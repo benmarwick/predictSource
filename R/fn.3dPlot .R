@@ -1,9 +1,6 @@
 #' fn.3dPlot
 #'
-#' create 3-dimensional data plot
-#' The function stops after producing each plot.  Enter c ("continue") at the prompt to
-#'   get the next plot.  If this function is run using Rstudio, each plot appears in a separate window,
-#'   not in the Rstudio plot pane.
+#' create 3-dimensional data plot. The function stops after producing each plot.  Enter c ("continue") at the prompt to get the next plot.  If this function is run using Rstudio, each plot appears in a separate window, not in the Rstudio plot pane.
 #'
 #' @param data R matrix or data frame containing the data to be analyzed
 #' @param GroupVar name for variable defining grouping, " " if no grouping
@@ -14,9 +11,6 @@
 #' @param Color color of plotted points
 #' @param SymbolSize value at most 1, smaller value gives smaller diameter points
 #'
-#'   DETAILS
-#'
-
 #'
 #'   @return   A list with the following components:
 #'   fcn.date.ver: a vector with the contents of the argument doc, the date run, the version of R used
