@@ -1,19 +1,35 @@
 #' fn.data
-
-#' create data frame of form to be used for all sources
-#' @param path to the folder
-#' containing the data
-#' @param data = excel file containing the data for the group
-#' @param Group = character code for the group
-#' @param Subset = codes for subsets of samples, ' ' if no
-#' subsets
-#' @param ID = character IDs for samples
-#' @param Elements = character names for elements used, the names in the excel file
 #'
-#' @export
-
-fn.data <- function(path, data, Group, Subset, ID, Elements) {
-
+#' @param fn.data create data frame with data to be analyzed, columns in specified order
+#' @param data data frame containing the data for one group
+#' @param Group character: code for the group, added to the data set
+#' @param Subset character: name of variable with codes for subsets of samples, " " if no subsets
+#' @param ID character: name of IDs (typically lab IDs) for samples
+#' @param Elements character vector: names for elements used from the data
+#'
+#' @return A data frame with columns
+#'           Group: group code (specified in Group)
+#'           Subset: subset code (specified in Subset)
+#'           ID: ID value
+#'           elements: one column for each element specified in Elements
+#'
+#' @section Details:
+#' This function creates a data frame with columns in a specified order.  It is useful
+#' for combining multiple data frames into one analysis object using rbind().  The name
+#' for a specified variable must be the same in each file used in the argument data; a
+#' space after a variable name in an excel file imported into R yields the variable name
+#' followed by a period.
+#'
+#' @examples
+#' data(ObsidianData)
+#' # create example data set by restricting to one group, removing column with group code
+#' fn.data(data = ObsidianData[ObsidianData[,"Code"] == "AW"][,-1]
+#'           Group = "Code",
+#'           Subset = " ",
+#'           ID = "ID"
+#'           Elements = c("Rb","Sr","Y","Zr","Nb"))
+#'
+function(data,Group,Subset,ID,Elements){
   dataCode <- rep(Group, nrow(data))
   dataSubset <- rep(Subset, nrow(data))
   dataID <- data[, ID]
@@ -28,11 +44,11 @@ fn.data <- function(path, data, Group, Subset, ID, Elements) {
   dimnames(outElements)[[2]] <- Elements
   for (i in 1:length(Elements))
     if (ElementsUsed[i] == T)
-      outElements[, i] <- data[, Elements[i]]
+      elements[, i] <- data[, Elements[i]]
   dataout <-
     data.frame(Group = dataCode,
                Subset = dataSubset,
                ID = dataID,
-               outElements)
+               elements)
   dataout
 }

@@ -19,6 +19,7 @@
 #'   groups: a vector (may be of length 1) with the value of the argument Groups
 #'   analyticVars: a vector with the value of the argument AnalyticVars
 #'   colors: a vector with the value of the argument Colors
+#'   dummy additional line
 #'
 #' @examples
 #' data(ObsidianData)
