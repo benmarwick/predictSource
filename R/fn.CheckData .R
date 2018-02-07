@@ -13,7 +13,7 @@
 #' @param ds.duplicates: file name for excel file with duplicate records, with extension csv (e.g. "duplicates.csv")
 #' @param ds.Nsamples: file name for excel file with numbers of samples, with extension csv (e.g. "Nresults.csv")
 #' @param ds.summary: file with summary statistics for each analytic variable check matrix stored in the object data for duplicates based on variables in the argument fields
-#' @export
+#' @return
 #'   If folder != " ", four excel files with duplicate observations, observations with negative
 #'       values for one or more analytic variables, numbers of observations for each analytic
 #'       variable, and summary statistics (quartiles and number missing)
@@ -32,7 +32,7 @@
 #'         the excel files
 #'
 #'   USAGE
-#'
+#' @export
 
 
 fn.CheckData <-

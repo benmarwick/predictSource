@@ -4,19 +4,33 @@
 \alias{fn.BoxPlots}
 \title{fn.BoxPlots}
 \usage{
-fn.BoxPlots(data, GroupVar, Groups, AnalyticVars, Nrow, Ncol)
+fn.BoxPlots(doc = "fn.BoxPlots version 0.1", data, GroupVar, Groups,
+  AnalyticVars, Nrow, Ncol)
 }
 \arguments{
+\item{doc:}{string documenting use, included in list returned}
+
+\item{data:}{data frame or matrix with data to be analyzed}
+
 \item{GroupVar:}{name for variable defining grouping, ' ' if no grouping}
 
-\item{Groups:}{vector of values of group variable for which plots are to be done 'All': use all groups ' ': no
-grouping}
+\item{Groups:}{vector of values of group variable for which plots are to be done; if 'All', use all groups:
+if ' ', no grouping}
 
-\item{AnalyticVars:}{vector of names (character values) of analytic results}
+\item{AnalyticVars:}{vector of names (character values) of analytic results to be analyzed}
 
 \item{Nrow:}{number of rows of plots for each page}
 
 \item{Ncol:}{number of columns of plots for each page restrict to desired set of groups}
+}
+\value{
+A list with the following components:
+        fcn.date.ver: a vector with the value of the argument doc, date run, version of R used
+        dataUsed: a data frame with the observations in data restricted to the groups analyzed
+        analyticVars: the vector specified by the parameter AnalyticVars
+        params.numeric: a vector with the values of the arguments Nrow and Ncol
+        params.grouping: a vector with the values of the arguments GroupVar and Groups
+        analyticVars: a vector with the value of the argument AnalyticVars
 }
 \description{
 box plots of specified analytic values, by specified groups

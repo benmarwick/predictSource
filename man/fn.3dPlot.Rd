@@ -22,10 +22,20 @@ fn.3dPlot(data, GroupVar, Groups, AnalyticVars, Selections, ByGroup = FALSE,
 
 \item{Color}{color of plotted points}
 
-\item{SymbolSize}{value at most 1, smaller value gives smaller diameter points}
+\item{SymbolSize}{value at most 1, smaller value gives smaller diameter points
+
+
+  @return   A list with the following components:
+  fcn.date.ver: a vector with the contents of the argument doc, the date run, the version of R used
+  dataUsed: the contents of the argument data restricted to the groups used
+  params: a vector with the values of the arguments ByGroup and SymbolSize
+  groups: a vector (may be of length 1) with the value of the argument Groups
+  analyticVars: a vector with the value of the argument AnalyticVars
+  colors: a vector with the value of the argument Colors
+  dummy additional line}
 }
 \description{
-create 3-dimensional data plot
+create 3-dimensional data plot. The function stops after producing each plot.  Enter c ("continue") at the prompt to get the next plot.  If this function is run using Rstudio, each plot appears in a separate window, not in the Rstudio plot pane.
 }
 \examples{
 data(ObsidianData)

@@ -26,6 +26,26 @@ fn.CheckData(doc = "fn.CheckData", data, CheckDupVars, GroupVar, Groups,
 
 \item{ds.summary:}{file with summary statistics for each analytic variable check matrix stored in the object data for duplicates based on variables in the argument fields}
 }
+\value{
+If folder != " ", four excel files with duplicate observations, observations with negative
+      values for one or more analytic variables, numbers of observations for each analytic
+      variable, and summary statistics (quartiles and number missing)
+      if Groups != " ", numbers of observations and summary statistics are by group
+  A list with the following components:
+     fcn.date.ver: a string with the contents of the parameter doc, date run, R version used
+     dataUsed: the data frame specified by the parameter data
+     params:
+     analyticVars: the vector of names specified by the parameter AnalyticVars
+     Duplicates: a data frame containing the observations with duplicate values
+     NegativeValues: a data frame containing the observations with at least one negative value
+         for a variable in AnalyticVars
+     Nvalues: a data frame contain the number of observations with a value for each analytic variable
+     Summary: a data frame containing the summary statistics (by group, if Group is specified)
+     if folder != " ": excel.files, a list containing the folder name and the name of each of
+        the excel files
+
+  USAGE
+}
 \description{
 basic data check: duplicate records, negative analytic values, numbers of analytic results, ranges of results
 }

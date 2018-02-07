@@ -29,6 +29,8 @@
 #'           ID = "ID"
 #'           Elements = c("Rb","Sr","Y","Zr","Nb"))
 #'
+#'@export
+#'
 function(data,Group,Subset,ID,Elements){
   dataCode <- rep(Group, nrow(data))
   dataSubset <- rep(Subset, nrow(data))
