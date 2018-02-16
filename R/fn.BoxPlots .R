@@ -11,7 +11,7 @@
 #' @param Nrow: number of rows of plots for each page
 #' @param Ncol: number of columns of plots for each page restrict to desired set of groups
 #'
-#' @export A list with the following components:
+#' @return A list with the following components:
 #'         fcn.date.ver: a vector with the value of the argument doc, date run, version of R used
 #'         dataUsed: a data frame with the observations in data restricted to the groups analyzed
 #'         analyticVars: the vector specified by the parameter AnalyticVars
@@ -19,6 +19,8 @@
 #'         params.grouping: a vector with the values of the arguments GroupVar and Groups
 #'         analyticVars: a vector with the value of the argument AnalyticVars
 #'
+#' @export
+
 fn.BoxPlots <-
   function(doc = "fn.BoxPlots version 0.1",
            data,

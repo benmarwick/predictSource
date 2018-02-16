@@ -21,14 +21,17 @@
 #' followed by a period.
 #'
 #' @examples
-#' data(ObsidianData)
-#' # create example data set by restricting to one group, removing column with group code
+#' load(ObsidianData)
+#' # create example data set by restricting to one group, removing column with group code,
+#' # then adding that code back to the data set
 #' fn.data(data = ObsidianData[ObsidianData[,"Code"] == "AW"][,-1]
-#'           Group = "Code",
+#'           Group = "AW",
 #'           Subset = " ",
 #'           ID = "ID"
 #'           Elements = c("Rb","Sr","Y","Zr","Nb"))
 #'
+#' @export
+
 function(data,Group,Subset,ID,Elements){
   dataCode <- rep(Group, nrow(data))
   dataSubset <- rep(Subset, nrow(data))
