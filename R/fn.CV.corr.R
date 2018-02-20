@@ -3,22 +3,40 @@
 #' Compute coefficients of variation and correlations for specified
 #' analytic values, by specified groups
 #'
-#' @param data: R matrix or data frame containing the
-#' data to be analyzedfn
-#' @param GroupVar: name for variable defining grouping, ' ' if no
-#' grouping
+#' @param data: R matrix or data frame containing the data to be analyzedfn
+#' @param GroupVar: name for variable defining grouping; if " ", if no grouping
 #' @param Groups: vector of values of group variable for which plots are to be done
-#' 'All': use all groups ' ': no grouping AnalyticVars: vector of names (character
-#' values) of analytic results
-#' @param Transpose: if T, one row for the correlations between
-#' each pair of analyses (columns are groups) if F, one row for each group, column for
-#' correlations between a pair of analyses
-#' @param folder: location to store excel files with
-#' coefficients of variation and Spearman correlations
-#' @param ds.CV: file name for
-#' coefficients of variation, with extension .csv
-#' @param ds.corr: file name for Spearman
-#' correlation coefficients, with extension .csv restrict to desired set of groups
+#'   if "All", use all groups, if " ", no grouping
+#' @param AnalyticVars: vector of names (character values) of analytic results
+#' @param Transpose: see Details
+#' @param CV.digits: number of significant digits in CV estimates, default is 2
+#' @param corr.digits: number of significant digits in correlation estimates, default is 2
+#' @param folder: location to store excel files with coefficients of variation and Spearman correlations
+#'  if " " (the default), no excel files are created
+#' @param ds.CV: file name for coefficients of variation, with extension .csv
+#' @param ds.corr: file name for Spearman correlation coefficients, with extension .csv
+#'
+#' @Section Details:
+#'
+#'   If Transpose=T, the correlation matrix has rows defined by the group variable and columns
+#'   defined by the pairs of analytic variables.  If Transpose=F, the rows are defined by
+#'   pairs of analytic variables and the columns are defined by the groups.
+#
+#' @return
+#'
+#'   A list with the following components:
+#'   fcn.date.ver: a vector with the contents of the argument doc, the date run, the version of R used
+#'   dataUsed: the contents of the argument data restricted to the groups used
+#'   params.numeric: a vector with the values of the arguments CV.digits and corr.digits
+#'   params.grouping: a list with the values of the argument GroupVar and Groups
+#'   analyticVars: a vector with the value of the argument AnalyticVars
+#'   CV: a data frame with the coefficients of variation for each analytic variable in each group
+#'   corr: a data frame with the correlations between pairs of variables in each group
+#'   if folder != " ":
+#'     files: a list with path and data set names to the excel files containing
+#'       the coefficients of variations and the correlations
+#'
+#' @examples
 #'
 #' @export
 
@@ -29,7 +47,9 @@ fn.CV.corr <-
            Groups,
            AnalyticVars,
            Transpose = T,
-           folder,
+           CV.digits = 2,
+           corr.digits = 2,
+           folder = " ",
            ds.CV,
            ds.corr) {
 
@@ -46,7 +66,7 @@ fn.CV.corr <-
       CV <- rep(NA, length(AnalyticVars))
       means <- apply(data.Used, 2, mean)
       std <- sqrt(apply(data.Used, 2, var))
-      CV <- round(std / means, dig = 2)
+      CV <- round(std / means, dig = CV.digits)
       names(CV) <- AnalyticVars
     } else {
       if (Groups[1] == "All")
@@ -65,12 +85,11 @@ fn.CV.corr <-
           data.Used[rows.i, AnalyticVars]  # data restricted to group i
         means.i <- apply(data.i, 2, mean)
         std.i <- sqrt(apply(data.i, 2, var))
-        compute.CV[i,] <- round(std.i / means.i, dig = 2)
+        compute.CV[i,] <- round(std.i / means.i, dig = CV.digits)
       }
       CV <- data.frame(groups, compute.CV)
       colnames(CV) <- c(GroupVar, AnalyticVars)
     }
-    write.csv(CV, paste(folder, ds.CV, sep = ""))
     # Spearman correlations
     if (GroupVar[1] == " ") {
       Corrs <-
@@ -79,7 +98,7 @@ fn.CV.corr <-
           method = "spearman",
           use = "pairwise.complete.obs"
         ),
-        dig = 2)
+        dig = corr.digits)
     } else {
       Corrs <-
         matrix(NA,
@@ -106,7 +125,7 @@ fn.CV.corr <-
             method = "spearman",
             use = "pairwise.complete.obs"
           ),
-          dig = 2)
+          dig = corr.digits)
         # load correlations into Corrs
         Row <- 0  # row in which to load correlations
         for (j in 1:(length(AnalyticVars) - 1)) {
@@ -119,9 +138,32 @@ fn.CV.corr <-
     }
     if (Transpose == T)
       Corrs <- t(Corrs)
-    write.csv(Corrs, file = paste(folder, ds.corr, sep = ""))
+    if (folder != " ") {
+      write.csv(Corrs, file = paste(folder, ds.corr, sep = ""))
+      write.csv(CV, paste(folder, ds.CV, sep = ""))
+      files <- list(Cv = paste(folder, ds.CV, sep = ""), Corrs = paste(folder, ds.corr, sep = ""))
+    }
     #
-    list(Documentation = doc,
-         CV = CV,
-         corr = Corrs)
+    fcn.date.ver<-c(doc,date(),R.Version())
+    params.numeric<-c(digits.CV=CV.digits,digits.corr=corr.digits)
+    names(params.numeric)<-c("CV.digits","corr.digits")
+    params.grouping<-list(GroupVar,Groups)
+    names(params.grouping)<-c("GroupVar","Groups")
+    if (substr(folder,1,1) == " ")
+      out<-list(fcn.date.ver=fcn.date.ver,
+                dataUsed=data.Used,
+                params.numeric=params.numeric,
+                params.grouping=params.grouping,
+                analyticVars=AnalyticVars,
+                CV=CV,
+                corr=Corrs)
+    else
+      out<-list(fcn.date.ver=fcn.date.ver,
+                dataUsed=data.Used,
+                params.numeric=params.numeric,
+                params.grouping=params.grouping,
+                analyticVars=AnalyticVars,
+                CV=CV,corr=Corrs,
+                files=files)
+    out
   }

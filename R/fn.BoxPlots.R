@@ -20,6 +20,8 @@
 #'         analyticVars: a vector with the value of the argument AnalyticVars
 #' @export
 #'
+#' @export
+
 fn.BoxPlots <-
   function(doc = "fn.BoxPlots version 0.1",
            data,
