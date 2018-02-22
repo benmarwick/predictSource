@@ -25,16 +25,15 @@
 #' @return
 #'
 #'   A list with the following components:
-#'   fcn.date.ver: a vector with the contents of the argument doc, the date run, the version of R used
-#'   dataUsed: the contents of the argument data restricted to the groups used
-#'   params.numeric: a vector with the values of the arguments CV.digits and corr.digits
-#'   params.grouping: a list with the values of the argument GroupVar and Groups
-#'   analyticVars: a vector with the value of the argument AnalyticVars
-#'   CV: a data frame with the coefficients of variation for each analytic variable in each group
-#'   corr: a data frame with the correlations between pairs of variables in each group
-#'   if folder != " ":
-#'     files: a list with path and data set names to the excel files containing
-#'       the coefficients of variations and the correlations
+#'   \item{fcn.date.ver}{a vector with the contents of the argument doc, the date run, the version of R used}
+#'   \item{dataUsed}{the contents of the argument data restricted to the groups used}
+#'   \item{params.numeric}{a vector with the values of the arguments CV.digits and corr.digits}
+#'   \item{params.grouping}{a list with the values of the argument GroupVar and Groups}
+#'   \item{analyticVars}{a vector with the value of the argument AnalyticVars}
+#'   \item{CV}{a data frame with the coefficients of variation for each analytic variable in each group}
+#'   \item{corr}{a data frame with the correlations between pairs of variables in each group}
+#'   \item{files}{if folder != " ": a list with path and data set names to the excel files containing
+#'       the coefficients of variations and the correlations}
 #'
 #' @examples
 #'
