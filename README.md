@@ -3,6 +3,8 @@
 karon
 =====
 
+[![Binder](http://mybinder.org/badge.svg)](http://mybinder.org/v2/gh/benmarwick/karon/master)
+
 The goal of karon is to provide functions for working with compositional data from archaeological artefacts.
 
 Installation
