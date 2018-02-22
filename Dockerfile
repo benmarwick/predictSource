@@ -3,6 +3,7 @@ FROM w201rdada/portfolio:fa17
 USER root
 COPY . /home/rstudio/
 RUN chown -R rstudio:rstudio * .* \
+  && sudo apt-get update \
   && sudo apt-get install libcgal-dev libglu1-mesa-dev libglu1-mesa-dev
 USER rstudio
 
