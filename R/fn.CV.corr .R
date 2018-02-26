@@ -25,7 +25,7 @@
 #' @return
 #'
 #'   A list with the following components:
-#'   \item{fcn.date.ver}{a vector with the contents of the argument doc, the date run, the version of R used}
+#'   \item{usage}{a vector with the contents of the argument doc, the date run, the version of R used}
 #'   \item{dataUsed}{the contents of the argument data restricted to the groups used}
 #'   \item{params.numeric}{a vector with the values of the arguments CV.digits and corr.digits}
 #'   \item{params.grouping}{a list with the values of the argument GroupVar and Groups}
@@ -149,7 +149,7 @@ fn.CV.corr <-
     params.grouping<-list(GroupVar,Groups)
     names(params.grouping)<-c("GroupVar","Groups")
     if (substr(folder,1,1) == " ")
-      out<-list(fcn.date.ver=fcn.date.ver,
+      out<-list(usage=fcn.date.ver,
                 dataUsed=data.Used,
                 params.numeric=params.numeric,
                 params.grouping=params.grouping,
@@ -157,7 +157,7 @@ fn.CV.corr <-
                 CV=CV,
                 corr=Corrs)
     else
-      out<-list(fcn.date.ver=fcn.date.ver,
+      out<-list(usage=fcn.date.ver,
                 dataUsed=data.Used,
                 params.numeric=params.numeric,
                 params.grouping=params.grouping,
