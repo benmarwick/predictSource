@@ -16,7 +16,7 @@
 #' @param ds.CV: file name for coefficients of variation, with extension .csv
 #' @param ds.corr: file name for Spearman correlation coefficients, with extension .csv
 #'
-#' @Section Details:
+#' @section Details:
 #'
 #'   If Transpose=T, the correlation matrix has rows defined by the group variable and columns
 #'   defined by the pairs of analytic variables.  If Transpose=F, the rows are defined by

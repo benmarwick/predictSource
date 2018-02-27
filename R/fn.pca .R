@@ -27,7 +27,8 @@
 #'  repeat if desired.  To go to the next pane, right click and select "Stop" in base R; click on
 #'  "Finish" in the plot pane in Rstudio.
 #'
-#' @result
+#' @return
+#'
 #' The function produces a plot of the first two principal components, the contents of which
 #' are defined by the arguments PlotPoints, PlotEllipses, PlotHull, and PlotMedians.
 #' A scree plot and box plots are produced if requested.
