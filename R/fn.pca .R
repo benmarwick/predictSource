@@ -28,8 +28,7 @@
 #'  "Finish" in the plot pane in Rstudio.
 #'
 #' @return
-#' The function produces a plot of the first two principal components, the contents of which
-#' are defined by the arguments PlotPoints, PlotEllipses, PlotHull, and PlotMedians.
+#' The function produces a plot of the first two principal components, the contents of which are defined by the arguments PlotPoints, PlotEllipses, PlotHull, and PlotMedians.
 #' A scree plot and box plots are produced if requested.
 #' The function returns a list with the following components:
 #' \item{usage}{a vector with the contents of the argument doc, the date run, the version of R used}
