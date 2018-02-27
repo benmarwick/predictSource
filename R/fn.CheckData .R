@@ -173,7 +173,7 @@ fn.CheckData <-
                                  NegativeValues = NegativeValues,
                                  Nvalues = Nvalues,
                                  Summary = Summary)
-    if (folder != " ") out<-list(usage?=fcn.date.ver,
+    if (folder != " ") out<-list(usage=fcn.date.ver,
                                  dataUsed=data,params=params,
                                  analyticVars=AnalyticVars,
                                  Duplicates = duplicates,
