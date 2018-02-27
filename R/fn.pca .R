@@ -28,7 +28,6 @@
 #'  "Finish" in the plot pane in Rstudio.
 #'
 #' @return
-#'
 #' The function produces a plot of the first two principal components, the contents of which
 #' are defined by the arguments PlotPoints, PlotEllipses, PlotHull, and PlotMedians.
 #' A scree plot and box plots are produced if requested.
@@ -36,8 +35,7 @@
 #' \item{usage}{a vector with the contents of the argument doc, the date run, the version of R used}
 #' \item{dataUsed}{the contents of the argument data restricted to the groups used}
 #' \item{params.grouping}{a list with the values of the arguments GroupVar and Groups}
-#' \item{params.logical: a vector with the values of the arguments ScreePlot,BoxPlots,PlotPoints,
-#'  PlotEllipses,PlotHull,PlotMedians,PlotColors}
+#' \item{params.logical: a vector with the values of the arguments ScreePlot,BoxPlots,PlotPoints,PlotEllipses,PlotHull,PlotMedians,PlotColors}
 #' \item{analyticVars}{a vector with the value of the argument AnalyticVars}
 #' \item{ellipse.pct}{the value of the argument Ellipses}
 #' \item{Summary}{a list including the percent of variation explained by each principal component
