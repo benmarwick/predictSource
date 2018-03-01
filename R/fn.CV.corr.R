@@ -16,15 +16,13 @@
 #' @param ds.CV: file name for coefficients of variation, with extension .csv
 #' @param ds.corr: file name for Spearman correlation coefficients, with extension .csv
 #'
-#' @Section Details:
+#' @section Details:
 #'
 #'   If Transpose=T, the correlation matrix has rows defined by the group variable and columns
 #'   defined by the pairs of analytic variables.  If Transpose=F, the rows are defined by
 #'   pairs of analytic variables and the columns are defined by the groups.
 #
-#' @return
-#'
-#'   A list with the following components:
+#' @return A list with the following components:
 #'   fcn.date.ver: a vector with the contents of the argument doc, the date run, the version of R used
 #'   dataUsed: the contents of the argument data restricted to the groups used
 #'   params.numeric: a vector with the values of the arguments CV.digits and corr.digits
@@ -49,7 +47,7 @@ fn.CV.corr <-
            Transpose = T,
            CV.digits = 2,
            corr.digits = 2,
-           folder = " ",
+           folder = "",
            ds.CV,
            ds.corr) {
 
