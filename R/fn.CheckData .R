@@ -29,7 +29,7 @@
 #'          for a variable in AnalyticVars}
 #' \item{Nvalues}{a data frame contain the number of observations with a value for each analytic variable}
 #' \item{Summary}{a data frame containing the summary statistics (by group, if Group is specified)}
-#'  \item{files}{if folder != " ", a list containing the folder name and the name of each of
+#' \item{files}{if folder != " ", a list containing the folder name and the name of each of
 #'         the excel files}
 #'
 #' @section Detail:

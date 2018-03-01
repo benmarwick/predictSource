@@ -5,7 +5,7 @@
 #' @param doc: documentation in the list returned, default is the function name
 #' @param data: R matrix or data frame containing the data to be analyzed
 #' @param GroupVar: name for variable defining grouping; if " ", no grouping
-#' @param Groups: vector of values of group variable for which plots are to be done
+#' @param Groups: vector of values of group variable for which plots are to be done.
 #'    if "All": use all groups; if " ": no grouping
 #' @param AnalyticVars: vector of names (character values) of analytic results
 #' @param Ellipses: value or vector of proportions for confidence ellipses
@@ -29,8 +29,7 @@
 #'
 #' @return
 #' The function produces a plot of the first two principal components, the contents of which are defined by the arguments PlotPoints, PlotEllipses, PlotHull, and PlotMedians.
-#' A scree plot and box plots are produced if requested.
-#' The function returns a list with the following components:
+#' A scree plot and box plots are produced if requested.  The function returns a list with the following components:
 #' \item{usage}{a vector with the contents of the argument doc, the date run, the version of R used}
 #' \item{dataUsed}{the contents of the argument data restricted to the groups used}
 #' \item{params.grouping}{a list with the values of the arguments GroupVar and Groups}

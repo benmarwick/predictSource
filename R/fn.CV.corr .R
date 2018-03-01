@@ -5,7 +5,7 @@
 #'
 #' @param data: R matrix or data frame containing the data to be analyzedfn
 #' @param GroupVar: name for variable defining grouping; if " ", if no grouping
-#' @param Groups: vector of values of group variable for which plots are to be done
+#' @param Groups: vector of values of group variable for which plots are to be done.
 #'   if "All", use all groups, if " ", no grouping
 #' @param AnalyticVars: vector of names (character values) of analytic results
 #' @param Transpose: see Details

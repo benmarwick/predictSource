@@ -23,15 +23,15 @@
 #' \item{colors}{a vector with the value of the argument Color}
 #'
 #' @section Details:
-#' \item{}{The function stops after producing each plot.  Enter c ("continue") at the prompt to
+#' \item{ }{The function stops after producing each plot.  Enter c ("continue") at the prompt to
 #'   get the next plot.  If this function is run using Rstudio, each plot appears in a separate window,
 #'   not in the Rstudio plot pane.}
 #'
-#' \item{}{The argument Selections can specify variable names or column numbers of the matrix defined by
+#' \item{ }{The argument Selections can specify variable names or column numbers of the matrix defined by
 #'   AnalyticVars.  If a vector, only one plot is produced; if a data frame or matrix, there is a plot
 #'   defined by each row.}
 #'
-#' \item{}{If only one group is shown, the points have the color of the first color specified.  For multiple
+#' \item{ }{If only one group is shown, the points have the color of the first color specified.  For multiple
 #'   groups, the colors are used in the order specified.}
 #'
 #' @examples
