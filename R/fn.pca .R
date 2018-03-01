@@ -49,7 +49,6 @@
 #'
 #' @export
 #'
-
 fn.pca <-
   function(doc = "fn.pca",
            data,
