@@ -13,8 +13,7 @@ fn.CV.corr(doc = "fn.CV.corr", data, GroupVar, Groups, AnalyticVars,
 
 \item{GroupVar:}{name for variable defining grouping; if " ", if no grouping}
 
-\item{Groups:}{vector of values of group variable for which plots are to be done.
-if "All", use all groups, if " ", no grouping}
+\item{Groups:}{vector of values of group variable for which plots are to be done. if "All", use all groups, if " ", no grouping}
 
 \item{AnalyticVars:}{vector of names (character values) of analytic results}
 
@@ -51,9 +50,7 @@ analytic values, by specified groups
 }
 \section{Details}{
 
-  If Transpose=T, the correlation matrix has rows defined by the group variable and columns
-  defined by the pairs of analytic variables.  If Transpose=F, the rows are defined by
-  pairs of analytic variables and the columns are defined by the groups.
+  If Transpose=T, the correlation matrix has rows defined by the group variable and columns defined by the pairs of analytic variables.  If Transpose=F, the rows are defined by pairs of analytic variables and the columns are defined by the groups.
 }
 
 \examples{

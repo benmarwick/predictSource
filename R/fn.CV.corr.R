@@ -5,8 +5,7 @@
 #'
 #' @param data: R matrix or data frame containing the data to be analyzedfn
 #' @param GroupVar: name for variable defining grouping; if " ", if no grouping
-#' @param Groups: vector of values of group variable for which plots are to be done.
-#'   if "All", use all groups, if " ", no grouping
+#' @param Groups: vector of values of group variable for which plots are to be done. if "All", use all groups, if " ", no grouping
 #' @param AnalyticVars: vector of names (character values) of analytic results
 #' @param Transpose: see Details
 #' @param CV.digits: number of significant digits in CV estimates, default is 2
@@ -17,9 +16,7 @@
 #' @param ds.corr: file name for Spearman correlation coefficients, with extension .csv
 #'
 #' @section Details:
-#'   If Transpose=T, the correlation matrix has rows defined by the group variable and columns
-#'   defined by the pairs of analytic variables.  If Transpose=F, the rows are defined by
-#'   pairs of analytic variables and the columns are defined by the groups.
+#'   If Transpose=T, the correlation matrix has rows defined by the group variable and columns defined by the pairs of analytic variables.  If Transpose=F, the rows are defined by pairs of analytic variables and the columns are defined by the groups.
 #
 #' @return
 #'
