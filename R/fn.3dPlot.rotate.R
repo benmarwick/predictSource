@@ -6,9 +6,8 @@
 #' @param doc A string documenting usage written to the list return, default is the function name
 #' @param data: R matrix or data frame containing the data to be analyzed
 #' @param GroupVar: name for variable defining grouping, " " if no grouping
-#' @param Groups: vector of values of group variable for which plots are to be done
-#'    "All": use all groups
-#'    " ": no grouping
+#' @param Groups: vector of values of group variable for which plots are to be done;
+#'    "All": use all groups;" ": no grouping
 #' @param AnalyticVars: vector of names (character values) of analytic results
 #' @param Selections: vector of length 3, or data frame with 3 columns, with combinations to be plotted
 #' @param ByGroup: if T, show scatterplot for each group for each selection of 3 variables
@@ -22,32 +21,35 @@
 #' @import MASS rgl
 #'
 #' @section: Details
-#'
-#'   If the plots are not to be saved to a file, the function stops after producing each plot.
+#' \itemize{
+#' \item{"x"}{If the plots are not to be saved to a file, the function stops after producing each plot.
 #'   Close the plot window, then enter c ("continue") at the prompt to get the next plot.
 #'   If this function is run using Rstudio, each plot appears in a separate window,
-#'   not in the Rstudio plot pane; this window may appear behind the Rstudio window.
+#'   not in the Rstudio plot pane; this window may appear behind the Rstudio window.}
 #'
-#'   If the plots are to be saved to a file, the function also stops are producing each plot.
+#' \item{"x"}{If the plots are to be saved to a file, the function also stops after producing each plot.
 #'   Rotate the plot as desired, then enter c at the prompt, so that the function will save
-#'   the file in the desired format.
+#'   the file in the desired format.}
 #'
-#'   If more than one plot is to be produced (the argument Selections is a matrix),
+#' \item{"x"}{If more than one plot is to be produced (the argument Selections is a matrix),
 #'   close the rgl plot window before entering c to go to the next plot.  In this case, if
-#'   plots are saved to files, the successive file names are ds.3dPlot1, ds.3dPlot2,....
+#'   plots are saved to files, the successive file names are ds.3dPlot1, ds.3dPlot2,....}
 #'
-#'   If only one group is shown, the points have the color of the first color specified.  For multiple
-#'   groups, the colors are used in the order specified.
+#' \item{"x"}{If only one group is shown, the points have the color of the first color specified.  For multiple
+#'   groups, the colors are used in the order specified.}
+#'   }
 #'
 #' @return A list with the following components:
-#'   fcn.date.ver: a vector with the contents of the argument doc, the date run, the version of R used
-#'   dataUsed: the contents of the argument data restricted to the groups used
-#'   params: a vector with the values of the arguments ByGroup and SymbolSize
-#'   groups: a vector (may be of length 1) with the value of the argument Groups
-#'   analyticVars: a vector with the value of the argument AnalyticVars
-#'   selections: a vector or matrix with the value of the argument Selections
-#'   cols: a vector with the value of the argument Color
-#'   if folder != " ": file, the path and file name ds.3dPlotq()
+#' \itemize{
+#' \item{"usage"}{a vector with the contents of the argument doc, the date run, the version of R used}
+#' \item{"dataUsed"}{the contents of the argument data restricted to the groups used}
+#' \item{"params"}{a vector with the values of the arguments ByGroup and SymbolSize}
+#' \item{"groups"}{a vector (may be of length 1) with the value of the argument Groups}
+#' \item{"analyticVars"}{a vector with the value of the argument AnalyticVars}
+#' \item{"selections"}{a vector or matrix with the value of the argument Selections}
+#' \item{"colors"}{a vector with the value of the argument Color}
+#' \item{"file"}{if folder != " ": the path and file name ds.3dPlot}
+#' }
 #'
 #' @export
 
@@ -140,21 +142,21 @@ fn.3dPlot.rotate <-
     names(params)<-c("ByGroup","SymbolSize")
     #
     if (folder == " ")
-      out<-list(fcn.date.ver=fcn.date.ver,
+      out<-list(usage=fcn.date.ver,
               dataUsed=data.Used,
               params=params,
               groups=Groups,
               analyticVars=AnalyticVars,
               selections=Selections,
-              cols=Colors)
+              colors=Colors)
     if (folder != " ")
-      out<-list(fcn.date.ver=fcn.date.ver,
+      out<-list(usage=fcn.date.ver,
                 dataUsed=data.Used,
                 params=params,
                 groups=Groups,
                 analyticVars=AnalyticVars,
                 selections=Selections,
-                cols=Colors,
+                colors=Colors,
                 file=paste(folder,ds.3dPlot,".",extension,sep=""))
     out
   }

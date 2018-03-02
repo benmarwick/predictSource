@@ -5,9 +5,12 @@
 \title{fn.CheckData}
 \usage{
 fn.CheckData(doc = "fn.CheckData", data, CheckDupVars, GroupVar, Groups,
-  AnalyticVars, folder, ds.duplicates, ds.NegValues, ds.Nsamples, ds.summary)
+  AnalyticVars, folder = " ", ds.duplicates, ds.NegValues, ds.Nsamples,
+  ds.summary)
 }
 \arguments{
+\item{doc:}{a character string written to the output list; default is the function name}
+
 \item{data:}{R object (data frame) containing analytic data}
 
 \item{CheckDupVars:}{vector with names of identifying variables, typically group and lab ID}
@@ -18,7 +21,7 @@ fn.CheckData(doc = "fn.CheckData", data, CheckDupVars, GroupVar, Groups,
 
 \item{AnalyticVars:}{character vector of names of analytic variables for which tabulations are done}
 
-\item{folder:}{path to folder in which to store excel files with results (e.g. `C:\project\\results`)}
+\item{folder:}{path to folder in which to store excel files with results (e.g. "C:\\project\\results\\") or " "}
 
 \item{ds.duplicates:}{file name for excel file with duplicate records, with extension csv (e.g. "duplicates.csv")}
 
@@ -32,20 +35,27 @@ If folder != " ", four excel files with duplicate observations, observations wit
       variable, and summary statistics (quartiles and number missing)
       if Groups != " ", numbers of observations and summary statistics are by group
   A list with the following components:
-     fcn.date.ver: a string with the contents of the parameter doc, date run, R version used
-     dataUsed: the data frame specified by the parameter data
-     params:
-     analyticVars: the vector of names specified by the parameter AnalyticVars
-     Duplicates: a data frame containing the observations with duplicate values
-     NegativeValues: a data frame containing the observations with at least one negative value
-         for a variable in AnalyticVars
-     Nvalues: a data frame contain the number of observations with a value for each analytic variable
-     Summary: a data frame containing the summary statistics (by group, if Group is specified)
-     if folder != " ": excel.files, a list containing the folder name and the name of each of
-        the excel files
-
-  USAGE
+  \itemize{
+\item{"usage"}{a string with the contents of the argument doc, date run, R version used}
+\item{"dataUsed"}{the data frame specified by the argument data}|
+\item{"params"}{}
+\item{"analyticVars"}{the vector of names specified by the argument AnalyticVars}
+\item{"Duplicates"}{a data frame containing the observations with duplicate values}
+\item{"NegativeValues"}{a data frame containing the observations with at least one negative value for a variable in AnalyticVars}
+\item{"Nvalues"}{a data frame contain the number of observations with a value for each analytic variable}
+\item{"Summary"}{a data frame containing the summary statistics (by group, if Group is specified)}
+\item{"files"}{if folder != " ", a list containing the folder name and the name of each of the excel files}
+        }
 }
 \description{
-basic data check: duplicate records, negative analytic values, numbers of analytic results, ranges of results
+data checks and summaries: duplicate records, negative analytic values, numbers of analytic results, percentiles of results
+}
+\section{Detail}{
+
+AnalyticVars must be a vector of length at least 2.
+If folder = " ", no excel files are written.  If not, the path must end with \\.
+}
+
+\examples{
+
 }

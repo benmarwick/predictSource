@@ -5,7 +5,7 @@
 #'
 #' @param data: R matrix or data frame containing the data to be analyzedfn
 #' @param GroupVar: name for variable defining grouping; if " ", if no grouping
-#' @param Groups: vector of values of group variable for which plots are to be done
+#' @param Groups: vector of values of group variable for which plots are to be done.
 #'   if "All", use all groups, if " ", no grouping
 #' @param AnalyticVars: vector of names (character values) of analytic results
 #' @param Transpose: see Details
@@ -17,22 +17,24 @@
 #' @param ds.corr: file name for Spearman correlation coefficients, with extension .csv
 #'
 #' @section Details:
-#'
 #'   If Transpose=T, the correlation matrix has rows defined by the group variable and columns
 #'   defined by the pairs of analytic variables.  If Transpose=F, the rows are defined by
 #'   pairs of analytic variables and the columns are defined by the groups.
 #
-#' @return A list with the following components:
-#'   fcn.date.ver: a vector with the contents of the argument doc, the date run, the version of R used
-#'   dataUsed: the contents of the argument data restricted to the groups used
-#'   params.numeric: a vector with the values of the arguments CV.digits and corr.digits
-#'   params.grouping: a list with the values of the argument GroupVar and Groups
-#'   analyticVars: a vector with the value of the argument AnalyticVars
-#'   CV: a data frame with the coefficients of variation for each analytic variable in each group
-#'   corr: a data frame with the correlations between pairs of variables in each group
-#'   if folder != " ":
-#'     files: a list with path and data set names to the excel files containing
-#'       the coefficients of variations and the correlations
+#' @return
+#'
+#'   A list with the following components:
+#'   \itemize{
+#'   \item{"usage"}{a vector with the contents of the argument doc, the date run, the version of R used}
+#'   \item{"dataUsed"}{the contents of the argument data restricted to the groups used}
+#'   \item{"params.numeric"}{a vector with the values of the arguments CV.digits and corr.digits}
+#'   \item{"params.grouping"}{a list with the values of the argument GroupVar and Groups}
+#'   \item{"analyticVars"}{a vector with the value of the argument AnalyticVars}
+#'   \item{"CV"}{a data frame with the coefficients of variation for each analytic variable in each group}
+#'   \item{"corr"}{a data frame with the correlations between pairs of variables in each group}
+#'   \item{"files"}{if folder != " ": a list with path and data set names to the excel files containing
+#'       the coefficients of variations and the correlations}
+#'       }
 #'
 #' @examples
 #'
@@ -47,7 +49,7 @@ fn.CV.corr <-
            Transpose = T,
            CV.digits = 2,
            corr.digits = 2,
-           folder = "",
+           folder = " ",
            ds.CV,
            ds.corr) {
 
@@ -148,7 +150,7 @@ fn.CV.corr <-
     params.grouping<-list(GroupVar,Groups)
     names(params.grouping)<-c("GroupVar","Groups")
     if (substr(folder,1,1) == " ")
-      out<-list(fcn.date.ver=fcn.date.ver,
+      out<-list(usage=fcn.date.ver,
                 dataUsed=data.Used,
                 params.numeric=params.numeric,
                 params.grouping=params.grouping,
@@ -156,7 +158,7 @@ fn.CV.corr <-
                 CV=CV,
                 corr=Corrs)
     else
-      out<-list(fcn.date.ver=fcn.date.ver,
+      out<-list(usage=fcn.date.ver,
                 dataUsed=data.Used,
                 params.numeric=params.numeric,
                 params.grouping=params.grouping,

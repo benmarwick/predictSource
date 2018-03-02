@@ -2,8 +2,8 @@
 #'
 #' create 3-dimensional data plot comparing groups
 #'
-#' @param data: R matrix or #' data frame containing the data to be analyzed
-#' @param GroupVar: name for variable defining #' grouping, ' ' if no grouping
+#' @param data: R matrix or data frame containing the data to be analyzed
+#' @param GroupVar: name for variable defining grouping, ' ' if no grouping
 #' @param Groups: vector of values of group variable for which plots are to be done AnalyticVars: vector of names (character values) of analytic
 #' results
 #' @param Selections: vector of length 3, or data frame with 3 columns, with combinations to be plotted

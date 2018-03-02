@@ -15,24 +15,28 @@
 #'
 #'
 #' @return   A list with the following components:
-#'   fcn.date.ver: a vector with the contents of the argument doc, the date run, the version of R used
-#'   dataUsed: the contents of the argument data restricted to the groups used
-#'   params: a vector with the values of the arguments ByGroup and SymbolSize
-#'   groups: a vector (may be of length 1) with the value of the argument Groups
-#'   analyticVars: a vector with the value of the argument AnalyticVars
-#'   colors: a vector with the value of the argument Color
+#'  \itemize{
+#' \item{"usage"}{a vector with the contents of the argument doc, the date run, the version of R used}
+#' \item{"dataUsed"}{the contents of the argument data restricted to the groups used}
+#' \item{"params"}{a vector with the values of the arguments ByGroup and SymbolSize}
+#' \item{"groups"}{a vector (may be of length 1) with the value of the argument Groups}
+#' \item{"analyticVars"}{a vector with the value of the argument AnalyticVars}
+#' \item{"colors"}{a vector with the value of the argument Color}
+#' }
 #'
 #' @section Details:
-#'   The function stops after producing each plot.  Enter c ("continue") at the prompt to
-#'   get the next plot.  If this function is run using Rstudio, each plot appears in a separate window,
-#'   not in the Rstudio plot pane.
+#'  \itemize{
+#' \item{"x"}{The function stops after producing each plot.  Enter c ("continue") at the prompt to
+#'   get the next plot.  If this function is run using RStudio, each plot appears in a separate window,
+#'   not in the Rstudio plot pane.}
 #'
-#'   The argument Selections can specify variable names or column numbers of the matrix defined by
+#' \item{"x"}{The argument Selections can specify variable names or column numbers of the matrix defined by
 #'   AnalyticVars.  If a vector, only one plot is produced; if a data frame or matrix, there is a plot
-#'   defined by each row.
+#'   defined by each row.}
 #'
-#'   If only one group is shown, the points have the color of the first color specified.  For multiple
-#'   groups, the colors are used in the order specified.
+#' \item{"x"}{If only one group is shown, the points have the color of the first color specified.  For multiple
+#'   groups, the colors are used in the order specified.}
+#'   }
 #'
 #' @examples
 #' data(ObsidianData)
@@ -183,7 +187,12 @@ fn.3dPlot <-
     fcn.date.ver<-c(doc,date(),R.Version()$version.string)
     params<-list(ByGroup,SymbolSize)
     names(params)<-c("ByGroup","SymbolSize")
-    out<-list(fcn.date.ver=fcn.date.ver,dataUsed=data.Used,params=params,groups=Groups,analyticVars=AnalyticVars,colors=Colors)
+    out<-list(usage=fcn.date.ver,
+              dataUsed=data.Used,
+              params=params,
+              groups=Groups,
+              analyticVars=AnalyticVars,
+              colors=Colors)
     out
 
   }

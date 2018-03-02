@@ -8,11 +8,12 @@
 #' @param Elements character vector: names for elements used from the data
 #'
 #' @return A data frame with columns
-#'           Group: group code (specified in Group)
-#'           Subset: subset code (specified in Subset)
-#'           ID: ID value
-#'           elements: one column for each element specified in Elements
-#'
+#'  \itemize{
+#' \item{"Group"}{group code (specified in Group)}
+#' \item{"Subset"}{subset code (specified in Subset)}
+#' \item{"ID"}{ID value}
+#' \item{"elements"}{one column for each element specified in Elements}
+#'}
 #' @section Details:
 #' This function creates a data frame with columns in a specified order.  It is useful
 #' for combining multiple data frames into one analysis object using rbind().  The name
@@ -30,11 +31,9 @@
 #'           ID = "ID"
 #'           Elements = c("Rb","Sr","Y","Zr","Nb"))
 #'
-
 #' @export
 
-
-function(data,Group,Subset,ID,Elements){
+fn.data <- function(data,Group,Subset,ID,Elements){
   dataCode <- rep(Group, nrow(data))
   dataSubset <- rep(Subset, nrow(data))
   dataID <- data[, ID]

@@ -25,12 +25,13 @@ if ' ', no grouping}
 }
 \value{
 A list with the following components:
-        fcn.date.ver: a vector with the value of the argument doc, date run, version of R used
-        dataUsed: a data frame with the observations in data restricted to the groups analyzed
-        analyticVars: the vector specified by the parameter AnalyticVars
-        params.numeric: a vector with the values of the arguments Nrow and Ncol
-        params.grouping: a vector with the values of the arguments GroupVar and Groups
-        analyticVars: a vector with the value of the argument AnalyticVars
+ \itemize{
+\item{"usage"}{a vector with the value of the argument doc, date run, version of R used}
+\item{"analyticVars"}{the vector specified by the parameter AnalyticVars}
+\item{"params.numeric"}{a vector with the values of the arguments Nrow and Ncol}
+\item{"params.grouping"}{a vector with the values of the arguments GroupVar and Groups}
+\item{"analyticVars"}{a vector with the value of the argument AnalyticVars}
+}
 }
 \description{
 box plots of specified analytic values, by specified groups

@@ -12,14 +12,13 @@
 #' @param Ncol: number of columns of plots for each page restrict to desired set of groups
 #'
 #' @return A list with the following components:
-#'         fcn.date.ver: a vector with the value of the argument doc, date run, version of R used
-#'         dataUsed: a data frame with the observations in data restricted to the groups analyzed
-#'         analyticVars: the vector specified by the parameter AnalyticVars
-#'         params.numeric: a vector with the values of the arguments Nrow and Ncol
-#'         params.grouping: a vector with the values of the arguments GroupVar and Groups
-#'         analyticVars: a vector with the value of the argument AnalyticVars
-#' @export
-#'
+#'  \itemize{
+#' \item{"usage"}{a vector with the value of the argument doc, date run, version of R used}
+#' \item{"analyticVars"}{the vector specified by the parameter AnalyticVars}
+#' \item{"params.numeric"}{a vector with the values of the arguments Nrow and Ncol}
+#' \item{"params.grouping"}{a vector with the values of the arguments GroupVar and Groups}
+#' \item{"analyticVars"}{a vector with the value of the argument AnalyticVars}
+#'}
 #' @export
 
 fn.BoxPlots <-
@@ -67,7 +66,7 @@ fn.BoxPlots <-
     names(params.numeric)<-c("Nrow","Ncol")
     params.grouping<-list(GroupVar,Groups)
     names(params.grouping)<-c("GroupVar","Groups")
-    out<-list(fcn.date.ver=fcn.date.ver,
+    out<-list(usage=fcn.date.ver,
               dataUsed=data.BP,
               params.numeric=params.numeric,
               params.grouping=params.grouping,

@@ -5,74 +5,41 @@
 #' @param doc: documentation in the list returned, default is the function name
 #' @param data: R matrix or data frame containing the data to be analyzed
 #' @param GroupVar: name for variable defining grouping; if " ", no grouping
-#' @param Groups: vector of values of group variable for which plots are to be done
-#'    if "All": use all groups; if " ": no grouping
+#' @param Groups: vector of values of group variable for which plots are to be done. if "All": use all groups; if " ": no grouping
 #' @param AnalyticVars: vector of names (character values) of analytic results
-#' @param Ellipses: value or vector of proportions for confidence ellipses
-#'        default is c(.95,.99) to produce 95% and 99% confidence ellipses
-#' @param legendLoc: character, location of legend for a plot with points
-#'        default is "topright", alternatives are combinations of "top", "bottom",
-#'        "right", "left"
-#' @param PlotColors: T, use list of colors in Colors for points
-#'              F, plot points as black
+#' @param Ellipses: value or vector of proportions for confidence ellipses default is c(.95,.99) to produce 95\% and 99\% confidence ellipses
+#' @param legendLoc: character, location of legend for a plot with points default is "topright", alternatives are combinations of "top", "bottom", "right", "left"
+#' @param PlotColors: if T, use list of colors in Colors for points; if F, plot points as black
 #' @param Colors: vector of color names
-#' @param Identify: if T, the user can identify points of interest in plots; information on
-#'        these points is saved to the file; default is F
+#' @param Identify: if T, the user can identify points of interest in plots; information on these points is saved to the file; default is F
 #' @param folder: folder in which excel files are to be stored
 #' @param ds.weights: excel file with principal component loadings, extension.csv
 #' @param ds.importance: excel file with percent of variation explained, extension.csv
 #'
-#' @section Details
-#'  If Identify=T, the user must interact with each plot (or pane, if there is more than one pane
-#'  on a plot).  To identify a point, place the cursor as close as possible to the point and left click;
-#'  repeat if desired.  To go to the next pane, right click and select "Stop" in base R; click on
-#'  "Finish" in the plot pane in Rstudio.
+#' @section Details:
+#' If Identify=T, the user must interact with each plot (or pane, if there is more than one pane on a plot).  To identify a point, place the cursor as close as possible to the point and left click;  repeat if desired.  To go to the next pane, right click and select "Stop" in base R; click on "Finish" in the plot pane in Rstudio.
 #'
-#' @return The function produces a plot of the first two principal components, the contents of which
-#' '      are defined by the arguments PlotPoints, PlotEllipses, PlotHull, and PlotMedians.
-#' '  A scree plot and box plots are produced if requested.
-#' '  The function returns a list with the following components:
-#' '      fcn.date.ver: a vector with the contents of the argument doc, the date run, the version of R used
-#' '      dataUsed: the contents of the argument data restricted to the groups used
-#' '      params.grouping: a list with the values of the arguments GroupVar and Groups
-#' '      params.logical: a vector with the values of the arguments ScreePlot,BoxPlots,PlotPoints,
-#' '          PlotEllipses,PlotHull,PlotMedians,PlotColors
-#' '      analyticVars: a vector with the value of the argument AnalyticVars
-#' '      ellipse.pct: the value of the argument Ellipses
-#' '      Summary: a list including the percent of variation explained by each principal component
-#' '          and the cumulative percent explained
-#' '      weights: a data frame with the principal component weights for each observation
-#' '      Predicted:
-#' '      DataPlusPredicted:
-#' '      if Identify=T: data.check, a data frame with the observations in dataUsed identified as of interest
-#' '      if folder != " ": files: a list with path and data set names to the excel files
-#' '          containing weights, importance, and, if Identify=T, data for the points of interest
+#' @return The function produces a plot of the first two principal components, the contents of which are defined by the arguments PlotPoints, PlotEllipses, PlotHull, and PlotMedians. A scree plot and box plots are produced if requested.  The function returns a list with the following components:
+#' \itemize{
+#'   \item{"usage"}{a vector with the contents of the argument doc, the date run, the version of R used}
+#'   \item{"dataUsed"}{the contents of the argument data restricted to the groups used}
+#'   \item{"params.grouping"}{a list with the values of the arguments GroupVar and Groups}
+#'   \item{"x"}{params.logical: a vector with the values of the arguments ScreePlot,BoxPlots,PlotPoints,PlotEllipses,PlotHull,PlotMedians,PlotColors}
+#'   \item{"analyticVars"}{a vector with the value of the argument AnalyticVars}
+#'   \item{"ellipse.pct"}{the value of the argument Ellipses}
+#'   \item{"Summary"}{a list including the percent of variation explained by each principal component and the cumulative percent explained}
+#'   \item{"weights"}{a data frame with the principal component weights for each observation}
+#'   \item{"Predicted"}{Predicted}
+#'   \item{"DataPlusPredicted"}{DataPlusPredicted}
+#'   \item{"data.check"}{if Identify=T, a data frame with the observations in dataUsed identified as of interest}
+#'   \item{"files"}{if folder != " ", a list with path and data set names to the excel files containing weights, importance, and, if Identify=T, data for the points of interest}
+#'  }
 #'
 #' @import  MASS ellipse
 #'
 #' @export
 #'
-
-fn.pca <-
-  function(doc = "fn.pca",
-           data,
-           GroupVar,
-           Groups,
-           AnalyticVars,
-           ScreePlot = F,
-           BoxPlots = F,
-           PlotPoints = F,
-           PlotEllipses = F,
-           legendLoc="topright",
-           PlotHull = T,
-           PlotMedians = T,
-           Ellipses = c(.95, .99),
-           PlotColors = T,
-           Colors = c("red","black","blue","green","purple"),
-           Identify = F,
-           folder = " ",
-           ds.weights,
-           ds.importance) {
+fn.pca <-  function(doc = "fn.pca", data, GroupVar, Groups, AnalyticVars, ScreePlot = F, BoxPlots = F, PlotPoints = F, PlotEllipses = F, legendLoc="topright", PlotHull = T, PlotMedians = T, Ellipses = c(.95, .99), PlotColors = T, Colors = c("red","black","blue","green","purple"), Identify = F, folder = " ", ds.weights, ds.importance) {
     #
     #
     #  define functions to plot convex hulls and ellipses
@@ -212,7 +179,7 @@ fn.pca <-
     names(params.logical)<-c("ScreePlot","BoxPlots","PlotPoints","PlotEllipses","PlotHull","PlotMedians","PlotColors")
     #
     if ((substr(folder,1,1) == " ") & (!Identify))
-      out<-list(fcn.date.ver=fcn.date.ver,
+      out<-list(usage=fcn.date.ver,
                 dataUsed = data.Used,
                 analyticVars = AnalyticVars,
                 params.logical = params.logical,
@@ -223,7 +190,7 @@ fn.pca <-
                 Predicted = Predicted,
                 DataPlusPredicted = DataPlusPredicted)
     if ((substr(folder,1,1) != " ") & (!Identify))
-      out<-list(fcn.date.ver = fcn.date.ver,
+      out<-list(usage = fcn.date.ver,
                 dataUsed = data.Used,
                 analyticVars = AnalyticVars,
                 params.logical = params.logical,
@@ -235,7 +202,7 @@ fn.pca <-
                 DataPlusPredicted = DataPlusPredicted,
                 files=list(paste(folder,ds.weights,sep=""),paste(folder,ds.importance,sep="")))
     if ((substr(folder,1,1) == " ") & (Identify))
-      out<-list(fcn.date.ver=fcn.date.ver,
+      out<-list(usage=fcn.date.ver,
                 dataUsed=data.Used,
                 analyticVars=AnalyticVars,
                 params.grouping=params.grouping,
@@ -246,7 +213,7 @@ fn.pca <-
                 DataPlusPredicted = DataPlusPredicted,
                 data.check=data.check)
     if ((substr(folder,1,1) != " ") & (Identify))
-      out<-list(fcn.date.ver=fcn.date.ver,
+      out<-list(usage=fcn.date.ver,
                 dataUsed=data.Used,
                 analyticVars=AnalyticVars,
                 params.grouping=params.grouping,

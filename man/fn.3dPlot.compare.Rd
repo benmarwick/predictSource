@@ -8,9 +8,9 @@ fn.3dPlot.compare(data, GroupVar, Groups, AnalyticVars, Selections, Colors,
   SymbolSize = 0.7)
 }
 \arguments{
-\item{data:}{R matrix or #' data frame containing the data to be analyzed}
+\item{data:}{R matrix or data frame containing the data to be analyzed}
 
-\item{GroupVar:}{name for variable defining #' grouping, ' ' if no grouping}
+\item{GroupVar:}{name for variable defining grouping, ' ' if no grouping}
 
 \item{Groups:}{vector of values of group variable for which plots are to be done AnalyticVars: vector of names (character values) of analytic
 results}
