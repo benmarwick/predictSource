@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="John Karon &amp; Ben Marwick" />
+
+<meta name="date" content="2018-03-07" />
+
+<title>Introduction to the karon package</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+
+
+<link href="data:text/css;charset=utf-8,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23header%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%20code%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Introduction to the karon package</h1>
+<h4 class="author"><em>John Karon &amp; Ben Marwick</em></h4>
+<h4 class="date"><em>2018-03-07</em></h4>
+
+
+
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>In this vignette we demonstrate typical uses of the functions contained in the karon package.</p>
+</div>
+<div id="example-data" class="section level2">
+<h2>Example data</h2>
+<p>The package includes a small data set of data on the geochemistry of some Obsidian pieces that we will use for demonstating the functions. Let’s take a look at the data:</p>
+<p>[…insert more background and attribution about the data here…]</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(karon)
+<span class="kw">data</span>(ObsidianData)
+<span class="kw">head</span>(ObsidianData)
+<span class="co">#&gt;   Code Subset    ID   Ti   Mn    Fe  Rb Sr   Y   Zr  Nb Ba Pb Th Zn</span>
+<span class="co">#&gt; 1   AW         1B1  1512 1184 25863 372  6 131 1275 101 NA NA NA NA</span>
+<span class="co">#&gt; 2   AW         5B3  1190  966 22438 345  6 133 1222  93 NA NA NA NA</span>
+<span class="co">#&gt; 3   AW         7B1  1367 1097 24538 381  8 137 1316 106 NA NA NA NA</span>
+<span class="co">#&gt; 4   AW         7B3  1410 1024 23250 361  7 136 1285 102 NA NA NA NA</span>
+<span class="co">#&gt; 5   AW         7B8  1381 1018 22291 357  5 133 1276  98 NA NA NA NA</span>
+<span class="co">#&gt; 6   AW        7B12  1405 1117 25989 392  9 143 1357 109 NA NA NA NA</span>
+<span class="kw">names</span>(ObsidianData)
+<span class="co">#&gt;  [1] &quot;Code&quot;   &quot;Subset&quot; &quot;ID&quot;     &quot;Ti&quot;     &quot;Mn&quot;     &quot;Fe&quot;     &quot;Rb&quot;    </span>
+<span class="co">#&gt;  [8] &quot;Sr&quot;     &quot;Y&quot;      &quot;Zr&quot;     &quot;Nb&quot;     &quot;Ba&quot;     &quot;Pb&quot;     &quot;Th&quot;    </span>
+<span class="co">#&gt; [15] &quot;Zn&quot;</span></code></pre></div>
+<p>We can check the data with the <code>fn.CheckData</code> function which will check and summarize the data. It will tell you about duplicate records, negative analytic values, numbers of analytic results, and percentiles of results. […insert more commentary here…]</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Els &lt;-<span class="kw">c</span>(<span class="st">&quot;Rb&quot;</span>,<span class="st">&quot;Sr&quot;</span>,<span class="st">&quot;Y&quot;</span>,<span class="st">&quot;Zr&quot;</span>,<span class="st">&quot;Nb&quot;</span>)  <span class="co"># define the elements used in the analysis</span>
+Folder &lt;-<span class="st"> </span><span class="kw">paste0</span>(here<span class="op">::</span><span class="kw">here</span>(), <span class="st">&quot;/vignettes/&quot;</span>)
+checks &lt;-<span class="st"> </span><span class="kw">fn.CheckData</span>(<span class="dt">data =</span> ObsidianData, 
+                     <span class="dt">CheckDupVars =</span> <span class="kw">c</span>(<span class="st">&quot;Code&quot;</span>,<span class="st">&quot;ID&quot;</span>),
+                     <span class="dt">GroupVar =</span> <span class="st">&quot;Code&quot;</span>, 
+                     <span class="dt">Groups =</span> <span class="st">&quot;All&quot;</span>, 
+                     <span class="dt">AnalyticVars =</span> Els, 
+                     <span class="dt">folder =</span> Folder, 
+                     <span class="dt">ds.duplicates =</span> <span class="st">&quot;Duplicates.csv&quot;</span>, 
+                     <span class="dt">ds.NegValues =</span> <span class="st">&quot;NegValues.csv&quot;</span>, 
+                     <span class="dt">ds.Nsamples =</span> <span class="st">&quot;Nsamples&quot;</span>, 
+                     <span class="dt">ds.summary =</span> <span class="st">&quot;SummaryStats&quot;</span>)
+
+<span class="kw">str</span>(checks)
+<span class="co">#&gt; List of 9</span>
+<span class="co">#&gt;  $ usage         :List of 3</span>
+<span class="co">#&gt;   ..$ : chr &quot;fn.CheckData&quot;</span>
+<span class="co">#&gt;   ..$ : chr &quot;Wed Mar 07 09:52:42 2018&quot;</span>
+<span class="co">#&gt;   ..$ :function ()  </span>
+<span class="co">#&gt;  $ dataUsed      :'data.frame':  705 obs. of  15 variables:</span>
+<span class="co">#&gt;   ..$ Code  : Factor w/ 24 levels &quot;AW&quot;,&quot;CC&quot;,&quot;DP.E&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...</span>
+<span class="co">#&gt;   ..$ Subset: Factor w/ 4 levels &quot; &quot;,&quot;GrantsRidge&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...</span>
+<span class="co">#&gt;   ..$ ID    : Factor w/ 568 levels &quot;-10&quot;,&quot;-11&quot;,&quot;-12&quot;,..: 204 261 286 288 289 287 302 303 314 324 ...</span>
+<span class="co">#&gt;   ..$ Ti    : num [1:705] 1512 1190 1367 1410 1381 ...</span>
+<span class="co">#&gt;   ..$ Mn    : num [1:705] 1184 966 1097 1024 1018 ...</span>
+<span class="co">#&gt;   ..$ Fe    : num [1:705] 25863 22438 24538 23250 22291 ...</span>
+<span class="co">#&gt;   ..$ Rb    : num [1:705] 372 345 381 361 357 392 342 381 374 341 ...</span>
+<span class="co">#&gt;   ..$ Sr    : num [1:705] 6 6 8 7 5 9 5 6 9 8 ...</span>
+<span class="co">#&gt;   ..$ Y     : num [1:705] 131 133 137 136 133 143 124 140 128 123 ...</span>
+<span class="co">#&gt;   ..$ Zr    : num [1:705] 1275 1222 1316 1285 1276 ...</span>
+<span class="co">#&gt;   ..$ Nb    : num [1:705] 101 93 106 102 98 109 96 100 105 96 ...</span>
+<span class="co">#&gt;   ..$ Ba    : num [1:705] NA NA NA NA NA NA NA NA 45 45 ...</span>
+<span class="co">#&gt;   ..$ Pb    : num [1:705] NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   ..$ Th    : num [1:705] NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   ..$ Zn    : num [1:705] NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;  $ params        :List of 3</span>
+<span class="co">#&gt;   ..$ CheckDupVars: chr [1:2] &quot;Code&quot; &quot;ID&quot;</span>
+<span class="co">#&gt;   ..$ GroupVar    : chr &quot;Code&quot;</span>
+<span class="co">#&gt;   ..$ Groups      : chr &quot;All&quot;</span>
+<span class="co">#&gt;  $ analyticVars  : chr [1:5] &quot;Rb&quot; &quot;Sr&quot; &quot;Y&quot; &quot;Zr&quot; ...</span>
+<span class="co">#&gt;  $ Duplicates    :'data.frame':  13 obs. of  15 variables:</span>
+<span class="co">#&gt;   ..$ Code  : Factor w/ 24 levels &quot;AW&quot;,&quot;CC&quot;,&quot;DP.E&quot;,..: 15 15 15 15 15 15 15 15 15 15 ...</span>
+<span class="co">#&gt;   ..$ Subset: Factor w/ 4 levels &quot; &quot;,&quot;GrantsRidge&quot;,..: 2 2 2 2 2 2 2 2 2 2 ...</span>
+<span class="co">#&gt;   ..$ ID    : Factor w/ 568 levels &quot;-10&quot;,&quot;-11&quot;,&quot;-12&quot;,..: 4 5 6 7 8 9 1 4 5 6 ...</span>
+<span class="co">#&gt;   ..$ Ti    : num [1:13] NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   ..$ Mn    : num [1:13] 807 773 923 1026 817 ...</span>
+<span class="co">#&gt;   ..$ Fe    : num [1:13] 8181 7907 8928 9114 8166 ...</span>
+<span class="co">#&gt;   ..$ Rb    : num [1:13] 566 540 603 626 561 534 568 587 590 571 ...</span>
+<span class="co">#&gt;   ..$ Sr    : num [1:13] 4 5 5 4 4 4 3 1 7 4 ...</span>
+<span class="co">#&gt;   ..$ Y     : num [1:13] 77 74 79 78 77 72 75 77 80 78 ...</span>
+<span class="co">#&gt;   ..$ Zr    : num [1:13] 117 116 123 121 124 116 115 120 118 116 ...</span>
+<span class="co">#&gt;   ..$ Nb    : num [1:13] 197 192 199 210 201 192 194 197 204 195 ...</span>
+<span class="co">#&gt;   ..$ Ba    : num [1:13] 14 15 14 11 16 15 12 12 13 13 ...</span>
+<span class="co">#&gt;   ..$ Pb    : num [1:13] NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   ..$ Th    : num [1:13] 36 38 34 30 33 41 NA NA NA NA ...</span>
+<span class="co">#&gt;   ..$ Zn    : num [1:13] 152 143 165 180 144 146 156 160 160 161 ...</span>
+<span class="co">#&gt;  $ NegativeValues: logi NA</span>
+<span class="co">#&gt;  $ Nvalues       :'data.frame':  25 obs. of  6 variables:</span>
+<span class="co">#&gt;   ..$ Group: Factor w/ 25 levels &quot;AW&quot;,&quot;CC&quot;,&quot;DP.E&quot;,..: 1 2 3 4 5 6 7 8 9 10 ...</span>
+<span class="co">#&gt;   ..$ Rb   : num [1:25] 33 23 46 15 38 25 15 16 28 15 ...</span>
+<span class="co">#&gt;   ..$ Sr   : num [1:25] 33 23 46 15 38 25 15 16 28 15 ...</span>
+<span class="co">#&gt;   ..$ Y    : num [1:25] 33 23 46 15 38 25 15 16 28 15 ...</span>
+<span class="co">#&gt;   ..$ Zr   : num [1:25] 33 23 46 15 38 25 15 16 28 15 ...</span>
+<span class="co">#&gt;   ..$ Nb   : num [1:25] 33 23 46 15 38 25 15 16 28 15 ...</span>
+<span class="co">#&gt;  $ Summary       :'data.frame':  125 obs. of  9 variables:</span>
+<span class="co">#&gt;   ..$ Analysis : Factor w/ 6 levels &quot; &quot;,&quot;Nb&quot;,&quot;Rb&quot;,..: 3 3 3 3 3 3 3 3 3 3 ...</span>
+<span class="co">#&gt;   ..$ Group    : Factor w/ 25 levels &quot; &quot;,&quot;AW&quot;,&quot;CC&quot;,..: 2 3 4 5 6 7 8 9 10 11 ...</span>
+<span class="co">#&gt;   ..$ min      : num [1:125] 289 112 183 158 147 99 106 156 179 146 ...</span>
+<span class="co">#&gt;   ..$ Q1       : num [1:125] 328 136 194 174 215 105 114 158 202 148 ...</span>
+<span class="co">#&gt;   ..$ median   : num [1:125] 340 141 198 181 222 107 116 159 205 150 ...</span>
+<span class="co">#&gt;   ..$ mean     : num [1:125] 342 142 201 179 221 107 116 162 206 152 ...</span>
+<span class="co">#&gt;   ..$ Q3       : num [1:125] 357 149 206 183 231 108 120 164 214 156 ...</span>
+<span class="co">#&gt;   ..$ max      : num [1:125] 392 161 241 194 244 116 123 178 222 165 ...</span>
+<span class="co">#&gt;   ..$ n.missing: num [1:125] 0 0 0 0 0 0 0 0 0 0 ...</span>
+<span class="co">#&gt;  $ files         :List of 5</span>
+<span class="co">#&gt;   ..$ folder       : chr &quot;C:/Users/bmarwick/Desktop/karon/vignettes/&quot;</span>
+<span class="co">#&gt;   ..$ ds.duplicates: chr &quot;Duplicates.csv&quot;</span>
+<span class="co">#&gt;   ..$ ds.NegValues : chr &quot;NegValues.csv&quot;</span>
+<span class="co">#&gt;   ..$ ds.Nsamples  : chr &quot;Nsamples&quot;</span>
+<span class="co">#&gt;   ..$ ds.summary   : chr &quot;SummaryStats&quot;</span></code></pre></div>
+<p>We can see the number of sample values, by source and element:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">checks<span class="op">$</span>Nvalues
+<span class="co">#&gt;    Group  Rb  Sr   Y  Zr  Nb</span>
+<span class="co">#&gt; 1     AW  33  33  33  33  33</span>
+<span class="co">#&gt; 2     CC  23  23  23  23  23</span>
+<span class="co">#&gt; 3   DP.E  46  46  46  46  46</span>
+<span class="co">#&gt; 4   DP.W  15  15  15  15  15</span>
+<span class="co">#&gt; 5     GC  38  38  38  38  38</span>
+<span class="co">#&gt; 6     GM  25  25  25  25  25</span>
+<span class="co">#&gt; 7    JBS  15  15  15  15  15</span>
+<span class="co">#&gt; 8    JCM  16  16  16  16  16</span>
+<span class="co">#&gt; 9    JCT  28  28  28  28  28</span>
+<span class="co">#&gt; 10   JER  15  15  15  15  15</span>
+<span class="co">#&gt; 11    JP  39  39  39  39  39</span>
+<span class="co">#&gt; 12 MC.AC  36  36  36  36  36</span>
+<span class="co">#&gt; 13 MC.MM  22  22  22  22  22</span>
+<span class="co">#&gt; 14 MC.SC  34  34  34  34  34</span>
+<span class="co">#&gt; 15    MT  35  35  35  35  35</span>
+<span class="co">#&gt; 16    PW  17  17  17  17  17</span>
+<span class="co">#&gt; 17    RH  32  32  32  32  32</span>
+<span class="co">#&gt; 18    RM  29  29  29  29  29</span>
+<span class="co">#&gt; 19    SM  30  30  30  30  30</span>
+<span class="co">#&gt; 20    SS  26  26  26  26  26</span>
+<span class="co">#&gt; 21    ST  43  43  43  43  43</span>
+<span class="co">#&gt; 22    Su  64  64  64  64  64</span>
+<span class="co">#&gt; 23    TM  15  15  15  15  15</span>
+<span class="co">#&gt; 24    Vu  29  29  29  29  29</span>
+<span class="co">#&gt; 25 Total 705 705 705 705 705</span></code></pre></div>
+</div>
+<div id="box-plots" class="section level2">
+<h2>Box plots</h2>
+<p>Next we can make some boxplots […insert more commentary here…]:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># windows()</span>
+boxplots &lt;-<span class="st"> </span>
+<span class="kw">fn.BoxPlots</span>(<span class="dt">data =</span> ObsidianData, 
+            <span class="dt">GroupVar =</span> <span class="st">&quot;Code&quot;</span>, 
+            <span class="dt">Groups =</span> <span class="st">&quot;All&quot;</span>, 
+            <span class="dt">AnalyticVars =</span> Els,
+            <span class="dt">Nrow =</span> <span class="dv">5</span>,
+            <span class="dt">Ncol =</span> <span class="dv">5</span>)</code></pre></div>
+</div>
+<div id="pairs-plots" class="section level2">
+<h2>Pairs plots</h2>
+<p>We can make a pairs plot. A pairs plot is a matrix containing bivariate scatter plots for all pairs of quantitative variables. The matrix is symmetric, so corresponding plots across the main diagonal interchange the horizontal and vertical axes. Each plot contains a robust locally weighted line to describe the trend in the data. This line is obtained from the R function <code>lowess()</code> which computes a predicted value at each abscissa (x-value) from a regression based on a fraction of the data, with weights decreasing at abscissas farther from the point and rejecting outliers. This function tends to try to have the line go through or near the points with the largest and smallest abscissas; therefore the behavior at the ends of the plot is not reliable. The line is obtained from the function <code>panel.smooth()</code> within the call to <code>pairs()</code> with an argument span. The line (smoother) will not be useful if there are very few values; an example plot demonstrates that trends may show useful results even with 15 values.</p>
+<p>The plots are obtained with the function <code>fn.PairsPlot()</code> and the arguments data, GroupVar, Groups, AnalyticVars, and Span. All except Span have the same meanings as in the function fn.BoxPlot. Span is a value between 0 and 1 (not equal to 0) defining the proportion of data used to estimate robust smooth; the function is written with a default value of 2/3, which can be changed. A small value (such as 0.1) will produce plots which do not show a clear trend; a large value (close to 1) will produce plots which do not show changes in trends. Running the function will produce warnings that span is not a graphical parameter; these warnings should be ignored.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pairsplots &lt;-<span class="st"> </span>
+<span class="kw">fn.PairsPlot</span>(<span class="dt">data =</span> ObsidianData,
+             <span class="dt">GroupVar =</span> <span class="st">&quot; &quot;</span>,
+             <span class="dt">Groups =</span> <span class="st">&quot; &quot;</span>,
+             <span class="dt">AnalyticVars =</span> Els)</code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+</div>
+<div id="coefficients-of-variation-for-analyses-and-correlations-between-pairs-of-elements" class="section level2">
+<h2>Coefficients of variation for analyses and correlations between pairs of elements</h2>
+<p>These descriptive statistics can be obtained from the function fn.CV.corr() using the following arguments: - doc: character, default is “fn.CV.corr” data, GroupVar, Groups, AnalyticVars, and folder: these have the same meanings as for previous functions;<br />
+- Transpose: if T (the default value), one row for the correlations between each pair of analyses (columns are groups)’ if F, one row for each group (columns are correlations between a pair of analyses);<br />
+- CV.digits: number of significant digits in the table of coefficients of variation, default value is 2<br />
+- corr.digits: number of significant digits in the table of correlations, default value is 2<br />
+- folder: the path to the folder containing the excel files (Windows)<br />
+- ds.CV: file name for coefficients of variation, with extension .csv<br />
+- ds.corr: file name for Spearman correlation coefficients, with extension .csv</p>
+<p>This function returns a list with elements doc, CV (the coefficients of variation), and corr (the correlations). By default, both the coefficients of variation and the correlations are rounded to two decimal places. The coefficient of variation is the standard deviation of a set of data divided by the mean; it would be affected by outliers. The Spearman correlation is the correlation based on ranks; it does not affected by outliers. It is easier to make comparisons reading down a column than reading across a row, to this table makes it easier to see the variation in correlations among the sources.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Els &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Rb&quot;</span>,<span class="st">&quot;Sr&quot;</span>,<span class="st">&quot;Y&quot;</span>,<span class="st">&quot;Zr&quot;</span>,<span class="st">&quot;Nb&quot;</span>)  <span class="co"># define the elements used in the analysis</span>
+cvcorr &lt;-<span class="st"> </span>
+<span class="st">  </span><span class="kw">fn.CV.corr</span>(<span class="dt">data =</span> ObsidianData, 
+           <span class="dt">GroupVar =</span> <span class="st">&quot;Code&quot;</span>, 
+           <span class="dt">Groups =</span> <span class="st">&quot;All&quot;</span>, 
+           <span class="dt">AnalyticVars =</span> Els, 
+           <span class="dt">Transpose =</span> T, 
+           <span class="dt">folder =</span> Folder,
+           <span class="dt">ds.CV =</span> <span class="st">&quot;CV.csv&quot;</span>, 
+           <span class="dt">ds.corr =</span> <span class="st">&quot;corr.csv&quot;</span>)</code></pre></div>
+<p>Here are the first few rows of the CV values:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(cvcorr<span class="op">$</span>CV)
+<span class="co">#&gt;   Code   Rb   Sr    Y   Zr   Nb</span>
+<span class="co">#&gt; 1   AW 0.08 0.19 0.05 0.05 0.06</span>
+<span class="co">#&gt; 2   CC 0.07 0.10 0.07 0.08 0.10</span>
+<span class="co">#&gt; 3 DP.E 0.05 0.10 0.09 0.05 0.10</span>
+<span class="co">#&gt; 4 DP.W 0.06 0.04 0.06 0.04 0.08</span>
+<span class="co">#&gt; 5   GC 0.08 0.62 0.08 0.09 0.16</span>
+<span class="co">#&gt; 6   GM 0.03 0.04 0.09 0.04 0.05</span></code></pre></div>
+<p>And here are the first few rows of the correlation values:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(cvcorr<span class="op">$</span>corr)
+<span class="co">#&gt;      Rb/Sr  Rb/Y Rb/Zr Rb/Nb  Sr/Y Sr/Zr Sr/Nb  Y/Zr Y/Nb Zr/Nb</span>
+<span class="co">#&gt; AW   -0.03  0.73  0.91  0.56  0.08  0.01  0.42  0.63 0.66  0.48</span>
+<span class="co">#&gt; CC    0.85  0.39  0.49  0.15  0.53  0.67  0.33  0.49 0.16  0.43</span>
+<span class="co">#&gt; DP.E  0.62  0.33  0.52  0.26  0.17  0.70  0.28  0.02 0.12  0.32</span>
+<span class="co">#&gt; DP.W  0.85  0.54  0.74  0.34  0.55  0.94  0.24  0.59 0.30  0.05</span>
+<span class="co">#&gt; GC    0.01  0.29  0.58  0.37 -0.03 -0.02  0.20  0.19 0.31  0.01</span>
+<span class="co">#&gt; GM    0.35 -0.07  0.16  0.56  0.31 -0.24  0.63 -0.07 0.35  0.01</span></code></pre></div>
+</div>
+
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

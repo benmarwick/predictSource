@@ -1,0 +1,133 @@
+---
+title: "Introduction to the karon package"
+author: "John Karon & Ben  Marwick"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  warning = FALSE,
+  message = FALSE,
+  comment = "#>"
+)
+```
+
+## Introduction
+
+In this vignette we demonstrate typical uses of the functions contained in the karon package. 
+
+
+## Example data
+
+The package includes a small data set of data on the geochemistry of some Obsidian pieces that we will use for demonstating the functions. Let's take a look at the data:
+
+[...insert more background and attribution about the data here...]
+
+```{r}
+library(karon)
+data(ObsidianData)
+head(ObsidianData)
+names(ObsidianData)
+```
+
+We can check the data with the `fn.CheckData` function which will check and summarize the data. It will tell you about duplicate records, negative analytic values, numbers of analytic results, and percentiles of results. [...insert more commentary here...]
+
+
+```{r}
+Els <-c("Rb","Sr","Y","Zr","Nb")  # define the elements used in the analysis
+Folder <- paste0(here::here(), "/vignettes/")
+checks <- fn.CheckData(data = ObsidianData, 
+                     CheckDupVars = c("Code","ID"),
+                     GroupVar = "Code", 
+                     Groups = "All", 
+                     AnalyticVars = Els, 
+                     folder = Folder, 
+                     ds.duplicates = "Duplicates.csv", 
+                     ds.NegValues = "NegValues.csv", 
+                     ds.Nsamples = "Nsamples", 
+                     ds.summary = "SummaryStats")
+
+str(checks)
+```
+
+We can see the number of sample values, by source and element:
+
+```{r}
+checks$Nvalues
+```
+
+## Box plots
+
+Next we can make some boxplots [...insert more commentary here...]: 
+
+```{r eval = FALSE}
+# windows()
+boxplots <- 
+fn.BoxPlots(data = ObsidianData, 
+            GroupVar = "Code", 
+            Groups = "All", 
+            AnalyticVars = Els,
+            Nrow = 5,
+            Ncol = 5)
+```
+
+## Pairs plots
+
+We can make a pairs plot. A pairs plot is a matrix containing bivariate scatter plots for all pairs of quantitative variables.  The matrix is symmetric, so corresponding plots across the main diagonal interchange the horizontal and vertical axes.  Each plot contains a robust locally weighted line to describe the trend in the data.  This line is obtained from the R function `lowess()` which computes a predicted value at each abscissa (x-value) from a regression based on a fraction of the data, with weights decreasing at abscissas farther from the point and rejecting outliers.  This function tends to try to have the line go through or near the points with the largest and smallest abscissas; therefore the behavior at the ends of the plot is not reliable.  The line is obtained from the function `panel.smooth()` within the call to `pairs()` with an argument span.  The line (smoother) will not be useful if there are very few values; an example plot demonstrates that trends may show useful results even with 15 values.  
+
+The plots are obtained with the function `fn.PairsPlot()` and the arguments data, GroupVar, Groups, AnalyticVars, and Span.  All except Span have the same meanings as in the function fn.BoxPlot.  Span is a value between 0 and 1 (not equal to 0) defining the proportion of data used to estimate robust smooth; the function is written with a default value of 2/3, which can be changed.  A small value (such as 0.1) will produce plots which do not show a clear trend; a large value (close to 1) will produce plots which do not show changes in trends.  Running the function will produce warnings that span is not a graphical parameter; these warnings should be ignored.
+
+```{r}
+pairsplots <- 
+fn.PairsPlot(data = ObsidianData,
+             GroupVar = " ",
+             Groups = " ",
+             AnalyticVars = Els)
+```
+
+## Coefficients of variation for analyses and correlations between pairs of elements
+
+These descriptive statistics can be obtained from the function fn.CV.corr() using the following arguments:
+- doc: character, default is "fn.CV.corr" data, GroupVar, Groups, AnalyticVars, and folder: these have the same meanings as for previous functions;    
+- Transpose: if T (the default value), one row for the correlations between each pair of analyses (columns are groups)’ if F, one row for each group (columns are correlations between a pair of analyses);    
+- CV.digits: number of significant digits in the table of coefficients of variation,
+	default value is 2    
+- corr.digits: number of significant digits in the table of correlations, 	default value is 2    
+- folder: the path to the folder containing the excel files (Windows)      
+- ds.CV: file name for coefficients of variation, with extension .csv    
+- ds.corr: file name for Spearman correlation coefficients, with extension .csv    
+
+This function returns a list with elements doc, CV (the coefficients of variation), and corr (the correlations).  By default, both the coefficients of variation and the correlations are rounded to two decimal places.  The coefficient of variation is the standard deviation of a set of data divided by the mean; it would be affected by outliers.  The Spearman correlation is the correlation based on ranks; it does not affected by outliers.  It is easier to make comparisons reading down a column than reading across a row, to this table makes it easier to see the variation in correlations among the sources.
+
+```{r}
+Els <- c("Rb","Sr","Y","Zr","Nb")  # define the elements used in the analysis
+cvcorr <- 
+  fn.CV.corr(data = ObsidianData, 
+           GroupVar = "Code", 
+           Groups = "All", 
+           AnalyticVars = Els, 
+           Transpose = T, 
+           folder = Folder,
+           ds.CV = "CV.csv", 
+           ds.corr = "corr.csv")
+```
+
+Here are the first few rows of the CV values:
+
+```{r}
+head(cvcorr$CV)
+```
+
+And here are the first few rows of the correlation values:
+
+```{r}
+head(cvcorr$corr)
+```
+
+
