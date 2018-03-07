@@ -9,10 +9,11 @@
 #' @param GroupVar: if there are groups, name of variable defining the groups, default value of " ": no grouping
 #' @param Groups: character vector of groups by which numbers of samples and summary statistics will be tabulated default value of " ": tabulations are done for the entire data set value = "All": tabulation for each distinct code in GroupVar
 #' @param AnalyticVars: character vector of names of analytic variables for which tabulations are done
-#' @param folder: path to folder in which to store excel files with results (e.g. "C:\\project\\results\\") or " "
+#' @param folder: character; if " ", no files are saved; if not, path to folder in which to store excel files with results (see Detail)
 #' @param ds.duplicates: file name for excel file with duplicate records, with extension csv (e.g. "duplicates.csv")
+#' @param ds.NegValues: file name for excel file with observations with negative analytic values (e.g. "negValues.csv")
 #' @param ds.Nsamples: file name for excel file with numbers of samples, with extension csv (e.g. "Nresults.csv")
-#' @param ds.summary: file with summary statistics for each analytic variable check matrix stored in the object data for duplicates based on variables in the argument fields
+#' @param ds.summary: file with summary statistics for each analytic variable
 #'
 #' @return
 #'   If folder != " ", four excel files with duplicate observations, observations with negative
@@ -34,7 +35,7 @@
 #'
 #' @section Detail:
 #' AnalyticVars must be a vector of length at least 2.
-#' If folder = " ", no excel files are written.  If not, the path must end with \\.
+#' If folder = " ", no excel files are written.  If not, in windows OS, the path must end with two slashes.
 #'
 #' @examples
 #'
