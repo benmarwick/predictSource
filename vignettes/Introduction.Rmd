@@ -14,6 +14,8 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   warning = FALSE,
   message = FALSE,
+  fig.width = 7,
+  fig.height = 7,
   comment = "#>"
 )
 ```
@@ -66,15 +68,16 @@ checks$Nvalues
 
 Next we can make some boxplots [...insert more commentary here...]: 
 
-```{r eval = FALSE}
+```{r}
 # windows()
+Els <- c("Rb", "Sr")
 boxplots <- 
 fn.BoxPlots(data = ObsidianData, 
             GroupVar = "Code", 
-            Groups = "All", 
+            Groups = c("AW", "CC"), 
             AnalyticVars = Els,
-            Nrow = 5,
-            Ncol = 5)
+            Nrow = 1,
+            Ncol = 2)
 ```
 
 ## Pairs plots
@@ -93,7 +96,8 @@ fn.PairsPlot(data = ObsidianData,
 
 ## Coefficients of variation for analyses and correlations between pairs of elements
 
-These descriptive statistics can be obtained from the function fn.CV.corr() using the following arguments:
+These descriptive statistics can be obtained from the function fn.CV.corr() using the following arguments:    
+
 - doc: character, default is "fn.CV.corr" data, GroupVar, Groups, AnalyticVars, and folder: these have the same meanings as for previous functions;    
 - Transpose: if T (the default value), one row for the correlations between each pair of analyses (columns are groups)’ if F, one row for each group (columns are correlations between a pair of analyses);    
 - CV.digits: number of significant digits in the table of coefficients of variation,

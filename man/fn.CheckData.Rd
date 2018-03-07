@@ -21,13 +21,15 @@ fn.CheckData(doc = "fn.CheckData", data, CheckDupVars, GroupVar, Groups,
 
 \item{AnalyticVars:}{character vector of names of analytic variables for which tabulations are done}
 
-\item{folder:}{path to folder in which to store excel files with results (e.g. "C:\\project\\results\\") or " "}
+\item{folder:}{character; if " ", no files are saved; if not, path to folder in which to store excel files with results (see Detail)}
 
 \item{ds.duplicates:}{file name for excel file with duplicate records, with extension csv (e.g. "duplicates.csv")}
 
+\item{ds.NegValues:}{file name for excel file with observations with negative analytic values (e.g. "negValues.csv")}
+
 \item{ds.Nsamples:}{file name for excel file with numbers of samples, with extension csv (e.g. "Nresults.csv")}
 
-\item{ds.summary:}{file with summary statistics for each analytic variable check matrix stored in the object data for duplicates based on variables in the argument fields}
+\item{ds.summary:}{file with summary statistics for each analytic variable}
 }
 \value{
 If folder != " ", four excel files with duplicate observations, observations with negative
@@ -53,7 +55,7 @@ data checks and summaries: duplicate records, negative analytic values, numbers 
 \section{Detail}{
 
 AnalyticVars must be a vector of length at least 2.
-If folder = " ", no excel files are written.  If not, the path must end with \\.
+If folder = " ", no excel files are written.  If not, in windows OS, the path must end with two slashes.
 }
 
 \examples{

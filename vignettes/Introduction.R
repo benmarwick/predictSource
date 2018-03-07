@@ -3,6 +3,8 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   warning = FALSE,
   message = FALSE,
+  fig.width = 7,
+  fig.height = 7,
   comment = "#>"
 )
 
@@ -31,15 +33,16 @@ str(checks)
 ## ------------------------------------------------------------------------
 checks$Nvalues
 
-## ----eval = FALSE--------------------------------------------------------
-#  # windows()
-#  boxplots <-
-#  fn.BoxPlots(data = ObsidianData,
-#              GroupVar = "Code",
-#              Groups = "All",
-#              AnalyticVars = Els,
-#              Nrow = 5,
-#              Ncol = 5)
+## ------------------------------------------------------------------------
+# windows()
+Els <- c("Rb", "Sr")
+boxplots <- 
+fn.BoxPlots(data = ObsidianData, 
+            GroupVar = "Code", 
+            Groups = c("AW", "CC"), 
+            AnalyticVars = Els,
+            Nrow = 1,
+            Ncol = 2)
 
 ## ------------------------------------------------------------------------
 pairsplots <- 
