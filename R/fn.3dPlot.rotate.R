@@ -21,23 +21,7 @@
 #' @import MASS rgl
 #'
 #' @section: Details
-#' \itemize{
-#' \item{"x"}{If the plots are not to be saved to a file, the function stops after producing each plot.
-#'   Close the plot window, then enter c ("continue") at the prompt to get the next plot.
-#'   If this function is run using Rstudio, each plot appears in a separate window,
-#'   not in the Rstudio plot pane; this window may appear behind the Rstudio window.}
-#'
-#' \item{"x"}{If the plots are to be saved to a file, the function also stops after producing each plot.
-#'   Rotate the plot as desired, then enter c at the prompt, so that the function will save
-#'   the file in the desired format.}
-#'
-#' \item{"x"}{If more than one plot is to be produced (the argument Selections is a matrix),
-#'   close the rgl plot window before entering c to go to the next plot.  In this case, if
-#'   plots are saved to files, the successive file names are ds.3dPlot1, ds.3dPlot2,....}
-#'
-#' \item{"x"}{If only one group is shown, the points have the color of the first color specified.  For multiple
-#'   groups, the colors are used in the order specified.}
-#'   }
+#' See the vignette for details on viewing each plot, saving plots to a file, and use of colors.
 #'
 #' @return A list with the following components:
 #' \itemize{

@@ -44,18 +44,8 @@ create 3-dimensional data plot. The function stops after producing each plot.  E
 }
 \section{Details}{
 
- \itemize{
-\item{"x"}{The function stops after producing each plot.  Enter c ("continue") at the prompt to
-  get the next plot.  If this function is run using RStudio, each plot appears in a separate window,
-  not in the Rstudio plot pane.}
-
-\item{"x"}{The argument Selections can specify variable names or column numbers of the matrix defined by
-  AnalyticVars.  If a vector, only one plot is produced; if a data frame or matrix, there is a plot
-  defined by each row.}
-
-\item{"x"}{If only one group is shown, the points have the color of the first color specified.  For multiple
-  groups, the colors are used in the order specified.}
-  }
+ See the vignette for more information: visualizing each plot, specification of the argument Selections
+as a matrix or data frame, and use of colors.
 }
 
 \examples{

@@ -37,15 +37,9 @@ pairs plots of specified analytic values, by specified groups
 }
 \section{DETAILS}{
 
-\itemize{
-\item{"x"}{The function produces a pairs plot with a lowess smooth through the scatter plot for
+ The function produces a pairs plot with a lowess smooth through the scatter plot for
   each pair of variables in AnalyticVars.  If Groups != " ", there is a scatter plot for
-  each group in Groups.  If Groups=" ", there is one pairs plot with the data for all groups.}
-
-\item{"x"}{In Rstudio, each plot is in a separate window, not in the Plot pane.}
-
-\item{"x"}{Executing the function produces warnings ("span is not a graphical parameter") that can be
-  ignored (changing the value of Span does change the lowess smooths).}
-  }
+  each group in Groups.  If Groups=" ", there is one pairs plot with the data for all groups.
+  Executing the function produces warnings ("span is not a graphical parameter") that can be
 }
 
