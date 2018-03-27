@@ -1,37 +1,68 @@
-
-
-fn.2dPlot <- function (doc = "fn.bivariate", data=ObsidianSources, GroupVar = "Code", labID=" ", Groups = c("A","B"),
+#' fn.2dPlot
+#'
+#' create 2-dimensional data plot or plots. The function stops after producing each plot.  Enter c ("continue") at the prompt to get the next plot.  If this function is run using Rstudio, each plot appears in a separate window, not in the Rstudio plot pane.
+#'
+#' @param doc A string documenting use written to the output list; default is the function name
+#' @param data R matrix or data frame containing the data to be analyzed
+#' @param GroupVar name for the variable defining grouping, " " if no grouping
+#' @param labID name for the variable with a lab ID, " " if no lab ID is used
+#' @param Groups vector of values of the group variable for which plots are to be done;
+#'    if "All", use all groups; if " ", no grouping
+#' @param AnalyticVars names of two analytic variables to be shown in the plots, vector of length 2 or matrix with 2 columns;
+#'     if a matrix, the set of plots is produced for each row
+#' @param PlotByGroup default is T; if F, all groups are on each plot for a pair of variables
+#' @param PlotPoints if T (the default), all points are plotted; if F, no points are plotted
+#' @param LowessLine if T, a lowess line is plotted for each group; if F, no line is plotted
+#' @param Lowess.f parameter for lowess()less than or equal to 1, defining the range of x-values used;
+#'     if NA (the default), uses the default value of 0.67
+#' @param KernelSmooth if T, a kernel smooth is plotted for each group; if F (the default), no kernel smooth is plotted
+#' @param KernelWidth the proportion of the range of x-values used in the kernel smooth; default is 0.3
+#' @param PlotEllipses if T, Gaussian confidence ellipses are plotted for each group; if F, no ellipses are plotted
+#' @param Ellipses single value or vector of values with confidence values for the ellipses; default is c(0.95,0.99)
+#' @param PlotHulls if T, the convex hull is drawn for each set of points; if F (the default), no hulls are drawn
+#' @param PlotMedians if T, the code for each group is plotted at the median of the values for that group; default is F
+#' @param Identify if T, user can identify points of interest in the plots; default is F
+#' @param PlotColors: if T, colors are assigned to the groups
+#' @param Colors: single value or vector of color names
+#' @param folder in Windows, path to the folder containing an excel file with the identified points, ending with two forward slashes;
+#'         if " ", no data set is written
+#' @param ds.identified excel file name with extension .csv containing information on the identified points
+#'
+#' @return   A list with the following components:
+#'  \itemize{
+#' \item{usage}{ Vector with the contents of the argument doc, the date run, the version of R used}
+#' \item{dataUsed}{ The contents of the argument data restricted to the groups used}
+#' \item{params.numeric}{ Vector with the values of the arguments Lowess.f and KernelWidth}
+#' \item{params.grouping}{ Character vector with the values of the arguments GroupVar and Groups}
+#' \item{"ellipse.pct}{ The value of the argument Ellipses}
+#' \item{analyticVars}{ The value of the argument AnalyticVars}
+#' \item{colors}{ vector with the value of the argument Color}
+#' \item{data.check}{ If Identify = T, a data frame with the information on user-identified points of interest}
+#' \item{folder.data.check}{ If folder != " " and Identify = T, the path to the excel file with the information on user-identified points of interest}
+#' }
+#'
+#' @section Details:
+#'  See the vignette for more information: visualizing each plot, use of colors, and identifying points of interest.
+#'
+#' @examples
+#' data(ObsidianSources)
+#' fn.2dPlot(data = ObsidianSources,
+#'           Groups = " ",
+#'           GroupVar = " ",
+#'           ByGroup = FALSE,
+#'           Selections = c(4,5,6))
+#'
+#'
+#' @import MASS
+#'
+#' @export
+#'
+fn.2dPlot <- function (doc = "fn.2dPlot", data=ObsidianSources, GroupVar = "Code", labID=" ", Groups = c("A","B"),
           AnalyticVars=ElsBivariate[1:2,], PlotByGroup=T, PlotPoints = T, LowessLine=F, Lowess.f=NA,
           KernelSmooth=F,KernelWidth=0.3, PlotEllipses = F,
           PlotHulls = F, PlotMedians = F, Ellipses = c(0.95, 0.99), Identify=F,
           PlotColors = F, Colors="black",folder=" ",ds.identified)
 {
-  #
-  #   doc: documentation
-  #   data: data frame containing character group variable and analytic variables
-  #   GroupVar: name of grouping variable
-  #   Groups: define groups to be used, can be a vector of character values
-  #   AnalyticVars: names of two analytic variables to be considered
-  #     vector of length 2 or matrix with 2 columns
-  #     if a matrix, the set of plots is produced for each row
-  #   PlotByGroup: if F, all groups are on each plot for a pair of variables
-  #   PlotPoints: if T, all points are plotted
-  #   LowessLine: if T, a lowess line is plotted for each group
-  #   Lowess.f: parameter for lowess()less than or equal to 1, defining range of x-values used
-  #     if NA, uses default value of 0.67
-  #   KernelSmooth: if T, a kernel smooth is plotted for each group
-  #   KernelWidth: the proportion of the range of x-values used in the kernel smooth
-  #   PlotEllipses: if T, Gaussian confidence ellipses are plotted for each group
-  #   Ellipses: single value or vector of values with confidence values for the ellipses
-  #   PlotHulls: if T, the convex hull is drawn for each set of points
-  #   PlotMedians: if T, the code for each group is plotted at the median of the values for that group
-  #   Identify: if T, identify points of interest in plots
-  #   PlotColors: if T, colors are assigned to the groups
-  #   Colors: single value or vector of color names
-  #   folder: in Windows, path to the folder containing an excel file with the identified points, ending in //
-  #         if " ", no data set is written
-  #   ds.identified: excel file name with extension .csv containing information on the identified points
-  #
   if (Groups[1] != "All") {
     Use.rows <- (data[, GroupVar] %in% Groups)
     data.Used <- data[Use.rows,]
@@ -231,11 +262,11 @@ fn.2dPlot <- function (doc = "fn.bivariate", data=ObsidianSources, GroupVar = "C
   params.grouping<-list(GroupVar,Groups)
   names(params.grouping)<-c("GroupVar","Groups")
   if ((substr(folder,1,1) == " ") & (!Identify))
-    out<-list(fcn.date.ver=fcn.date.ver,dataUsed=data.Used,params.numeric=params.numeric,params.grouping=params.grouping,ellipse.pct=Ellipses)
+    out<-list(usage=fcn.date.ver,dataUsed=data.Used,params.numeric=params.numeric,params.grouping=params.grouping,ellipse.pct=Ellipses)
   if ((substr(folder,1,1) == " ") & (Identify))
-    out<-list(fcn.date.ver=fcn.date.ver,dataUsed=data.Used,params.numeric=params.numeric,params.grouping=params.grouping,ellipse.pct=Ellipses,data.check=data.check)
+    out<-list(usage=fcn.date.ver,dataUsed=data.Used,params.numeric=params.numeric,params.grouping=params.grouping,ellipse.pct=Ellipses,data.check=data.check)
   if ((substr(folder,1,1) != " ") * (Identify))
-    out<-list(fcn.date.ver=fcn.date.ver,dataUsed=data.Used,params.numeric=params.numeric,params.grouping=params.grouping,ellipse.pct=Ellipses,
+    out<-list(usage=fcn.date.ver,dataUsed=data.Used,params.numeric=params.numeric,params.grouping=params.grouping,ellipse.pct=Ellipses,
               data.check=data.check,folder.data.check=paste(folder,ds.identified,sep=""))
   out
 }
