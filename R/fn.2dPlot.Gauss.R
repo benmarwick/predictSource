@@ -1,8 +1,56 @@
+#' fn.2dPlot.Gauss
+#'
+#' Plot and check specified pairs of analysis variables for bivariate normality. The function stops after producing each plot.  Enter c ("continue") at the prompt to get the next plot.  If this function is run using Rstudio, each plot appears in a separate window, not in the Rstudio plot pane.
+#'
+#' @param doc  A string documenting use written to the output list; default is the function name
+#' @param data  R matrix or data frame containing the data to be analyzed
+#' @param GroupVar  Name for the variable defining grouping, " " if no grouping
+#' @param labID  Name for the variable with a lab ID, " " if no lab ID is used
+#' @param Groups  Vector of values of the group variable for which plots are to be done;
+#'    if "All", use all groups; if " ", no grouping
+#' @param AnalyticVars  Names of two analytic variables to be shown in the plots, vector of length 2 or matrix with 2 columns;
+#'     if a matrix, the set of plots is produced for each row
+#' @param QQtest  Logical (default is T): specify whether to run the package qqtest
+#' @param pvalue.digits  Numeric (default is 3): number of significant digits retained in tests for normality
+#' @param Identify  Logical(default is F): if T, user can identify points of interest in the plots
+#' @param folder  In Windows, path to the folder containing an excel file with the identified points, ending with two forward slashes;
+#'         if " ", no data set is written
+#' @param ds.identified  Excel file name with extension .csv containing information on the identified points
+#'
+#' @return   A list with the following components:
+#'  \itemize{
+#' \item{usage}{  Vector with the contents of the argument doc, the date run, the version of R used}
+#' \item{dataUsed}{ The contents of the argument data restricted to the groups used}
+#' \item{analyticVars}{  The contents of the argument AnalyticVars}
+#' \item{parameters}{  A vector with argument values for GroupVar, Groups, pvalue.digits, and QQtest}
+#' \item{pvalues}{  A matrix with the p-values for univariate and bivariate tests of normality}
+#' \item{data.check}{ If Identify = T, a data frame with the information on user-identified points of interest}
+#' \item{file}{ If folder != " ", a string or list: the path to the excel file or files with pvalues and, if Identify = T,
+#'  the information on user-identified points of interest}
+#' }
+#'
+#' @section Details:
+#'  See the vignette for more information: visualizing each plot, the information obtained by using the package qqtest,
+#'   the tests for bivariate normality, and identifying points of interest.
+#'
+#' @examples
+#' data(ObsidianSources)
+#' fn.2dPlot.Gauss(data = ObsidianSources,
+#'           Groups = " ",
+#'           GroupVar = " ",
+#'           ByGroup = FALSE,
+#'           Selections = c(4,5,6))
+#'
+#'
+#' @import MASS  qqtest
+#'
+#' @export
+#'
 
 
-
-fn.2dPlot.Gauss <- function (doc = "fn.bivariate.Gauss", data=ObsidianSources, GroupVar = "Code",labID=" ", Groups = "All",
-          AnalyticVars=Els[1:2], QQtest = T, pvalue.digits=3, Identify=F, folder=Folder, ds.pvalues="bivariatePvalues.csv")
+fn.2dPlot.Gauss <- function (doc = "fn.2dPlot.Gauss", data=ObsidianSources, GroupVar = "Code",labID=" ", Groups = "All",
+          AnalyticVars=ObsidianSources[,c("Zr","Y")],
+          QQtest = T, pvalue.digits=3, Identify=F, folder=" ", ds.pvalues, ds.data.check)
 {
   #
   #   doc: character variable returned with p values
@@ -138,12 +186,23 @@ fn.2dPlot.Gauss <- function (doc = "fn.bivariate.Gauss", data=ObsidianSources, G
   #
   fcn.date.ver<-c(doc,date(),R.Version())
   parameters<-c(groupVar=GroupVar,groups=Groups,digits.pvalue=pvalue.digits,qqtest=QQtest)
-  if ((substr(folder,1,1) == " ") & (!Identify)) out<-list(fcn.date.ver=fcn.date.ver,data.Used=data.Used,analyticVars=AnalyticVars,pvalues=pvalues)
-  if ((substr(folder,1,1) == " ") & ( Identify)) out<-list(fcn.date.ver=fcn.date.ver,data.Used=data.Used,analyticVars=AnalyticVars,pvalues=pvalues,data.check=data.check)
-  else  {
-    file<-list(corr=paste(folder,ds.pvalues,sep=""))
-    if (!Identify) out<-list(fcn.date.ver=fcn.date.ver,data.Used=data.Used,analyticVars=AnalyticVars,pvalues=pvalues,file=file)
-    if ( Identify) out<-list(fcn.date.ver=fcn.date.ver,data.Used=data.Used,analyticVars=AnalyticVars,pvalues=pvalues,data.check=data.check,file=file)
-  }
+  if (substr(folder,1,1) == " ") {
+    if ((!Identify)) out<-list(usage=fcn.date.ver,dataUsed=data.Used,analyticVars=AnalyticVars,parameters=parameters,
+                               pvalues=pvalues)
+    if (( Identify)) out<-list(usage=fcn.date.ver,dataUsed=data.Used,analyticVars=AnalyticVars,parameters=parameters,
+                               pvalues=pvalues,data.check=data.check)
+    }
+  if (substr(folder,1,1) != " ") {
+    if (!Identify) {
+      file<-paste(folder,ds.pvalues,sep="")
+      out<-list(usage=fcn.date.ver,data.Used=dataUsed,analyticVars=AnalyticVars,parameters=parameters,
+                pvalues=pvalues,file=file)
+      }
+    if ( Identify) {
+      file<-list(pvalues=paste(folder,ds.pvalues,sep=""),data,check=paste(folder,ds.data.check,sep=""))
+      out<-list(usager=fcn.date.ver,data.Used=dataUsed,analyticVars=AnalyticVars, parameters=parameters,
+                pvalues=pvalues,data.check=data.check,file=file)
+      }
+    }
   out
 }
