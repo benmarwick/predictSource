@@ -49,8 +49,7 @@
 
 
 fn.2dPlot.Gauss <- function (doc = "fn.2dPlot.Gauss", data=ObsidianSources, GroupVar = "Code",labID=" ", Groups = "All",
-          AnalyticVars=ObsidianSources[,c("Zr","Y")],
-          QQtest = T, pvalue.digits=3, Identify=F, folder=" ", ds.pvalues, ds.data.check)
+          AnalyticVars=c("Zr","Y"), QQtest = T, pvalue.digits=3, Identify=F, folder=" ", ds.pvalues, ds.data.check)
 {
   #
   #   doc: character variable returned with p values

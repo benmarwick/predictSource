@@ -4,7 +4,7 @@
 \alias{fn.2dPlot}
 \title{fn.2dPlot}
 \usage{
-fn.2dPlot(doc = "fn.bivariate", data = ObsidianSources, GroupVar = "Code",
+fn.2dPlot(doc = "fn.2dPlot", data = ObsidianSources, GroupVar = "Code",
   labID = " ", Groups = c("A", "B"), AnalyticVars = ElsBivariate[1:2, ],
   PlotByGroup = T, PlotPoints = T, LowessLine = F, Lowess.f = NA,
   KernelSmooth = F, KernelWidth = 0.3, PlotEllipses = F, PlotHulls = F,

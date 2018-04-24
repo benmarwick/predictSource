@@ -4,10 +4,11 @@
 \alias{fn.2dPlot.Gauss}
 \title{fn.2dPlot.Gauss}
 \usage{
-fn.2dPlot.Gauss(doc = "fn.bivariate.Gauss", data = ObsidianSources,
+fn.2dPlot.Gauss(doc = "fn.2dPlot.Gauss", data = ObsidianSources,
   GroupVar = "Code", labID = " ", Groups = "All",
-  AnalyticVars = Els[1:2], QQtest = T, pvalue.digits = 3, Identify = F,
-  folder = Folder, ds.pvalues = "bivariatePvalues.csv", ds.data.check)
+  AnalyticVars = ObsidianSources[, c("Zr", "Y")], QQtest = T,
+  pvalue.digits = 3, Identify = F, folder = " ", ds.pvalues,
+  ds.data.check)
 }
 \arguments{
 \item{doc}{A string documenting use written to the output list; default is the function name}
