@@ -28,16 +28,13 @@
 #'  See the vignette for more information: visualizing each plot, specification of the argument Selections
 #' as a matrix or data frame, and use of colors.
 #'
-#' @examples
-#' data(ObsidianData)
-#' fn.3dPlot(data = ObsidianData,
-#'           Groups = " ",
-#'           GroupVar = " ",
-#'           ByGroup = FALSE,
-#'           Selections = c(4,5,6))
-#'
-#'
 #' @import MASS scatterplot3d
+#'
+#' @examples
+#' data(ObsidianSources)
+#' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+#' 3dPlot<-fn.3dPlot(data=ObsidianSources, GroupVar="Code", Groups=c("A","B"),
+#'                   Selections=rbind(analyticVars[1:3,],analyticVars[2:4,]))
 #'
 #' @export
 

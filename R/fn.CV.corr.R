@@ -34,6 +34,9 @@
 #'       }
 #'
 #' @examples
+#' data(ObsidianSources)
+#' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+#' CV.corr<-fn.CV.corr(data = ObsidianSources, GroupVar="Code", Groups = "All", AnalyticVars=analyticVars)
 #'
 #' @export
 

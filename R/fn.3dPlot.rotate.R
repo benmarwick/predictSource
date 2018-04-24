@@ -1,7 +1,7 @@
 #'
 #'  fn.3dPlot.rotate
 #'
-#'  create 3-dimensional data plot(s) that can be rotated
+#'  Create 3-dimensional data plot(s) that can be rotated
 #'
 #' @param doc A string documenting usage written to the list return, default is the function name
 #' @param data: R matrix or data frame containing the data to be analyzed
@@ -34,6 +34,12 @@
 #' \item{"colors"}{a vector with the value of the argument Color}
 #' \item{"file"}{if folder != " ": the path and file name ds.3dPlot}
 #' }
+#'
+#' @examples
+#' data(ObsidianSources)
+#' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+#' 3dPlot.rotate<-fn.3dPlot.rotate(data=ObsidianSources, GroupVar="Code", Groups=c("A","B"),
+#'                                 AnalyticVars = analyticVars, Selections=analyticVars[1:3,])
 #'
 #' @export
 

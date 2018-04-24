@@ -58,13 +58,6 @@ Plot and check specified pairs of analysis variables for bivariate normality. Th
 
 \examples{
 data(ObsidianSources)
-fn.2dPlot.Gauss(data = ObsidianSources,
-          Groups = " ",
-          GroupVar = " ",
-          ByGroup = FALSE,
-          Selections = c(4,5,6))
-
-data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 2dPlot.Gauss<-fn.2dPlot.Gauss(data = ObsidianSources,
                              GroupVar = "Code",

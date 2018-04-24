@@ -33,14 +33,6 @@
 #'  See the vignette for more information: visualizing each plot, the information obtained by using the package qqtest,
 #'   the tests for bivariate normality, and identifying points of interest.
 #'
-#' @examples
-#' data(ObsidianSources)
-#' fn.2dPlot.Gauss(data = ObsidianSources,
-#'           Groups = " ",
-#'           GroupVar = " ",
-#'           ByGroup = FALSE,
-#'           Selections = c(4,5,6))
-#'
 #' @import MASS  qqtest
 #'
 #' @examples

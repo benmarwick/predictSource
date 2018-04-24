@@ -48,10 +48,17 @@ A list with the following components:
 }
 }
 \description{
-create 3-dimensional data plot(s) that can be rotated
+Create 3-dimensional data plot(s) that can be rotated
 }
 \section{}{
  Details
 See the vignette for details on viewing each plot, saving plots to a file, and use of colors.
 }
 
+\examples{
+data(ObsidianSources)
+analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+3dPlot.rotate<-fn.3dPlot.rotate(data=ObsidianSources, GroupVar="Code", Groups=c("A","B"),
+                                AnalyticVars = analyticVars, Selections=analyticVars[1:3,])
+
+}
