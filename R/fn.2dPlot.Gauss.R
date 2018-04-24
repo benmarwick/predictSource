@@ -41,15 +41,21 @@
 #'           ByGroup = FALSE,
 #'           Selections = c(4,5,6))
 #'
-#'
 #' @import MASS  qqtest
+#'
+#' @examples
+#' data(ObsidianSources)
+#' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+#' 2dPlot.Gauss<-fn.2dPlot.Gauss(data = ObsidianSources,
+#'                              GroupVar = "Code",
+#'                              labID = "ID",
+#'                              Groups = c("A","B"),
+#'                              AnalyticVars = rbind(analyticVars[1:2,],analyticVars[c(1,3),]))
 #'
 #' @export
 #'
-
-
-fn.2dPlot.Gauss <- function (doc = "fn.2dPlot.Gauss", data=ObsidianSources, GroupVar = "Code",labID=" ", Groups = "All",
-          AnalyticVars=c("Zr","Y"), QQtest = T, pvalue.digits=3, Identify=F, folder=" ", ds.pvalues, ds.data.check)
+fn.2dPlot.Gauss <- function (doc = "fn.2dPlot.Gauss", data, GroupVar,labID, Groups,
+          AnalyticVars, QQtest = T, pvalue.digits=3, Identify=F, folder=" ", ds.pvalues, ds.data.check)
 {
   #
   #   doc: character variable returned with p values

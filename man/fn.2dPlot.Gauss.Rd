@@ -4,10 +4,9 @@
 \alias{fn.2dPlot.Gauss}
 \title{fn.2dPlot.Gauss}
 \usage{
-fn.2dPlot.Gauss(doc = "fn.2dPlot.Gauss", data = ObsidianSources,
-  GroupVar = "Code", labID = " ", Groups = "All", AnalyticVars = c("Zr",
-  "Y"), QQtest = T, pvalue.digits = 3, Identify = F, folder = " ",
-  ds.pvalues, ds.data.check)
+fn.2dPlot.Gauss(doc = "fn.2dPlot.Gauss", data, GroupVar, labID, Groups,
+  AnalyticVars, QQtest = T, pvalue.digits = 3, Identify = F,
+  folder = " ", ds.pvalues, ds.data.check)
 }
 \arguments{
 \item{doc}{A string documenting use written to the output list; default is the function name}
@@ -65,5 +64,12 @@ fn.2dPlot.Gauss(data = ObsidianSources,
           ByGroup = FALSE,
           Selections = c(4,5,6))
 
+data(ObsidianSources)
+analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+2dPlot.Gauss<-fn.2dPlot.Gauss(data = ObsidianSources,
+                             GroupVar = "Code",
+                             labID = "ID",
+                             Groups = c("A","B"),
+                             AnalyticVars = rbind(analyticVars[1:2,],analyticVars[c(1,3),]))
 
 }

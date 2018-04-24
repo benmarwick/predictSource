@@ -46,19 +46,21 @@
 #'
 #' @examples
 #' data(ObsidianSources)
+#' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 #' fn.2dPlot(data = ObsidianSources,
-#'           Groups = " ",
-#'           GroupVar = " ",
-#'           ByGroup = FALSE,
-#'           Selections = c(4,5,6))
-#'
+#'           Groups = "All",
+#'           GroupVar = "Code",
+#'           labID = "ID",
+#'           Groups = c("A","B","C"),
+#'           AnalyticVars = rbind(analyticVars[1:2,],analyicVars[c(1,3),]),
+#'           Colors = c("black","red"))
 #'
 #' @import MASS
 #'
 #' @export
 #'
-fn.2dPlot <- function (doc = "fn.2dPlot", data=ObsidianSources, GroupVar = "Code", labID=" ", Groups = c("A","B"),
-          AnalyticVars=ElsBivariate[1:2,], PlotByGroup=T, PlotPoints = T, LowessLine=F, Lowess.f=NA,
+fn.2dPlot <- function (doc = "fn.2dPlot", data, GroupVar, labID, Groups,
+          AnalyticVars, PlotByGroup=T, PlotPoints = T, LowessLine=F, Lowess.f=NA,
           KernelSmooth=F,KernelWidth=0.3, PlotEllipses = F,
           PlotHulls = F, PlotMedians = F, Ellipses = c(0.95, 0.99), Identify=F,
           PlotColors = F, Colors="black",folder=" ",ds.identified)
