@@ -1,6 +1,6 @@
 #'   fn.PairsPlot
 #'
-#'       pairs plots of specified analytic values, by specified groups
+#'       Pairs plots of specified analytic values, by specified groups
 #'
 #' @param doc: a string documenting use added to the output list, default is the function name
 #' @param data: R matrix or data frame containing the data to be analyzedfn
@@ -27,6 +27,12 @@
 #' \item{"params.grouping"}{a vector with the values of the arguments GroupVar and Groups}
 #' \item{"analyticVars"}{a vector with the value of the argument AnalyticVars}
 #' }
+#'
+#' @examples
+#'
+#' data(ObsidianSources)
+#' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+#' pairsPlot <- fn.PairsPlot(data=ObsidianSources, GroupVar="Code", Groups="All", AnalyticVars=analyticVars)
 #'
 #' @export
 

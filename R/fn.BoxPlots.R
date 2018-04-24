@@ -1,6 +1,6 @@
 #' fn.BoxPlots
 #'
-#' box plots of specified analytic values, by specified groups
+#' Box plots of specified analytic values, by specified groups
 #'
 #' @param doc: string documenting use, included in list returned
 #' @param data: data frame or matrix with data to be analyzed
@@ -9,7 +9,7 @@
 #'                if ' ', no grouping
 #' @param AnalyticVars: vector of names (character values) of analytic results to be analyzed
 #' @param Nrow: number of rows of plots for each page
-#' @param Ncol: number of columns of plots for each page restrict to desired set of groups
+#' @param Ncol: number of columns of plots for each page
 #'
 #' @return A list with the following components:
 #'  \itemize{
@@ -19,6 +19,12 @@
 #' \item{"params.grouping"}{a vector with the values of the arguments GroupVar and Groups}
 #' \item{"analyticVars"}{a vector with the value of the argument AnalyticVars}
 #'}
+#'
+#' @examples
+#' data(ObsidianSources)
+#' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+#' boxPlots<-fn.BoxPlots(data=ObsidianSources, GroupVar="Code", Groups=c("A","B"),AnalyticVars=analyticVars,Nrow=2,Ncol=2)
+#'
 #' @export
 
 fn.BoxPlots <-

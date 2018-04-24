@@ -33,7 +33,7 @@ A set of pairs plots as described above and a list with the following components
 }
 }
 \description{
-pairs plots of specified analytic values, by specified groups
+Pairs plots of specified analytic values, by specified groups
 }
 \section{DETAILS}{
 
@@ -43,3 +43,10 @@ pairs plots of specified analytic values, by specified groups
   Executing the function produces warnings ("span is not a graphical parameter") that can be
 }
 
+\examples{
+
+data(ObsidianSources)
+analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+pairsPlot <- fn.PairsPlot(data=ObsidianSources, GroupVar="Code", Groups="All", AnalyticVars=analyticVars)
+
+}

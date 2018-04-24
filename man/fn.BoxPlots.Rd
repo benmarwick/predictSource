@@ -21,7 +21,7 @@ if ' ', no grouping}
 
 \item{Nrow:}{number of rows of plots for each page}
 
-\item{Ncol:}{number of columns of plots for each page restrict to desired set of groups}
+\item{Ncol:}{number of columns of plots for each page}
 }
 \value{
 A list with the following components:
@@ -34,5 +34,11 @@ A list with the following components:
 }
 }
 \description{
-box plots of specified analytic values, by specified groups
+Box plots of specified analytic values, by specified groups
+}
+\examples{
+data(ObsidianSources)
+analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+boxPlots<-fn.BoxPlots(data=ObsidianSources, GroupVar="Code", Groups=c("A","B"),AnalyticVars=analyticVars,Nrow=2,Ncol=2)
+
 }
