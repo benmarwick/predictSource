@@ -38,6 +38,9 @@
 #' If folder = " ", no excel files are written.  If not, in windows OS, the path must end with two slashes.
 #'
 #' @examples
+#' data("ObsidianSources")
+#' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+#' CheckData<-fn.CheckData(data=ObsidianSources,CheckDupVars=c("Code","ID"),GroupVar="Code",Groups="All",AnalyticVars=analyticVars)
 #'
 #' @export
 
