@@ -1,7 +1,6 @@
 #'  fn.CheckData
 #'
-#'
-#' data checks and summaries: duplicate records, negative analytic values, numbers of analytic results, percentiles of results
+#' Data checks and summaries: duplicate records, negative analytic values, numbers of analytic results, percentiles of results
 #'
 #' @param doc: a character string written to the output list; default is the function name
 #' @param data: R object (data frame) containing analytic data
@@ -38,7 +37,7 @@
 #' If folder = " ", no excel files are written.  If not, in windows OS, the path must end with two slashes.
 #'
 #' @examples
-#' data("ObsidianSources")
+#' data(ObsidianSources)
 #' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 #' CheckData<-fn.CheckData(data=ObsidianSources,CheckDupVars=c("Code","ID"),GroupVar="Code",Groups="All",AnalyticVars=analyticVars)
 #'

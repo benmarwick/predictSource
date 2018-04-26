@@ -1,6 +1,6 @@
 #'   fn.PairsPlot
 #'
-#'       Pairs plots of specified analytic values, by specified groups
+#' Pairs plots of specified analytic values, by specified groups
 #'
 #' @param doc: a string documenting use added to the output list, default is the function name
 #' @param data: R matrix or data frame containing the data to be analyzedfn

@@ -1,6 +1,6 @@
 #' fn.2dPlot
 #'
-#' create 2-dimensional data plot or plots. The function stops after producing each plot.  Enter c ("continue") at the prompt to get the next plot.  If this function is run using Rstudio, each plot appears in a separate window, not in the Rstudio plot pane.
+#' Create 2-dimensional data plot or plots. The function stops after producing each plot.  Enter c ("continue") at the prompt to get the next plot.  If this function is run using Rstudio, each plot appears in a separate window, not in the Rstudio plot pane.
 #'
 #' @param doc A string documenting use written to the output list; default is the function name
 #' @param data R matrix or data frame containing the data to be analyzed

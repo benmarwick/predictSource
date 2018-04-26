@@ -1,6 +1,6 @@
-#'  fn.PCA
+#'  fn.pca
 #'
-#'  compute principal components using standardized data
+#'  Compute principal components using standardized data
 #'
 #' @param doc: documentation in the list returned, default is the function name
 #' @param data: R matrix or data frame containing the data to be analyzed
@@ -36,13 +36,20 @@
 #'  }
 #'
 #' @import  MASS ellipse
+#'#'
+#' @examples
+#' data(ObsidianSources)
+#' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+#' save.pca <- fn.pca(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars)
 #'
 #' @export
 #'
-fn.pca <-  function(doc = "fn.pca", data, GroupVar, Groups, AnalyticVars, ScreePlot = F, BoxPlots = F, PlotPoints = F, PlotEllipses = F, legendLoc="topright", PlotHull = T, PlotMedians = T, Ellipses = c(.95, .99), PlotColors = T, Colors = c("red","black","blue","green","purple"), Identify = F, folder = " ", ds.weights, ds.importance) {
-    #
-    #
-    #  define functions to plot convex hulls and ellipses
+fn.pca <-  function(doc = "fn.pca", data, GroupVar, Groups, AnalyticVars, ScreePlot = F, BoxPlots = F, PlotPoints = T,
+                    PlotEllipses = T, legendLoc="topright", PlotHull = F, PlotMedians = F, Ellipses = c(.95, .99),
+                    PlotColors = T, Colors = c("red","black","blue","green","purple"), Identify = F,
+                    folder = " ", ds.weights, ds.importance) {
+   #
+  #  define functions to plot convex hulls and ellipses
     fn.convexhull <- function(Code) {
       temp <- Predicted[Predicted[, "group"] == Code, c("group",
                                                         "PC1", "PC2")]
