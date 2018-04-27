@@ -2,11 +2,11 @@
 % Please edit documentation in R/fn.pca.R
 \name{fn.pca}
 \alias{fn.pca}
-\title{fn.PCA}
+\title{fn.pca}
 \usage{
 fn.pca(doc = "fn.pca", data, GroupVar, Groups, AnalyticVars, ScreePlot = F,
-  BoxPlots = F, PlotPoints = F, PlotEllipses = F,
-  legendLoc = "topright", PlotHull = T, PlotMedians = T,
+  BoxPlots = F, PlotPoints = T, PlotEllipses = T,
+  legendLoc = "topright", PlotHull = F, PlotMedians = F,
   Ellipses = c(0.95, 0.99), PlotColors = T, Colors = c("red", "black",
   "blue", "green", "purple"), Identify = F, folder = " ", ds.weights,
   ds.importance)
@@ -56,10 +56,16 @@ The function produces a plot of the first two principal components, the contents
  }
 }
 \description{
-compute principal components using standardized data
+Compute principal components using standardized data
 }
 \section{Details}{
 
 If Identify=T, the user must interact with each plot (or pane, if there is more than one pane on a plot).  To identify a point, place the cursor as close as possible to the point and left click;  repeat if desired.  To go to the next pane, right click and select "Stop" in base R; click on "Finish" in the plot pane in Rstudio.
 }
 
+\examples{
+data(ObsidianSources)
+analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+save.pca <- fn.pca(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars)
+
+}

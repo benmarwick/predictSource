@@ -50,7 +50,7 @@ If folder != " ", four excel files with duplicate observations, observations wit
         }
 }
 \description{
-data checks and summaries: duplicate records, negative analytic values, numbers of analytic results, percentiles of results
+Data checks and summaries: duplicate records, negative analytic values, numbers of analytic results, percentiles of results
 }
 \section{Detail}{
 
@@ -59,7 +59,7 @@ If folder = " ", no excel files are written.  If not, in windows OS, the path mu
 }
 
 \examples{
-data("ObsidianSources")
+data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 CheckData<-fn.CheckData(data=ObsidianSources,CheckDupVars=c("Code","ID"),GroupVar="Code",Groups="All",AnalyticVars=analyticVars)
 
