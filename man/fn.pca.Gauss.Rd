@@ -42,3 +42,9 @@ The function produces Q-Q plots of the first two principal components for each g
 \description{
 Check whether first two principal components are Gaussian
 }
+\examples{
+data(ObsidianSources)
+analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+pca.Gauss <- fn.pca.Gauss(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars)
+
+}

@@ -34,7 +34,6 @@
 #'   the tests for bivariate normality, and identifying points of interest.
 #'
 #' @import MASS  qqtest
-#'
 #' @examples
 #' data(ObsidianSources)
 #' analyticVars<-c("Rb","Sr","Y","Zr","Nb")

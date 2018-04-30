@@ -36,7 +36,7 @@
 #'  }
 #'
 #' @import  MASS ellipse
-#'#'
+#'
 #' @examples
 #' data(ObsidianSources)
 #' analyticVars<-c("Rb","Sr","Y","Zr","Nb")

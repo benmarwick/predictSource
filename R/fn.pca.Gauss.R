@@ -27,12 +27,13 @@
 #'
 #' @import MASS nortest qqtest MVN
 #'
-#' @example
+#' @examples
 #' data(ObsidianSources)
 #' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 #' pca.Gauss <- fn.pca.Gauss(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars)
 #'
 #' @export
+#'
 
 fn.pca.Gauss <-
   function(doc = "fn.pca.Gauss",
@@ -56,7 +57,6 @@ fn.pca.Gauss <-
         as.character(unique(data.Used[, GroupVar]))
     else
       groups <- as.character(Groups)
-    #
     pca <- prcomp(data.Used[, AnalyticVars], scale = TRUE)
     # predicted values for first two components
     predict.pc1 <- predict(pca)[, 1]
@@ -68,7 +68,7 @@ fn.pca.Gauss <-
         if (data.Used[i, GroupVar] == groups[j])
           GroupIndex[i] <- j
     }
-    #
+
     pvalues <-
       matrix(NA, length(groups), 6)  # Anderson-Darling, Shapiro-Wilk, Mardia test p-values
     dimnames(pvalues) <-
@@ -83,12 +83,12 @@ fn.pca.Gauss <-
           "Mardia.kurtosis"
         )
       )
-    #
+
     Predicted <-
       data.frame(group = as.character(data.Used[, GroupVar]),
                  GroupIndex = GroupIndex,
                  predict(pca))
-    #
+
     n.pages <-
       round((length(groups) + 1) / 2, dig = 0)  # number of pages of plots, 2 groups to a page
     i.group <- 0  # initialize choice for group
