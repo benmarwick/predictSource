@@ -1,6 +1,6 @@
 #'  fn.pca
 #'
-#'  Compute principal components using standardized data
+#'  Compute and plot principal components using standardized data
 #'
 #' @param doc: documentation in the list returned, default is the function name
 #' @param data: R matrix or data frame containing the data to be analyzed
@@ -11,28 +11,33 @@
 #' @param legendLoc: character, location of legend for a plot with points default is "topright", alternatives are combinations of "top", "bottom", "right", "left"
 #' @param PlotColors: if T, use list of colors in Colors for points; if F, plot points as black
 #' @param Colors: vector of color names
-#' @param Identify: if T, the user can identify points of interest in plots; information on these points is saved to the file; default is F
+#' @param Identify: if T, the user can identify points of interest in plots; information on these points is saved to a file; default is F
 #' @param folder: folder in which excel files are to be stored
 #' @param ds.weights: excel file with principal component loadings, extension.csv
 #' @param ds.importance: excel file with percent of variation explained, extension.csv
+#' @param ds.identified:  excel file with identified points, if Identify == T
 #'
 #' @section Details:
-#' If Identify=T, the user must interact with each plot (or pane, if there is more than one pane on a plot).  To identify a point, place the cursor as close as possible to the point and left click;  repeat if desired.  To go to the next pane, right click and select "Stop" in base R; click on "Finish" in the plot pane in Rstudio.
+#' If Identify=T, the user must interact with each plot (or pane, if there is more than one pane on a plot).
+#' To identify a point, place the cursor as close as possible to the point and left click;  repeat if desired.
+#' To go to the next pane, right click and select "Stop" in base R; click on "Finish" in the plot pane in Rstudio.
 #'
 #' @return The function produces a plot of the first two principal components, the contents of which are defined by the arguments PlotPoints, PlotEllipses, PlotHull, and PlotMedians. A scree plot and box plots are produced if requested.  The function returns a list with the following components:
 #' \itemize{
-#'   \item{"usage"}{a vector with the contents of the argument doc, the date run, the version of R used}
-#'   \item{"dataUsed"}{the contents of the argument data restricted to the groups used}
-#'   \item{"params.grouping"}{a list with the values of the arguments GroupVar and Groups}
-#'   \item{"x"}{params.logical: a vector with the values of the arguments ScreePlot,BoxPlots,PlotPoints,PlotEllipses,PlotHull,PlotMedians,PlotColors}
-#'   \item{"analyticVars"}{a vector with the value of the argument AnalyticVars}
-#'   \item{"ellipse.pct"}{the value of the argument Ellipses}
-#'   \item{"Summary"}{a list including the percent of variation explained by each principal component and the cumulative percent explained}
-#'   \item{"weights"}{a data frame with the principal component weights for each observation}
-#'   \item{"Predicted"}{Predicted}
-#'   \item{"DataPlusPredicted"}{DataPlusPredicted}
-#'   \item{"data.check"}{if Identify=T, a data frame with the observations in dataUsed identified as of interest}
-#'   \item{"files"}{if folder != " ", a list with path and data set names to the excel files containing weights, importance, and, if Identify=T, data for the points of interest}
+#'   \item{usage:}{  A vector with the contents of the argument doc, the date run, the version of R used}
+#'   \item{dataUsed:}{  The contents of the argument data restricted to the groups used}
+#'   \item{params.grouping:}{  A list with the values of the arguments GroupVar and Groups}
+#'   \item{params.logical:}  {A vector with the values of the arguments ScreePlot,BoxPlots,PlotPoints,PlotEllipses,PlotHull,PlotMedians,PlotColors}
+#'   \item{analyticVars:}{  A vector with the value of the argument AnalyticVars}
+#'   \item{ellipse.pct:}{  The value of the argument Ellipses}
+#'   \item{Summary:}{  A list including the percent of variation explained by each principal component and the cumulative percent explained}
+#'   \item{weights:}{  A data frame with the principal component weights for each observation}
+#'   \item{Predicted:}{  A data frame with the predicted values for each principal component, plus the value of Groups and
+#'   an integer GroupIndex (with values 1:number of Groups)}
+#'   \item{DataPlusPredicted:}{  A data frame with the data used to compute the principal components, plus GroupIndex (as defined
+#'  above) and predicted values for each principal component}
+#'   \item{data.check:}{  If Identify=T, a data frame with the observations in dataUsed identified as of interest}
+#'   \item{files:}{  If folder != " ", a list with path and data set names to the excel files containing weights, importance, and, if Identify=T, data for the points of interest}
 #'  }
 #'
 #' @import  MASS ellipse
@@ -47,7 +52,7 @@
 fn.pca <-  function(doc = "fn.pca", data, GroupVar, Groups, AnalyticVars, ScreePlot = F, BoxPlots = F, PlotPoints = T,
                     PlotEllipses = T, legendLoc="topright", PlotHull = F, PlotMedians = F, Ellipses = c(.95, .99),
                     PlotColors = T, Colors = c("red","black","blue","green","purple"), Identify = F,
-                    folder = " ", ds.weights, ds.importance) {
+                    folder = " ", ds.weights, ds.importance, ds.check) {
    #
   #  define functions to plot convex hulls and ellipses
     fn.convexhull <- function(Code) {
@@ -176,7 +181,7 @@ fn.pca <-  function(doc = "fn.pca", data, GroupVar, Groups, AnalyticVars, ScreeP
     if (substr(folder,1,1) != " ")  {
       write.csv(importance.pca, file = paste(folder, ds.importance, sep=""))
       write.csv(t(weights), file = paste(folder, ds.weights, sep = ""))
-      write.csv(data.check, file = paste(folder, ds.identified, sep = ""))
+      if (Identify == T)  write.csv(data.check, file = paste(folder, ds.identified, sep = ""))
     }
     #
     fcn.date.ver<-paste(doc,date(),R.Version()$version.string)
