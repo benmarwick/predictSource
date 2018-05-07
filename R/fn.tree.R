@@ -75,7 +75,7 @@ fn.tree <-
       groups <- as.character(Groups)
     #
     if (is.na(wts))
-      Weights = rep(1, nrow(Data))
+      Weights = rep(1, nrow(Data.used))
     else
       Weights = wts
     #
