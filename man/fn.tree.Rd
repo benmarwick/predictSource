@@ -5,36 +5,63 @@
 \title{fn.tree}
 \usage{
 fn.tree(doc = "fn.tree", data, GroupVar = "Code", Groups = "All",
-  AnalyticVars, wts = NA, PlotTree = T, Model = "Rb+Y+Nb+Zr+Sr", folder,
-  outClassify, outCpTable, outCVtable, outOptSplit)
+  AnalyticVars, wts = NA, PlotTree = T, Model = "Rb+Y+Nb+Zr+Sr",
+  folder = " ", ds.Classify, ds.CpTable, ds.CVtable, ds.OptSplit)
 }
 \arguments{
-\item{doc}{.}
+\item{doc}{Documentation, default is fn.tree (the function name)}
 
-\item{data}{.}
+\item{data}{Data frame with the data to be analyzed}
 
-\item{GroupVar}{name of variable defining groups, grouping is required}
+\item{GroupVar}{Name of the variable defining groups, grouping is required}
 
-\item{Groups}{vector of codes for groups to be used, 'All' if use all groups}
+\item{Groups}{Vector of codes for groups to be used, 'All' if use all groups}
 
-\item{AnalyticVars}{names of analytic variables wts: option to weight the observations, if used, vector with length nrow(data) if NA, assume equal weights}
+\item{AnalyticVars}{Names of analytic variables}
 
-\item{wts}{.}
+\item{PlotTree}{If T (true, the default), plot the recursive partitioning tree}
 
-\item{PlotTree}{if T (true), plot the recursive partitioning tree}
+\item{Model}{A character string containing the variables considered separated by + signs}
 
-\item{Model}{.}
+\item{folder}{If " ", no files are written; otherwise, the path to the folder containing the excel files,
+must end with two forward slashes}
 
-\item{folder}{path to folder containing excel files, must end with '\\'}
+\item{ds.Classify}{Name of the excel file containing the results of classifying the data, must end with .csv}
 
-\item{outClassify}{file containing results of classifying the data}
+\item{ds.CpTable}{Name of the excel file containing the values of Cp at successive splits, must end with .csv}
 
-\item{outCpTable}{file containing the values of Cp at successive splits}
+\item{ds.CVtable}{Name of an excel file.}
 
-\item{outCVtable}{.}
+\item{ds.OptSplit}{Name of the excel file containing}
 
-\item{outOptSplit}{file containing predictors are considered in the tree model in the order in which they appeat in AnalyticVars}
+\item{wts:}{Option to weight the observations, if used, vector with length nrow(data); if NA (the default), assume equal weights}
+}
+\value{
+The function fits a classification tree model.  The variables in AnalyticVars are considered in the order
+       they appear in the Model argument (from left to right).  See the for more details.
+       The function returns a list with the following components:
+
+\itemize{
+  \item{usage:}{ A vector with the contents of the argument doc, the date run, the version of R used}
+  \item{dataUsed:}{ The contents of the argument data restricted to the groups used}
+  \item{params.grouping:}{ A list with the values of the arguments GroupVar and Groups}
+  \item{analyticVars:}{ A vector with the value of the argument AnalyticVars}
+  \item{params.logical:}{ The value of PlotTree}
+  \item{model:}{ A character string with the value of the argument Model}
+  \item{Classification:}  {A data frame showing the crossclassification of sources and predicted sources}
+  \item{CpTable:}{  A data frame showing the decrease in Cp with increasing numbers of splits}
+  \item{CvTable:}{  A data frame with cross-validation results}
+  \item{NoptSplit:}{  A data frame with information on the optimal splitting}
+  \item{files:}{ If folder != " ", a character string with the path to the file containing the p-values}
+ }
 }
 \description{
-fit recursive partitioning model doc: documentation
+Fit a recursive partitioning model
+}
+\examples{
+data(ObsidianSources)
+analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+tree <- fn.tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
+                Model="Rb"+"Sr"+"Y"+"Zr"+"Nb")
+
 }

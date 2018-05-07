@@ -1,20 +1,45 @@
 #' fn.tree
 #'
-#' fit recursive partitioning model doc: documentation
+#' Fit a recursive partitioning model
 #'
-#' @param doc .
-#' @param data .
-#' @param GroupVar  name of variable defining groups, grouping is required
-#' @param Groups vector of codes for groups to be used, 'All' if use all groups
-#' @param AnalyticVars  names of analytic variables wts: option to weight the observations, if used, vector with length nrow(data) if NA, assume equal weights
-#' @param wts .
-#' @param PlotTree if T (true), plot the recursive partitioning tree
-#' @param Model .
-#' @param folder  path to folder containing excel files, must end with '\\'
-#' @param outClassify file containing results of classifying the data
-#' @param outCpTable file containing the values of Cp at successive splits
-#' @param outCVtable .
-#' @param outOptSplit  file containing predictors are considered in the tree model in the order in which they appeat in AnalyticVars
+#' @param doc Documentation, default is fn.tree (the function name)
+#' @param data  Data frame with the data to be analyzed
+#' @param GroupVar  Name of the variable defining groups, grouping is required
+#' @param Groups  Vector of codes for groups to be used, 'All' if use all groups
+#' @param AnalyticVars  Names of analytic variables
+#' @param wts: Option to weight the observations, if used, vector with length nrow(data); if NA (the default), assume equal weights
+#' @param PlotTree If T (true, the default), plot the recursive partitioning tree
+#' @param Model  A character string containing the variables considered separated by + signs
+#' @param folder  If " ", no files are written; otherwise, the path to the folder containing the excel files,
+#'                must end with two forward slashes
+#' @param ds.Classify  Name of the excel file containing the results of classifying the data, must end with .csv
+#' @param ds.CpTable Name of the excel file containing the values of Cp at successive splits, must end with .csv
+#' @param ds.CVtable Name of an excel file.
+#' @param ds.OptSplit  Name of the excel file containing
+#'
+#' @return The function fits a classification tree model.  The variables in AnalyticVars are considered in the order
+#'        they appear in the Model argument (from left to right).  See the for more details.
+#'        The function returns a list with the following components:
+#'
+#' \itemize{
+#'   \item{usage:}{ A vector with the contents of the argument doc, the date run, the version of R used}
+#'   \item{dataUsed:}{ The contents of the argument data restricted to the groups used}
+#'   \item{params.grouping:}{ A list with the values of the arguments GroupVar and Groups}
+#'   \item{analyticVars:}{ A vector with the value of the argument AnalyticVars}
+#'   \item{params.logical:}{ The value of PlotTree}
+#'   \item{model:}{ A character string with the value of the argument Model}
+#'   \item{Classification:}  {A data frame showing the crossclassification of sources and predicted sources}
+#'   \item{CpTable:}{  A data frame showing the decrease in Cp with increasing numbers of splits}
+#'   \item{CvTable:}{  A data frame with cross-validation results}
+#'   \item{NoptSplit:}{  A data frame with information on the optimal splitting}
+#'   \item{files:}{ If folder != " ", a character string with the path to the file containing the p-values}
+#'  }
+#'
+#' @examples
+#' data(ObsidianSources)
+#' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+#' tree <- fn.tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
+#'                 Model="Rb"+"Sr"+"Y"+"Zr"+"Nb")
 #'
 #' @import rpart partykit Formula
 #'
@@ -29,40 +54,39 @@ fn.tree <-
            wts = NA,
            PlotTree = T,
            Model = "Rb+Y+Nb+Zr+Sr",
-           folder,
-           outClassify,
-           outCpTable,
-           outCVtable,
-           outOptSplit) {
+           folder = " ",
+           ds.Classify,
+           ds.CpTable,
+           ds.CVtable,
+           ds.OptSplit) {
 
 
     # create dataset Data based on grouping restrict to desired set of groups
     if (Groups[1] != "All") {
       Use.rows <- (data[, GroupVar] %in% Groups)
-      Data <- data[Use.rows, c(GroupVar, AnalyticVars)]
+      Data.used <- data[Use.rows, c(GroupVar, AnalyticVars)]
     } else
-      Data <- data[, c(GroupVar, AnalyticVars)]
+      Data.used <- data[, c(GroupVar, AnalyticVars)]
     # define variable groups as groups used in analysis
     if ((GroupVar[1] != " ") & (Groups[1] == "All"))
       groups <-
-        as.character(unique(Data[, GroupVar]))
+        as.character(unique(Data.used[, GroupVar]))
     else if (GroupVar[1] != " ")
       groups <- as.character(Groups)
     #
-    Data <- data[, c("Code", AnalyticVars)]
     if (is.na(wts))
       Weights = rep(1, nrow(Data))
     else
       Weights = wts
     #
-    Sources <- factor(Data[, GroupVar])
+    Sources <- factor(Data.used[, GroupVar])
     formula.rhs <-
       paste(AnalyticVars, collapse = "+")  # right hand side of formula
     formula.tree <-
       as.formula(paste("Sources", formula.rhs, sep = " ~ "))
     Tree <-
       rpart(formula.tree,
-            data = Data,
+            data = Data.used,
             weights = Weights,
             method = "class")
     if (PlotTree == T)
@@ -73,7 +97,7 @@ fn.tree <-
     write.csv(t(Classification), paste(folder, outClassify, sep = ""))
     # evaluate tree size
     CpTable <- Tree$cptable
-    write.csv(CpTable, paste(folder, outCpTable, sep = ""))
+    if (folder != " ")  write.csv(CpTable, paste(folder, ds.CpTable, sep = ""))
     #
     plot(
       x = CpTable[, "nsplit"],
@@ -96,13 +120,41 @@ fn.tree <-
     browser()
     Nsplitopt <-
       table(Model = nsplitopt[, "Model"], Splits = nsplitopt[, "Splits"])
-    write.csv(table(Nsplitopt), paste(folder, outOptSplit, sep = ""))
+    if (folder != " ")  write.csv(table(Nsplitopt), paste(folder, ds.OptSplit, sep = ""))
     #
-    list(
-      Documentation = doc,
-      Tree = Tree,
-      Classification = Classification,
-      CpTable = CpTable,
-      NOptSplit = nsplitopt
-    )
+    fcn.date.ver<-paste(doc,date(),R.Version()$version.string)
+    params.grouping<-list(GroupVar,Groups)
+    names(params.grouping)<-c("GroupVar","Groups")
+    params.logical<-PlotTree
+    names(params.logical)<-"PlotTree"
+    if (folder != " ")
+      fileNames <- list(paste(folder,ds.Classify,sep=""),paste(folder,ds.CpTable,sep=""),
+                        paste(folder,ds.CVtable,sep=""),paste(folder,ds.OptSplit,sep=""))
+    #
+    if (substr(folder,1,1) != " ")
+      out<-list(usage=fcn.date.ver,
+                dataUsed=Data.used,
+                analyticVars=AnalyticVars,
+                params.grouping=params.grouping,
+                params.logical=params.logical,
+                Tree = Tree,
+                Classification = Classification,
+                CpTable = CpTable,
+                CvTable = CvTable,
+                NOptSplit = nsplitopt
+                )
+    if (substr(folder,1,1) == " ")
+      out<-list(usage=fcn.date.ver,
+                dataUsed=Data.used,
+                analyticVars=AnalyticVars,
+                params.grouping=params.grouping,
+                params.logical=params.logical,
+                Tree = Tree,
+                Classification = Classification,
+                CpTable = CpTable,
+                CvTable = CvTable,
+                NOptSplit = Noptsplit,
+                files = fileNames
+      )
+    out
   }

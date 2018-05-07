@@ -28,7 +28,8 @@ extension .csv}
 }
 \value{
 The function produces Q-Q plots of the first two principal components for each group, and, if QQtest=T,
-   confidence envelopes for the corresponding Q-Q plots based on simulated data.  The function returns a list with the following components:
+   confidence envelopes for the corresponding Q-Q plots based on simulated data.  The function returns a list with the
+   following components:
 \itemize{
   \item{"usage"}{ a vector with the contents of the argument doc, the date run, the version of R used}
   \item{"dataUsed"}{ the contents of the argument data restricted to the groups used}
