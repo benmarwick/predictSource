@@ -75,7 +75,7 @@ fn.tree <-
       groups <- as.character(Groups)
     #
     if (is.na(wts))
-      Weights = rep(1, nrow(Data))
+      Weights = rep(1, nrow(Data.used))
     else
       Weights = wts
     #
@@ -94,7 +94,7 @@ fn.tree <-
     browser()
     # classification
     Classification <- table(Tree$y, Sources)
-    write.csv(t(Classification), paste(folder, outClassify, sep = ""))
+    if (folder != " ") write.csv(t(Classification), paste(folder, ds.Classify, sep = ""))
     # evaluate tree size
     CpTable <- Tree$cptable
     if (folder != " ")  write.csv(CpTable, paste(folder, ds.CpTable, sep = ""))
