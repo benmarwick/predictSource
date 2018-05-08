@@ -4,39 +4,62 @@
 \alias{fn.randomForest}
 \title{fn.randomForest}
 \usage{
-fn.randomForest(doc = "fn.randomForest", data, GroupVar = "Code",
-  Groups = "All", AnalyticVars, Ntrees = 500, NvarUsed = 3,
-  Seed = 11111, folder, ds.importance, ds.confusion)
+fn.randomForest(doc = "fn.randomForest", data, GroupVar, Groups = "All",
+  AnalyticVars, Ntrees = 500, NvarUsed, Seed = 11111, folder = " ",
+  ds.importance, ds.confusion)
 }
 \arguments{
-\item{doc}{.}
+\item{doc}{Documentation for the function use, default value is the function name}
 
-\item{data}{.}
+\item{data:}{Data frame with the data to be analyzed}
 
-\item{GroupVar:}{name of variable defining groups, grouping is required}
+\item{GroupVar:}{Name of variable defining groups, grouping is required}
 
-\item{Groups:}{vector of
-codes for groups to be used, 'All' if use all groups}
+\item{Groups:}{Vector of codes for groups to be used, 'All' if use all groups}
 
-\item{AnalyticVars:}{vector with
-names of analytic variables}
+\item{AnalyticVars:}{Vector with names of analytic variables}
 
-\item{Ntrees:}{number of trees grown, default value of 500 is
-that for the randomForest function}
+\item{Ntrees:}{Number of trees grown, default value of 500 is that for the randomForest function}
 
-\item{NvarUsed:}{if not NA, number of variables to use
-in each random forest call to rpart}
+\item{NvarUsed:}{If not NA, number of variables to use in each random forest call to rpart;
+if NA, rpart uses the default (the square root of the number of candidate variables)}
 
-\item{Seed:}{if not NA, random number generator seed
-to produce reproducible results}
+\item{Seed:}{If not NA, a random number generator seed to produce reproducible results}
 
-\item{folder:}{path to folder containing excel files, must
-end with '\\'}
+\item{folder:}{If not " " (the default), the path to folder containing excel files, must end with '\\'}
 
-\item{ds.importance:}{excel file with importance measures, extension .csv}
+\item{ds.importance:}{Excel file with importance measures, extension .csv}
 
-\item{ds.confusion:}{excel file with confusion matrix, extension.csv}
+\item{ds.confusion:}{Excel file with confusion matrix, extension.csv}
+}
+\value{
+The function implements a random forest analysis.  For each analysis, the variables used in the
+          analysis are considered in the order in which they appear in AnalyticVars (from left to right);
+          See the vignette for more details.
+          The function returns a list with the following components:
+
+\itemize{
+  \item{usage:}{ A vector with the contents of the argument doc, the date run, the version of R used}
+  \item{dataUsed:}{ The contents of the argument data restricted to the groups used}
+  \item{params.grouping:}{ A list with the values of the arguments GroupVar and Groups}
+  \item{analyticVars:}{ A vector with the value of the argument AnalyticVars}
+  \item{params.numeric:}{ A numeric vector with the values of the arguments Ntrees, NvarUsed, and Seed}
+  \item{formula.rf:}  {The formula used in the analysis (the variables specified in the argument AnalyticVars
+                       separated by + signs)}
+  \item{forest:}{  The random forest}
+  \item{importance:}{  A data frame with information on the importance of each variable in AnalyticVars}
+  \item{confusion:}{  A data frame with the estimate of the confusion matrix}
+  \item{files:}{ If folder != " ", a character string with the path to the file containing the excel files
+                 with the importance and confusion estimates}
+ }
 }
 \description{
-random forest analysis doc: documentation data: analysis data
+Random forest analysis
+}
+\examples{
+data(ObsidianSources)
+analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+tree <- fn.randomForest(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
+                NvarUsed=3)
+
 }

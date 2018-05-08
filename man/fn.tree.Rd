@@ -30,8 +30,6 @@ must end with two forward slashes}
 
 \item{ds.CpTable}{Name of the excel file containing the values of Cp at successive splits, must end with .csv}
 
-\item{ds.CVtable}{Name of an excel file.}
-
 \item{ds.OptSplit}{Name of the excel file containing}
 
 \item{wts:}{Option to weight the observations, if used, vector with length nrow(data); if NA (the default), assume equal weights}
@@ -50,7 +48,6 @@ The function fits a classification tree model.  The variables in AnalyticVars ar
   \item{model:}{ A character string with the value of the argument Model}
   \item{Classification:}  {A data frame showing the crossclassification of sources and predicted sources}
   \item{CpTable:}{  A data frame showing the decrease in Cp with increasing numbers of splits}
-  \item{CvTable:}{  A data frame with cross-validation results}
   \item{NoptSplit:}{  A data frame with information on the optimal splitting}
   \item{files:}{ If folder != " ", a character string with the path to the file containing the p-values}
  }

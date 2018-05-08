@@ -14,7 +14,6 @@
 #'                must end with two forward slashes
 #' @param ds.Classify  Name of the excel file containing the results of classifying the data, must end with .csv
 #' @param ds.CpTable Name of the excel file containing the values of Cp at successive splits, must end with .csv
-#' @param ds.CVtable Name of an excel file.
 #' @param ds.OptSplit  Name of the excel file containing
 #'
 #' @return The function fits a classification tree model.  The variables in AnalyticVars are considered in the order
@@ -30,7 +29,6 @@
 #'   \item{model:}{ A character string with the value of the argument Model}
 #'   \item{Classification:}  {A data frame showing the crossclassification of sources and predicted sources}
 #'   \item{CpTable:}{  A data frame showing the decrease in Cp with increasing numbers of splits}
-#'   \item{CvTable:}{  A data frame with cross-validation results}
 #'   \item{NoptSplit:}{  A data frame with information on the optimal splitting}
 #'   \item{files:}{ If folder != " ", a character string with the path to the file containing the p-values}
 #'  }
@@ -140,7 +138,6 @@ fn.tree <-
                 Tree = Tree,
                 Classification = Classification,
                 CpTable = CpTable,
-                CvTable = CvTable,
                 NOptSplit = nsplitopt
                 )
     if (substr(folder,1,1) == " ")
@@ -152,7 +149,6 @@ fn.tree <-
                 Tree = Tree,
                 Classification = Classification,
                 CpTable = CpTable,
-                CvTable = CvTable,
                 NOptSplit = Noptsplit,
                 files = fileNames
       )
