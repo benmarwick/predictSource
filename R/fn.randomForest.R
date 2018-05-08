@@ -39,7 +39,7 @@
 #' @examples
 #' data(ObsidianSources)
 #' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-#' tree <- fn.randomForest(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
+#' randomForest <- fn.randomForest(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
 #'                 NvarUsed=3)
 #'
 #' @import  MASS randomForest rpart
@@ -68,7 +68,7 @@ fn.randomForest <-
     # define variable groups as groups used in analysis
     if ((GroupVar[1] != " ") & (Groups[1] == "All"))
       groups <-
-        as.character(unique(Data[, GroupVar]))
+        as.character(unique(Data.used[, GroupVar]))
     else if (GroupVar[1] != " ")
       groups <- as.character(Groups)
     #
