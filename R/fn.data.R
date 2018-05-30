@@ -1,18 +1,20 @@
 #' fn.data
 #'
-#' @param fn.data create data frame with data to be analyzed, columns in specified order
-#' @param data data frame containing the data for one group
-#' @param Group character: code for the group, added to the data set
-#' @param Subset character: name of variable with codes for subsets of samples, " " if no subsets
-#' @param ID character: name of IDs (typically lab IDs) for samples
-#' @param Elements character vector: names for elements used from the data
+#'  Create data frame with data to be analyzed, columns in specified order
 #'
-#' @return A data frame with columns
+#' @param doc Documentation, default is the function name
+#' @param data Data frame containing the data for one group
+#' @param Group Character: user-specified grouping code for these data, added to the data set
+#' @param Subset Character: name of variable with codes for subsets of samples, " " if no subsets
+#' @param ID Character: name of IDs (typically lab IDs) for samples
+#' @param AnalyticVars Character vector with names for elements used from the data
+#'
+#' @return A list with the elements:
 #'  \itemize{
-#' \item{"Group"}{group code (specified in Group)}
-#' \item{"Subset"}{subset code (specified in Subset)}
-#' \item{"ID"}{ID value}
-#' \item{"elements"}{one column for each element specified in Elements}
+#' \item{usage:}{  Documentatation, including function name, version of R used, date run)}
+#' \item{dataUsed:"}{  Data used, restricted to the specified group}
+#' \item{analyticVars:}{  The value of AnalyticVars}
+#' \item{dataOut:}{  The data frame created by the function, with Group, Subset (if specified), ID, and analytic variables}
 #'}
 #' @section Details:
 #' This function creates a data frame with columns in a specified order.  It is useful
@@ -22,37 +24,38 @@
 #' followed by a period.
 #'
 #' @examples
-#' load(ObsidianData)
 #' # create example data set by restricting to one group, removing column with group code,
 #' # then adding that code back to the data set
-#' fn.data(data = ObsidianData[ObsidianData[,"Code"] == "AW"][,-1]
-#'           Group = "AW",
+#' data(ObsidianSources)
+#' fn.data(data = ObsidianSources[(ObsidianSources[,"Code"] == "A"),][,-1],
+#'           Group = "A",
 #'           Subset = " ",
-#'           ID = "ID"
-#'           Elements = c("Rb","Sr","Y","Zr","Nb"))
+#'           ID = "ID",
+#'           AnalyticVars = c("Rb","Sr","Y","Zr","Nb"))
 #'
 #' @export
 
-fn.data <- function(data,Group,Subset,ID,Elements){
-  dataCode <- rep(Group, nrow(data))
-  dataSubset <- rep(Subset, nrow(data))
-  dataID <- data[, ID]
+fn.data <- function(doc="fn.data", data, Group,Subset,ID,AnalyticVars){
+  dataCode <- rep(Group, nrow(data))  # create a vector with the specified code
   #
-  sourceElements <-
-    dimnames(data)[[2]][-1]  #  elements in data matrix
-  ElementsUsed <-
-    Elements %in% sourceElements  # logical vector of length(Elements)
+  if (length(Subset) == nrow(data))  dataSubset <- Subset  # use specified subsets
+  if (length(Subset) == 1)  dataSubset<-rep(Subset, nrow(data))  # create subset variable with same value for all obserations
+  #
+  dataID <- data[, ID]  # create a vector with the lab IDs
+  #
+  #sourceElements <-
+  #  dimnames(data)[[2]][-1]  #  elements in data matrix
+  #ElementsUsed <-
+  #  Elements %in% sourceElements  # logical vector of length(Elements)
   # for whether ith value is in data matrix
-  outElements <-
-    matrix(nrow = nrow(data), ncol = length(Elements), NA)
-  dimnames(outElements)[[2]] <- Elements
-  for (i in 1:length(Elements))
-    if (ElementsUsed[i] == T)
-      elements[, i] <- data[, Elements[i]]
-  dataout <-
-    data.frame(Group = dataCode,
-               Subset = dataSubset,
-               ID = dataID,
-               elements)
-  dataout
+  variables <- data[,AnalyticVars]
+  dimnames(variables)[[2]] <- AnalyticVars
+  #
+  if (Subset[1] != " ")  dataOut<-data.frame(Group=Group, Subset=Subset, ID=dataID, variables)
+    else  dataOut<-data.frame(Group=Group, ID=dataID, variables)
+  fcn.date.ver<-paste(doc,date(),R.Version()$version.string)
+  #
+  list(usage=fcn.date.ver,
+              analyticVars=AnalyticVars,
+              dataOut=dataOut)
 }

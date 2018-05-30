@@ -4,32 +4,32 @@
 \alias{fn.data}
 \title{fn.data}
 \usage{
-fn.data(data, Group, Subset, ID, Elements)
+fn.data(doc = fn.data, data, Group, Subset, ID, AnalyticVars)
 }
 \arguments{
-\item{data}{data frame containing the data for one group}
+\item{doc}{Documentation, default is the function name}
 
-\item{Group}{character: code for the group, added to the data set}
+\item{data}{Data frame containing the data for one group}
 
-\item{Subset}{character: name of variable with codes for subsets of samples, " " if no subsets}
+\item{Group}{Character: user-specified grouping code for these data, added to the data set}
 
-\item{ID}{character: name of IDs (typically lab IDs) for samples}
+\item{Subset}{Character: name of variable with codes for subsets of samples, " " if no subsets}
 
-\item{Elements}{character vector: names for elements used from the data}
+\item{ID}{Character: name of IDs (typically lab IDs) for samples}
 
-\item{fn.data}{create data frame with data to be analyzed, columns in specified order}
+\item{AnalyticVars}{Character vector with names for elements used from the data}
 }
 \value{
-A data frame with columns
+A list with the elements:
  \itemize{
-\item{"Group"}{group code (specified in Group)}
-\item{"Subset"}{subset code (specified in Subset)}
-\item{"ID"}{ID value}
-\item{"elements"}{one column for each element specified in Elements}
+\item{usage:}{  Documentatation, including function name, version of R used, date run)}
+\item{dataUsed:"}{  Data used, restricted to the specified group}
+\item{analyticVars:}{  The value of AnalyticVars}
+\item{dataOut:}{  The data frame created by the function, with Group, Subset (if specified), ID, and analytic variables}
 }
 }
 \description{
-fn.data
+Create data frame with data to be analyzed, columns in specified order
 }
 \section{Details}{
 
@@ -41,13 +41,13 @@ followed by a period.
 }
 
 \examples{
-load(ObsidianData)
 # create example data set by restricting to one group, removing column with group code,
 # then adding that code back to the data set
-fn.data(data = ObsidianData[ObsidianData[,"Code"] == "AW"][,-1]
-          Group = "AW",
+data(ObsidianSources)
+fn.data(data = ObsidianSources[(ObsidianSources[,"Code"] == "A"),][,-1],
+          Group = "A",
           Subset = " ",
-          ID = "ID"
-          Elements = c("Rb","Sr","Y","Zr","Nb"))
+          ID = "ID",
+          AnalyticVars = c("Rb","Sr","Y","Zr","Nb"))
 
 }

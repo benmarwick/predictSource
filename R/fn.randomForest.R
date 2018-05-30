@@ -37,10 +37,7 @@
 #'  }
 #'
 #' @examples
-#' data(ObsidianSources)
-#' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-#' randomForest <- fn.randomForest(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
-#'                 NvarUsed=3)
+#'names
 #'
 #' @import  MASS randomForest rpart
 #'
@@ -103,11 +100,11 @@ fn.randomForest <-
     params.grouping<-list(GroupVar,Groups)
     names(params.grouping)<-c("GroupVar","Groups")
     params.numeric<-c(NvarUsed, Ntrees, Seed)
-    names(params.logical)<-c("NvarUsed", "Ntrees", "Seed")
+    names(params.numeric)<-c("NvarUsed", "Ntrees", "Seed")
     if (folder != " ")
       fileNames <- list(paste(folder,ds.importance,sep=""),paste(folder,ds.confusion,sep=""))
     #
-    if (substr(folder,1,1) != " ")
+    if (substr(folder,1,1) == " ")
       out<-list(usage=fcn.date.ver,
                 dataUsed=Data.used,
                 analyticVars=AnalyticVars,
@@ -118,7 +115,7 @@ fn.randomForest <-
                 importance = importance.rf,
                 confusion = fit.rf$confusion
       )
-    if (substr(folder,1,1) == " ")
+    if (substr(folder,1,1) != " ")
       out<-list(usage=fcn.date.ver,
                 dataUsed=Data.used,
                 analyticVars=AnalyticVars,
@@ -130,4 +127,5 @@ fn.randomForest <-
                 confusion = fit.rf$confusion,
                 files = fileNames
       )
+    outnames
   }

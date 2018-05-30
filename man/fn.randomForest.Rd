@@ -57,9 +57,6 @@ The function implements a random forest analysis.  For each analysis, the variab
 Random forest analysis
 }
 \examples{
-data(ObsidianSources)
-analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-tree <- fn.randomForest(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
-                NvarUsed=3)
+names
 
 }
