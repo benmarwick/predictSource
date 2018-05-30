@@ -4,7 +4,7 @@
 \alias{fn.data}
 \title{fn.data}
 \usage{
-fn.data(doc = fn.data, data, Group, Subset, ID, AnalyticVars)
+fn.data(doc = "fn.data", data, Group, Subset, ID, AnalyticVars)
 }
 \arguments{
 \item{doc}{Documentation, default is the function name}
