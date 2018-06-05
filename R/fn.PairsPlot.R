@@ -15,8 +15,10 @@
 #'   each pair of variables in AnalyticVars.  If Groups != " ", there is a scatter plot for
 #'   each group in Groups.  If Groups=" ", there is one pairs plot with the data for all groups.
 #'   Executing the function produces warnings ("span is not a graphical parameter") that can be
-#`   ignored (changing the value of Span does change the lowess smooths).
-#`  In Rstudio, each plot is in a separate window, not in the Plot pane.
+#'   ignored (changing the value of Span does change the lowess smooths).
+#' As coded, in RStudio all plots are produced without a pause; use the back arrow in the plot pane to see
+#'  the plots.  In base R, remove the comment symbol (#) from the browser command at the end of the final loop,
+#'  so that the function will stop after producing each plot.
 #'
 #' @return A set of pairs plots as described above and a list with the following components:
 #' \itemize{
@@ -63,8 +65,8 @@ fn.PairsPlot <-
         win.graph()
         pairs(data.temp, panel = panel.smooth, span = Span,
               main = paste("group", groups[i]))
-        browser()
-      }
+  #      browser()
+       }
     }
     fcn.date.ver<-paste(doc,date(),R.Version()$version.string)
     params.numeric<-Span

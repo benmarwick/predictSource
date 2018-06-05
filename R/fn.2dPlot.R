@@ -30,15 +30,15 @@
 #'
 #' @return   A list with the following components:
 #'  \itemize{
-#' \item{usage}{ Vector with the contents of the argument doc, the date run, the version of R used}
-#' \item{dataUsed}{ The contents of the argument data restricted to the groups used}
-#' \item{params.numeric}{ Vector with the values of the arguments Lowess.f and KernelWidth}
-#' \item{params.grouping}{ Character vector with the values of the arguments GroupVar and Groups}
-#' \item{"ellipse.pct}{ The value of the argument Ellipses}
-#' \item{analyticVars}{ The value of the argument AnalyticVars}
-#' \item{colors}{ vector with the value of the argument Color}
-#' \item{data.check}{ If Identify = T, a data frame with the information on user-identified points of interest}
-#' \item{folder.data.check}{ If folder != " " and Identify = T, the path to the excel file with the information on user-identified points of interest}
+#' \item{usage: }{  A vector with the contents of the argument doc, the date run, the version of R used}
+#' \item{dataUsed: }{ The contents of the argument data restricted to the groups used}
+#' \item{params.numeric: }{ A vector with the values of the arguments Lowess.f and KernelWidth}
+#' \item{params.grouping: }{ A character vector with the values of the arguments GroupVar and Groups}
+#' \item{"ellipse.pct: }{ The value of the argument Ellipses}
+#' \item{analyticVars: }{ The value of the argument AnalyticVars}
+#' \item{colors:}{  A vector with the value of the argument Color}
+#' \item{data.check: }{ If Identify = T, a data frame with the information on user-identified points of interest}
+#' \item{folder.data.check: }{ If folder != " " and Identify = T, the path to the excel file with the information on user-identified points of interest}
 #' }
 #'
 #' @section Details:
@@ -47,13 +47,8 @@
 #' @examples
 #' data(ObsidianSources)
 #' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-#' fn.2dPlot(data = ObsidianSources,
-#'           Groups = "All",
-#'           GroupVar = "Code",
-#'           labID = "ID",
-#'           Groups = c("A","B","C"),
-#'           AnalyticVars = rbind(analyticVars[1:2,],analyicVars[c(1,3),]),
-#'           Colors = c("black","red"))
+#'plot.2d <- fn.2dPlot(data = ObsidianSources, GroupVar = "Code", labID = "ID", Groups = c("A","B","C"),
+#'           AnalyticVars = rbind(analyticVars[1:2],analyticVars[c(1,3)]), Colors = c("black","red"))
 #'
 #' @import MASS
 #'
@@ -263,12 +258,26 @@ fn.2dPlot <- function (doc = "fn.2dPlot", data, GroupVar, labID, Groups,
   names(params.numeric)<-c("Lowess.f","KernelWidth")
   params.grouping<-list(GroupVar,Groups)
   names(params.grouping)<-c("GroupVar","Groups")
+  #
   if ((substr(folder,1,1) == " ") & (!Identify))
-    out<-list(usage=fcn.date.ver,dataUsed=data.Used,params.numeric=params.numeric,params.grouping=params.grouping,ellipse.pct=Ellipses)
+    out<-list(usage=fcn.date.ver,
+              dataUsed=data.Used,
+              params.numeric=params.numeric,
+              params.grouping=params.grouping,
+              ellipse.pct=Ellipses)
   if ((substr(folder,1,1) == " ") & (Identify))
-    out<-list(usage=fcn.date.ver,dataUsed=data.Used,params.numeric=params.numeric,params.grouping=params.grouping,ellipse.pct=Ellipses,data.check=data.check)
+    out<-list(usage=fcn.date.ver,
+              dataUsed=data.Used,
+              params.numeric=params.numeric,
+              params.grouping=params.grouping,
+              ellipse.pct=Ellipses,
+              data.check=data.check)
   if ((substr(folder,1,1) != " ") * (Identify))
-    out<-list(usage=fcn.date.ver,dataUsed=data.Used,params.numeric=params.numeric,params.grouping=params.grouping,ellipse.pct=Ellipses,
+    out<-list(usage=fcn.date.ver,
+              dataUsed=data.Used,
+              params.numeric=params.numeric,
+              params.grouping=params.grouping,
+              ellipse.pct=Ellipses,
               data.check=data.check,folder.data.check=paste(folder,ds.identified,sep=""))
   out
 }

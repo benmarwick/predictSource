@@ -144,7 +144,7 @@ fn.CV.corr <-
       files <- list(Cv = paste(folder, ds.CV, sep = ""), Corrs = paste(folder, ds.corr, sep = ""))
     }
     #
-    fcn.date.ver<-c(doc,date(),R.Version())
+    fcn.date.ver<-c(doc,date(),R.Version()$version.string)
     params.numeric<-c(digits.CV=CV.digits,digits.corr=corr.digits)
     names(params.numeric)<-c("CV.digits","corr.digits")
     params.grouping<-list(GroupVar,Groups)

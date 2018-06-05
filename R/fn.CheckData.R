@@ -161,7 +161,7 @@ fn.CheckData <-
     }
     if (substr(folder,1,1) != " ")  write.csv(Summary, paste(folder, ds.summary, sep = ""))
     #
-    fcn.date.ver<-c(doc,date(),R.Version)
+    fcn.date.ver<-c(doc,date(),R.Version()$version.string)
     params<-list(CheckDupVars,GroupVar,Groups)
     names(params)<-c("CheckDupVars","GroupVar","Groups")
     if (folder != " ")  {

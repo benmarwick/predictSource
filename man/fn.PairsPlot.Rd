@@ -41,6 +41,10 @@ Pairs plots of specified analytic values, by specified groups
   each pair of variables in AnalyticVars.  If Groups != " ", there is a scatter plot for
   each group in Groups.  If Groups=" ", there is one pairs plot with the data for all groups.
   Executing the function produces warnings ("span is not a graphical parameter") that can be
+  ignored (changing the value of Span does change the lowess smooths).
+As coded, in RStudio all plots are produced without a pause; use the back arrow in the plot pane to see
+ the plots.  In base R, remove the comment symbol (#) from the browser command at the end of the final loop,
+ so that the function will stop after producing each plot.
 }
 
 \examples{

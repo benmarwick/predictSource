@@ -20,6 +20,10 @@
 #' \item{"analyticVars"}{a vector with the value of the argument AnalyticVars}
 #'}
 #'
+#' \section  DETAILS:
+#' Only the last plot is displayed in the plot window when the function is run.  Use the back arrow
+#' to display previous plots; click on the zoom button to create a new window with an enlarged version of the plot window.
+#'
 #' @examples
 #' data(ObsidianSources)
 #' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
