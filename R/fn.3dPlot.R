@@ -10,7 +10,8 @@
 #' @param AnalyticVars vector of names (character values) of analytic results
 #' @param Selections vector of length 3, or data frame with 3 columns, with combinations to be plotted
 #' @param ByGroup if T, show scatterplot for each group for each selection of 3 variables
-#' @param Color color of plotted points, default is a vector for showing several groups on one plot
+#' @param PlotMedians  If T, plot the medians
+#' @param Colors colors of plotted points, default is a vector for showing several groups on one plot
 #' @param SymbolSize value at most 1, smaller value gives smaller diameter points
 #'
 #'
@@ -33,8 +34,8 @@
 #' @examples
 #' data(ObsidianSources)
 #' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-#' 3dPlot<-fn.3dPlot(data=ObsidianSources, GroupVar="Code", Groups=c("A","B"),
-#'                   Selections=rbind(analyticVars[1:3,],analyticVars[2:4,]))
+#' plot3d<-fn.3dPlot(data=ObsidianSources, GroupVar="Code", Groups=c("A","B"), AnalyticVars=analyticVars,
+#'                   Selections=rbind(analyticVars[1:3],analyticVars[2:4]))
 #'
 #' @export
 
@@ -46,7 +47,8 @@ fn.3dPlot <-
            AnalyticVars,
            Selections,
            ByGroup = FALSE,
-           Color = c("red","black","blue","green","purple"),
+           PlotMedians = FALSE,
+           Colors = c("red","black","blue","green","purple"),
            SymbolSize = 0.7) {
 
     library(scatterplot3d)
@@ -172,8 +174,8 @@ fn.3dPlot <-
       }
     }
     fcn.date.ver<-c(doc,date(),R.Version()$version.string)
-    params<-list(ByGroup,SymbolSize)
-    names(params)<-c("ByGroup","SymbolSize")
+    params<-list(ByGroup, PlotMedians, SymbolSize)
+    names(params)<-c("ByGroup","PlotMedians", "SymbolSize")
     out<-list(usage=fcn.date.ver,
               dataUsed=data.Used,
               params=params,

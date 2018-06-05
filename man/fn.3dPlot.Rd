@@ -5,8 +5,8 @@
 \title{fn.3dPlot}
 \usage{
 fn.3dPlot(doc = "fn.3dPlot version 0.1", data, GroupVar, Groups, AnalyticVars,
-  Selections, ByGroup = FALSE, Color = c("red", "black", "blue", "green",
-  "purple"), SymbolSize = 0.7)
+  Selections, ByGroup = FALSE, PlotMedians = FALSE, Colors = c("red",
+  "black", "blue", "green", "purple"), SymbolSize = 0.7)
 }
 \arguments{
 \item{doc}{A string documenting use written to the output list; default is the function name}
@@ -24,7 +24,9 @@ if "All", use all groups; if " ", no grouping}
 
 \item{ByGroup}{if T, show scatterplot for each group for each selection of 3 variables}
 
-\item{Color}{color of plotted points, default is a vector for showing several groups on one plot}
+\item{PlotMedians}{If T, plot the medians}
+
+\item{Colors}{colors of plotted points, default is a vector for showing several groups on one plot}
 
 \item{SymbolSize}{value at most 1, smaller value gives smaller diameter points}
 }
@@ -51,7 +53,7 @@ as a matrix or data frame, and use of colors.
 \examples{
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-3dPlot<-fn.3dPlot(data=ObsidianSources, GroupVar="Code", Groups=c("A","B"),
-                  Selections=rbind(analyticVars[1:3,],analyticVars[2:4,]))
+plot3d<-fn.3dPlot(data=ObsidianSources, GroupVar="Code", Groups=c("A","B"), AnalyticVars=analyticVars,
+                  Selections=rbind(analyticVars[1:3],analyticVars[2:4]))
 
 }
