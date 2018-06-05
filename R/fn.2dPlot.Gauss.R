@@ -33,15 +33,12 @@
 #'  See the vignette for more information: visualizing each plot, the information obtained by using the package qqtest,
 #'   the tests for bivariate normality, and identifying points of interest.
 #'
-#' @import MASS  qqtest
+#' @import MASS  qqtest  MVN
 #' @examples
 #' data(ObsidianSources)
 #' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-#' 2dPlot.Gauss<-fn.2dPlot.Gauss(data = ObsidianSources,
-#'                              GroupVar = "Code",
-#'                              labID = "ID",
-#'                              Groups = c("A","B"),
-#'                              AnalyticVars = rbind(analyticVars[1:2,],analyticVars[c(1,3),]))
+#' plot2d.Gauss<-fn.2dPlot.Gauss(data = ObsidianSources, GroupVar = "Code", labID = "ID", Groups = c("A","B"),
+#'                              AnalyticVars = analyticVars[1:2])
 #'
 #' @export
 #'
@@ -105,9 +102,10 @@ fn.2dPlot.Gauss <- function (doc = "fn.2dPlot.Gauss", data, GroupVar,labID, Grou
     }
     ADp1 <- ad.test(temp1)$p.value
     ADp2 <- ad.test(temp2)$p.value
-    SWp1 <- uniNorm(temp1, type = "SW")[[2]]$p.value
-    SWp2 <- uniNorm(temp2, type = "SW")[[2]]$p.value
-    mardia <- mardiaTest(data = temp)
+    SWp1 <- shapiro.test(temp1)$p.value
+    SWp2 <- shapiro.test(temp2)$p.value
+    mardia <- mvn(data = temp, mvnTest="mardia")$multivariateNormality
+    browser()
     if (nrow(temp) >= 20)
       p.kurtosis <- mardia@p.value.kurt
     else p.kurtosis <- mardia@p.value.small
