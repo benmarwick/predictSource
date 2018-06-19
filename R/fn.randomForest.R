@@ -37,7 +37,10 @@
 #'  }
 #'
 #' @examples
-#'names
+#' data(ObsidianSources)
+#' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+#' save.randomForest <- fn.randomForest(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
+#'   NvarUsed=3)
 #'
 #' @import  MASS randomForest rpart
 #'
@@ -127,5 +130,5 @@ fn.randomForest <-
                 confusion = fit.rf$confusion,
                 files = fileNames
       )
-    outnames
+    out
   }

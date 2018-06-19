@@ -8,7 +8,7 @@
 #' @param known.sources: vector of locations to be considered as sources
 #'  predicted.soures: vector of predicted sources, names must match those in known.sources if both are the same (not all need to be in known.sources)
 #'  predicted.sources: predicted sources to be compared
-#' @param Els: elements used in principal component analyses
+#' @param AnalyticVars: elements used in principal component analyses
 #' @param loc.legend: location of legend added to plots (alternates are "topleft",
 #'    "bottomright","bottomleft")
 #' @param folder: path to folder containing result files each file name should end with .csv
@@ -18,10 +18,16 @@
 #'
 #' @import mgcv
 #'
+#' @examples
+#' data(ObsidianSources)
+#' data(ObsidianArtifacts)
+#' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+#' sources <- unique(ObsidianSources[,"Code"])
+#' pca.eval <- fn.pca.evaluation(SourceData=ObsidianSources, ArtifactData=ObsidianArtifacts,
+#'    SourceGroup="Code", ArtifactGroup="Code",known.sources=sources, predicted.sources=sources, AnalyticVars=analyticVars)
+#'
 #' @export
 #
-
-
 fn.pca.evaluation <-
   function(doc = "fn.pca.evaluation",
            SourceData,
@@ -30,9 +36,9 @@ fn.pca.evaluation <-
            ArtifactGroup,
            known.sources,
            predicted.sources,
-           Els,
+           AnalyticVars,
            loc.legend = "topright",
-           folder,
+           folder = " ",
            ds.importance,
            ds.pts.outside,
            ds.in.out) {
@@ -43,7 +49,7 @@ fn.pca.evaluation <-
     #
 
     SourceRows <- SourceData[, SourceGroup] %in% known.sources
-    pcaData <- SourceData[SourceRows, c(SourceGroup, Els)]
+    pcaData <- SourceData[SourceRows, c(SourceGroup, AnalyticVars)]
     #
     #  add numeric code for source to data set
     #
@@ -57,12 +63,12 @@ fn.pca.evaluation <-
     #
     #  compute principal components and save first two components with ID information
     #
-    pca <- prcomp(temp[, Els], scale = TRUE)
+    pca <- prcomp(temp[, AnalyticVars], scale = TRUE)
     #
     #  matrix with information from summary
     #
     importance.pca <- summary(pca)$importance
-    write.csv(importance.pca, file = paste(folder, ds.importance, sep = ""))
+    if (folder != " ")  write.csv(importance.pca, file = paste(folder, ds.importance, sep = ""))
     #
     predict.pc1 <-
       cbind(temp[, SourceGroup], SourceIndex = SourceIndex, PC1 = predict(pca)[, 1])
@@ -72,17 +78,17 @@ fn.pca.evaluation <-
     #  principal component weights
     #
     PrinComp <-
-      matrix(NA, length(Els), length(Els)) # principal component loadings
-    dimnames(PrinComp) <- list(paste("pc", 1:length(Els), sep = ""), Els)
+      matrix(NA, length(AnalyticVars), length(AnalyticVars)) # principal component loadings
+    dimnames(PrinComp) <- list(paste("pc", 1:length(AnalyticVars), sep = ""), AnalyticVars)
     #
     #  matrix with predicted values of PCs for each area
     #
     Predicted <- predict(pca)
-    dimnames(Predicted) <- list(NULL, paste("pc", 1:length(Els), sep = ""))
+    dimnames(Predicted) <- list(NULL, paste("pc", 1:length(AnalyticVars), sep = ""))
     Predicted <-
       data.frame(SourceIndex = temp[, "SourceIndex"], Code = pcaData[, SourceGroup], Predicted)
     #
-    for (i in 1:length(Els))  {
+    for (i in 1:length(AnalyticVars))  {
       PrinComp[i, ] <- pca$rotation[, i]
     }
     #
@@ -90,13 +96,13 @@ fn.pca.evaluation <-
     #
     #  weights applied to artifact data
     #
-    temp <- ArtifactData[, c(ArtifactGroup, Els)]
+    temp <- ArtifactData[, c(ArtifactGroup, AnalyticVars)]
     #  standardize data
-    data.std <- matrix(NA, nrow(temp), length(Els))
-    for (j in 1:length(Els)) {
-      temp.mean <- mean(pcaData[, Els[j]])
-      temp.sd <- sd(pcaData[, Els[j]])
-      data.std[, j] <- (temp[, Els[j]] - temp.mean) / temp.sd
+    data.std <- matrix(NA, nrow(temp), length(AnalyticVars))
+    for (j in 1:length(AnalyticVars)) {
+      temp.mean <- mean(pcaData[, AnalyticVars[j]])
+      temp.sd <- sd(pcaData[, AnalyticVars[j]])
+      data.std[, j] <- (temp[, AnalyticVars[j]] - temp.mean) / temp.sd
     }
     #  predicted principal components
     PC.1 <- rep(NA, nrow(data.std))
@@ -189,7 +195,7 @@ fn.pca.evaluation <-
       # convex hulls of source data
       lines(plot.data[[i]])
     #  plot artifact points
-    #  get information for labels
+    #  get information for labAnalyticVars
     crosstab <- table(data.pc[, "artifact.group"], data.pc[, "index"])
     indices <- as.numeric(colnames(crosstab))
     source.names <- as.character(rownames(crosstab))
@@ -241,7 +247,7 @@ fn.pca.evaluation <-
     text(
       x = medians[, "pc1"],
       y = medians[, "pc2"],
-      labels = groups,
+      labAnalyticVars = groups,
       cex = 0.75,
       adj = 0.5
     )
@@ -311,10 +317,10 @@ fn.pca.evaluation <-
       colnames(pts.outside)[(colnames(pts.outside) != "index") &
                               (colnames(pts.outside) != "artifact.group")]
     pts.outside <- pts.outside[, cols.keep]
-    write.csv(pts.outside, file = paste(folder, ds.pts.outside, sep = ""))
+    if (folder != " ")  write.csv(pts.outside, file = paste(folder, ds.pts.outside, sep = ""))
     #
     n.in.out[length(known.sources) + 1, ] <- apply(n.in.out, 2, sum)
-    write.csv(n.in.out, file = paste(folder, ds.in.out, sep = ""))
+    if (folder != " ")  write.csv(n.in.out, file = paste(folder, ds.in.out, sep = ""))
     #
     list(
       Documentation = doc,

@@ -18,7 +18,7 @@
 #' @param extension: if folder != " ", the format in which the file should be saved;
 #'        options are pdf ("pdf", the default) and postscript (value is "ps")
 #'
-#' @import MASS rgl
+#' @import MASS rgl scatterplot3d
 #'
 #' @section: Details
 #' See the vignette for details on viewing each plot, saving plots to a file, and use of colors.
@@ -38,9 +38,12 @@
 #' @examples
 #' data(ObsidianSources)
 #' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-#' 3dPlot.rotate<-fn.3dPlot.rotate(data=ObsidianSources, GroupVar="Code", Groups=c("A","B"),
-#'                                 AnalyticVars = analyticVars, Selections=analyticVars[1:3,])
-#'
+#' plot.3d.rotate<-fn.3dPlot.rotate(data=ObsidianSources, GroupVar="Code", Groups=c("A","B"),
+#'                                 AnalyticVars = analyticVars, Selections=analyticVars[1:3],ByGroup=T)
+#' # two plots
+#' plot.3d.rotate<-fn.3dPlot.rotate(data=ObsidianSources, GroupVar="Code", Groups=c("A","B"),
+#'                                 AnalyticVars = analyticVars,
+#'                                 Selections=rbind(analyticVars[1:3],analyticVars[2:4]))
 #' @export
 
 fn.3dPlot.rotate <-
@@ -50,8 +53,9 @@ fn.3dPlot.rotate <-
            Groups,
            AnalyticVars,
            Selections,
-           ByGroup,
-           Color = c("red","black","blue","green","purple"),
+           ByGroup = F,
+           SymbolSize = 0.7,
+           Colors = c("red","black","blue","green","purple"),
            folder = " ",
            ds.3dPlot,
            extension="pdf") {
@@ -80,7 +84,7 @@ fn.3dPlot.rotate <-
       data.Used<-data.Used[index,]
     }
     #
-    #  add index to data.Used to specific col for plotting points in groups
+    #  add index to data.Used to specific color for plotting points in groups
     #
     if (!ByGroup)  {
       n.group<-rep(0,length(groups))
@@ -98,6 +102,7 @@ fn.3dPlot.rotate <-
       for (i in 2:length(Groups))
         header<-paste(header,"  ",Groups[i],": ",Colors[i],sep="")
       if (is.vector(Selections)) {
+        plot.new()
         plot3d(data.Used[, Selections[1]], data.Used[,Selections[2]], data.Used[, Selections[3]],
                xlab = Selections[1], ylab = Selections[2], zlab = Selections[3],
                col = Colors[data.Used[,"group.index"]],

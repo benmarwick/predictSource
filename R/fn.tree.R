@@ -115,7 +115,6 @@ fn.tree <-
       nsplitopt[i] <- cp[which.min(cp[, "xerror"]), "nsplit"]
     }
     nsplitopt <- cbind(Model = rep(0, 25), Splits = nsplitopt)
-    browser()
     Nsplitopt <-
       table(Model = nsplitopt[, "Model"], Splits = nsplitopt[, "Splits"])
     if (folder != " ")  write.csv(table(Nsplitopt), paste(folder, ds.OptSplit, sep = ""))
@@ -129,6 +128,17 @@ fn.tree <-
       fileNames <- list(paste(folder,ds.Classify,sep=""),paste(folder,ds.CpTable,sep=""),
                         paste(folder,ds.CVtable,sep=""),paste(folder,ds.OptSplit,sep=""))
     #
+    if (substr(folder,1,1) == " ")
+      out<-list(usage=fcn.date.ver,
+                dataUsed=Data.used,
+                analyticVars=AnalyticVars,
+                params.grouping=params.grouping,
+                params.logical=params.logical,
+                Tree = Tree,
+                Classification = Classification,
+                CpTable = CpTable
+   #             NOptSplit = nsplitopt
+                )
     if (substr(folder,1,1) != " ")
       out<-list(usage=fcn.date.ver,
                 dataUsed=Data.used,
@@ -138,18 +148,7 @@ fn.tree <-
                 Tree = Tree,
                 Classification = Classification,
                 CpTable = CpTable,
-                NOptSplit = nsplitopt
-                )
-    if (substr(folder,1,1) == " ")
-      out<-list(usage=fcn.date.ver,
-                dataUsed=Data.used,
-                analyticVars=AnalyticVars,
-                params.grouping=params.grouping,
-                params.logical=params.logical,
-                Tree = Tree,
-                Classification = Classification,
-                CpTable = CpTable,
-                NOptSplit = Noptsplit,
+  #              NOptSplit = Noptsplit,
                 files = fileNames
       )
     out
