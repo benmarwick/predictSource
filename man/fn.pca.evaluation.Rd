@@ -2,11 +2,12 @@
 % Please edit documentation in R/fn.pca.evaluation.R
 \name{fn.pca.evaluation}
 \alias{fn.pca.evaluation}
-\title{fn.pca.evaluation  evaluate predicted artifact sources using principal component loadings}
+\title{fn.pca.evaluation  Create plots to evaluate the predicted artifact sources using the source data principal component loadings}
 \usage{
 fn.pca.evaluation(doc = "fn.pca.evaluation", SourceData, ArtifactData,
-  SourceGroup, ArtifactGroup, known.sources, predicted.sources, Els,
-  loc.legend = "topright", folder, ds.importance, ds.pts.outside, ds.in.out)
+  SourceGroup, ArtifactGroup, known.sources, predicted.sources, AnalyticVars,
+  Identify = F, loc.legend = "topright", folder = " ", ds.importance,
+  ds.pts.outside, ds.in.out, ds.identified)
 }
 \arguments{
 \item{doc:}{documentation in list returned by function}
@@ -23,10 +24,12 @@ fn.pca.evaluation(doc = "fn.pca.evaluation", SourceData, ArtifactData,
 predicted.soures: vector of predicted sources, names must match those in known.sources if both are the same (not all need to be in known.sources)
 predicted.sources: predicted sources to be compared}
 
-\item{Els:}{elements used in principal component analyses}
+\item{AnalyticVars:}{elements used in principal component analyses}
 
 \item{loc.legend:}{location of legend added to plots (alternates are "topleft",
-"bottomright","bottomleft")}
+  "bottomright","bottomleft")
+@param Identify: if T, the user can identify artifacts of interest and obtain a data set with information on those artifacts
+  (default is F)}
 
 \item{folder:}{path to folder containing result files each file name should end with .csv}
 
@@ -36,6 +39,28 @@ predicted.sources: predicted sources to be compared}
 
 \item{ds.in.out:}{table with number of artifacts, by whether inside or outside hull for predicted  source, for each predicted source}
 }
+\value{
+The function produces two plots: the convex hulls of the first two principal components of the source data,
+ and a plot with those convex hulls and the artifact data (using the weights obtained from the source data).
+ The function returns a list with the following components:
+\itemize{
+  \item{usage:}{  A vector with the contents of the argument doc, the date run, the version of R used}
+  \item{dataUsed:}{  The contents of the argument data restricted to the groups used}
+  \item{params}{  A list with the values of the arguments GroupVar and Groups}
+  \item{analyticVars:}{  A vector with the value of the argument AnalyticVars}
+  \item{data.check:}{  If Identify=T, a data frame with the observations in dataUsed identified as of interest}
+  \item{files:}{  If folder != " ", a list with path and data set names to the excel files containing weights, importance, and, if Identify=T, data for the points of interest}
+   }
+}
 \description{
-fn.pca.evaluation  evaluate predicted artifact sources using principal component loadings
+fn.pca.evaluation  Create plots to evaluate the predicted artifact sources using the source data principal component loadings
+}
+\examples{
+data(ObsidianSources)
+data(ObsidianArtifacts)
+analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+sources <- unique(ObsidianSources[,"Code"])
+pca.eval <- fn.pca.evaluation(SourceData=ObsidianSources, ArtifactData=ObsidianArtifacts,
+   SourceGroup="Code", ArtifactGroup="Code",known.sources=sources, predicted.sources=sources, AnalyticVars=analyticVars)
+
 }

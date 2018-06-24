@@ -5,8 +5,9 @@
 \title{fn.3dPlot.rotate}
 \usage{
 fn.3dPlot.rotate(doc = "fn.3dPlot.rotate version 0.1", data, GroupVar, Groups,
-  AnalyticVars, Selections, ByGroup, Color = c("red", "black", "blue",
-  "green", "purple"), folder = " ", ds.3dPlot, extension = "pdf")
+  AnalyticVars, Selections, ByGroup = F, SymbolSize = 0.7,
+  Colors = c("red", "black", "blue", "green", "purple"), folder = " ",
+  ds.3dPlot, extension = "pdf")
 }
 \arguments{
 \item{doc}{A string documenting usage written to the list return, default is the function name}
@@ -58,7 +59,10 @@ See the vignette for details on viewing each plot, saving plots to a file, and u
 \examples{
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-3dPlot.rotate<-fn.3dPlot.rotate(data=ObsidianSources, GroupVar="Code", Groups=c("A","B"),
-                                AnalyticVars = analyticVars, Selections=analyticVars[1:3,])
-
+plot.3d.rotate<-fn.3dPlot.rotate(data=ObsidianSources, GroupVar="Code", Groups=c("A","B"),
+                                AnalyticVars = analyticVars, Selections=analyticVars[1:3],ByGroup=T)
+# two plots
+plot.3d.rotate<-fn.3dPlot.rotate(data=ObsidianSources, GroupVar="Code", Groups=c("A","B"),
+                                AnalyticVars = analyticVars,
+                                Selections=rbind(analyticVars[1:3],analyticVars[2:4]))
 }

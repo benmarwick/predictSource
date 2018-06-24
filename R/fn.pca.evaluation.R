@@ -1,8 +1,11 @@
-#'  fn.pca.evaluation  evaluate predicted artifact sources using principal component loadings
+#'  fn.pca.evaluation
+#'
+#'  Create plots to evaluate the predicted artifact sources using the source data principal component loadings
 #'
 #' @param doc: documentation in list returned by function
 #' @param SourceData: data from known sources, including code for location and element analyses
 #' @param ArtifactData: corresponding data from artifacts
+#' @param labID: ID for sample, " " if none (default value)
 #' @param SourceGroup: name of variable with code of location
 #' @param ArtifactGroup: name of variable with code for predicted source
 #' @param known.sources: vector of locations to be considered as sources
@@ -11,10 +14,27 @@
 #' @param AnalyticVars: elements used in principal component analyses
 #' @param loc.legend: location of legend added to plots (alternates are "topleft",
 #'    "bottomright","bottomleft")
+#'  @param Identify: if T, the user can identify artifacts of interest and obtain a data set with information on those artifacts
+#'    (default is F)
 #' @param folder: path to folder containing result files each file name should end with .csv
 #' @param ds.importance: name of file with percent of variance explained for the known source analysis
 #' @param ds.pts.outside: name of file with information on artifacts with principal component pointsoutside of hull for predicted source
 #' @param ds.in.out: table with number of artifacts, by whether inside or outside hull for predicted  source, for each predicted source
+#'
+#'@return The function produces two plots: the convex hulls of the first two principal components of the source data,
+#'  and a plot with those convex hulls and the artifact data (using the weights obtained from the source data).
+#'  The function returns a list with the following components:
+#' \itemize{
+#'   \item{usage:}{  A vector with the contents of the argument doc, the date run, the version of R used}
+#'   \item{dataUsed:}{  The contents of the argument data restricted to the groups used}
+#'   \item{params}{  A list with the values of the arguments GroupVar and Groups}
+#'   \item{analyticVars:}{  A vector with the value of the argument AnalyticVars}
+#'   \item{table.in.out:} {  A data frame with counts of the numbers of artifacts inside and outside of the source locations}
+#'   \item{pts.outside:}  {  A data frame with the data for artifact points located outside of a source}
+#'   \item{data.check:}{  If Identify=T, a data frame with the observations in dataUsed identified as of interest}
+#'   \item{files:}{  If folder != " ", a list with path and data set names to the excel files containing importance,
+#'   ds.in.out, pts.outside, and, if Identify=T, data for the points of interest}
+#'    }
 #'
 #' @import mgcv
 #'
@@ -23,8 +43,8 @@
 #' data(ObsidianArtifacts)
 #' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 #' sources <- unique(ObsidianSources[,"Code"])
-#' pca.eval <- fn.pca.evaluation(SourceData=ObsidianSources, ArtifactData=ObsidianArtifacts,
-#'    SourceGroup="Code", ArtifactGroup="Code",known.sources=sources, predicted.sources=sources, AnalyticVars=analyticVars)
+#' pca.eval <- fn.pca.evaluation(SourceData=ObsidianSources, ArtifactData=ObsidianArtifacts,SourceGroup= "Code",
+#'    ArtifactGroup="Code",known.sources=sources, predicted.sources=sources, AnalyticVars=analyticVars)
 #'
 #' @export
 #
@@ -32,22 +52,22 @@ fn.pca.evaluation <-
   function(doc = "fn.pca.evaluation",
            SourceData,
            ArtifactData,
+           labID = " ",
            SourceGroup,
            ArtifactGroup,
            known.sources,
            predicted.sources,
            AnalyticVars,
+           Identify = F,
            loc.legend = "topright",
            folder = " ",
            ds.importance,
            ds.pts.outside,
-           ds.in.out) {
-    #
-
+           ds.in.out,
+           ds.identified) {
     #
     #  create source data set with group code and elements, restricted to identified sources, for PCA
     #
-
     SourceRows <- SourceData[, SourceGroup] %in% known.sources
     pcaData <- SourceData[SourceRows, c(SourceGroup, AnalyticVars)]
     #
@@ -58,7 +78,7 @@ fn.pca.evaluation <-
       for (j in 1:length(known.sources))
         if (pcaData[i, SourceGroup] == known.sources[j])
           SourceIndex[i] <- j
-    }
+    }  # end of loop on i
     temp <- data.frame(pcaData, SourceIndex)
     #
     #  compute principal components and save first two components with ID information
@@ -88,36 +108,38 @@ fn.pca.evaluation <-
     Predicted <-
       data.frame(SourceIndex = temp[, "SourceIndex"], Code = pcaData[, SourceGroup], Predicted)
     #
-    for (i in 1:length(AnalyticVars))  {
+    for (i in 1:length(AnalyticVars))
       PrinComp[i, ] <- pca$rotation[, i]
-    }
     #
     #  principal components plot
     #
     #  weights applied to artifact data
     #
-    temp <- ArtifactData[, c(ArtifactGroup, AnalyticVars)]
+    if (labID == " ")  temp <- ArtifactData[, c(ArtifactGroup, AnalyticVars)]
+       else  temp <- ArtifactData[, c(labID, ArtifactGroup, AnalyticVars)]
+    artifacts <- temp # save artifact data for later use
+    data.check<-artifacts[1,]  # dummy row to set up information on identified observations
     #  standardize data
     data.std <- matrix(NA, nrow(temp), length(AnalyticVars))
     for (j in 1:length(AnalyticVars)) {
       temp.mean <- mean(pcaData[, AnalyticVars[j]])
       temp.sd <- sd(pcaData[, AnalyticVars[j]])
       data.std[, j] <- (temp[, AnalyticVars[j]] - temp.mean) / temp.sd
-    }
+    }  # end of loop on j
     #  predicted principal components
     PC.1 <- rep(NA, nrow(data.std))
     PC.2 <- PC.1
     for (i in 1:nrow(data.std)) {
       PC.1[i] <- crossprod(data.std[i, ], PrinComp[1, ])
       PC.2[i] <- crossprod(data.std[i, ], PrinComp[2, ])
-    }
+    }  # end of loop on i
     # compute index for each predicted artifact source
     index <- rep(NA, nrow(ArtifactData))
     for (i in 1:length(index))  {
       for (j in 1:length(predicted.sources))
         if (ArtifactData[i, ArtifactGroup] == predicted.sources[j])
           index[i] <- j
-    }
+    }  #  end of loop on i
     #
     data.pc <-
       data.frame(ArtifactData[, ArtifactGroup], index, cbind(PC.1, PC.2))
@@ -134,7 +156,7 @@ fn.pca.evaluation <-
     #
     #  convex hulls for source data
     #
-    fn.convex.hull <- function(Code = "BS") {
+    fn.convex.hull <- function(Code) {
       predicted <- Predicted[Predicted[, SourceGroup] == Code, c("pc1", "pc2")]
       chull <- chull(x = predicted[, "pc1"], y = predicted[, "pc2"])
       chull <- c(chull, chull[1])
@@ -142,7 +164,7 @@ fn.pca.evaluation <-
         predicted[chull, c("pc1", "pc2")]  # points in order defining hull
       lines(x = hull.pts[, "pc1"], y = hull.pts[, "pc2"])
       hull.pts
-    }
+    }  # end of fn.convex.hull
     #
     plot.data <-
       list(rep(NA, length(known.sources))) # save convex hull data for second plot
@@ -191,8 +213,8 @@ fn.pca.evaluation <-
       main = "Artifacts and hulls of predicted sources"
     )
     #
+    # convex hulls of source data
     for (i in 1:length(known.sources))
-      # convex hulls of source data
       lines(plot.data[[i]])
     #  plot artifact points
     #  get information for labAnalyticVars
@@ -240,14 +262,14 @@ fn.pca.evaluation <-
         Predicted[Predicted[, SourceGroup] == groups[i], c("pc1", "pc2")]  # data from group i
       medians[i, 1] <- median(temp[, 1], na.rm = T)
       medians[i, 2] <- median(temp[, 2], na.rm = T)
-    }
+    }  # end of loop on i
     medians <-
       cbind(1:length(groups), medians)  # add column with group number
     colnames(medians) <- c("group", "pc1", "pc2")
     text(
       x = medians[, "pc1"],
       y = medians[, "pc2"],
-      labAnalyticVars = groups,
+      labels = groups,
       cex = 0.75,
       adj = 0.5
     )
@@ -263,8 +285,8 @@ fn.pca.evaluation <-
       main = "Points outside source hulls"
     )
     #
+    # plot convex hulls
     for (i in 1:length(known.sources))
-      # plot convex hulls
       lines(plot.data[[i]])
     #
     #  compute indicator for predicted source within convex hull of that source
@@ -275,8 +297,6 @@ fn.pca.evaluation <-
     flag <- 0  #  reset to 1 with first source with point outside hull
     #cols.keep<-colnames(data.pc)[colnames(data.pc)!="index"]
     n.in.out <- matrix(0, nrow = length(known.sources) + 1, ncol = 3)
-    colnames(n.in.out) <- c("in", "out", "total")
-    rownames(n.in.out) <- c(known.sources, "total")
     for (i in 1:length(known.sources)) {
       index.i <-
         (data.pc[, "artifact.group"] == known.sources[i]) # rows with data prediced from this source
@@ -299,11 +319,18 @@ fn.pca.evaluation <-
           if (flag == 0) {
             flag <- 1
             pts.outside <- temp.i[!indicator, ]
-          }
+            }  # end of loop for flag=0
           points(temp.pc[!indicator, c("pc.1", "pc.2")], pch = i, cex = .5)  # plots points outside hull
-        }
-      }
-    }
+          if (Identify==T)  {
+            data.check<-artifacts[1,]  # dummy row to set up information on identified observations
+            index<-identify(x = temp.pc[,"pc.1"], y = temp.pc[,"pc.2"])
+            data.check<-rbind(data.check,artifacts[index,])
+            browser()
+            }  # end of loop for Identify = T
+         }  # end of loop for sum(indicator) > 0
+      } # end of loop for sum(index.i) > 0
+    }  # end of loop on i
+    #
     legend(
       x = loc.legend,
       legend = predicted.sources,
@@ -320,11 +347,70 @@ fn.pca.evaluation <-
     if (folder != " ")  write.csv(pts.outside, file = paste(folder, ds.pts.outside, sep = ""))
     #
     n.in.out[length(known.sources) + 1, ] <- apply(n.in.out, 2, sum)
-    if (folder != " ")  write.csv(n.in.out, file = paste(folder, ds.in.out, sep = ""))
+    table.in.out <- data.frame(Source = c(as.vector(known.sources, mode = "character"),"tOtal"), n.in.out)
+    colnames(table.in.out) <- c("Source","in", "out", "total")
+    if (folder != " ") write.csv(table.in.out, file = paste(folder, ds.in.out, sep = ""))
     #
-    list(
-      Documentation = doc,
-      table.in.out = n.in.out,
-      points.outside = pts.outside
-    )
-  }
+    fcn.date.ver<-paste(doc,date(),R.Version()$version.string)
+    params<-list(SourceGroup, ArtifactGroup,known.sources,predicted.sources)
+    names(params)<-c("SourceGroup","ArtifactGroup","known.sources","predicted.sources")
+    if ((Identify == T) & nrow(data.check > 1))  data.check <- data.check[-1,]
+    #
+    if ((substr(folder,1,1) != " ") & (Identify == F)) {
+      files=list(paste(folder,ds.importance,sep=""),paste(folder,ds.pts.outside,sep=""),
+                 paste(folder,ds.in.out,sep=""))
+      names(files) <- c("ds.importance", "ds.pts.outside", "ds.in.out")
+    }
+    if ((substr(folder,1,1) != " ") & (Identify == T)) {
+      files=list(paste(folder,ds.importance,sep=""),paste(folder,ds.pts.outside,sep=""),
+                 paste(folder,ds.in.out,sep=""),paste(folder,ds.identified,sep=""))
+      names(files) <- c("ds.importance", "ds.pts.outside", "ds.in.out","ds.identified")
+    }
+    #
+    if ((substr(folder,1,1) == " ") & (!Identify))
+      out<-list(usage=fcn.date.ver,
+                sourceData = SourceData,
+                artifactData = ArtifactData,
+                analyticVars = AnalyticVars,
+                params = params,
+                table.in.out = table.in.out,
+                points.outside = pts.outside)
+    if ((substr(folder,1,1) != " ") & (!Identify))
+      out<-list(usage = fcn.date.ver,
+                sourceData = SourceData,
+                artifactData = ArtifactData,
+                analyticVars = AnalyticVars,
+                params = params,
+                table.in.out = table.in.out,
+                points.outside = pts.outside,
+                files=list(paste(folder,ds.weights,sep=""),paste(folder,ds.importance,sep="")))
+    if ((substr(folder,1,1) == " ") & (Identify))
+      out<-list(usage=fcn.date.ver,
+                sourceData = SourceData,
+                artifactData = ArtifactData,
+                analyticVars=AnalyticVars,
+                params=params,
+                table.in.out = n.in.out,
+                points.outside = pts.outside,
+                data.check=data.check)
+    if ((substr(folder,1,1) != " ") & (Identify == T))
+      out<-list(usage=fcn.date.ver,
+                sourceData = SourceData,
+                artifactData = ArtifactData,
+                analyticVars=AnalyticVars,
+                params=params,
+                table.in.out = table.in.out,
+                points.outside = pts.outside,
+                data.check=data.check,
+                files=files)
+    if ((substr(folder,1,1) != " ") & (Identify) == F)
+      out<-list(usage=fcn.date.ver,
+              sourceData = SourceData,
+              artifactData = ArtifactData,
+              analyticVars=AnalyticVars,
+              params=params,
+              table.in.out = table.in.out,
+              points.outside = pts.outside,
+              files=files)
+    out
+   }

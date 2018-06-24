@@ -47,7 +47,7 @@
 #' @examples
 #' data(ObsidianSources)
 #' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-#'plot.2d <- fn.2dPlot(data = ObsidianSources, GroupVar = "Code", labID = "ID", Groups = c("A","B","C"),
+#' plot.2d <- fn.2dPlot(data = ObsidianSources, GroupVar = "Code", labID = "ID", Groups = c("A","B","C"),
 #'           AnalyticVars = rbind(analyticVars[1:2],analyticVars[c(1,3)]), Colors = c("black","red"))
 #'
 #' @import MASS

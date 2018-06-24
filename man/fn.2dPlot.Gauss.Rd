@@ -20,8 +20,7 @@ fn.2dPlot.Gauss(doc = "fn.2dPlot.Gauss", data, GroupVar, labID, Groups,
 \item{Groups}{Vector of values of the group variable for which plots are to be done;
 if "All", use all groups; if " ", no grouping}
 
-\item{AnalyticVars}{Names of two analytic variables to be shown in the plots, vector of length 2 or matrix with 2 columns;
-if a matrix, the set of plots is produced for each row}
+\item{AnalyticVars}{Names of two analytic variables to be shown in the plots, vector of length 2}
 
 \item{QQtest}{Logical (default is T): specify whether to run the package qqtest}
 
@@ -58,8 +57,7 @@ Plot and check specified pairs of analysis variables for bivariate normality. Th
 
 \examples{
 data(ObsidianSources)
-analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-plot2d.Gauss<-fn.2dPlot.Gauss(data = ObsidianSources, GroupVar = "Code", labID = "ID", Groups = c("A","B"),
-                             AnalyticVars = analyticVars[1:2])
+plot.2d.Gauss<-fn.2dPlot.Gauss(data=ObsidianSources, GroupVar="Code", labID="ID", Groups=c("A","B"),
+   AnalyticVars=c("Rb","Sr"))
 
 }
