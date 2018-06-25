@@ -2,12 +2,12 @@
 % Please edit documentation in R/fn.pca.evaluation.R
 \name{fn.pca.evaluation}
 \alias{fn.pca.evaluation}
-\title{fn.pca.evaluation  Create plots to evaluate the predicted artifact sources using the source data principal component loadings}
+\title{fn.pca.evaluation}
 \usage{
 fn.pca.evaluation(doc = "fn.pca.evaluation", SourceData, ArtifactData,
-  SourceGroup, ArtifactGroup, known.sources, predicted.sources, AnalyticVars,
-  Identify = F, loc.legend = "topright", folder = " ", ds.importance,
-  ds.pts.outside, ds.in.out, ds.identified)
+  labID = " ", SourceGroup, ArtifactGroup, known.sources, predicted.sources,
+  AnalyticVars, Identify = F, loc.legend = "topright", folder = " ",
+  ds.importance, ds.pts.outside, ds.in.out, ds.identified)
 }
 \arguments{
 \item{doc:}{documentation in list returned by function}
@@ -15,6 +15,8 @@ fn.pca.evaluation(doc = "fn.pca.evaluation", SourceData, ArtifactData,
 \item{SourceData:}{data from known sources, including code for location and element analyses}
 
 \item{ArtifactData:}{corresponding data from artifacts}
+
+\item{labID:}{ID for sample, " " if none (default value)}
 
 \item{SourceGroup:}{name of variable with code of location}
 
@@ -48,19 +50,22 @@ The function produces two plots: the convex hulls of the first two principal com
   \item{dataUsed:}{  The contents of the argument data restricted to the groups used}
   \item{params}{  A list with the values of the arguments GroupVar and Groups}
   \item{analyticVars:}{  A vector with the value of the argument AnalyticVars}
+  \item{table.in.out:} {  A data frame with counts of the numbers of artifacts inside and outside of the source locations}
+  \item{pts.outside:}  {  A data frame with the data for artifact points located outside of a source}
   \item{data.check:}{  If Identify=T, a data frame with the observations in dataUsed identified as of interest}
-  \item{files:}{  If folder != " ", a list with path and data set names to the excel files containing weights, importance, and, if Identify=T, data for the points of interest}
+  \item{files:}{  If folder != " ", a list with path and data set names to the excel files containing importance,
+  ds.in.out, pts.outside, and, if Identify=T, data for the points of interest}
    }
 }
 \description{
-fn.pca.evaluation  Create plots to evaluate the predicted artifact sources using the source data principal component loadings
+Create plots to evaluate the predicted artifact sources using the source data principal component loadings
 }
 \examples{
 data(ObsidianSources)
 data(ObsidianArtifacts)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 sources <- unique(ObsidianSources[,"Code"])
-pca.eval <- fn.pca.evaluation(SourceData=ObsidianSources, ArtifactData=ObsidianArtifacts,
-   SourceGroup="Code", ArtifactGroup="Code",known.sources=sources, predicted.sources=sources, AnalyticVars=analyticVars)
+pca.eval <- fn.pca.evaluation(SourceData=ObsidianSources, ArtifactData=ObsidianArtifacts,SourceGroup= "Code",
+   ArtifactGroup="Code",known.sources=sources, predicted.sources=sources, AnalyticVars=analyticVars)
 
 }

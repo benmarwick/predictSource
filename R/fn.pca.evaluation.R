@@ -21,6 +21,9 @@
 #' @param ds.pts.outside: name of file with information on artifacts with principal component pointsoutside of hull for predicted source
 #' @param ds.in.out: table with number of artifacts, by whether inside or outside hull for predicted  source, for each predicted source
 #'
+#' @section Details
+#' See the vignette for instructions for identifying points of interest using the paramter Identify = T.
+#'
 #'@return The function produces two plots: the convex hulls of the first two principal components of the source data,
 #'  and a plot with those convex hulls and the artifact data (using the weights obtained from the source data).
 #'  The function returns a list with the following components:
@@ -117,8 +120,6 @@ fn.pca.evaluation <-
     #
     if (labID == " ")  temp <- ArtifactData[, c(ArtifactGroup, AnalyticVars)]
        else  temp <- ArtifactData[, c(labID, ArtifactGroup, AnalyticVars)]
-    artifacts <- temp # save artifact data for later use
-    data.check<-artifacts[1,]  # dummy row to set up information on identified observations
     #  standardize data
     data.std <- matrix(NA, nrow(temp), length(AnalyticVars))
     for (j in 1:length(AnalyticVars)) {
@@ -231,7 +232,6 @@ fn.pca.evaluation <-
       pch = indices,
       bty = "n"
     )
-    browser()   #  pause to save plot
     #
     # plots to check whether artifact points are in the predicted convex hulls
     #
@@ -288,6 +288,12 @@ fn.pca.evaluation <-
     # plot convex hulls
     for (i in 1:length(known.sources))
       lines(plot.data[[i]])
+    legend(
+      x = loc.legend,
+      legend = predicted.sources,
+      pch = 1:length(predicted.sources),
+      bty = "n"
+    )  # legend for plot
     #
     #  compute indicator for predicted source within convex hull of that source
     #  plot points outside of predicted hull
@@ -296,7 +302,11 @@ fn.pca.evaluation <-
     #
     flag <- 0  #  reset to 1 with first source with point outside hull
     #cols.keep<-colnames(data.pc)[colnames(data.pc)!="index"]
-    n.in.out <- matrix(0, nrow = length(known.sources) + 1, ncol = 3)
+    n.in.out <- matrix(0, nrow = length(known.sources) + 1, ncol = 3)  # matrix with cross-tabulation of in/out points
+       # dummy row to set up information on identified observations
+    #
+    create.data.check <- 0  # flag to create data.check in first iteration
+    #
     for (i in 1:length(known.sources)) {
       index.i <-
         (data.pc[, "artifact.group"] == known.sources[i]) # rows with data prediced from this source
@@ -304,6 +314,10 @@ fn.pca.evaluation <-
         # at least one artifact from source i
         temp.i <-
           cbind(data.pc[index.i, ], ArtifactData[index.i, ]) # add artifact data to principal components
+        if ((Identify == T) & (create.data.check == 0)) {
+          data.check<-temp.i[1,]
+          create.data.check <- 1
+          }
         temp.pc <-
           as.matrix(temp.i[, c("pc.1", "pc.2")]) # force artifact PC data to matrix form
         plot.data.i <-
@@ -322,21 +336,12 @@ fn.pca.evaluation <-
             }  # end of loop for flag=0
           points(temp.pc[!indicator, c("pc.1", "pc.2")], pch = i, cex = .5)  # plots points outside hull
           if (Identify==T)  {
-            data.check<-artifacts[1,]  # dummy row to set up information on identified observations
             index<-identify(x = temp.pc[,"pc.1"], y = temp.pc[,"pc.2"])
-            data.check<-rbind(data.check,artifacts[index,])
-            browser()
+            data.check<-rbind(data.check,temp.i[index,])
             }  # end of loop for Identify = T
          }  # end of loop for sum(indicator) > 0
       } # end of loop for sum(index.i) > 0
     }  # end of loop on i
-    #
-    legend(
-      x = loc.legend,
-      legend = predicted.sources,
-      pch = 1:length(predicted.sources),
-      bty = "n"
-    )  # legend for plot
     #
     #  keep desired columns from pts.outside
     #
@@ -354,7 +359,12 @@ fn.pca.evaluation <-
     fcn.date.ver<-paste(doc,date(),R.Version()$version.string)
     params<-list(SourceGroup, ArtifactGroup,known.sources,predicted.sources)
     names(params)<-c("SourceGroup","ArtifactGroup","known.sources","predicted.sources")
-    if ((Identify == T) & nrow(data.check > 1))  data.check <- data.check[-1,]
+    if (Identify == T) {
+      if (nrow(data.check) > 1) {
+        data.check <- data.check[-1,c(-2,-5)]
+        data.check[,c("pc.1","pc.2")] <- round(data.check[,c("pc.1","pc.2")],dig=2)
+        }
+      }
     #
     if ((substr(folder,1,1) != " ") & (Identify == F)) {
       files=list(paste(folder,ds.importance,sep=""),paste(folder,ds.pts.outside,sep=""),
