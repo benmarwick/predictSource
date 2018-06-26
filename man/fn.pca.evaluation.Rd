@@ -12,26 +12,27 @@ fn.pca.evaluation(doc = "fn.pca.evaluation", SourceData, ArtifactData,
 \arguments{
 \item{doc:}{documentation in list returned by function}
 
-\item{SourceData:}{data from known sources, including code for location and element analyses}
+\item{sourceData:}{data from known sources, including code for location and element analyses, restricted to specified sources}
 
-\item{ArtifactData:}{corresponding data from artifacts}
+\item{artifactData:}{corresponding data from artifacts}
 
 \item{labID:}{ID for sample, " " if none (default value)}
 
-\item{SourceGroup:}{name of variable with code of location}
+\item{SourceGroup:}{name of variable with code for location}
 
 \item{ArtifactGroup:}{name of variable with code for predicted source}
 
-\item{known.sources:}{vector of locations to be considered as sources
-predicted.soures: vector of predicted sources, names must match those in known.sources if both are the same (not all need to be in known.sources)
-predicted.sources: predicted sources to be compared}
+\item{known.sources:}{vector of locations to be considered as sources}
+
+\item{predicted.soures:}{vector of predicted sources to be considered, not all must be in known.sources}
 
 \item{AnalyticVars:}{elements used in principal component analyses}
 
 \item{loc.legend:}{location of legend added to plots (alternates are "topleft",
-  "bottomright","bottomleft")
-@param Identify: if T, the user can identify artifacts of interest and obtain a data set with information on those artifacts
-  (default is F)}
+"bottomright","bottomleft")}
+
+\item{Identify:}{if T, the user can identify artifacts of interest and obtain a data set with information on those artifacts
+(default is F)}
 
 \item{folder:}{path to folder containing result files each file name should end with .csv}
 
@@ -48,7 +49,7 @@ The function produces two plots: the convex hulls of the first two principal com
 \itemize{
   \item{usage:}{  A vector with the contents of the argument doc, the date run, the version of R used}
   \item{dataUsed:}{  The contents of the argument data restricted to the groups used}
-  \item{params}{  A list with the values of the arguments GroupVar and Groups}
+  \item{params:}{  A list with the values of the arguments GroupVar and Groups}
   \item{analyticVars:}{  A vector with the value of the argument AnalyticVars}
   \item{table.in.out:} {  A data frame with counts of the numbers of artifacts inside and outside of the source locations}
   \item{pts.outside:}  {  A data frame with the data for artifact points located outside of a source}
