@@ -68,34 +68,76 @@ fn.pca.evaluation <-
            ds.in.out,
            ds.identified) {
     #
-    #  create source data set with group code and elements, restricted to identified sources, for PCA
+    #  create source data set with group code and elements, restricted to identified sources
     #
     SourceRows <- SourceData[, SourceGroup] %in% known.sources
-    pcaData <- SourceData[SourceRows, c(SourceGroup, AnalyticVars)]
+    sourceData <- SourceData[SourceRows, c(SourceGroup, AnalyticVars)]
     #
     #  add numeric code for source to data set
     #
-    SourceIndex <- rep(NA, nrow(pcaData))
-    for (i in 1:nrow(pcaData)) {
+    SourceIndex <- rep(NA, nrow(sourceData))
+    for (i in 1:nrow(sourceData)) {
       for (j in 1:length(known.sources))
-        if (pcaData[i, SourceGroup] == known.sources[j])
+        if (sourceData[i, SourceGroup] == known.sources[j])
           SourceIndex[i] <- j
+      }  # end of loop on i
+    data.Source <- rep(T, nrow(sourceData))
+    sourceData <- data.frame(sourceData[,c(SourceGroup,AnalyticVars)], SourceIndex, data.Source)
+    colnames(sourceData) <- c("group",AnalyticVars,"index", "data.Source")
+    #
+    #  if needed, create dummy lab ID
+    #
+    if (labID != " ") {
+      ID = rep(" ", nrow(sourceData))
+      sourceData <- data.frame(sourceData[,c("group",AnalyticVars,"index", "data.Source")], ID = ID)
+      }
+    #
+    #  create artifact data with group code and elements, restricted to potential sources of interest
+    #
+    artifactRows <- ArtifactData[, ArtifactGroup] %in% predicted.sources
+    if (labID == " ")  artifactData <- ArtifactData[artifactRows, c(ArtifactGroup, AnalyticVars)]
+      else  artifactData <- ArtifactData[artifactRows, c(ArtifactGroup, ID = labID, AnalyticVars)]
+    #
+    #  add numeric code for predicted source to data set
+    #
+    ArtifactIndex <- rep(NA, nrow(artifactData))
+    for (i in 1:nrow(artifactData)) {
+      for (j in 1:length(known.sources))
+        if (artifactData[i, ArtifactGroup] == predicted.sources[j])
+          ArtifactIndex[i] <- j
     }  # end of loop on i
-    temp <- data.frame(pcaData, SourceIndex)
+    data.Source <- rep(F,nrow(artifactData))
+    if (labID == " ") {
+      artifactData <- data.frame(artifactData[,c(ArtifactGroup,AnalyticVars)], ArtifactIndex, data.Source)
+      colnames(artifactData) <- c("group",AnalyticVars,"index", "data.Source")
+      }
+       else { artifactData <- data.frame(artifactData[,c(ArtifactGroup,AnalyticVars, "index", "data.Source")], ID = labID)
+         colnames(artifactData) <- c("group", AnalyticVars, "index", "data.Source", "ID")
+       }
+    #
+    #  combine data sets for principal components analysis
+    #
+    analysisData <- rbind(sourceData, artifactData)
     #
     #  compute principal components and save first two components with ID information
     #
-    pca <- prcomp(temp[, AnalyticVars], scale = TRUE)
+    pca <- prcomp(analysisData[, AnalyticVars], scale = TRUE)
     #
     #  matrix with information from summary
     #
     importance.pca <- summary(pca)$importance
     if (folder != " ")  write.csv(importance.pca, file = paste(folder, ds.importance, sep = ""))
     #
-    predict.pc1 <-
-      cbind(temp[, SourceGroup], SourceIndex = SourceIndex, PC1 = predict(pca)[, 1])
-    predict.pc2 <-
-      cbind(temp[, SourceGroup], SourceIndex = SourceIndex, PC2 = predict(pca)[, 2])
+    #  compute locations of points on principal component plot
+    #
+    if (folder == " ") {
+      predict.pc1 <- cbind(analysisData[, c("group","index","data.source")], pc1 = predict(pca)[, 1])
+      predict.pc2 <- cbind(analysisData[, c("group","index","data.source")], pc2 = predict(pca)[, 2])
+    }
+      else {
+        predict.pc1 <- cbind(analysisData[, c("group","index","data.source", "ID")], pc1 = predict(pca)[, 1])
+        predict.pc2 <- cbind(analysisData[, c("group","index","data.source", "ID")], pc2 = predict(pca)[, 2])
+        }
     #
     #  principal component weights
     #
@@ -108,7 +150,7 @@ fn.pca.evaluation <-
     Predicted <- predict(pca)
     dimnames(Predicted) <- list(NULL, paste("pc", 1:length(AnalyticVars), sep = ""))
     Predicted <-
-      data.frame(SourceIndex = temp[, "SourceIndex"], Code = pcaData[, SourceGroup], Predicted)
+      data.frame(SourceIndex = temp[, "SourceIndex"], Code = sourceData[, SourceGroup], Predicted)
     #
     for (i in 1:length(AnalyticVars))
       PrinComp[i, ] <- pca$rotation[, i]
@@ -124,8 +166,8 @@ fn.pca.evaluation <-
     #  standardize data
     data.std <- matrix(NA, nrow(artifactData), length(AnalyticVars))
     for (j in 1:length(AnalyticVars)) {
-      temp.mean <- mean(pcaData[, AnalyticVars[j]])
-      temp.sd <- sd(pcaData[, AnalyticVars[j]])
+      temp.mean <- mean(sourceData[, AnalyticVars[j]])
+      temp.sd <- sd(sourceData[, AnalyticVars[j]])
       data.std[, j] <- (artifactData[, AnalyticVars[j]] - temp.mean) / temp.sd
     }  # end of loop on j
     #  predicted principal components
@@ -343,7 +385,6 @@ fn.pca.evaluation <-
             }  # end of loop for Identify = T
          }  # end of loop for sum(indicator) > 0
       } # end of loop for sum(index.i) > 0
-      browser()
     }  # end of loop on i
     #
     #  keep desired columns from pts.outside
@@ -382,7 +423,7 @@ fn.pca.evaluation <-
     #
     if ((substr(folder,1,1) == " ") & (!Identify))
       out<-list(usage=fcn.date.ver,
-                sourceData = pcaData,
+                sourceData = sourceData,
                 artifactData = artifactData,
                 analyticVars = AnalyticVars,
                 params = params,
@@ -390,40 +431,40 @@ fn.pca.evaluation <-
                 points.outside = pts.outside)
     if ((substr(folder,1,1) != " ") & (!Identify))
       out<-list(usage = fcn.date.ver,
-                sourceData = pcaData,
+                sourceData = sourceData,
                 artifactData = artifactData,
                 analyticVars = AnalyticVars,
                 params = params,
                 table.in.out = table.in.out,
                 points.outside = pts.outside,
-                files=list(paste(folder,ds.weights,sep=""),paste(folder,ds.importance,sep="")))
+                files = files)
     if ((substr(folder,1,1) == " ") & (Identify))
       out<-list(usage=fcn.date.ver,
-                sourceData = pcaData,
+                sourceData = sourceData,
                 artifactData = artifactData,
                 analyticVars=AnalyticVars,
                 params=params,
                 table.in.out = n.in.out,
                 points.outside = pts.outside,
-                data.check=data.check)
+                data.check = data.check)
     if ((substr(folder,1,1) != " ") & (Identify == T))
       out<-list(usage=fcn.date.ver,
-                sourceData = pcaData,
+                sourceData = sourceData,
                 artifactData = ArtifactData,
-                analyticVars=AnalyticVars,
-                params=params,
+                analyticVars = AnalyticVars,
+                params = params,
                 table.in.out = table.in.out,
                 points.outside = pts.outside,
-                data.check=data.check,
-                files=files)
+                data.check = data.check,
+                files = files)
     if ((substr(folder,1,1) != " ") & (Identify) == F)
       out<-list(usage=fcn.date.ver,
-              sourceData = pcaceData,
+              sourceData = sourceData,
               artifactData = artifactData,
-              analyticVars=AnalyticVars,
-              params=params,
+              analyticVars = AnalyticVars,
+              params = params,
               table.in.out = table.in.out,
               points.outside = pts.outside,
-              files=files)
+              files = files)
     out
    }
