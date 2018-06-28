@@ -83,13 +83,13 @@ fn.pca.evaluation <-
       }  # end of loop on i
     data.Source <- rep(T, nrow(sourceData))
     sourceData <- data.frame(sourceData[,c(SourceGroup,AnalyticVars)], SourceIndex, data.Source)
-    colnames(sourceData) <- c("group",AnalyticVars,"index", "data.Source")
+    colnames(sourceData) <- c("group",AnalyticVars,"index", "data.source")
     #
     #  if needed, create dummy lab ID
     #
     if (labID != " ") {
       ID = rep(" ", nrow(sourceData))
-      sourceData <- data.frame(sourceData[,c("group",AnalyticVars,"index", "data.Source")], ID = ID)
+      sourceData <- data.frame(sourceData[,c("group",AnalyticVars,"index", "data.source")], ID = ID)
       }
     #
     #  create artifact data with group code and elements, restricted to potential sources of interest
@@ -109,10 +109,11 @@ fn.pca.evaluation <-
     data.Source <- rep(F,nrow(artifactData))
     if (labID == " ") {
       artifactData <- data.frame(artifactData[,c(ArtifactGroup,AnalyticVars)], ArtifactIndex, data.Source)
-      colnames(artifactData) <- c("group",AnalyticVars,"index", "data.Source")
+      colnames(artifactData) <- c("group",AnalyticVars,"index", "data.source")
       }
-       else { artifactData <- data.frame(artifactData[,c(ArtifactGroup,AnalyticVars, "index", "data.Source")], ID = labID)
-         colnames(artifactData) <- c("group", AnalyticVars, "index", "data.Source", "ID")
+    else {
+      artifactData <- data.frame(artifactData[,c(ArtifactGroup,AnalyticVars)], ArtifactIndex, data.Source, ID = labID)
+      colnames(artifactData) <- c("group", AnalyticVars, "index", "data.source", "ID")
        }
     #
     #  combine data sets for principal components analysis
@@ -130,83 +131,41 @@ fn.pca.evaluation <-
     #
     #  compute locations of points on principal component plot
     #
-    if (folder == " ") {
-      predict.pc1 <- cbind(analysisData[, c("group","index","data.source")], pc1 = predict(pca)[, 1])
-      predict.pc2 <- cbind(analysisData[, c("group","index","data.source")], pc2 = predict(pca)[, 2])
-    }
-      else {
-        predict.pc1 <- cbind(analysisData[, c("group","index","data.source", "ID")], pc1 = predict(pca)[, 1])
-        predict.pc2 <- cbind(analysisData[, c("group","index","data.source", "ID")], pc2 = predict(pca)[, 2])
-        }
+    if (labID == " ")
+      pcaLocations <- cbind(analysisData[, c("group", AnalyticVars, "index","data.source")], pc1 = predict(pca)[, 1],
+        pc2 = predict(pca)[, 2])
+      else
+      pcaLocations <- cbind(analysisData[, c("group", AnalyticVars, "index","data.source", "ID")], pc1 = predict(pca)[, 1],
+         pc2 = predict(pca)[, 2])
+    #
+    #  create separate principal component location data sets for sources and artifacts
+    #
+    pcaLocationsSources <- pcaLocations[pcaLocations[,"data.source"] == T,]
+    pcaLocationsArtifacts <- pcaLocations[pcaLocations[,"data.source"] == F,]
     #
     #  principal component weights
     #
-    PrinComp <-
+    pcaWeights <-
       matrix(NA, length(AnalyticVars), length(AnalyticVars)) # principal component loadings
-    dimnames(PrinComp) <- list(paste("pc", 1:length(AnalyticVars), sep = ""), AnalyticVars)
-    #
-    #  matrix with predicted values of PCs for each area
-    #
-    Predicted <- predict(pca)
-    dimnames(Predicted) <- list(NULL, paste("pc", 1:length(AnalyticVars), sep = ""))
-    Predicted <-
-      data.frame(SourceIndex = temp[, "SourceIndex"], Code = sourceData[, SourceGroup], Predicted)
-    #
+    dimnames(pcaWeights) <- list(paste("pc", 1:length(AnalyticVars), sep = ""), AnalyticVars)
     for (i in 1:length(AnalyticVars))
-      PrinComp[i, ] <- pca$rotation[, i]
-    #
-    #  principal components plot
-    #
-    #  weights applied to artifact data
-    #
-    #  restrict artifact data to potential sources of interest
-    artifactRows <- ArtifactData[, ArtifactGroup] %in% predicted.sources
-    if (labID == " ")  artifactData <- ArtifactData[artifactRows, c(ArtifactGroup, AnalyticVars)]
-      else  artifactData <- ArtifactData[artifactRows, c(ArtifactGroup, labID, AnalyticVars)]
-    #  standardize data
-    data.std <- matrix(NA, nrow(artifactData), length(AnalyticVars))
-    for (j in 1:length(AnalyticVars)) {
-      temp.mean <- mean(sourceData[, AnalyticVars[j]])
-      temp.sd <- sd(sourceData[, AnalyticVars[j]])
-      data.std[, j] <- (artifactData[, AnalyticVars[j]] - temp.mean) / temp.sd
-    }  # end of loop on j
-    #  predicted principal components
-    PC.1 <- rep(NA, nrow(data.std))
-    PC.2 <- PC.1
-    for (i in 1:nrow(data.std)) {
-      PC.1[i] <- crossprod(data.std[i, ], PrinComp[1, ])
-      PC.2[i] <- crossprod(data.std[i, ], PrinComp[2, ])
-    }  # end of loop on i
-    #
-    # compute index for each predicted artifact source
-    index <- rep(NA, nrow(artifactData))
-    for (i in 1:length(index))  {
-      for (j in 1:length(predicted.sources))
-        if (artifactData[i, ArtifactGroup] == predicted.sources[j])
-          index[i] <- j
-    }  #  end of loop on i
-    #
-    data.pc <-
-      data.frame(artifactData[, ArtifactGroup], index, cbind(PC.1, PC.2))
-    colnames(data.pc) <- c("artifact.group", "index", "pc.1", "pc.2")
+      pcaWeights[i, ] <- pca$rotation[, i]
     #
     #  principal components plots
     #
     #  compute limits for axes to include all points
     #
-    min.pc1 <- min(Predicted[, "pc1"], data.pc[, "pc.1"])
-    max.pc1 <- max(Predicted[, "pc1"], data.pc[, "pc.1"])
-    min.pc2 <- min(Predicted[, "pc2"], data.pc[, "pc.2"])
-    max.pc2 <- max(Predicted[, "pc2"], data.pc[, "pc.2"])
+    range.pc1 <- range(pcaLocations[, "pc1"])
+    range.pc2 <- range(pcaLocations[, "pc2"])
     #
     #  convex hulls for source data
     #
-    fn.convex.hull <- function(Code) {
-      predicted <- Predicted[Predicted[, SourceGroup] == Code, c("pc1", "pc2")]
-      chull <- chull(x = predicted[, "pc1"], y = predicted[, "pc2"])
+    fn.convex.hull <- function(hull.group) {
+      locations <- pcaLocationsSources[pcaLocationsSources[, "group"] == hull.group, c("pc1", "pc2")]
+      chull <- chull(x = locations[, "pc1"], y = locations[, "pc2"])
       chull <- c(chull, chull[1])
       hull.pts <-
-        predicted[chull, c("pc1", "pc2")]  # points in order defining hull
+        locations[chull, c("pc1", "pc2")]  # points in order defining hull
       lines(x = hull.pts[, "pc1"], y = hull.pts[, "pc2"])
       hull.pts
     }  # end of fn.convex.hull
@@ -224,22 +183,22 @@ fn.pca.evaluation <-
     #  set up size of plot
     plot(
       type = "n",
-      x = c(min.pc1, max.pc1),
-      y = c(min.pc2, max.pc2),
+      x = range.pc1,
+      y = range.pc2,
       xlab = "first PC",
       ylab = "second PC",
       main = "Principal component plot of source data"
     )
     #  plot points
     points(
-      x = Predicted[, "pc1"],
-      y = Predicted[, "pc2"],
+      x = pcaLocationsSources[, "pc1"],
+      y = pcaLocationsSources[, "pc2"],
       cex = .5,
-      pch = (Predicted[, "SourceIndex"] - 1)
+      pch = (pcaLocationsSources[, "index"] - 1)
     )
     # plot convex hulls
     for (i in 1:length(known.sources))
-      plot.data[[i]] <- fn.convex.hull(Code = known.sources[i])
+      plot.data[[i]] <- fn.convex.hull(hull.group = known.sources[i])
     legend(
       x = loc.legend,
       legend = known.sources,
@@ -251,8 +210,8 @@ fn.pca.evaluation <-
     #
     plot(
       type = "n",
-      x = c(min.pc1, max.pc1),
-      y = c(min.pc2, max.pc2),
+      x = range.pc1,
+      y = range.pc2,
       xlab = "first PC",
       ylab = "second PC",
       main = "Artifacts and hulls of predicted sources"
@@ -262,32 +221,27 @@ fn.pca.evaluation <-
     for (i in 1:length(known.sources))
       lines(plot.data[[i]])
     #  plot artifact points
-    #  get information for labAnalyticVars
-    crosstab <- table(data.pc[, "artifact.group"], data.pc[, "index"])
-    indices <- as.numeric(colnames(crosstab))
-    source.names <- as.character(rownames(crosstab))
-    points(x = data.pc[, "pc.1"],
-           data.pc[, "pc.2"],
+    points(x = pcaLocationsArtifacts[, "pc1"],
+           y = pcaLocationsArtifacts[, "pc2"],
            cex = .5,
-           pch = data.pc[, "index"])
+           pch = pcaLocationsArtifacts[, "index"])
     legend(
       x = loc.legend,
-      legend = source.names,
-      pch = indices,
+      legend = unique(pcaLocationsArtifacts[,"group"]),
+      pch = pcaLocationsArtifacts[,"index"],
       bty = "n"
     )
+    browser()
     #
     # plots to check whether artifact points are in the predicted convex hulls
-    #
-    artifact.sources <- as.character(unique(artifactData[, ArtifactGroup]))
     #
     plot.new()
     par(mfrow = c(1, 2))
     #  set up plot
     plot(
       type = "n",
-      x = c(min.pc1, max.pc1),
-      y = c(min.pc2, max.pc2),
+      x = range.pc1,
+      y = range.pc2,
       xlab = "first PC",
       ylab = "second PC",
       main = "Convex hulls for sources"
@@ -302,10 +256,10 @@ fn.pca.evaluation <-
     medians <-
       matrix(NA, nrow = length(groups), ncol = 2)  # matrix to store medians from each group
     for (i in 1:length(groups)) {
-      temp <-
-        Predicted[Predicted[, SourceGroup] == groups[i], c("pc1", "pc2")]  # data from group i
-      medians[i, 1] <- median(temp[, 1], na.rm = T)
-      medians[i, 2] <- median(temp[, 2], na.rm = T)
+      temp.medians <-
+        pcaLocationsSources[pcaLocationsSources[, "group"] == groups[i], c("pc1", "pc2")]  # data from group i
+      medians[i, 1] <- median(temp.medians[, 1], na.rm = T)
+      medians[i, 2] <- median(temp.medians[, 2], na.rm = T)
     }  # end of loop on i
     medians <-
       cbind(1:length(groups), medians)  # add column with group number
@@ -322,8 +276,8 @@ fn.pca.evaluation <-
     #
     plot(
       type = "n",
-      x = c(min.pc1, max.pc1),
-      y = c(min.pc2, max.pc2),
+      x = range.pc1,
+      y = range.pc2,
       xlab = "first PC",
       ylab = "second PC",
       main = "Points outside source hulls"
@@ -334,10 +288,11 @@ fn.pca.evaluation <-
       lines(plot.data[[i]])
     legend(
       x = loc.legend,
-      legend = predicted.sources,
-      pch = 1:length(predicted.sources),
+      legend = known.sources,
+      pch = 1:length(known.sources),
       bty = "n"
     )  # legend for plot
+    browser()
     #
     #  compute indicator for predicted source within convex hull of that source
     #  plot points outside of predicted hull
