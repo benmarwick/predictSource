@@ -214,7 +214,7 @@ fn.pca.evaluation <-
       y = range.pc2,
       xlab = "first PC",
       ylab = "second PC",
-      main = "Artifacts and hulls of predicted sources"
+      main = "Artifact points and hulls of predicted sources"
     )
     #
     # convex hulls of source data
@@ -227,8 +227,8 @@ fn.pca.evaluation <-
            pch = pcaLocationsArtifacts[, "index"])
     legend(
       x = loc.legend,
-      legend = unique(pcaLocationsArtifacts[,"group"]),
-      pch = pcaLocationsArtifacts[,"index"],
+      legend = known.sources,
+      pch = 1:(length(known.sources)),
       bty = "n"
     )
     browser()
@@ -300,7 +300,6 @@ fn.pca.evaluation <-
     #  create data set of points outside hulls
     #
     flag <- 0  #  reset to 1 with first source with point outside hull
-    #cols.keep<-colnames(data.pc)[colnames(data.pc)!="index"]
     n.in.out <- matrix(0, nrow = length(known.sources) + 1, ncol = 3)  # matrix with cross-tabulation of in/out points
        # dummy row to set up information on identified observations
     #
@@ -308,20 +307,16 @@ fn.pca.evaluation <-
     #
     for (i in 1:length(known.sources)) {
       index.i <-
-        (data.pc[, "artifact.group"] == known.sources[i]) # rows with data prediced from this source
+        (pcaLocationsArtifacts[, "index"] == known.sources[i]) # rows with data prediced from this source
       if (sum(index.i) > 0) {
         # at least one artifact from source i
-        temp.i <-
-          cbind(data.pc[index.i, ], artifactData[index.i, ]) # add artifact data to principal components
-        if ((Identify == T) & (create.data.check == 0)) {
+        temp.i <- pcaLocationsArtifacts[index.i,]
+          if ((Identify == T) & (create.data.check == 0)) {
           data.check<-temp.i[1,]
           create.data.check <- 1
           }
-        temp.pc <-
-          as.matrix(temp.i[, c("pc.1", "pc.2")]) # force artifact PC data to matrix form
-        plot.data.i <-
-          as.matrix(plot.data[[i]])  # convex hull for this source
-        indicator <- in.out(bnd = plot.data.i, x = temp.pc[, c("pc.1", "pc.2")])
+        hull.i <- plot.data[[i]]  # convex hull for this source
+        indicator <- in.out(bnd = hull.i, x = temp.i[, c("pc.1", "pc.2")])
         #  vector of indicators (TRUE, FALSE) whether artifacts lie within convex hull
         n.in.out[i, ] <-
           c(sum(indicator), sum(!indicator), length(indicator)) # create row of table
