@@ -235,6 +235,22 @@ fn.pca.evaluation <-
     #
     # plots to check whether artifact points are in the predicted convex hulls
     #
+    #  create vector of indicators for whether principal components point for a artifact is in predicted source hull
+    #
+    artifact.in.hull <- rep(NA, nrow(pcaLocationsArtifacts))  # indicator, T if artifact in predicted source convex hull
+    for (i in 1:length(known.sources)) {
+      index.i <- (known.sources[pcaLocationsArtifacts[, "index"]] == known.sources[i]) # rows with data prediced from this source
+      if (sum(index.i) > 0) {
+        # at least one artifact from source i
+        temp.i <- pcaLocationsArtifacts[index.i,]
+        hull.i <- plot.data[[i]]  # convex hull for this source
+        artifact.in.hull[index.i] <- in.out(bnd = as.matrix(hull.i, mode="numeric"), x = as.matrix(temp.i[, c("pc1", "pc2")],mode="numeric"))
+      }  # end of loop for sum(index.i) > 0
+    }
+    pcaLocationsArtifacts <- data.frame(pcaLocationsArtifacts, in.hull = artifact.in.hull)
+    #
+    #  left panel: convex hulls for sources
+    #
     plot.new()
     par(mfrow = c(1, 2))
     #  set up plot
@@ -272,7 +288,7 @@ fn.pca.evaluation <-
       adj = 0.5
     )
     #
-    #  set up plot of points outside corresponding convex hull
+    #  right panel: set up plot of points outside corresponding convex hull
     #
     plot(
       type = "n",
@@ -283,7 +299,8 @@ fn.pca.evaluation <-
       main = "Points outside source hulls"
     )
     #
-    # plot convex hulls
+    # plot source convex hulls
+    #
     for (i in 1:length(known.sources))
       lines(plot.data[[i]])
     legend(
@@ -292,10 +309,14 @@ fn.pca.evaluation <-
       pch = 1:length(known.sources),
       bty = "n"
     )  # legend for plot
-    browser()
     #
-    #  compute indicator for predicted source within convex hull of that source
     #  plot points outside of predicted hull
+    #
+    points(x = pcaLocationsArtifacts[!pcaLocationsArtifacts["in.hull"], "pc1"],
+           y = pcaLocationsArtifacts[!pcaLocationsArtifacts["in.hull"], "pc2"],
+           cex = .5,
+           pch = pcaLocationsArtifacts[!pcaLocationsArtifacts["in.hull"], "index"])
+   browser()
     #  create crosstab of source/inside/outside hull
     #  create data set of points outside hulls
     #
@@ -304,22 +325,8 @@ fn.pca.evaluation <-
        # dummy row to set up information on identified observations
     create.data.check <- 0  # flag to create data.check in first iteration
     #
-    in.hull <- rep(NA, nrow(pcaLocationsArtifacts))  # indicator, T if artifact in predicted source convex hull
     for (i in 1:length(known.sources)) {
-      index.i <- (known.sources[pcaLocationsArtifacts[, "index"]] == known.sources[i]) # rows with data prediced from this source
-      if (sum(index.i) > 0) {
-        # at least one artifact from source i
-        temp.i <- pcaLocationsArtifacts[index.i,]
-        hull.i <- plot.data[[i]]  # convex hull for this source
-        browser()
-        in.hull[index.i] <- in.out(bnd = as.matrix(hull.i, mode="numeric"), x = as.matrix(temp.i[, c("pc1", "pc2")],mode="numeric"))
-        }  # end of loop for sum(index.i) > 0
-      browser()
-    }
-    artifact.in.hull<-in.hull
-    browser()
-    for (i in 1:length(known.sources)) {
-      index.i <-
+      index.i <-(known.sources[pcaLocationsArtifacts[, "index"]] == known.sources[i]) # rows with data prediced from this source
 
       if (sum(index.i) > 0) {
         #  vector of indicators (TRUE, FALSE) whether artifacts lie within convex hull
