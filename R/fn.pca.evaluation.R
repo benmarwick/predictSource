@@ -194,7 +194,7 @@ fn.pca.evaluation <-
       x = pcaLocationsSources[, "pc1"],
       y = pcaLocationsSources[, "pc2"],
       cex = .5,
-      pch = (pcaLocationsSources[, "index"] - 1)
+      pch = pcaLocationsSources[, "index"]
     )
     # plot convex hulls
     for (i in 1:length(known.sources))
@@ -202,7 +202,7 @@ fn.pca.evaluation <-
     legend(
       x = loc.legend,
       legend = known.sources,
-      pch = 0:(length(known.sources) - 1),
+      pch = 1:(length(known.sources)),
       bty = "n"
     )
     #
@@ -302,21 +302,26 @@ fn.pca.evaluation <-
     flag <- 0  #  reset to 1 with first source with point outside hull
     n.in.out <- matrix(0, nrow = length(known.sources) + 1, ncol = 3)  # matrix with cross-tabulation of in/out points
        # dummy row to set up information on identified observations
-    #
     create.data.check <- 0  # flag to create data.check in first iteration
     #
+    in.hull <- rep(NA, nrow(pcaLocationsArtifacts))  # indicator, T if artifact in predicted source convex hull
     for (i in 1:length(known.sources)) {
-      index.i <-
-        (pcaLocationsArtifacts[, "index"] == known.sources[i]) # rows with data prediced from this source
+      index.i <- (known.sources[pcaLocationsArtifacts[, "index"]] == known.sources[i]) # rows with data prediced from this source
       if (sum(index.i) > 0) {
         # at least one artifact from source i
         temp.i <- pcaLocationsArtifacts[index.i,]
-          if ((Identify == T) & (create.data.check == 0)) {
-          data.check<-temp.i[1,]
-          create.data.check <- 1
-          }
         hull.i <- plot.data[[i]]  # convex hull for this source
-        indicator <- in.out(bnd = hull.i, x = temp.i[, c("pc.1", "pc.2")])
+        browser()
+        in.hull[index.i] <- in.out(bnd = as.matrix(hull.i, mode="numeric"), x = as.matrix(temp.i[, c("pc1", "pc2")],mode="numeric"))
+        }  # end of loop for sum(index.i) > 0
+      browser()
+    }
+    artifact.in.hull<-in.hull
+    browser()
+    for (i in 1:length(known.sources)) {
+      index.i <-
+
+      if (sum(index.i) > 0) {
         #  vector of indicators (TRUE, FALSE) whether artifacts lie within convex hull
         n.in.out[i, ] <-
           c(sum(indicator), sum(!indicator), length(indicator)) # create row of table
