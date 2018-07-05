@@ -249,7 +249,19 @@ fn.pca.evaluation <-
     }
     pcaLocationsArtifacts <- data.frame(pcaLocationsArtifacts, in.hull = artifact.in.hull)
     #
-    #  left panel: convex hulls for sources
+    #  create data frame with data on points outside predicted hull and, if requested, write to excel
+    #  keep desired columns
+    #
+    pts.outside <- pcaLocationsArtifacts[!pcaLocationsArtifacts[,"in.hull",],]
+    pts.outside.pc <- round(as.matrix(pts.outside[, c("pc1","pc2")], mode = "numeric"), dig=2)
+    cols.keep <- colnames(pts.outside)[(colnames(pts.outside) != "index") & (colnames(pts.outside) != "artifact.group") &
+                                       (colnames(pts.outside) != "data.source") & (colnames(pts.outside) != "in.hull") &
+                                       (colnames(pts.outside) != "pc1") & (colnames(pts.outside) != "pc2")]
+    pts.outside <- pts.outside[, cols.keep]
+    pts.outside <- data.frame(pts.outside, pts.outside.pc)
+    if (folder != " ")  write.csv(pts.outside, file = paste(folder, ds.pts.outside, sep = ""))
+    #
+    #  left plot panel: convex hulls for sources
     #
     plot.new()
     par(mfrow = c(1, 2))
@@ -316,46 +328,14 @@ fn.pca.evaluation <-
            y = pcaLocationsArtifacts[!pcaLocationsArtifacts["in.hull"], "pc2"],
            cex = .5,
            pch = pcaLocationsArtifacts[!pcaLocationsArtifacts["in.hull"], "index"])
-   browser()
-    #  create crosstab of source/inside/outside hull
-    #  create data set of points outside hulls
+    browser()
     #
-    flag <- 0  #  reset to 1 with first source with point outside hull
+    #  create crosstab of source/inside/outside hull
+    #
     n.in.out <- matrix(0, nrow = length(known.sources) + 1, ncol = 3)  # matrix with cross-tabulation of in/out points
        # dummy row to set up information on identified observations
     create.data.check <- 0  # flag to create data.check in first iteration
-    #
-    for (i in 1:length(known.sources)) {
-      index.i <-(known.sources[pcaLocationsArtifacts[, "index"]] == known.sources[i]) # rows with data prediced from this source
 
-      if (sum(index.i) > 0) {
-        #  vector of indicators (TRUE, FALSE) whether artifacts lie within convex hull
-        n.in.out[i, ] <-
-          c(sum(indicator), sum(!indicator), length(indicator)) # create row of table
-        if (sum(indicator) > 0) {
-          # points outside hull for this source
-          if (flag == 1)
-            pts.outside <- rbind(pts.outside, temp.i[!indicator, ])
-          if (flag == 0) {
-            flag <- 1
-            pts.outside <- temp.i[!indicator, ]
-            }  # end of loop for flag=0
-          points(temp.pc[!indicator, c("pc.1", "pc.2")], pch = i, cex = .5)  # plots points outside hull
-          if (Identify==T)  {
-            index<-identify(x = temp.pc[,"pc.1"], y = temp.pc[,"pc.2"])
-            data.check<-rbind(data.check,temp.i[index,])
-            }  # end of loop for Identify = T
-         }  # end of loop for sum(indicator) > 0
-      } # end of loop for sum(index.i) > 0
-    }  # end of loop on i
-    #
-    #  keep desired columns from pts.outside
-    #
-    cols.keep <-
-      colnames(pts.outside)[(colnames(pts.outside) != "index") &
-                              (colnames(pts.outside) != "artifact.group")]
-    pts.outside <- pts.outside[, cols.keep]
-    if (folder != " ")  write.csv(pts.outside, file = paste(folder, ds.pts.outside, sep = ""))
     #
     n.in.out[length(known.sources) + 1, ] <- apply(n.in.out, 2, sum)
     table.in.out <- data.frame(Source = c(as.vector(known.sources, mode = "character"),"tOtal"), n.in.out)
