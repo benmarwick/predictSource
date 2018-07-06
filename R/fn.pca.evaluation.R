@@ -261,6 +261,16 @@ fn.pca.evaluation <-
     pts.outside <- data.frame(pts.outside, pts.outside.pc)
     if (folder != " ")  write.csv(pts.outside, file = paste(folder, ds.pts.outside, sep = ""))
     #
+    #  table with counts of artifacts inside and outside of predicted source hull
+    #
+    n.in.out <- table(pcaLocationsArtifacts[,"group"],pcaLocationsArtifacts[,"in.hull"])
+    colnames(n.in.out) <- c("outside", "inside")
+    if (folder != " ") write.csv(in.out, file = paste(folder, ds.in.out, sep = ""))
+    #
+    #  define function to create evaluation plot, run twice if Identify = T
+    #
+    fn.evalPlot <- function(identify=Identify) {
+    #
     #  left plot panel: convex hulls for sources
     #
     plot.new()
@@ -328,19 +338,12 @@ fn.pca.evaluation <-
            y = pcaLocationsArtifacts[!pcaLocationsArtifacts["in.hull"], "pc2"],
            cex = .5,
            pch = pcaLocationsArtifacts[!pcaLocationsArtifacts["in.hull"], "index"])
+     } # end of function fn.evalPlot
+    #
+    fn.evalPlot()
     browser()
-    #
-    #  create crosstab of source/inside/outside hull
-    #
-    n.in.out <- matrix(0, nrow = length(known.sources) + 1, ncol = 3)  # matrix with cross-tabulation of in/out points
-       # dummy row to set up information on identified observations
     create.data.check <- 0  # flag to create data.check in first iteration
 
-    #
-    n.in.out[length(known.sources) + 1, ] <- apply(n.in.out, 2, sum)
-    table.in.out <- data.frame(Source = c(as.vector(known.sources, mode = "character"),"tOtal"), n.in.out)
-    colnames(table.in.out) <- c("Source","in", "out", "total")
-    if (folder != " ") write.csv(table.in.out, file = paste(folder, ds.in.out, sep = ""))
     #
     fcn.date.ver<-paste(doc,date(),R.Version()$version.string)
     params<-list(SourceGroup, ArtifactGroup,known.sources,predicted.sources)
@@ -369,7 +372,7 @@ fn.pca.evaluation <-
                 artifactData = artifactData,
                 analyticVars = AnalyticVars,
                 params = params,
-                table.in.out = table.in.out,
+                table.in.out = n.in.out,
                 points.outside = pts.outside)
     if ((substr(folder,1,1) != " ") & (!Identify))
       out<-list(usage = fcn.date.ver,
@@ -377,7 +380,7 @@ fn.pca.evaluation <-
                 artifactData = artifactData,
                 analyticVars = AnalyticVars,
                 params = params,
-                table.in.out = table.in.out,
+                table.in.out = n.in.out,
                 points.outside = pts.outside,
                 files = files)
     if ((substr(folder,1,1) == " ") & (Identify))
@@ -395,7 +398,7 @@ fn.pca.evaluation <-
                 artifactData = ArtifactData,
                 analyticVars = AnalyticVars,
                 params = params,
-                table.in.out = table.in.out,
+                table.in.out = n.in.out,
                 points.outside = pts.outside,
                 data.check = data.check,
                 files = files)
@@ -405,7 +408,7 @@ fn.pca.evaluation <-
               artifactData = artifactData,
               analyticVars = AnalyticVars,
               params = params,
-              table.in.out = table.in.out,
+              table.in.out = n.in.out,
               points.outside = pts.outside,
               files = files)
     out
