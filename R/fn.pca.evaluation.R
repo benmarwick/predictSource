@@ -267,9 +267,7 @@ fn.pca.evaluation <-
     colnames(n.in.out) <- c("outside", "inside")
     if (folder != " ") write.csv(in.out, file = paste(folder, ds.in.out, sep = ""))
     #
-    #  define function to create evaluation plot, run twice if Identify = T
-    #
-    fn.evalPlot <- function(identify=Identify) {
+    #  evaluation plots
     #
     #  left plot panel: convex hulls for sources
     #
@@ -338,22 +336,56 @@ fn.pca.evaluation <-
            y = pcaLocationsArtifacts[!pcaLocationsArtifacts["in.hull"], "pc2"],
            cex = .5,
            pch = pcaLocationsArtifacts[!pcaLocationsArtifacts["in.hull"], "index"])
-     } # end of function fn.evalPlot
     #
-    fn.evalPlot()
+    #  end of code for two-panel evaluation plot
     browser()
-    create.data.check <- 0  # flag to create data.check in first iteration
-
+    #
+    # code to create plot to identify points of interest
+    #
+    if (Identify == T) {
+      plot.new()
+      mfrow<-c(1,1)
+      plot(
+      type = "n",
+      x = range.pc1,
+      y = range.pc2,
+      xlab = "first PC",
+      ylab = "second PC",
+      main = "Points outside source hulls"
+    )
+    #
+    # plot source convex hulls
+    #
+    for (i in 1:length(known.sources))
+      lines(plot.data[[i]])
+    legend(
+      x = loc.legend,
+      legend = known.sources,
+      pch = 1:length(known.sources),
+      bty = "n"
+    )  # legend for plot
+    #
+    #  plot points outside of predicted hull
+    #
+    points(x = pcaLocationsArtifacts[!pcaLocationsArtifacts["in.hull"], "pc1"],
+           y = pcaLocationsArtifacts[!pcaLocationsArtifacts["in.hull"], "pc2"],
+           cex = .5,
+           pch = pcaLocationsArtifacts[!pcaLocationsArtifacts["in.hull"], "index"])
+    }
+    #
+    #  return information to an R object
     #
     fcn.date.ver<-paste(doc,date(),R.Version()$version.string)
     params<-list(SourceGroup, ArtifactGroup,known.sources,predicted.sources)
     names(params)<-c("SourceGroup","ArtifactGroup","known.sources","predicted.sources")
     if (Identify == T) {
-      if (nrow(data.check) > 1) {
-        data.check <- data.check[-1,c(-2,-5)]
-        data.check[,c("pc.1","pc.2")] <- round(data.check[,c("pc.1","pc.2")],dig=2)
-        }
-      }
+      index<-identify(pcaLocationsArtifacts[!pcaLocationsArtifacts["in.hull"],c("pc1","pc2")])
+      data.check<-pcaLocationsArtifacts[index,]
+    }
+    colnames.data.check<-colnames(data.check)[(colnames(data.check)!="index")&(colnames(data.check)!="data.source")]
+    data.check<-data.check[,colnames.data.check]
+    data.check[,c("pc1","pc2")] <- round(as.matrix(data.check[,c("pc1","pc2")],mode="numeric"),dig=2)
+    browser()
     #
     if ((substr(folder,1,1) != " ") & (Identify == F)) {
       files=list(paste(folder,ds.importance,sep=""),paste(folder,ds.pts.outside,sep=""),
