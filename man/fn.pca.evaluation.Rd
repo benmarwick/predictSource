@@ -51,11 +51,12 @@ The function produces two plots: the convex hulls of the first two principal com
   \item{dataUsed:}{  The contents of the argument data restricted to the groups used}
   \item{params:}{  A list with the values of the arguments GroupVar and Groups}
   \item{analyticVars:}{  A vector with the value of the argument AnalyticVars}
-  \item{table.in.out:} {  A data frame with counts of the numbers of artifacts inside and outside of the source locations}
-  \item{pts.outside:}  {  A data frame with the data for artifact points located outside of a source}
+  \item{table.in.out:} {  A data frame with counts of the numbers of artifacts inside and outside of each
+   predicted source location}
+  \item{pts.outside:}  {  A data frame with the data for artifact points located outside of the predicted source}
   \item{data.check:}{  If Identify=T, a data frame with the observations in dataUsed identified as of interest}
   \item{files:}{  If folder != " ", a list with path and data set names to the excel files containing importance,
-  ds.in.out, pts.outside, and, if Identify=T, data for the points of interest}
+  ds.in.out, pts.outside, and, if Identify=T, data.check}
    }
 }
 \description{

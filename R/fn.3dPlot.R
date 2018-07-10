@@ -143,7 +143,7 @@ fn.3dPlot <-
         }
       } # end of plot points for groups combined
     }
-    if ((PlotMedians) & (GroupVar != " ") & (!ByGroup)) {
+    if ((PlotMedians) & (GroupVar != " ")) {
       # plot medians
       if (is.vector(Selections)) {
         win.graph()

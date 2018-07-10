@@ -19,6 +19,7 @@
 #' @param ds.importance: name of file with percent of variance explained for the known source analysis
 #' @param ds.pts.outside: name of file with information on artifacts with principal component pointsoutside of hull for predicted source
 #' @param ds.in.out: table with number of artifacts, by whether inside or outside hull for predicted  source, for each predicted source
+#' @param ds.data.check: if Identify = T, data for observations outside of the predicted hull identified as of interest
 #'
 #' @section Details
 #' See the vignette for instructions for identifying points of interest using the paramter Identify = T.
@@ -31,12 +32,18 @@
 #'   \item{dataUsed:}{  The contents of the argument data restricted to the groups used}
 #'   \item{params:}{  A list with the values of the arguments GroupVar and Groups}
 #'   \item{analyticVars:}{  A vector with the value of the argument AnalyticVars}
-#'   \item{table.in.out:} {  A data frame with counts of the numbers of artifacts inside and outside of the source locations}
-#'   \item{pts.outside:}  {  A data frame with the data for artifact points located outside of a source}
+#'   \item{table.in.out:} {  A data frame with counts of the numbers of artifacts inside and outside of each
+#'    predicted source location}
+#'   \item{pts.outside:}  {  A data frame with the data for artifact points located outside of the predicted source}
 #'   \item{data.check:}{  If Identify=T, a data frame with the observations in dataUsed identified as of interest}
 #'   \item{files:}{  If folder != " ", a list with path and data set names to the excel files containing importance,
-#'   ds.in.out, pts.outside, and, if Identify=T, data for the points of interest}
+#'   ds.in.out, pts.outside, and, if Identify=T, data.check}
 #'    }
+#'
+#' @section  Details
+#'
+#' If using Rstudio, the plot created when Identify = T must be expanded by increasing the size of the plot pane
+#'  (the view tab is not available).
 #'
 #' @import mgcv
 #'
@@ -66,7 +73,8 @@ fn.pca.evaluation <-
            ds.importance,
            ds.pts.outside,
            ds.in.out,
-           ds.identified) {
+           ds.identified,
+           ds.data.check) {
     #
     #  create source data set with group code and elements, restricted to identified sources
     #
@@ -392,9 +400,10 @@ fn.pca.evaluation <-
       names(files) <- c("ds.importance", "ds.pts.outside", "ds.in.out")
     }
     if ((substr(folder,1,1) != " ") & (Identify == T)) {
-      files=list(paste(folder,ds.importance,sep=""),paste(folder,ds.pts.outside,sep=""),
-                 paste(folder,ds.in.out,sep=""),paste(folder,ds.identified,sep=""))
-      names(files) <- c("ds.importance", "ds.pts.outside", "ds.in.out","ds.identified")
+      files=list(paste(folder,ds.importance,sep=""), paste(folder,ds.pts.outside,sep=""),
+                 paste(folder,ds.in.out,sep=""), paste(folder,ds.identified,sep=""),
+                 paste(folder,ds.data.check,sep=""))
+      names(files) <- c("ds.importance", "ds.pts.outside", "ds.in.out","ds.identified", "ds.data.check")
     }
     #
     if ((substr(folder,1,1) == " ") & (!Identify))
