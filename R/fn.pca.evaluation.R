@@ -269,6 +269,9 @@ fn.pca.evaluation <-
     #
     #  evaluation plots
     #
+    #  if Identify = T, do not create the evaluation plot, but only the plot of points outside predicted hulls
+    #
+    #
     #  left plot panel: convex hulls for sources
     #
     plot.new()
@@ -344,7 +347,7 @@ fn.pca.evaluation <-
     #
     if (Identify == T) {
       plot.new()
-      mfrow<-c(1,1)
+      par(mfrow = c(1,1))
       plot(
       type = "n",
       x = range.pc1,
