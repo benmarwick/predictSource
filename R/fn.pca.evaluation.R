@@ -246,7 +246,7 @@ fn.pca.evaluation <-
         hull.i <- plot.data[[i]]  # convex hull for this source
         artifact.in.hull[index.i] <- in.out(bnd = as.matrix(hull.i, mode="numeric"), x = as.matrix(temp.i[, c("pc1", "pc2")],mode="numeric"))
       }  # end of loop for sum(index.i) > 0
-    }
+    }  # end of loop on i
     pcaLocationsArtifacts <- data.frame(pcaLocationsArtifacts, in.hull = artifact.in.hull)
     #
     #  create data frame with data on points outside predicted hull and, if requested, write to excel
@@ -254,8 +254,8 @@ fn.pca.evaluation <-
     #
     pts.outside <- pcaLocationsArtifacts[!pcaLocationsArtifacts[,"in.hull",],]
     pts.outside.pc <- round(as.matrix(pts.outside[, c("pc1","pc2")], mode = "numeric"), dig=2)
-    cols.keep <- colnames(pts.outside)[(colnames(pts.outside) != "index") & (colnames(pts.outside) != "artifact.group") &
-                                       (colnames(pts.outside) != "data.source") & (colnames(pts.outside) != "in.hull") &
+    cols.keep <- colnames(pts.outside)[(colnames(pts.outside) != "artifact.group") &
+                                       (colnames(pts.outside) != "data.source") &
                                        (colnames(pts.outside) != "pc1") & (colnames(pts.outside) != "pc2")]
     pts.outside <- pts.outside[, cols.keep]
     pts.outside <- data.frame(pts.outside, pts.outside.pc)
@@ -362,30 +362,26 @@ fn.pca.evaluation <-
       x = loc.legend,
       legend = known.sources,
       pch = 1:length(known.sources),
-      bty = "n"
-    )  # legend for plot
+      bty = "n" )  # legend for plot
     #
     #  plot points outside of predicted hull
     #
-    points(x = pcaLocationsArtifacts[!pcaLocationsArtifacts["in.hull"], "pc1"],
-           y = pcaLocationsArtifacts[!pcaLocationsArtifacts["in.hull"], "pc2"],
-           cex = .5,
-           pch = pcaLocationsArtifacts[!pcaLocationsArtifacts["in.hull"], "index"])
-    }
+    points(x = pts.outside[, "pc1"], y = pts.outside[,"pc2"],
+           cex = .5, pch = pts.outside[, "index"])
+    # identify points of interest
+      index<-identify(pts.outside[,c("pc1","pc2")])
+      data.check<-pts.outside[index,]
+      colnames.data.check<-colnames(data.check)[(colnames(data.check)!="index")&(colnames(data.check)!="data.source")]
+      data.check<-data.check[,colnames.data.check]
+      data.check[,c("pc1","pc2")] <- round(as.matrix(data.check[,c("pc1","pc2")],mode="numeric"),dig=2)
+      browser()
+        }  # end of code for Identify = T
     #
     #  return information to an R object
     #
     fcn.date.ver<-paste(doc,date(),R.Version()$version.string)
     params<-list(SourceGroup, ArtifactGroup,known.sources,predicted.sources)
     names(params)<-c("SourceGroup","ArtifactGroup","known.sources","predicted.sources")
-    if (Identify == T) {
-      index<-identify(pcaLocationsArtifacts[!pcaLocationsArtifacts["in.hull"],c("pc1","pc2")])
-      data.check<-pcaLocationsArtifacts[index,]
-    }
-    colnames.data.check<-colnames(data.check)[(colnames(data.check)!="index")&(colnames(data.check)!="data.source")]
-    data.check<-data.check[,colnames.data.check]
-    data.check[,c("pc1","pc2")] <- round(as.matrix(data.check[,c("pc1","pc2")],mode="numeric"),dig=2)
-    browser()
     #
     if ((substr(folder,1,1) != " ") & (Identify == F)) {
       files=list(paste(folder,ds.importance,sep=""),paste(folder,ds.pts.outside,sep=""),
