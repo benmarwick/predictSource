@@ -21,15 +21,15 @@
 #'       if Groups != " ", numbers of observations and summary statistics are by group
 #'   A list with the following components:
 #'   \itemize{
-#' \item{"usage"}{a string with the contents of the argument doc, date run, R version used}
-#' \item{"dataUsed"}{the data frame specified by the argument data}|
-#' \item{"params"}{}
-#' \item{"analyticVars"}{the vector of names specified by the argument AnalyticVars}
-#' \item{"Duplicates"}{a data frame containing the observations with duplicate values}
-#' \item{"NegativeValues"}{a data frame containing the observations with at least one negative value for a variable in AnalyticVars}
-#' \item{"Nvalues"}{a data frame contain the number of observations with a value for each analytic variable}
-#' \item{"Summary"}{a data frame containing the summary statistics (by group, if Group is specified)}
-#' \item{"files"}{if folder != " ", a list containing the folder name and the name of each of the excel files}
+#' \item{usage:}{  A string with the contents of the argument doc, date run, R version used}
+#' \item{dataUsed:}{  The data frame specified by the argument data}|
+#' \item{params:}{  A character vector with the values of CheckDupVars, GroupVar, and Groups}
+#' \item{analyticVars:}{  The vector of names specified by the argument AnalyticVars}
+#' \item{Duplicates:}{  A data frame containing the observations with duplicate values}
+#' \item{NegativeValues:}{  A data frame containing the observations with at least one negative value for a variable in AnalyticVars}
+#' \item{Nvalues:}{  A data frame contain the number of observations with a value for each analytic variable}
+#' \item{Summary:}{  A data frame containing the summary statistics (by group, if Group is specified)}
+#' \item{files:}{  If folder != " ", a list containing the folder name and the name of each of the excel files}
 #'         }
 #'
 #' @section Detail:

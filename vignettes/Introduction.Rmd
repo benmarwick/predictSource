@@ -22,47 +22,75 @@ knitr::opts_chunk$set(
 
 ## Introduction
 
-In this vignette we demonstrate typical uses of the functions contained in the karon package. 
+A common problem in archaeology is estimating or predicting the source of the material used to form an artifact.  Archaeologists may use 2- or 3-dimensional scatterplots of artifact chemical composition data to predict the source of an artifact.  This package contains a suite of R functions to apply multivariate statistical methods to this problem, as well as functions to create analysis data sets, carry out some basic data quality checks, and perform several descriptive statistical analyses.  Results are returned as tables or plots; appropriate tables can be saved as excel files, and the user can interact with some plots to identify data observations yielding points suggesting the need for closer identification.
 
+The package implements three multivariate statistical procedures: principal component analysis (yielding 2-dimensional plots), recursive partitioning (classification trees), and random forests.  It may be of interest that classification trees and random forests can use both quantitative (e.g. chemical composition) and qualitative (e.g. color) data in the same analysis.
+
+After creating analysis files and carrying out standard data quality and descriptive analyses, our suggested analysis strategy is the following: first, use these methods to evaluate whether the data available are sufficient to distinguish among sources.  Second, use a random forest analysis to order the characteristics according to their importance in distinguishing among sources.  Third, supply these characteristics in the specified order to a classification tree model, in order to predict the source of each artifact.  Finally, if all characteristics used are quantitative, plot the artifact points on a 2-dimensional principal component plot with the convex hulls of the source points, to identify artifacts for which the predicted sources are not plausible.
+
+The final section of this vignette contains useful summary information on the functions in this package, including arguments that are standard among the functions, names of components of the list returned by each function, and instructions for selecting points of interest in some of the plots.  We also provide information on the differences between interacting with plots in base R versus Rstudio.  For those using Rstudio, we provide simple instructions for running the example code for a function.
 
 ## Example data
 
-The package includes a small data set of data on the geochemistry of some Obsidian pieces that we will use for demonstating the functions. Let's take a look at the data:
+The example data available with this package are data on obsidian from five sources in the Jemez caldera in northern New Mexico and on obsidian artifacts from sites in the Pojoaque Valley east of that caldera.  For both the source and artifact samples, our example analyses use five elements (rubidium, Rb; strontium, Sr; ytterbium, Y; niobium, Nb; and zirconium, Zr; numerical values are in parts per million) analyzed by Steven Shackley using x-ray fluorescence.  These are the elements that Shackley uses to distinguish among sources and predict the source of an artifact.  The source data are publicly available (http://www.swxrflab.net/jemez.htm).  This site also contains discussions of the geology of the source sites.
 
-[...insert more background and attribution about the data here...]
+We selected data on 91 artifacts from approximately 450 artifacts collected under the supervision of James Moore, Office of Archaeological Studies, New Mexico state government.  Shackley predicted the sources of these artifacts; all except two were from the Jemez caldera (we omitted those two from consideration); we randomly reassigned the sources of a proportion of the artifacts we selected in order to introduce misclassification.  These artifact data have not been published.
+
+The artifacts were analyzed in Shackley’s lab in Albuquerque, New Mexico, using different instrumentation than that used for the sources.  For a discussion, see
+http://www.swxrflab.net/labfees.htm#QuanX%20Energy-Dispersive%20X-Ray%20Fluorescence%20Spectrometer%20(EDXRF).  For a more general discussion of Shackley’s procedures, see http://www.swxrflab.net/swobsrcs.htm.
+
+The five obsidian sources are coded as A, B, C, D, and E in the source and artifact data sets (ObsidianSources and ObsidianArtifacts, respectively).  The source (or predicted source for an artifact) is in the character-valued variable Code.  Each data set contains the variables Code, the five elements (as numeric variables, with variable names the element symbols), and a character-valued variable ID containing an artificial lab ID.  For example, the first few rows of ObsidianSources are
 
 ```{r}
 library(karon)
-data(ObsidianData)
-head(ObsidianData)
-names(ObsidianData)
+data(ObsidianSources)
+head(ObsidianSources)
+names(ObsidianSources)
 ```
+## Analysis file creation and check
 
-We can check the data with the `fn.CheckData` function which will check and summarize the data. It will tell you about duplicate records, negative analytic values, numbers of analytic results, and percentiles of results. [...insert more commentary here...]
+The following procedure produces an analysis file from excel data files, with the first row of each file containing the name of the variable represented by the data in that column.  All files must have the same name for an element; if some files use “Zr” and others use “Zr “, the latter becomes “Zr.” when an R object is created.  Also, variable names in R are case-sensitive, so “Zr” and “ZR” are different variables.  In addition, each value of an element analysis must be numeric; the value “< 0” is not allowed.  Missing values should be left blank.
 
+To create an R object (a data frame) from an excel file, use the R command
+
+object_name <- read.csv(file = “file name”)
+
+Other R functions could also be used, including read.table(); see the documentation for read.csv (obtained by entering ?read.csv at the R prompt) for alternatives and details.
+
+If it is necessary to combine several data files into an analysis file, use the function fn.data() to create an R data frame from each of the individual R objects.  For example, Shakley’s website contains an excel file with data for individual sources.  After creating an R data frame for a source using e.g. read.csv(), fn.data() creates a file with the analysis variables in a specified sequence.  These files can then be combined in a data frame using the R function rbind().  If it may be necessary to repeat this operation for a number of source files, it may be useful to define an R function  
+
+fn.combine <- function()
+rbind(dataSet1, dataSet2,…..)
+
+This function will return the result of the rbind() operation to define an R object, such as
+
+analysisFile <- fn.combine()
+
+After creating the analysis file, use 
+
+fn.CheckData(data=analysisFile, CheckDupVars, GroupVar, Groups, AnalyticVars) 
+
+to obtain basic descriptive statistics and carry out several data checks (number of observations, number of missing values, number of negative values, and descriptive statistics, by group and analysis variable).  For the data set ObsidianSources, there are no negative values for the five elements of interest and no duplicate observations.  The numbers of observations by source and element are
 
 ```{r}
-Els <-c("Rb","Sr","Y","Zr","Nb")  # define the elements used in the analysis
-Folder <- paste0(here::here(), "/vignettes/")
-checks <- fn.CheckData(data = ObsidianData, 
-                     CheckDupVars = c("Code","ID"),
-                     GroupVar = "Code", 
-                     Groups = "All", 
-                     AnalyticVars = Els, 
-                     folder = Folder, 
-                     ds.duplicates = "Duplicates.csv", 
-                     ds.NegValues = "NegValues.csv", 
-                     ds.Nsamples = "Nsamples", 
-                     ds.summary = "SummaryStats")
+library(karon)
+data(ObsidianSources)
+analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+CheckData<-fn.CheckData(data=ObsidianSources,CheckDupVars=c("Code","ID"),GroupVar="Code",Groups="All",AnalyticVars=analyticVars)
+CheckData$Nvalues
 
-str(checks)
 ```
+An example of the descriptive statistics is  
 
-We can see the number of sample values, by source and element:
+```{r} 
+library(karon)
+data(ObsidianSources)
+analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+CheckData<-fn.CheckData(data=ObsidianSources,CheckDupVars=c("Code","ID"),GroupVar="Code",Groups="All",AnalyticVars=analyticVars)
+head(CheckData$Summary)
 
-```{r}
-checks$Nvalues
 ```
+In the descriptive statistics data frame (Robject$Summary) information for each element, there is a row for each source, with a row containing missing values (NAs) between elements.  If this data frame is written to an excel file, those rows between elements can be converted to blank rows, to make the resulting table easier to read.
 
 ## Box plots
 
@@ -71,6 +99,7 @@ Next we can make some boxplots [...insert more commentary here...]:
 ```{r}
 # windows()
 Els <- c("Rb", "Sr")
+data(ObsidianData)
 boxplots <- 
 fn.BoxPlots(data = ObsidianData, 
             GroupVar = "Code", 
@@ -86,13 +115,6 @@ We can make a pairs plot. A pairs plot is a matrix containing bivariate scatter 
 
 The plots are obtained with the function `fn.PairsPlot()` and the arguments data, GroupVar, Groups, AnalyticVars, and Span.  All except Span have the same meanings as in the function fn.BoxPlot.  Span is a value between 0 and 1 (not equal to 0) defining the proportion of data used to estimate robust smooth; the function is written with a default value of 2/3, which can be changed.  A small value (such as 0.1) will produce plots which do not show a clear trend; a large value (close to 1) will produce plots which do not show changes in trends.  Running the function will produce warnings that span is not a graphical parameter; these warnings should be ignored.
 
-```{r}
-pairsplots <- 
-fn.PairsPlot(data = ObsidianData,
-             GroupVar = " ",
-             Groups = " ",
-             AnalyticVars = Els)
-```
 
 ## Coefficients of variation for analyses and correlations between pairs of elements
 
@@ -109,29 +131,5 @@ These descriptive statistics can be obtained from the function fn.CV.corr() usin
 
 This function returns a list with elements doc, CV (the coefficients of variation), and corr (the correlations).  By default, both the coefficients of variation and the correlations are rounded to two decimal places.  The coefficient of variation is the standard deviation of a set of data divided by the mean; it would be affected by outliers.  The Spearman correlation is the correlation based on ranks; it does not affected by outliers.  It is easier to make comparisons reading down a column than reading across a row, to this table makes it easier to see the variation in correlations among the sources.
 
-```{r}
-Els <- c("Rb","Sr","Y","Zr","Nb")  # define the elements used in the analysis
-cvcorr <- 
-  fn.CV.corr(data = ObsidianData, 
-           GroupVar = "Code", 
-           Groups = "All", 
-           AnalyticVars = Els, 
-           Transpose = T, 
-           folder = Folder,
-           ds.CV = "CV.csv", 
-           ds.corr = "corr.csv")
-```
-
-Here are the first few rows of the CV values:
-
-```{r}
-head(cvcorr$CV)
-```
-
-And here are the first few rows of the correlation values:
-
-```{r}
-head(cvcorr$corr)
-```
 
 

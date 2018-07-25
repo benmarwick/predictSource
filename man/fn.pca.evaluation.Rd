@@ -7,7 +7,7 @@
 fn.pca.evaluation(doc = "fn.pca.evaluation", SourceData, ArtifactData,
   labID = " ", SourceGroup, ArtifactGroup, known.sources, predicted.sources,
   AnalyticVars, Identify = F, loc.legend = "topright", folder = " ",
-  ds.importance, ds.pts.outside, ds.in.out, ds.identified)
+  ds.importance, ds.pts.outside, ds.in.out, ds.identified, ds.data.check)
 }
 \arguments{
 \item{doc:}{documentation in list returned by function}
@@ -41,6 +41,8 @@ fn.pca.evaluation(doc = "fn.pca.evaluation", SourceData, ArtifactData,
 \item{ds.pts.outside:}{name of file with information on artifacts with principal component pointsoutside of hull for predicted source}
 
 \item{ds.in.out:}{table with number of artifacts, by whether inside or outside hull for predicted  source, for each predicted source}
+
+\item{ds.data.check:}{if Identify = T, data for observations outside of the predicted hull identified as of interest}
 }
 \value{
 The function produces two plots: the convex hulls of the first two principal components of the source data,
