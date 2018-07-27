@@ -42,3 +42,21 @@ Only the last plot is displayed in the plot window when the function is run.  Us
 to display previous plots; click on the zoom button to create a new window with an enlarged version of the plot window.
 }
 
+\examples{
+data(ObsidianSources)
+analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+boxPlots<-fn.BoxPlots(data=ObsidianSources, GroupVar="Code", Groups=c("All"),AnalyticVars=analyticVars,Nrow=2,Ncol=2)
+
+# side-by-side box plots of each source and artifacts assigned to that source
+data(ObsidianSources)
+data(ObsidianArtifacts)
+analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+ObsidianSources<-ObsidianSources[,c("Code",analyticVars)]
+Artifacts <- ObsidianArtifacts[,c("Code",analyticVars)]
+SourcesCode <- as.vector(ObsidianSources[,"Code"], mode="character")
+ArtifactsCode <- as.vector(paste(Artifacts[,"Code"],"A",sep="."),mode="character")
+Codes <- c(SourcesCode, ArtifactsCode)
+SourcesArtifacts <- data.frame(rbind(ObsidianSources,Artifacts)[,analyticVars], Code = Codes)
+boxPlots<-fn.BoxPlots(data=SourcesArtifacts, GroupVar="Code", Groups="All",?AnalyticVars=c("Rb","Nb"),Nrow=2,Ncol=1)
+
+}

@@ -22,12 +22,12 @@
 #'
 #' @return A set of pairs plots as described above and a list with the following components:
 #' \itemize{
-#' \item{"usage"}{a vector with the value of the argument doc, date run, version of R used}
-#' \item{"dataUsed"}{a data frame with the observations in data restricted to the groups analyzed}
-#' \item{"analyticVars"}{the vector specified by the parameter AnalyticVars}
-#' \item{"params.numeric"}{the value of the argument Span}
-#' \item{"params.grouping"}{a vector with the values of the arguments GroupVar and Groups}
-#' \item{"analyticVars"}{a vector with the value of the argument AnalyticVars}
+#' \item{usage:}{  A vector with the value of the argument doc, date run, version of R used}
+#' \item{dataUsed:}{  A data frame with the observations in data restricted to the groups analyzed}
+#' \item{analyticVars:}{  The vector specified by the parameter AnalyticVars}
+#' \item{params.numeric:}{  The value of the argument Span}
+#' \item{params.grouping:}{  A vector with the values of the arguments GroupVar and Groups}
+#' \item{analyticVars:}{  A vector with the value of the argument AnalyticVars}
 #' }
 #'
 #' @examples
@@ -39,7 +39,7 @@
 #' @export
 
 fn.PairsPlot <-
-  function(doc = "fn.PairsPlot version 0.1",
+  function(doc = "fn.PairsPlot",
            data,
            GroupVar,
            Groups,
@@ -62,10 +62,10 @@ fn.PairsPlot <-
       for (i in 1:length(groups)) {
         rows.temp <- (data.Plot[, GroupVar] %in% groups[i])
         data.temp <- data.Plot[rows.temp, AnalyticVars]
-        win.graph()
+        if (i > 1) plot.new()
         pairs(data.temp, panel = panel.smooth, span = Span,
               main = paste("group", groups[i]))
-  #      browser()
+ #      browser()
        }
     }
     fcn.date.ver<-paste(doc,date(),R.Version()$version.string)

@@ -56,7 +56,7 @@
 #'    ArtifactGroup="Code",known.sources=sources, predicted.sources=sources, AnalyticVars=analyticVars)
 #'
 #' @export
-#
+
 fn.pca.evaluation <-
   function(doc = "fn.pca.evaluation",
            SourceData,

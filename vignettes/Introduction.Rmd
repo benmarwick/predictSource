@@ -118,18 +118,42 @@ analyticVars<-c("Rb","Sr","Y","Zr")
 boxPlots<-fn.BoxPlots(data=ObsidianSources, GroupVar="Code",                Groups="All",AnalyticVars=analyticVars,Nrow=2,Ncol=2)
 
 ```
+We can also create side-by-side box plots of the sources and the artifacts assigned to the sources, in order to see how well the distributions of the elements from artifacts correspond to the distributions of the corresponding sources.  The plot below shows this comparison for rubidium and niobium; the code for the artifact is .A added to the code for the assigned source (e.g., the artifacts assigned to source A have the code A.A).  We see that, for the artifacts assigned to sources A and E, the artifact values for rubidium are larger than the corresponding source values and also are more variable.  For one artifact assigned to source D, the niobium value is a clear outlier, suggesting a misclassified artifact.  For the artifacts assigned to source E, the upper quartile for niobium is only slightly larger than the median, resulting in the unusual appearance of the box.
 
+```{r} 
+library(karon)
+data(ObsidianSources)
+data(ObsidianArtifacts)
+analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+ObsidianSources<-ObsidianSources[,c("Code",analyticVars)]
+Artifacts <- ObsidianArtifacts[,c("Code",analyticVars)]
+SourcesCode <- as.vector(ObsidianSources[,"Code"], mode="character")
+ArtifactsCode <- as.vector(paste(Artifacts[,"Code"],"A",sep="."),mode="character")
+Codes <- c(SourcesCode, ArtifactsCode)
+SourcesArtifacts <- data.frame(rbind(ObsidianSources,Artifacts)[,analyticVars], Code = Codes)
+boxPlots<-fn.BoxPlots(data=SourcesArtifacts, GroupVar="Code", Groups="All",AnalyticVars=c("Rb","Nb"),Nrow=2,Ncol=1)
+
+```
 
 ## Pairs plots
 
-We can make a pairs plot. A pairs plot is a matrix containing bivariate scatter plots for all pairs of quantitative variables.  The matrix is symmetric, so corresponding plots across the main diagonal interchange the horizontal and vertical axes.  Each plot contains a robust locally weighted line to describe the trend in the data.  This line is obtained from the R function `lowess()` which computes a predicted value at each abscissa (x-value) from a regression based on a fraction of the data, with weights decreasing at abscissas farther from the point and rejecting outliers.  This function tends to try to have the line go through or near the points with the largest and smallest abscissas; therefore the behavior at the ends of the plot is not reliable.  The line is obtained from the function `panel.smooth()` within the call to `pairs()` with an argument span.  The line (smoother) will not be useful if there are very few values; an example plot demonstrates that trends may show useful results even with 15 values.  
+ A pairs plot is useful in visualizing the relations between pair of variables. A pairs plot is a matrix containing bivariate scatter plots for all pairs of quantitative variables.  The matrix is symmetric, so corresponding plots across the main diagonal interchange the horizontal and vertical axes.  Each plot contains a robust locally weighted line to describe the trend in the data.  This line is obtained from the R function `lowess()` which computes a predicted value at each abscissa (x-value) from a regression based on a fraction of the data, with weights decreasing at abscissas farther from the point, and rejecting outliers.  This function tends to try to have the line go through or near the points with the largest and smallest abscissas; therefore the behavior at the ends of the plot is not reliable.  The line is obtained from the function `panel.smooth()` within the call to `pairs()` with an argument span.  The line (smoother) will not be useful if there are very few values; an example plot demonstrates that trends may show useful results even with 15 values.  
 
-The plots are obtained with the function `fn.PairsPlot()` and the arguments data, GroupVar, Groups, AnalyticVars, and Span.  All except Span have the same meanings as in the function fn.BoxPlot.  Span is a value between 0 and 1 (not equal to 0) defining the proportion of data used to estimate robust smooth; the function is written with a default value of 2/3, which can be changed.  A small value (such as 0.1) will produce plots which do not show a clear trend; a large value (close to 1) will produce plots which do not show changes in trends.  Running the function will produce warnings that span is not a graphical parameter; these warnings should be ignored.
+The plot is obtained with the function `fn.PairsPlot()` and the arguments data, GroupVar, Groups, AnalyticVars, and Span.  All except Span have the same meanings as in the function fn.BoxPlot.  Span is a value between 0 and 1 (not equal to 0) defining the proportion of data used to estimate robust smooth; the function is written with a default value of 2/3, which can be changed.  A small value (such as 0.1) will produce plots which do not show a clear trend; a large value (close to 1) will produce plots which do not show changes in trends.  Running the function will produce warnings that span is not a graphical parameter; these warnings should be ignored.
 
+The plot below shows the relations between elements at source A.  It shows that....
 
-## Coefficients of variation for analyses and correlations between pairs of elements
+```{r} 
+library(karon)
+data(ObsidianSources)
+analyticVars<-c("Rb","Sr","Y","Zr")
+pairsPlot <- fn.PairsPlot(data=ObsidianSources, GroupVar="Code", Groups="A", AnalyticVars=analyticVars)
 
-These descriptive statistics can be obtained from the function fn.CV.corr() using the following arguments:    
+```
+
+## Coefficients of variation of elements and correlations between pairs of elements
+
+Numerical estimates of the associations between pairs of analytic variables, in the form of Spearman correlation coefficients, are produced by the function fn.CV.corr().  This function also produces an estimate of the coefficient of variation (the standard deviation divided by the mean) for each variable.  The Spearman correlation coefficient is computed from the ranks of the data; therefore, it is not affected by the numerical value of an outlier.  The coefficient of variation does use the numerical values, hence is affected by an outlier.    
 
 - doc: character, default is "fn.CV.corr" data, GroupVar, Groups, AnalyticVars, and folder: these have the same meanings as for previous functions;    
 - Transpose: if T (the default value), one row for the correlations between each pair of analyses (columns are groups)’ if F, one row for each group (columns are correlations between a pair of analyses);    
