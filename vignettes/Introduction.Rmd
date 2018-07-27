@@ -1,6 +1,6 @@
 ---
 title: "Introduction to the karon package"
-author: "John Karon & Ben  Marwick"
+author: "John Karon & Ben Marwick"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
@@ -57,12 +57,20 @@ object_name <- read.csv(file = “file name”)
 
 Other R functions could also be used, including read.table(); see the documentation for read.csv (obtained by entering ?read.csv at the R prompt) for alternatives and details.
 
-If it is necessary to combine several data files into an analysis file, use the function fn.data() to create an R data frame from each of the individual R objects.  For example, Shakley’s website contains an excel file with data for individual sources.  After creating an R data frame for a source using e.g. read.csv(), fn.data() creates a file with the analysis variables in a specified sequence.  These files can then be combined in a data frame using the R function rbind().  If it may be necessary to repeat this operation for a number of source files, it may be useful to define an R function  
+If it is necessary to combine several data files into an analysis file, use the function fn.data() to create an R data frame from each of the individual R objects.  For example, Shakley’s website contains an excel file with data for individual sources.  After creating an R data frame for a source using e.g. read.csv(), the element dataOut of the list created by fn.data() is a data frame with the analysis variables in a specified sequence; to create this new data frame, use the command
+
+new_object_name <- fn.data(data=object_name)$dataOut
+
+where object_name is the data frame created from read.csv(); alternatively, save the result of fn.data() as an R object (a list), and create the new data frame with the command
+
+new_object_name <-list_name$dataOut
+
+These data frames can then be combined into an analysis data frame using the R function rbind().  If it may be necessary to repeat this operation for a number of source files, it may be useful to define an R function  
 
 fn.combine <- function()
-rbind(dataSet1, dataSet2,…..)
+rbind(data1, data2,…..)
 
-This function will return the result of the rbind() operation to define an R object, such as
+This function will return the result of the rbind() operation to define a data frame, such as
 
 analysisFile <- fn.combine()
 
@@ -70,7 +78,7 @@ After creating the analysis file, use
 
 fn.CheckData(data=analysisFile, CheckDupVars, GroupVar, Groups, AnalyticVars) 
 
-to obtain basic descriptive statistics and carry out several data checks (number of observations, number of missing values, number of negative values, and descriptive statistics, by group and analysis variable).  For the data set ObsidianSources, there are no negative values for the five elements of interest and no duplicate observations.  The numbers of observations by source and element are
+to obtain basic descriptive statistics and carry out several data checks (number of observations, number of missing values, number of negative values, duplicate observations, and descriptive statistics, by group and analysis variable).  For the data set ObsidianSources, there are no negative values for the five elements of interest and no duplicate observations.  The numbers of observations by source and element are
 
 ```{r}
 library(karon)
@@ -90,24 +98,27 @@ CheckData<-fn.CheckData(data=ObsidianSources,CheckDupVars=c("Code","ID"),GroupVa
 head(CheckData$Summary)
 
 ```
-In the descriptive statistics data frame (Robject$Summary) information for each element, there is a row for each source, with a row containing missing values (NAs) between elements.  If this data frame is written to an excel file, those rows between elements can be converted to blank rows, to make the resulting table easier to read.
+The example table shows that, in the descriptive statistics data frame (Robject$Summary), there is a row for each element and each source, with a row containing missing values (NAs) between elements.  If this data frame is written to an excel file, those rows between elements can be converted to blank rows, to make the resulting table easier to read.
 
-## Box plots
+## Descriptive statistics
 
-Next we can make some boxplots [...insert more commentary here...]: 
+The package contains functions to create basic descriptive statistics tables and plots: box plots, pairs plots (a matrix of two-dimensional scatterplots), and coefficients of variation and correlations between pairs of elements.
 
-```{r}
-# windows()
-Els <- c("Rb", "Sr")
-data(ObsidianData)
-boxplots <- 
-fn.BoxPlots(data = ObsidianData, 
-            GroupVar = "Code", 
-            Groups = c("AW", "CC"), 
-            AnalyticVars = Els,
-            Nrow = 1,
-            Ncol = 2)
+Box plots, created by the function fn.BoxPlots(), are useful for comparing the distributions of an element among sources and for identifying outlying values.  The figure shows box plots for four elements for the source data.  To understand the information in a plot, look at the plot of zirconium at source C.  The heavy line, at the narrow part of the notch, is the median of the zirconium values at C.  The top and bottom of the box represent the 25th and 75th percentiles of the data, respectively (the quantiles).  The notches define a 95% confidence interval for the median; if these do not overlap for two sources, it is plausible that those sources have significantly different medians.  (These plots yield warning messages that some of the notches should extend beyond the quartiles; these messages can be ignored.) Vertical dashed lines from the quartiles to a larger or smaller value with a horizontal line define the ranges of “adjacent values”.  The largest adjacent value is the largest value less than or equal to the upper quartile plus 1.5 times the interquartile range (the upper quartile minus the lower quartile).  The smallest adjacent value is the smallest value greater than or equal to the lower quartile minus 1.5 times the interquartile range.  For a standard normal distribution (mean 0, standard deviation 1), the median is 0, the upper and lower quartiles are 0.68 and -0.68, respectively; the upper and lower adjacent values are 2.72 (4 x 0.68) and -2.72, respectively.  The probability that a value from standard Gaussian distribution is greater than 2.72 is 0.003.  It follows that, for Gaussian data, the probability that a value lies outside the range of adjacent values is less than 0.01.  Therefore, values outside the range of adjacent values either may be considered outliers, or the data is unlikely to be Gaussian.   
+
+If the box and the adjacent values are approximately symmetric around the median, then the distribution of the data is approximately symmetric.  Relative variation for values for an element among sources can be evaluated by comparing heights of boxes among sources.  
+the boxes   
+
+Now look at the figure.  We see immediately that there is little variation among the values of an element at a source. There are a few outliers, but they are not far from the range of adjacent values.  There is considerable variation in the distributions of these alements among the five Jemez sources, so it should be possible to distinguish these sources using these elements.  
+
+```{r} 
+library(karon)
+data(ObsidianSources)
+analyticVars<-c("Rb","Sr","Y","Zr")
+boxPlots<-fn.BoxPlots(data=ObsidianSources, GroupVar="Code",                Groups="All",AnalyticVars=analyticVars,Nrow=2,Ncol=2)
+
 ```
+
 
 ## Pairs plots
 

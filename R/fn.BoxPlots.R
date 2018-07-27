@@ -13,11 +13,11 @@
 #'
 #' @return A list with the following components:
 #'  \itemize{
-#' \item{"usage"}{a vector with the value of the argument doc, date run, version of R used}
-#' \item{"analyticVars"}{the vector specified by the parameter AnalyticVars}
-#' \item{"params.numeric"}{a vector with the values of the arguments Nrow and Ncol}
-#' \item{"params.grouping"}{a vector with the values of the arguments GroupVar and Groups}
-#' \item{"analyticVars"}{a vector with the value of the argument AnalyticVars}
+#' \item{usage:}{  A vector with the value of the argument doc, date run, version of R used}
+#' \item{analyticVars:}{  The vector specified by the parameter AnalyticVars}
+#' \item{params.numeric:}{  A vector with the values of the arguments Nrow and Ncol}
+#' \item{params.grouping:}{  A vector with the values of the arguments GroupVar and Groups}
+#' \item{analyticVars:}{  A vector with the value of the argument AnalyticVars}
 #'}
 #'
 #' @section  DETAILS:
@@ -27,7 +27,17 @@
 #' @examples
 #' data(ObsidianSources)
 #' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-#' boxPlots<-fn.BoxPlots(data=ObsidianSources, GroupVar="Code", Groups=c("A","B"),AnalyticVars=analyticVars,Nrow=2,Ncol=2)
+#' boxPlots<-fn.BoxPlots(data=ObsidianSources, GroupVar="Code", Groups=c("All"),AnalyticVars=analyticVars,Nrow=2,Ncol=2)
+#'
+#' # side-by-side box plots of each source and artifacts assigned to that source
+#' data(ObsidianSources)
+#' data(ObsidianArtifacts)
+#' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+#' ObsidianSources<-ObsidianSources[,c("Code",analyticVars)]
+#' Artifacts <- ObsidianArtifacts[,c("Code",analyticVars)]
+#' Artifacts[,"Code"] <- paste(Artifacts[,"Code],"A",sep=".")
+#' SourcesArtifacts <- rbind(ObsidianSources,Artifacts)
+#' boxPlots<-fn.BoxPlots(data=SourcesArtifacts, GroupVar="Code", Groups="All",AnalyticVars=c("Rb","Nb"),Nrow=2,Ncol=1)
 #'
 #' @export
 

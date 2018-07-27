@@ -26,11 +26,11 @@ if ' ', no grouping}
 \value{
 A list with the following components:
  \itemize{
-\item{"usage"}{a vector with the value of the argument doc, date run, version of R used}
-\item{"analyticVars"}{the vector specified by the parameter AnalyticVars}
-\item{"params.numeric"}{a vector with the values of the arguments Nrow and Ncol}
-\item{"params.grouping"}{a vector with the values of the arguments GroupVar and Groups}
-\item{"analyticVars"}{a vector with the value of the argument AnalyticVars}
+\item{usage:}{  A vector with the value of the argument doc, date run, version of R used}
+\item{analyticVars:}{  The vector specified by the parameter AnalyticVars}
+\item{params.numeric:}{  A vector with the values of the arguments Nrow and Ncol}
+\item{params.grouping:}{  A vector with the values of the arguments GroupVar and Groups}
+\item{analyticVars:}{  A vector with the value of the argument AnalyticVars}
 }
 }
 \description{
@@ -42,9 +42,3 @@ Only the last plot is displayed in the plot window when the function is run.  Us
 to display previous plots; click on the zoom button to create a new window with an enlarged version of the plot window.
 }
 
-\examples{
-data(ObsidianSources)
-analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-boxPlots<-fn.BoxPlots(data=ObsidianSources, GroupVar="Code", Groups=c("A","B"),AnalyticVars=analyticVars,Nrow=2,Ncol=2)
-
-}
