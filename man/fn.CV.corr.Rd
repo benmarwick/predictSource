@@ -33,14 +33,14 @@ if " " (the default), no excel files are created}
 \value{
 A list with the following components:
   \itemize{
-  \item{"usage"}{a vector with the contents of the argument doc, the date run, the version of R used}
-  \item{"dataUsed"}{the contents of the argument data restricted to the groups used}
-  \item{"params.numeric"}{a vector with the values of the arguments CV.digits and corr.digits}
-  \item{"params.grouping"}{a list with the values of the argument GroupVar and Groups}
-  \item{"analyticVars"}{a vector with the value of the argument AnalyticVars}
-  \item{"CV"}{a data frame with the coefficients of variation for each analytic variable in each group}
-  \item{"corr"}{a data frame with the correlations between pairs of variables in each group}
-  \item{"files"}{if folder != " ": a list with path and data set names to the excel files containing
+  \item{usage:}{  A vector with the contents of the argument doc, the date run, the version of R used}
+  \item{dataUsed:}{  The contents of the argument data restricted to the groups used}
+  \item{params.numeric:}{  A vector with the values of the arguments CV.digits and corr.digits}
+  \item{params.grouping:}{  A list with the values of the argument GroupVar and Groups}
+  \item{analyticVars:}{  A vector with the value of the argument AnalyticVars}
+  \item{CV:}{  A data frame with the coefficients of variation for each analytic variable in each group}
+  \item{corr:}{  A data frame with the correlations between pairs of variables in each group}
+  \item{files:}{  If folder != " ": a list with path and data set names to the excel files containing
       the coefficients of variations and the correlations}
       }
 }

@@ -4,8 +4,8 @@
 \alias{fn.PairsPlot}
 \title{fn.PairsPlot}
 \usage{
-fn.PairsPlot(doc = "fn.PairsPlot version 0.1", data, GroupVar, Groups,
-  AnalyticVars, Span = 2/3)
+fn.PairsPlot(doc = "fn.PairsPlot", data, GroupVar, Groups, AnalyticVars,
+  Span = 2/3)
 }
 \arguments{
 \item{doc:}{a string documenting use added to the output list, default is the function name}
