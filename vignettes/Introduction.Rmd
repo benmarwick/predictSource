@@ -39,13 +39,13 @@ We selected data on 91 artifacts from approximately 450 artifacts collected unde
 The artifacts were analyzed in Shackley’s lab in Albuquerque, New Mexico, using different instrumentation than that used for the sources.  For a discussion, see
 http://www.swxrflab.net/labfees.htm#QuanX%20Energy-Dispersive%20X-Ray%20Fluorescence%20Spectrometer%20(EDXRF).  For a more general discussion of Shackley’s procedures, see http://www.swxrflab.net/swobsrcs.htm.
 
-The five obsidian sources are coded as A, B, C, D, and E in the source and artifact data sets (ObsidianSources and ObsidianArtifacts, respectively).  The source (or predicted source for an artifact) is in the character-valued variable Code.  Each data set contains the variables Code, the five elements (as numeric variables, with variable names the element symbols), and a character-valued variable ID containing an artificial lab ID.  For example, the first few rows of ObsidianSources are
+The five obsidian sources are coded as A, B, C, D, and E in the source and artifact data sets (ObsidianSources and ObsidianArtifacts, respectively).  The source (or predicted source for an artifact) is in the character-valued variable Code.  Each data set contains the variables Code, the five elements (as numeric variables, with variable names the element symbols), and a character-valued variable ID containing an artificial lab ID.  For example, the first few rows of ObsidianSources are in Table 1.
 
 ```{r}
 library(karon)
 data(ObsidianSources)
-head(ObsidianSources)
-names(ObsidianSources)
+knitr::kable(ObsidianSources[1:6,], caption="Table 1.  Sample of the data in the file ObsidianSources.")
+#
 ```
 ## Analysis file creation and check
 
@@ -78,25 +78,25 @@ After creating the analysis file, use
 
 fn.CheckData(data=analysisFile, CheckDupVars, GroupVar, Groups, AnalyticVars) 
 
-to obtain basic descriptive statistics and carry out several data checks (number of observations, number of missing values, number of negative values, duplicate observations, and descriptive statistics, by group and analysis variable).  For the data set ObsidianSources, there are no negative values for the five elements of interest and no duplicate observations.  The numbers of observations by source and element are
+to obtain basic descriptive statistics and carry out several data checks (number of observations, number of missing values, number of negative values, duplicate observations, and descriptive statistics, by group and analysis variable).  For the data set ObsidianSources, there are no negative values for the five elements of interest and no duplicate observations.  The numbers of observations by source and element are in Table 2.
 
 ```{r}
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 CheckData<-fn.CheckData(data=ObsidianSources,CheckDupVars=c("Code","ID"),GroupVar="Code",Groups="All",AnalyticVars=analyticVars)
-CheckData$Nvalues
-
+knitr::kable(CheckData$Nvalues, caption="Table 2.  Number of values for each element from each Jemez source.")
+#
 ```
-An example of the descriptive statistics is  
+An example of the descriptive statistics is in Table 3. 
 
 ```{r} 
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 CheckData<-fn.CheckData(data=ObsidianSources,CheckDupVars=c("Code","ID"),GroupVar="Code",Groups="All",AnalyticVars=analyticVars)
-head(CheckData$Summary)
-
+knitr::kable(CheckData$Summary[1:6,], caption="Table 3.  Sample of the descriptive statistics for the data frame ObsidianSources.")
+#
 ```
 The example table shows that, in the descriptive statistics data frame (Robject$Summary), there is a row for each element and each source, with a row containing missing values (NAs) between elements.  If this data frame is written to an excel file, those rows between elements can be converted to blank rows, to make the resulting table easier to read.
 
@@ -164,36 +164,68 @@ Numerical estimates of the associations between pairs of analytic variables at e
 - ds.CV: file name for coefficients of variation, with extension .csv    
 - ds.corr: file name for Spearman correlation coefficients, with extension .csv 
 
-The table below contains the correlation coefficient estimates for all pairs of variables at each source.  Each estimate describes how close the relation between a pair of variables is to strictly monotone.  If a relationship is roughly monotone, the correlation coefficient does not describe how rapidly one variable changes with respect to the other (the correlation coefficient for a linear relationship can be large even if the slope of the line describing the relationship is small).  For example, the estimated correlation between strontium and zirconium at source A is 0.51, even though the pairs plot of these elements with strontium as the ordinate shows that strontium increases slowly as zirconium increases.  The correlation table is very useful for summarizing relationships between pairs of elements at the sources: it is clear that these relationships vary substantially among these sources.
+Table 4 contains the correlation coefficient estimates for all pairs of variables at each source.  Each estimate describes how close the relation between a pair of variables is to strictly monotone.  If a relationship is roughly monotone, the correlation coefficient does not describe how rapidly one variable changes with respect to the other (the correlation coefficient for a linear relationship can be large even if the slope of the line describing the relationship is small).  For example, the estimated correlation between strontium and zirconium at source A is 0.51, even though the pairs plot of these elements with strontium as the ordinate shows that strontium increases slowly as zirconium increases.  The correlation table is very useful for summarizing relationships between pairs of elements at the sources: it is clear that these relationships vary substantially among these sources.
 
 ```{r} 
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 CV.corr<-fn.CV.corr(data = ObsidianSources, GroupVar="Code", Groups = "All", AnalyticVars=analyticVars)
-CV.corr$corr
-
+knitr::kable(CV.corr$corr, caption="Table 4.  Spearman correlations among pairs of elements from the Jemez sources.")
+#
 ```
-The following table shows the coefficients of variation for each element at each source.  Each standard deviation is small compared to the corresponding mean (each coefficient of variation is at most 0.11, and most are 0.05 or less) except for strontium at sources C and D.  The relatively large values of the coefficient of variation for strontium at those sources is a result of the small mean strontium values at those sources: the table of descriptive statistics (not shown) gives mean values for strontium of 5 and 10, at C and D, respectively, with ranges of 0 to 8 and 2 to 11, respectively.
+Table 5 shows the coefficients of variation for each element at each source.  Each standard deviation is small compared to the corresponding mean (each coefficient of variation is at most 0.11, and most are 0.05 or less) except for strontium at sources C and D.  The relatively large values of the coefficient of variation for strontium at those sources is a result of the small mean strontium values at those sources: the table of descriptive statistics (not shown) gives mean values for strontium of 5 and 10, at C and D, respectively, with ranges of 0 to 8 and 2 to 11, respectively.
 
 ```{r} 
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 CV.corr<-fn.CV.corr(data = ObsidianSources, GroupVar="Code", Groups = "All", AnalyticVars=analyticVars)
-CV.corr$CV
-
+knitr::kable(CV.corr$CV, caption="Table 5.  Coefficients of variation of the elements from the Jemez sources.")
+#
 ```
 
 ## Two-and three-dimensional scatterplots
 
 Two- and three-dimensional scatterplots are very useful in visualizing relationships among elements.  The user can obtain these plots from the functions fn.2dPlot and fn.3dPlot, respectively.  Several sources can be shown on a single plot, with different colors identifying the sources.  If there are a large number of sources, the user can plot medians instead of points.  For two dimensional plots, the user can show additional information: Gaussian confidence ellipses for the values from each source; the convex hull of the points from each source; either of two nonparametric curves describing the relation between elements at a source, a lowess smooth or kernel smoother.  The user can also identify points of interest (e.g. outliers) on a two-dimensional plot and create a data frame containing the data yielding those points.  The function fn.2dPlot.Gauss computes test statistics for checking that a pair of elements at a source has a bivariate Gaussian distribution.  The function fn.3dPlot.rotate allows the user to rotate a three-dimensional plot.  
 
+Examples of two-dimensional scatterplots are below.  The first two show plots of two pairs of elements from source A , with 95% and 99% Gaussian confidence ellipses; the first and second include lowess and kernel smooths for the points, respectively.  The two types of smoothers show similar trends; the kernel smooths could be made less wiggly by increasing the default value (0.3) of the span parameter KernelWidth.  The next two plots show examples of all sources on one plot for strontium versus rubidium.  The first of these shows the convex hull of the points at each source, with the source symbol plotted as the median of the points.  We see, for example, that the medians at sources B and D are close to the smallest values of rubidium, indicating that, for each source, there are one or more rubidium values that are large compared to most of the values.  The second plot shows the points and confidence ellipses at each source, with colors and plotting characters identifying the sources.  Requesting this plot with Identify = T allows the user to create a data set (plot.2d$data.check) containing the data generating points that may be of interest.  The table shows the data generating five such points.  For example, the point from source E has a strontium value of 72, which is smaller than the value from any other sample from source E.
+
 ```{r} 
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-plot.2d <- fn.2dPlot(data = ObsidianSources, GroupVar = "Code", labID = "ID", Groups = c("A","B","C"),
-          AnalyticVars = rbind(analyticVars[1:2],analyticVars[c(1,3)]), Colors = c("black","red"))?fn
+plot.2d <- fn.2dPlot(data = ObsidianSources, GroupVar = "Code", labID = "ID", Groups = "A",
+          AnalyticVars = rbind(analyticVars[1:2],analyticVars[c(1,3)]), PlotEllipses=T, LowessLine=T)
 
 ```
+
+```{r} 
+library(karon)
+data(ObsidianSources)
+analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+plot.2d <- fn.2dPlot(data = ObsidianSources, GroupVar = "Code", labID = "ID", Groups = "A",
+          AnalyticVars = rbind(analyticVars[1:2],analyticVars[c(1,3)]), PlotEllipses=T, KernelSmooth=T)
+
+```
+```{r} 
+library(karon)
+data(ObsidianSources)
+analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+plot.2d <- fn.2dPlot(data = ObsidianSources, GroupVar = "Code", labID = "ID", Groups = "All", 
+          AnalyticVars = analyticVars[1:2], PlotByGroup=F, PlotPoints=F, PlotMedians=T, PlotHulls=T)
+
+```
+
+```{r} 
+library(karon)
+data(ObsidianSources)
+analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+plot.2d <- fn.2dPlot(data = ObsidianSources, GroupVar = "Code", labID = "ID", Groups = "All",
+          AnalyticVars = analyticVars[1:2], PlotByGroup = F, PlotColors=T, PlotEllipses=T, LowessLine=T, Identify=T)
+data("sources.data.check")
+knitr::kable(sources.data.check,caption="Data generating identified points")
+#
+```
+
+

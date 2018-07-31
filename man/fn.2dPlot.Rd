@@ -8,7 +8,8 @@ fn.2dPlot(doc = "fn.2dPlot", data, GroupVar, labID, Groups, AnalyticVars,
   PlotByGroup = T, PlotPoints = T, LowessLine = F, Lowess.f = NA,
   KernelSmooth = F, KernelWidth = 0.3, PlotEllipses = F, PlotHulls = F,
   PlotMedians = F, Ellipses = c(0.95, 0.99), Identify = F,
-  PlotColors = F, Colors = "black", folder = " ", ds.identified)
+  PlotColors = F, Colors = c("black", "red", "blue", "green", "purple"),
+  legendLoc = "topright", folder = " ", ds.identified)
 }
 \arguments{
 \item{doc}{A string documenting use written to the output list; default is the function name}
@@ -56,6 +57,8 @@ if " ", no data set is written}
 \item{PlotColors:}{if T, colors are assigned to the groups}
 
 \item{Colors:}{single value or vector of color names; if PlotByGroup = F, the vector must have the same number of colors as the number of groups}
+
+\item{legendLoc:}{character, location of legend for a plot with points default is "topright", alternatives are combinations of "top", "bottom", "right", "left"}
 }
 \value{
 A list with the following components:
@@ -82,7 +85,13 @@ Create 2-dimensional data plot or plots. The function stops after producing each
 \examples{
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-plot.2d <- fn.2dPlot(data = ObsidianSources, GroupVar = "Code", labID = "ID", Groups = c("A","B","C"),
-          AnalyticVars = rbind(analyticVars[1:2],analyticVars[c(1,3)]), Colors = c("black","red"))
+#
+#  plot two pairs of variables by source
+plot.2d <- fn.2dPlot(data = ObsidianSources, GroupVar = "Code", labID = "ID", Groups = c("A","B"),
+          AnalyticVars = rbind(analyticVars[1:2],analyticVars[c(1,3)]), PlotEllipses=T, LowessLine=T)
+#
+#  plot one pair of variables with all sources on one plot
+plot.2d <- fn.2dPlot(data = ObsidianSources, GroupVar = "Code", labID = "ID", Groups = "All",
+          AnalyticVars =analyticVars[1:2], PlotByGroup=F, PlotColors=T, namesPlotEllipses=T, LowessLine=T)
 
 }

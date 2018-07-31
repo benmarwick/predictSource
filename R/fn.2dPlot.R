@@ -24,6 +24,7 @@
 #' @param Identify if T, user can identify points of interest in the plots; default is F
 #' @param PlotColors: if T, colors are assigned to the groups
 #' @param Colors: single value or vector of color names; if PlotByGroup = F, the vector must have the same number of colors as the number of groups
+#' @param legendLoc: character, location of legend for a plot with points default is "topright", alternatives are combinations of "top", "bottom", "right", "left"
 #' @param folder in Windows, path to the folder containing an excel file with the identified points, ending with two forward slashes;
 #'         if " ", no data set is written
 #' @param ds.identified excel file name with extension .csv containing information on the identified points
@@ -47,8 +48,14 @@
 #' @examples
 #' data(ObsidianSources)
 #' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-#' plot.2d <- fn.2dPlot(data = ObsidianSources, GroupVar = "Code", labID = "ID", Groups = c("A","B","C"),
-#'           AnalyticVars = rbind(analyticVars[1:2],analyticVars[c(1,3)]), Colors = c("black","red"))
+#' #
+#' #  plot two pairs of variables by source
+#' plot.2d <- fn.2dPlot(data = ObsidianSources, GroupVar = "Code", labID = "ID", Groups = c("A","B"),
+#'           AnalyticVars = rbind(analyticVars[1:2],analyticVars[c(1,3)]), PlotEllipses=T, LowessLine=T)
+#' #
+#' #  plot one pair of variables with all sources on one plot
+#' plot.2d <- fn.2dPlot(data = ObsidianSources, GroupVar = "Code", labID = "ID", Groups = "All",
+#'           AnalyticVars =analyticVars[1:2], PlotByGroup=F, PlotColors=T, namesPlotEllipses=T, LowessLine=T)
 #'
 #' @import MASS
 #'
@@ -58,7 +65,8 @@ fn.2dPlot <- function (doc = "fn.2dPlot", data, GroupVar, labID, Groups,
           AnalyticVars, PlotByGroup=T, PlotPoints = T, LowessLine=F, Lowess.f=NA,
           KernelSmooth=F,KernelWidth=0.3, PlotEllipses = F,
           PlotHulls = F, PlotMedians = F, Ellipses = c(0.95, 0.99), Identify=F,
-          PlotColors = F, Colors="black",folder=" ",ds.identified)
+          PlotColors = F, Colors=c("black","red","blue","green","purple"),
+          legendLoc = "topright", folder=" ",ds.identified)
 {
   if (Groups[1] != "All") {
     Use.rows <- (data[, GroupVar] %in% Groups)
@@ -160,7 +168,7 @@ fn.2dPlot <- function (doc = "fn.2dPlot", data, GroupVar, labID, Groups,
   #  all groups on one plot
   #
   if (!PlotByGroup) {
-    if ((length(Colors)==1)&(Colors[1]=="black"))  Colors<-rep("black",length(groups))
+    if (length(Colors)==1)  Colors<-rep(Colors[1],length(groups))
     else {
       if (length(Colors) < length(groups))  stop("fewer colors specified than the number of groups")
     }
@@ -168,6 +176,7 @@ fn.2dPlot <- function (doc = "fn.2dPlot", data, GroupVar, labID, Groups,
     for (j in 1:n.pairs) {
       # set up plot for this pair of variables
       plot.new()
+      par(mfrow=c(1,1))
       temp<-data.Used[,AnalyticVars[j,]]
       rangeX<-range(temp[,1])
       rangeY<-range(temp[,2])
@@ -187,12 +196,12 @@ fn.2dPlot <- function (doc = "fn.2dPlot", data, GroupVar, labID, Groups,
       # move right boundary of box to always allow plotting the legend
       plot(type="n", x=rangeX, y=rangeY,xlab=AnalyticVars[j,1],ylab=AnalyticVars[j,2])
       #
-      #  add legend to plot in top right corner
+      #  add legend to plot in specified corner
       #
       if (!PlotMedians) {
         if (PlotColors)
-          legend(x = "topright", legend = groups, pch = 0:(length(groups) - 1), col = Colors[1:length(groups)], bty = "n")
-        else legend(x = "topright", legend = groups, pch = 0:(length(groups) - 1), bty = "n")
+          legend(x = legendLoc, legend = groups, pch = 0:(length(groups) - 1), col = Colors[1:length(groups)], bty = "n")
+        else legend(x = legendLoc, legend = groups, pch = 0:(length(groups) - 1), bty = "n")
       }
       for (i.group in 1:length(groups)) {
         temp.i <- data.Used[data.Used[, GroupVar] == groups[i.group],]
