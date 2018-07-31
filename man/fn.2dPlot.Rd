@@ -55,7 +55,7 @@ if " ", no data set is written}
 
 \item{PlotColors:}{if T, colors are assigned to the groups}
 
-\item{Colors:}{single value or vector of color names}
+\item{Colors:}{single value or vector of color names; if PlotByGroup = F, the vector must have the same number of colors as the number of groups}
 }
 \value{
 A list with the following components:
@@ -64,7 +64,7 @@ A list with the following components:
 \item{dataUsed: }{ The contents of the argument data restricted to the groups used}
 \item{params.numeric: }{ A vector with the values of the arguments Lowess.f and KernelWidth}
 \item{params.grouping: }{ A character vector with the values of the arguments GroupVar and Groups}
-\item{"ellipse.pct: }{ The value of the argument Ellipses}
+\item{ellipse.pct: }{ The value of the argument Ellipses}
 \item{analyticVars: }{ The value of the argument AnalyticVars}
 \item{colors:}{  A vector with the value of the argument Color}
 \item{data.check: }{ If Identify = T, a data frame with the information on user-identified points of interest}

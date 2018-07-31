@@ -23,7 +23,7 @@
 #' @param PlotMedians if T, the code for each group is plotted at the median of the values for that group; default is F
 #' @param Identify if T, user can identify points of interest in the plots; default is F
 #' @param PlotColors: if T, colors are assigned to the groups
-#' @param Colors: single value or vector of color names
+#' @param Colors: single value or vector of color names; if PlotByGroup = F, the vector must have the same number of colors as the number of groups
 #' @param folder in Windows, path to the folder containing an excel file with the identified points, ending with two forward slashes;
 #'         if " ", no data set is written
 #' @param ds.identified excel file name with extension .csv containing information on the identified points
@@ -34,7 +34,7 @@
 #' \item{dataUsed: }{ The contents of the argument data restricted to the groups used}
 #' \item{params.numeric: }{ A vector with the values of the arguments Lowess.f and KernelWidth}
 #' \item{params.grouping: }{ A character vector with the values of the arguments GroupVar and Groups}
-#' \item{"ellipse.pct: }{ The value of the argument Ellipses}
+#' \item{ellipse.pct: }{ The value of the argument Ellipses}
 #' \item{analyticVars: }{ The value of the argument AnalyticVars}
 #' \item{colors:}{  A vector with the value of the argument Color}
 #' \item{data.check: }{ If Identify = T, a data frame with the information on user-identified points of interest}
@@ -162,7 +162,7 @@ fn.2dPlot <- function (doc = "fn.2dPlot", data, GroupVar, labID, Groups,
   if (!PlotByGroup) {
     if ((length(Colors)==1)&(Colors[1]=="black"))  Colors<-rep("black",length(groups))
     else {
-      if (length(Colors) != length(groups))  stop("length of specified colors must equal number of groups")
+      if (length(Colors) < length(groups))  stop("fewer colors specified than the number of groups")
     }
     #
     for (j in 1:n.pairs) {
