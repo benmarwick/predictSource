@@ -189,14 +189,15 @@ knitr::kable(CV.corr$CV, caption="Table 5.  Coefficients of variation of the ele
 
 Two- and three-dimensional scatterplots are very useful in visualizing relationships among elements.  The user can obtain these plots from the functions fn.2dPlot and fn.3dPlot, respectively.  Several sources can be shown on a single plot, with different colors identifying the sources.  If there are a large number of sources, the user can plot medians instead of points.  For two dimensional plots, the user can show additional information: Gaussian confidence ellipses for the values from each source; the convex hull of the points from each source; either of two nonparametric curves describing the relation between elements at a source, a lowess smooth or kernel smoother.  The user can also identify points of interest (e.g. outliers) on a two-dimensional plot and create a data frame containing the data yielding those points.  The function fn.2dPlot.Gauss computes test statistics for checking that a pair of elements at a source has a bivariate Gaussian distribution.  The function fn.3dPlot.rotate allows the user to rotate a three-dimensional plot.  
 
-Examples of two-dimensional scatterplots are below.  The first two show plots of two pairs of elements from source A , with 95% and 99% Gaussian confidence ellipses; the first and second include lowess and kernel smooths for the points, respectively.  The two types of smoothers show similar trends; the kernel smooths could be made less wiggly by increasing the default value (0.3) of the span parameter KernelWidth.  The next two plots show examples of all sources on one plot for strontium versus rubidium.  The first of these shows the convex hull of the points at each source, with the source symbol plotted as the median of the points.  We see, for example, that the medians at sources B and D are close to the smallest values of rubidium, indicating that, for each source, there are one or more rubidium values that are large compared to most of the values.  The second plot shows the points and confidence ellipses at each source, with colors and plotting characters identifying the sources.  Requesting this plot with Identify = T allows the user to create a data set (plot.2d$data.check) containing the data generating points that may be of interest.  The table shows the data generating five such points.  For example, the point from source E has a strontium value of 72, which is smaller than the value from any other sample from source E.
+Examples of two-dimensional scatterplots are below.  The first two show plots of two pairs of elements from source A , with 95% and 99% Gaussian confidence ellipses; the first and second include lowess and kernel smooths for the points, respectively.  The two types of smoothers show similar trends; the kernel smooths could be made less wiggly by increasing the default value (0.3) of the span parameter KernelWidth.  The next two plots show examples of all sources on one plot for strontium versus rubidium.  The first of these shows the convex hull of the points at each source, with the source symbol plotted as the median of the points.  We see, for example, that the medians at sources B and D are close to the smallest values of rubidium, indicating that, for each source, there are one or more rubidium values that are large compared to most of the values.  The second plot shows the points and confidence ellipses at each source, with colors and plotting characters identifying the sources.  Requesting this plot with Identify = T allows the user to create a data set (plot.2d$data.check) containing the data generating points that may be of interest.  Table 6 shows the data generating five such points.  For example, the point from source E has a strontium value of 72, which is smaller than the value from any other sample from source E.
 
 ```{r} 
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 plot.2d <- fn.2dPlot(data = ObsidianSources, GroupVar = "Code", labID = "ID", Groups = "A",
-          AnalyticVars = rbind(analyticVars[1:2],analyticVars[c(1,3)]), PlotEllipses=T, LowessLine=T)
+            AnalyticVars = rbind(analyticVars[1:2],analyticVars[c(1,3)], analyticVars[c(1,4)],
+            analyticVars[2:3]), PlotEllipses=T, LowessLine=T)
 
 ```
 
@@ -205,7 +206,8 @@ library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 plot.2d <- fn.2dPlot(data = ObsidianSources, GroupVar = "Code", labID = "ID", Groups = "A",
-          AnalyticVars = rbind(analyticVars[1:2],analyticVars[c(1,3)]), PlotEllipses=T, KernelSmooth=T)
+          AnalyticVars = rbind(analyticVars[1:2],analyticVars[c(1,3)], analyticVars[c(1,4)],
+          analyticVars[2:3]), PlotEllipses=T, KernelSmooth=T)
 
 ```
 ```{r} 
@@ -224,8 +226,17 @@ analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 plot.2d <- fn.2dPlot(data = ObsidianSources, GroupVar = "Code", labID = "ID", Groups = "All",
           AnalyticVars = analyticVars[1:2], PlotByGroup = F, PlotColors=T, PlotEllipses=T, LowessLine=T, Identify=T)
 data("sources.data.check")
-knitr::kable(sources.data.check,caption="Data generating identified points")
+knitr::kable(sources.data.check,caption="Table 6. Data generating identified points")
 #
 ```
+If a pair of variables has a bivariate Gaussian distribution, each variable must have a Gaussian distribution, and test statistics for a bivariate Gaussian distribution cannot have small p-values. Note that, if the bivariate distribution is not Gaussian, one of these conditions can be true (each condition is necessary but not sufficient).  The function fn.2d.Gauss() displays Q-Q plots giving the user information on whether the univariate distributions may be Gaussian.  The function also computes p-values for test statistics for univariate Gaussian distributions and for a bivariate Gaussian distribution.  These p-values are in the component named pvalues in the list returned by the function.  This function also allows users to identify points of interest in the Q-Q plots (if the parameter Identify=T), with the data frame containing the data generating the points of interest in the component named data.check.
 
-
+```{r} 
+library(karon)
+data(ObsidianSources)
+analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+ plot.2d.Gauss<-fn.2dPlot.Gauss(data=ObsidianSources, GroupVar="Code", labID="ID", Groups="A",
+    AnalyticVars=c("Rb","Sr"))
+# knitr::kable(sources.data.check,caption="Table 6. Data generating identified points")
+#
+```

@@ -95,6 +95,7 @@ fn.2dPlot.Gauss <- function (doc = "fn.2dPlot.Gauss", data, GroupVar,labID, Grou
     temp <- c(ADp1, ADp2, SWp1, SWp2, p.skew, p.kurtosis)  # return p-values
     temp
   }
+  browser()
   for (page in 1:n.pages) {
     plot.new()
     par(mfrow = c(2, 2))
