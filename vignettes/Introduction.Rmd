@@ -229,14 +229,25 @@ data("sources.data.check")
 knitr::kable(sources.data.check,caption="Table 6. Data generating identified points")
 #
 ```
-If a pair of variables has a bivariate Gaussian distribution, each variable must have a Gaussian distribution, and test statistics for a bivariate Gaussian distribution cannot have small p-values. Note that, if the bivariate distribution is not Gaussian, one of these conditions can be true (each condition is necessary but not sufficient).  The function fn.2d.Gauss() displays Q-Q plots giving the user information on whether the univariate distributions may be Gaussian.  The function also computes p-values for test statistics for univariate Gaussian distributions and for a bivariate Gaussian distribution.  These p-values are in the component named pvalues in the list returned by the function.  This function also allows users to identify points of interest in the Q-Q plots (if the parameter Identify=T), with the data frame containing the data generating the points of interest in the component named data.check.
+For a pair of variables to have a bivariate Gaussian distribution, each variable must have a univariate Gaussian distribution, and the bivariate distribution must also be Gaussian. Note that, if the bivariate distribution is not Gaussian, one of these conditions can be true (each condition is necessary but not sufficient).  The function fn.2d.Gauss() displays Q-Q plots giving the user information on whether the univariate distributions may be Gaussian. The function also computes p-values for test statistics for univariate Gaussian distributions and for a bivariate Gaussian distribution.  These p-values are in the component named pvalues in the list returned by the function.  This function also allows users to identify points of interest in the Q-Q plots (if the parameter Identify=T); the component data.check in the list returned by the function contains the data generating the points of interest.
+
+A Q-Q plot is a quantile-quantile plot of the sample quantiles for univariate data versus the theoretical quantiles for a univariate Gaussian distribution.  Therefore, if the univariate distribution is Gaussian, the points on the plot are roughly linear.  Points with the largest values that are above the trend line indicate a distribution with a short right tail; points with the smallest values that are above the trend line indicate a distribution with a short left tail.  The opposite behaviors at the extreme indicate long tails.  See e.g. Chambers et al., Chapter 6, for a discussion of Q-Q plots. 
 
 ```{r} 
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
- plot.2d.Gauss<-fn.2dPlot.Gauss(data=ObsidianSources, GroupVar="Code", labID="ID", Groups="A",
-    AnalyticVars=c("Rb","Sr"))
-# knitr::kable(sources.data.check,caption="Table 6. Data generating identified points")
+plot.2d.Gauss<-fn.2dPlot.Gauss(data=ObsidianSources, GroupVar="Code", labID="ID", Groups="A",
+    AnalyticVars=c("Rb","Zr"))
+plot.2d.Gauss<-fn.2dPlot.Gauss(data=ObsidianSources, GroupVar="Code", labID="ID", Groups="B",
+    AnalyticVars=c("Rb","Zr"))
+plot.2d.Gauss<-fn.2dPlot.Gauss(data=ObsidianSources, GroupVar="Code", labID="ID", Groups="A",
+    AnalyticVars=c("Rb","Nb"))
+plot.2d.Gauss<-fn.2dPlot.Gauss(data=ObsidianSources, GroupVar="Code", labID="ID", Groups="B",
+    AnalyticVars=c("Rb","Nb"))
+data(RbNb.pvalues)
+data(RbZr.pvalues)
+knitr::kable(RbZr.pvalues,caption="Table x.a.  P-values from test statistics for a bivariable Rb/Zr distribution.")
+knitr::kable(RbNb.pvalues,caption="Table x.a.  P-values from test statistics for a bivariable Rb/Nb distribution.")
 #
 ```

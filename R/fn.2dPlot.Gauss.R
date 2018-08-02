@@ -36,7 +36,7 @@
 #' @examples
 #' data(ObsidianSources)
 #' plot.2d.Gauss<-fn.2dPlot.Gauss(data=ObsidianSources, GroupVar="Code", labID="ID", Groups=c("A","B"),
-#'    AnalyticVars=c("Rb","Sr"))
+#'    AnalyticVars=c("Rb","Zppr"))
 #'
 #' @export
 #'
@@ -68,7 +68,6 @@ fn.2dPlot.Gauss <- function (doc = "fn.2dPlot.Gauss", data, GroupVar,labID, Grou
   fn.plot <- function() {
     temp <- data.Used[data.Used[, GroupVar] == groups[i.group],AnalyticVars]
     temp1 <- temp[, AnalyticVars[1]]
-    browser()
     qqnorm.pts<-qqnorm(temp1, main = paste(AnalyticVars[1],"source", groups[i.group]))
     qqline(temp1)
     if (Identify) {
@@ -98,16 +97,15 @@ fn.2dPlot.Gauss <- function (doc = "fn.2dPlot.Gauss", data, GroupVar,labID, Grou
   }
   i.group <- 0
   pvalues <- matrix(NA, nrow=length(groups), ncol = 6)
+  par(mfrow = c(2, 2))
   for (page in 1:n.pages) {
-    plot.new()
-    par(mfrow = c(2, 2))
     i.group <- i.group + 1
     pvalues[i.group, ] <- fn.plot()
     i.group <- i.group + 1
     if (i.group <= length(groups))
       pvalues[i.group, ] <- fn.plot()
-    browser()
-  }
+  }  # end of loop on page
+  browser()
   #    fn.Mardia.plot <- function() {
   #        temp <- data.Used[data.Used[, GroupVar] == groups[i.group],AnalyticVars[1:2]]
   #        mardia <- mardiaTest(data = temp)
@@ -137,17 +135,15 @@ fn.2dPlot.Gauss <- function (doc = "fn.2dPlot.Gauss", data, GroupVar,labID, Grou
     }
     i.group <- 0
     for (page in 1:n.pages) {
-      plot.new()
-      par(mfrow = c(2, 2))
+ #     plot.new()
       i.group <- i.group + 1
       fn.qqtest()
       i.group <- i.group + 1
       if (i.group <= length(groups))
         fn.qqtest()
       browser()
-    }
+    }  # end of loop on page
   }
-  browser()
   numeric.pvalues<-as.numeric(pvalues)
   numeric.pvalues[is.na(numeric.pvalues)] <- -1  # case of missing p-value in Mardia test
   numeric.pvalues<-round(numeric.pvalues,dig=pvalue.digits)
@@ -155,7 +151,6 @@ fn.2dPlot.Gauss <- function (doc = "fn.2dPlot.Gauss", data, GroupVar,labID, Grou
   return.pvalues<-matrix(numeric.pvalues,nrow=length(groups),ncol=6)
   dimnames(return.pvalues) <- list(groups, c(paste("AD.",AnalyticVars,sep=""), paste("SW.",AnalyticVars,sep=""),
                                              "Mardia.skew", "Mardia.kurtosis"))
-  browser()
   #
   if (substr(folder,1,1) != " ")
     if (substr(ds.pvalues,1,1) != " ") write.csv(returnname.pvalues, file = paste(folder, ds.pvalues, sep = ""))
