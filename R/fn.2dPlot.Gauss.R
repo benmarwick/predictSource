@@ -64,10 +64,11 @@ fn.2dPlot.Gauss <- function (doc = "fn.2dPlot.Gauss", data, GroupVar,labID, Grou
     n.pages <- round(0.01+length(groups)/2, dig = 0)  # number of pages (rounds up with an odd number of groups)
   #
   if (Identify) data.check<-data.Used[1,]  # set up data frame to store identified points
-  i.group <- 0
+  #
   fn.plot <- function() {
-    temp <- data.Used[data.Used[, GroupVar] == groups[i.group],AnalyticVars[1:2]]
+    temp <- data.Used[data.Used[, GroupVar] == groups[i.group],AnalyticVars]
     temp1 <- temp[, AnalyticVars[1]]
+    browser()
     qqnorm.pts<-qqnorm(temp1, main = paste(AnalyticVars[1],"source", groups[i.group]))
     qqline(temp1)
     if (Identify) {
@@ -95,7 +96,8 @@ fn.2dPlot.Gauss <- function (doc = "fn.2dPlot.Gauss", data, GroupVar,labID, Grou
     temp <- c(ADp1, ADp2, SWp1, SWp2, p.skew, p.kurtosis)  # return p-values
     temp
   }
-  browser()
+  i.group <- 0
+  pvalues <- matrix(NA, nrow=length(groups), ncol = 6)
   for (page in 1:n.pages) {
     plot.new()
     par(mfrow = c(2, 2))
