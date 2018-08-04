@@ -36,7 +36,7 @@
 #' @examples
 #' data(ObsidianSources)
 #' plot.2d.Gauss<-fn.2dPlot.Gauss(data=ObsidianSources, GroupVar="Code", labID="ID", Groups=c("A","B"),
-#'    AnalyticVars=c("Rb","Zppr"))
+#'    AnalyticVars=c("Rb","Zr"))
 #'
 #' @export
 #'
@@ -68,6 +68,8 @@ fn.2dPlot.Gauss <- function (doc = "fn.2dPlot.Gauss", data, GroupVar,labID, Grou
   fn.plot <- function() {
     temp <- data.Used[data.Used[, GroupVar] == groups[i.group],AnalyticVars]
     temp1 <- temp[, AnalyticVars[1]]
+    if (QQtest) qqtest(data = temp1, dist = "normal", drawPercentiles = T,
+                       main = paste(AnalyticVars[1],"source", groups[i.group]))
     qqnorm.pts<-qqnorm(temp1, main = paste(AnalyticVars[1],"source", groups[i.group]))
     qqline(temp1)
     if (Identify) {
@@ -76,6 +78,8 @@ fn.2dPlot.Gauss <- function (doc = "fn.2dPlot.Gauss", data, GroupVar,labID, Grou
       data.check<<-rbind(data.check,data.grp[index,])
     }
     temp2 <- temp[, AnalyticVars[2]]
+    if (QQtest) qqtest(data = temp2, dist = "normal", drawPercentiles = T,
+           main = paste(AnalyticVars[2],"source", groups[i.group]))
     qqnorm.pts<-qqnorm(temp2, main = paste(AnalyticVars[2],"source", groups[i.group]))
     qqline(temp2)
     if (Identify) {
@@ -83,6 +87,7 @@ fn.2dPlot.Gauss <- function (doc = "fn.2dPlot.Gauss", data, GroupVar,labID, Grou
       data.grp<-data.Used[data.Used[,GroupVar]==groups[i.group],]
       data.check<<-rbind(data.check,data.grp[index,])
     }
+    browser()
     ADp1 <- ad.test(temp1)$p.value
     ADp2 <- ad.test(temp2)$p.value
     SWp1 <- shapiro.test(temp1)$p.value
@@ -105,7 +110,6 @@ fn.2dPlot.Gauss <- function (doc = "fn.2dPlot.Gauss", data, GroupVar,labID, Grou
     if (i.group <= length(groups))
       pvalues[i.group, ] <- fn.plot()
   }  # end of loop on page
-  browser()
   #    fn.Mardia.plot <- function() {
   #        temp <- data.Used[data.Used[, GroupVar] == groups[i.group],AnalyticVars[1:2]]
   #        mardia <- mardiaTest(data = temp)
@@ -123,27 +127,6 @@ fn.2dPlot.Gauss <- function (doc = "fn.2dPlot.Gauss", data, GroupVar,labID, Grou
   #            fn.Mardia.plot()
   #        browser()
   #    }
-  if (QQtest) {
-    fn.qqtest <- function() {
-      temp <- data.Used[data.Used[, GroupVar] == groups[i.group],AnalyticVars[1:2]]
-      temp1 <- temp[,AnalyticVars[1]]
-      qqtest(data = temp1, dist = "normal", drawPercentiles = T,
-             main = paste(AnalyticVars[1],"source", groups[i.group]))
-      temp2 <- temp[,AnalyticVars[2]]
-      qqtest(data = temp2, dist = "normal", drawPercentiles = T,
-             main = paste(AnalyticVars[2],"source", groups[i.group]))
-    }
-    i.group <- 0
-    for (page in 1:n.pages) {
- #     plot.new()
-      i.group <- i.group + 1
-      fn.qqtest()
-      i.group <- i.group + 1
-      if (i.group <= length(groups))
-        fn.qqtest()
-      browser()
-    }  # end of loop on page
-  }
   numeric.pvalues<-as.numeric(pvalues)
   numeric.pvalues[is.na(numeric.pvalues)] <- -1  # case of missing p-value in Mardia test
   numeric.pvalues<-round(numeric.pvalues,dig=pvalue.digits)
