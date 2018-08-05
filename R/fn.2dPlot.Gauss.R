@@ -99,17 +99,13 @@ fn.2dPlot.Gauss <- function (doc = "fn.2dPlot.Gauss", data, GroupVar,labID, Grou
        else  p.skew <- NA
     temp <- c(ADp1, ADp2, SWp1, SWp2, p.skew, p.kurtosis)  # return p-values
     temp
-  }
-  i.group <- 0
+  } # end of definition of function
+  #
   pvalues <- matrix(NA, nrow=length(groups), ncol = 6)
   par(mfrow = c(2, 2))
-  for (page in 1:n.pages) {
-    i.group <- i.group + 1
+  for (i.group in 1:length(groups))
     pvalues[i.group, ] <- fn.plot()
-    i.group <- i.group + 1
-    if (i.group <= length(groups))
-      pvalues[i.group, ] <- fn.plot()
-  }  # end of loop on page
+  #
   #    fn.Mardia.plot <- function() {
   #        temp <- data.Used[data.Used[, GroupVar] == groups[i.group],AnalyticVars[1:2]]
   #        mardia <- mardiaTest(data = temp)
