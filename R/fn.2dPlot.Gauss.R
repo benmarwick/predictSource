@@ -61,7 +61,6 @@ fn.2dPlot.Gauss <- function (doc = "fn.2dPlot.Gauss", data, GroupVar,labID, Grou
                                     groups[j])
       GroupIndex[i] <- j
   }
-    n.pages <- round(0.01+length(groups)/2, dig = 0)  # number of pages (rounds up with an odd number of groups)
   #
   if (Identify) data.check<-data.Used[1,]  # set up data frame to store identified points
   #
@@ -106,23 +105,6 @@ fn.2dPlot.Gauss <- function (doc = "fn.2dPlot.Gauss", data, GroupVar,labID, Grou
   for (i.group in 1:length(groups))
     pvalues[i.group, ] <- fn.plot()
   #
-  #    fn.Mardia.plot <- function() {
-  #        temp <- data.Used[data.Used[, GroupVar] == groups[i.group],AnalyticVars[1:2]]
-  #        mardia <- mardiaTest(data = temp)
-  #        mvnPlot(mardia, type = "persp")
-  #        mvnPlot(mardia, type = "contour")
-  #    }
-  #    i.group <- 0
-  #   for (page in 1:n.pages) {
-  #        plot.new()
-  #        par(mfrow = c(2, 2))
-  #        i.group <- i.group + 1
-  #        fn.Mardia.plot()
-  #        i.group <- i.group + 1
-  #        if (i.group <= length(groups))
-  #            fn.Mardia.plot()
-  #        browser()
-  #    }
   numeric.pvalues<-as.numeric(pvalues)
   numeric.pvalues[is.na(numeric.pvalues)] <- -1  # case of missing p-value in Mardia test
   numeric.pvalues<-round(numeric.pvalues,dig=pvalue.digits)

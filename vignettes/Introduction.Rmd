@@ -233,6 +233,10 @@ For a pair of variables to have a bivariate Gaussian distribution, each variable
 
 A Q-Q plot is a quantile-quantile plot of the sample quantiles for univariate data versus the theoretical quantiles for a univariate Gaussian distribution.  Therefore, if the univariate distribution is Gaussian, the points on the plot are roughly linear.  Points with the largest values that are above the trend line indicate a distribution with a short right tail; points with the smallest values that are above the trend line indicate a distribution with a short left tail.  The opposite behaviors at the extreme indicate long tails.  See e.g. Chambers et al., Chapter 6, for a discussion of Q-Q plots. 
 
+There are many statistical tests for univariate and bivariate Gaussian distributions.  The univariate tests have variable power against different violations of the Gaussian assumption.  The fn.2dPlot.Gauss() function implements two of the univariate tests, the Anderson-Darling and the Shapiro-Wilk tests.  Properties and definitions of many tests are in D’Agostino and Stephens, Chapter 9, Tests for the Normal Distribution.  In that chapter, D’Agostino states “the Anderson-Darling A2 test…is the EDF test we recommend for us[e]” (page 372) and “The most powerful EDF test appears to be the Anderson-Darling A2 ….  It is at times presented as being similar in power to the Shapiro-Wilk W test.” (page 404).  This function implements those two tests in a table of p-values, in columns with names AD.variable_name and SW.variable_name, respectively.  The function implements Mardia's test for a bivariate Gaussian distribution based on skewness and kurtosis (D'Agostino and Stephens, page 409) using the mvn() function in the user-contributed package MVN.  The mvn() function may fail to return a p-value for one or both of the Mardia tests; the documentation for the function does not state the conditions under which this may happen.  The p-values for the tests are in the component named pvalues in the list returned by the function; examples are in Tables 7a and 7b, below.    
+
+Q-Q plots describing the conformity of univariate Gaussian distributions for the bivariate rubidium/zirconium and rubidium/niobium bivariate distributions are below.  It is instructive to compare the Q-Q plots with and without simulation, and to compare these with the p-values in Tables 7a and 7b.
+
 ```{r} 
 library(karon)
 data(ObsidianSources)
@@ -247,7 +251,7 @@ plot.2d.Gauss<-fn.2dPlot.Gauss(data=ObsidianSources, GroupVar="Code", labID="ID"
     AnalyticVars=c("Rb","Nb"))
 data(RbNb.pvalues)
 data(RbZr.pvalues)
-knitr::kable(RbZr.pvalues,caption="Table x.a.  P-values from test statistics for a bivariable Rb/Zr distribution.")
-knitr::kable(RbNb.pvalues,caption="Table x.a.  P-values from test statistics for a bivariable Rb/Nb distribution.")
+knitr::kable(RbZr.pvalues,caption="Table 7.a.  P-values from test statistics for a bivariable Rb/Zr distribution.")
+knitr::kable(RbNb.pvalues,caption="Table 7.b.  P-values from test statistics for a bivariable Rb/Nb distribution.")
 #
 ```
