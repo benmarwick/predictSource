@@ -97,7 +97,7 @@ fn.2dPlot <- function (doc = "fn.2dPlot", data, GroupVar, labID, Groups,
   #   plots by Group
   #
   if (PlotByGroup) {
-    n.pages <- round(0.01+length(groups)/2, dig = 0)  # number of pages (rounds up with an odd number of groups)
+#    n.pages <- round(0.01+length(groups)/2, dig = 0)  # number of pages (rounds up with an odd number of groups)
     #
     fn.plot <- function(group,group.j, groupName) {
       temp <- data.Used[(data.Used[, GroupVar] == groups[group]),]
@@ -147,21 +147,27 @@ fn.2dPlot <- function (doc = "fn.2dPlot", data, GroupVar, labID, Groups,
       }
       if (Identify)  data.check
     }
+    par(mfrow = c(2, 2))
+    i.plot<-0
     for (i.group in 1:length(groups)) {
-      par(mfrow = c(2, 2))
-      n.page<-0
-      for (k in 1:n.pairs) {
-        n.page<-n.page+1
-        if (n.page > 4) {
-          browser()
-          plot.new()
-          n.page<-0
-        }
+
+#      n.page<-0
+       for (k in 1:n.pairs) {
+#        n.page<-n.page+1
+#        if (n.page > 4) {
+#          browser()
+#          plot.new()
+#          n.page<-0
+#        }
         if (!Identify)  fn.plot(group=i.group,group.j=k,groupName=groups[i.group])
         if ( Identify)  data.check<-fn.plot(group=i.group,group.j=k,groupName=groups[i.group])
-      }
-      browser()
-    }
+        i.plot <- i.plot + 1
+        if ((i.plot == 4) | (i.group == length(groups))) {
+          i.plot <- 0
+          browser()
+          }
+       } # end of loop on k
+    }  # end of loop on i.group
   }  # end of code for plotting by group
   #
   #  all groups on one plot

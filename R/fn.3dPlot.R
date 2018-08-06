@@ -52,7 +52,7 @@ fn.3dPlot <-
            SymbolSize = 0.7) {
 
     library(scatterplot3d)
-    library(rgl)
+#    library(rgl)
     #
     if ((Groups[1] != " ") & (Groups[1] != "All")) {
       Use.rows <- (data[, GroupVar] %in% Groups)
