@@ -4,23 +4,39 @@
 \alias{fn.pca}
 \title{fn.pca}
 \usage{
-fn.pca(doc = "fn.pca", data, GroupVar, Groups, AnalyticVars, ScreePlot = F,
-  BoxPlots = F, PlotPoints = T, PlotEllipses = T,
-  legendLoc = "topright", PlotHull = F, PlotMedians = F,
-  Ellipses = c(0.95, 0.99), PlotColors = T, Colors = c("red", "black",
-  "blue", "green", "purple"), Identify = F, folder = " ", ds.weights,
-  ds.importance, ds.check)
+fn.pca(doc = "fn.pca", data, labID = " ", GroupVar, Groups, AnalyticVars,
+  ScreePlot = F, BoxPlots = F, pcPlot = T, PlotPoints = T,
+  PlotEllipses = T, legendLoc = "topright", PlotHull = F,
+  PlotMedians = F, Ellipses = c(0.95, 0.99), PlotColors = T,
+  Colors = c("red", "black", "blue", "green", "purple"), Identify = F,
+  digits = 3, folder = " ", ds.weights, ds.importance, ds.check)
 }
 \arguments{
 \item{doc:}{documentation in the list returned, default is the function name}
 
 \item{data:}{R matrix or data frame containing the data to be analyzed}
 
+\item{labID:}{optional name for an ID, default is " " if no ID}
+
 \item{GroupVar:}{name for variable defining grouping; if " ", no grouping}
 
 \item{Groups:}{vector of values of group variable for which plots are to be done. if "All": use all groups; if " ": no grouping}
 
 \item{AnalyticVars:}{vector of names (character values) of analytic results}
+
+\item{ScreePlot:}{logical, if T create a scree plot, default is F}
+
+\item{BoxPlots:}{logical, if T, create box plots of the first two components, default is F}
+
+\item{pcPlot:}{logical, if T (the default), create the plot of the first two components}
+
+\item{PlotPoints:}{logical, if T (the fault) and pcPlot=T, plot the points for the first two components}
+
+\item{PlotEllipses:}{logical, if T (the default), plot the confidence ellipse or ellipses for each group}
+
+\item{PlotHull:}{logical, if T, plot the convex hull for each group, default is F}
+
+\item{PlotMedians:}{logical, if T, plot the symbol for each group at the median point for that group, default is F}
 
 \item{Ellipses:}{value or vector of proportions for confidence ellipses default is c(.95,.99) to produce 95\% and 99\% confidence ellipses}
 
@@ -31,6 +47,8 @@ fn.pca(doc = "fn.pca", data, GroupVar, Groups, AnalyticVars, ScreePlot = F,
 \item{Colors:}{vector of color names}
 
 \item{Identify:}{if T, the user can identify points of interest in plots; information on these points is saved to a file; default is F}
+
+\item{digits:}{significant digits to return in objects in data frames, default is 3}
 
 \item{folder:}{folder in which excel files are to be stored}
 
@@ -49,7 +67,7 @@ The function produces a plot of the first two principal components, the contents
   \item{params.logical:}  {A vector with the values of the arguments ScreePlot,BoxPlots,PlotPoints,PlotEllipses,PlotHull,PlotMedians,PlotColors}
   \item{analyticVars:}{  A vector with the value of the argument AnalyticVars}
   \item{ellipse.pct:}{  The value of the argument Ellipses}
-  \item{Summary:}{  A list including the percent of variation explained by each principal component and the cumulative percent explained}
+  \item{variances:}{  A data frame including the percent of variation explained by each principal component and the cumulative percent explained}
   \item{weights:}{  A data frame with the principal component weights for each observation}
   \item{Predicted:}{  A data frame with the predicted values for each principal component, plus the value of Groups and
   an integer GroupIndex (with values 1:number of Groups)}
@@ -72,6 +90,6 @@ To go to the next pane, right click and select "Stop" in base R; click on "Finis
 \examples{
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-save.pca <- fn.pca(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars)
+save.pca <- fn.pca(data=ObsidianSources, labID="ID", GroupVar="Code",Groups="All", AnalyticVars=analyticVars)
 
 }

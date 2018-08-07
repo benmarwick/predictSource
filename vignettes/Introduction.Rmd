@@ -41,7 +41,7 @@ http://www.swxrflab.net/labfees.htm#QuanX%20Energy-Dispersive%20X-Ray%20Fluoresc
 
 The five obsidian sources are coded as A, B, C, D, and E in the source and artifact data sets (ObsidianSources and ObsidianArtifacts, respectively).  The source (or predicted source for an artifact) is in the character-valued variable Code.  Each data set contains the variables Code, the five elements (as numeric variables, with variable names the element symbols), and a character-valued variable ID containing an artificial lab ID.  For example, the first few rows of ObsidianSources are in Table 1.
 
-```{r}
+```{r }
 library(karon)
 data(ObsidianSources)
 knitr::kable(ObsidianSources[1:6,], caption="Table 1.  Sample of the data in the file ObsidianSources.")
@@ -80,7 +80,7 @@ fn.CheckData(data=analysisFile, CheckDupVars, GroupVar, Groups, AnalyticVars)
 
 to obtain basic descriptive statistics and carry out several data checks (number of observations, number of missing values, number of negative values, duplicate observations, and descriptive statistics, by group and analysis variable).  For the data set ObsidianSources, there are no negative values for the five elements of interest and no duplicate observations.  The numbers of observations by source and element are in Table 2.
 
-```{r}
+```{r }
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
@@ -90,7 +90,7 @@ knitr::kable(CheckData$Nvalues, caption="Table 2.  Number of values for each ele
 ```
 An example of the descriptive statistics is in Table 3. 
 
-```{r} 
+```{r } 
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
@@ -111,7 +111,7 @@ the boxes
 
 Now look at the figure.  We see immediately that there is little variation among the values of an element at a source. There are a few outliers, but they are not far from the range of adjacent values.  There is considerable variation in the distributions of these alements among the five Jemez sources, so it should be possible to distinguish these sources using these elements.  
 
-```{r} 
+```{r  echo=FALSE, results='hide',message=FALSE} 
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr")
@@ -120,7 +120,7 @@ boxPlots<-fn.BoxPlots(data=ObsidianSources, GroupVar="Code",                Grou
 ```
 We can also create side-by-side box plots of the sources and the artifacts assigned to the sources, in order to see how well the distributions of the elements from artifacts correspond to the distributions of the corresponding sources.  The plot below shows this comparison for rubidium and niobium; the code for the artifact is .A added to the code for the assigned source (e.g., the artifacts assigned to source A have the code A.A).  We see that, for the artifacts assigned to sources A and E, the artifact values for rubidium are larger than the corresponding source values and also are more variable.  For one artifact assigned to source D, the niobium value is a clear outlier, suggesting a misclassified artifact.  For the artifacts assigned to source E, the upper quartile for niobium is only slightly larger than the median, resulting in the unusual appearance of the box.
 
-```{r} 
+```{r echo=FALSE, results='hide',message=FALSE } 
 library(karon)
 data(ObsidianSources)
 data(ObsidianArtifacts)
@@ -143,7 +143,7 @@ The plot is obtained with the function `fn.PairsPlot()` and the arguments data, 
 
 The plot below of the relations between elements at source A shows that the relationships between rubidium and ytterbium, and between rubidium and zirconium, are roughly linear, but that, roughly, there is no relation between the values of strontium and those of ytterbium and zirconium.  Note that it is necessary to look at both scatterplots of the relation between a pair of variables, as limited variation in one variable and dependence of the location of the largest and smallest values of one variable can make there seem to be a relationship (see the plots of strontium as the ordinate versus ytterbium or zirconium).  
 
-```{r} 
+```{r echo=FALSE, results='hide',message=FALSE } 
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr")
@@ -157,7 +157,7 @@ Numerical estimates of the associations between pairs of analytic variables at e
 
 Table 4 contains the correlation coefficient estimates for all pairs of variables at each source.  Each estimate describes how close the relation between a pair of variables is to strictly monotone.  If a relationship is roughly monotone, the correlation coefficient does not describe how rapidly one variable changes with respect to the other (the correlation coefficient for a linear relationship can be large even if the slope of the line describing the relationship is small).  For example, the estimated correlation between strontium and zirconium at source A is 0.51, even though the pairs plot of these elements with strontium as the ordinate shows that strontium increases slowly as zirconium increases.  The correlation table is very useful for summarizing relationships between pairs of elements at the sources: it is clear that these relationships vary substantially among these sources.
 
-```{r} 
+```{r } 
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
@@ -167,7 +167,7 @@ knitr::kable(CV.corr$corr, caption="Table 4.  Spearman correlations among pairs 
 ```
 Table 5 shows the coefficients of variation for each element at each source.  Each standard deviation is small compared to the corresponding mean (each coefficient of variation is at most 0.11, and most are 0.05 or less) except for strontium at sources C and D.  The relatively large values of the coefficient of variation for strontium at those sources is a result of the small mean strontium values at those sources: the table of descriptive statistics (not shown) gives mean values for strontium of 5 and 10, at C and D, respectively, with ranges of 0 to 8 and 2 to 11, respectively.
 
-```{r} 
+```{r } 
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
@@ -186,7 +186,7 @@ The next two plots show examples of all sources on one plot for zirconium versus
 
 The confidence ellipses provide information on whether the distributions of a pair of elements differ between or among sources.  If a bivariate distribution is Gaussian and 99% confidence ellipses do not overlap between or among sources, it is plausible that the distributions of a pair of elements between or among sources do not overlap.  The function fn.2dPlot.Gauss(), discussed below, provides plots and tests to evaluate the hypothesis that a bivariate distribution is Gaussian.  To anticipate, we find that the rubidium/zirconium distribution is likely to be Gaussian at source A but not at source B.  Note that the source values roughly fill the 95% confidence ellipse at source A, but those values tend to cluster at source B, and two lie approximately on the boundary of the 99% confidence ellipse.  
 
-```{r} 
+```{r echo=FALSE, results='hide',message=FALSE} 
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
@@ -194,7 +194,7 @@ plot.2d <- fn.2dPlot(data = ObsidianSources, GroupVar = "Code", labID = "ID", Gr
                 AnalyticVars = rbind(analyticVars[c(1,4)],analyticVars[c(1,5)]), PlotEllipses=T, LowessLine=T)
 ```
 
-```{r echo=FALSE} 
+```{r echo=FALSE, results='hide',message=FALSE} 
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
@@ -202,7 +202,7 @@ plot.2d <- fn.2dPlot(data = ObsidianSources, GroupVar = "Code", labID = "ID", Gr
           AnalyticVars = rbind(analyticVars[c(1,4)], analyticVars[c(1,5)]), PlotEllipses=T, KernelSmooth=T)
 ```
 
-```{r echo=FALSE} 
+```{r echo=FALSE, results='hide',message=FALSE} 
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
@@ -210,12 +210,15 @@ plot.2d <- fn.2dPlot(data = ObsidianSources, GroupVar = "Code", labID = "ID", Gr
           AnalyticVars = analyticVars[1:2], PlotByGroup=F, PlotPoints=F, PlotMedians=T, PlotHulls=T)
 ```
 
-```{r echo=FALSE} 
+```{r echo=FALSE, results='hide',message=FALSE} 
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 plot.2d <- fn.2dPlot(data = ObsidianSources, GroupVar = "Code", labID = "ID", Groups = "All",
-          AnalyticVars = rbind(analyticVars[c(1,4)], analyticVars[c(1,5)]), PlotByGroup = F, PlotColors=T, PlotEllipses=T, LowessLine=T,    Identify=T)
+          AnalyticVars = rbind(analyticVars[c(1,4)], analyticVars[c(1,5)]), PlotByGroup = F, PlotColors=T, PlotEllipses=T, LowessLine=T, Identify=T)
+```
+
+```{r}
 data("sources.data.check")
 knitr::kable(sources.data.check,caption="Table 6. Data generating identified points.")
 #
@@ -225,7 +228,7 @@ The function fn.3dPlot() creates one or more three-dimensional scatterplots.  If
 
 file:///C:/Consulting/Sourcing/Vignette/scatterRbSrY.doc
 
-```{r echo=FALSE}
+```{r echo=FALSE, results='hide',message=FALSE}
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
@@ -238,6 +241,8 @@ plot3d<-fn.3dPlot(data=ObsidianSources, GroupVar="Code", Groups=c("A","B","C"), 
 For a pair of variables to have a bivariate Gaussian distribution, each variable must have a univariate Gaussian distribution, and the bivariate distribution must also be Gaussian. Note that, if the bivariate distribution is not Gaussian, one of these conditions can be true (each condition is necessary but not sufficient).  The function fn.2d.Gauss() displays Q-Q plots giving the user information on whether the univariate distributions may be Gaussian. The function also computes p-values for test statistics for univariate Gaussian distributions and for a bivariate Gaussian distribution.  These p-values are in the component named pvalues in the list returned by the function.  This function also allows users to identify points of interest in the Q-Q plots (if the parameter Identify=T); the component data.check in the list returned by the function contains the data generating the points of interest.
 
 A Q-Q plot is a quantile-quantile plot of the sample quantiles for univariate data versus the theoretical quantiles for a univariate Gaussian distribution.  Therefore, if the univariate distribution is Gaussian, the points on the plot are roughly linear.  Points with the largest values that are above the trend line indicate a distribution with a short right tail; points with the smallest values that are above the trend line indicate a distribution with a short left tail.  The opposite behaviors at the extreme indicate long tails.  See e.g. Chambers et al., Chapter 6, for a discussion of Q-Q plots. 
+
+In addition to the standard Q-Q plot, the fn.2dPlot.Gauss() function implements a more informative plot.  To obtain this plot, a large number (by default, 1000) Gaussian distributions are simulated from the observed mean and variance of a data set.  The upper and lower 95% and 99% confidence bands for the points in the simulated Q-Q plots are computed and plotted, along with the observed points (in blue).  Observed points that fall within the 95% bands (and perhaps the 99% bands) should not be regarded as unusual.  Thus, the simulated plot figure provides information on whether a point that appears to depart from the trend line is unusual.  The simulated Q-Q plot is computed from the user-contributed function qqtest(); see Oldfield for a discussion and details.  The fn.2d.Gauss() function produces the standard and simulation Q-Q plots side-by-side for each data set.
 
 There are many statistical tests for univariate and bivariate Gaussian distributions.  The univariate tests have variable power against different violations of the Gaussian assumption.  The fn.2dPlot.Gauss() function implements two of the univariate tests, the Anderson-Darling and the Shapiro-Wilk tests.  Properties and definitions of many tests are in D’Agostino and Stephens, Chapter 9, Tests for the Normal Distribution.  In that chapter, D’Agostino states “the Anderson-Darling A2 test…is the EDF test we recommend for us[e]” (page 372) and “The most powerful EDF test appears to be the Anderson-Darling A2 ….  It is at times presented as being similar in power to the Shapiro-Wilk W test.” (page 404).  The p-values for those two tests are in a table produced by this function, in columns with names AD.variable_name and SW.variable_name, respectively.  The table also contains the p-values from Mardia's test for a bivariate Gaussian distribution based on skewness and kurtosis (D'Agostino and Stephens, page 409) using the mvn() function in the user-contributed package MVN.  The mvn() function may fail to return a p-value for one or both of the Mardia tests; the documentation for mvn() does not state the conditions under which this may happen.  The p-values for the tests are in the component named pvalues in the list returned by the function; examples are in Tables 7a and 7b, below.    
 
@@ -254,7 +259,7 @@ At source A, niobium has one small value, but the univariate test statistics hav
 
 We already know that rubidium does not have a Gaussian distribution at source B.  Since niobium has many samples with equal values, it is clear that niobium does not have a Gaussian distribution (this is confirmed by the p-values from the univariate tests).  Therefore, even though the p-values from the tests for a bivariate Gaussian distribution are large, these elements do not have a bivariate Gaussian distribution: "large" p-values from the bivariate tests are a necessary condition for bivariate normality but not sufficient. 
 
-```{r} 
+```{r echo=FALSE, results='hide',message=FALSE } 
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
@@ -266,6 +271,9 @@ plot.2d.Gauss<-fn.2dPlot.Gauss(data=ObsidianSources, GroupVar="Code", labID="ID"
     AnalyticVars=c("Rb","Nb"))
 plot.2d.Gauss<-fn.2dPlot.Gauss(data=ObsidianSources, GroupVar="Code", labID="ID", Groups="B",
     AnalyticVars=c("Rb","Nb"))
+```
+
+```{r}
 data(RbNb.pvalues)
 data(RbZr.pvalues)
 knitr::kable(RbZr.pvalues,caption="Table 7.a.  P-values from test statistics for a bivariable Rb/Zr distribution.")
@@ -274,4 +282,31 @@ knitr::kable(RbNb.pvalues,caption="Table 7.b.  P-values from test statistics for
 ```
 ## Principal component analysis
 
-Principal component analysis is a standard method implementing dimension reduction in order to create one or more two-dimensional plots to evaluate the separation of groups based on quantitative variables.
+Principal component analysis is a standard method implementing dimension reduction in order to create one or more two-dimensional plots to evaluate the separation of groups based on quantitative variables.  The function fn.pca() in this package does a principal components analysis after standardizing the data (so that each variable has mean zero and variance 1), plots the first two principal components (with the options in in fn.2dPlot()), and returns a list with the computed values of interest (defined below).  The user can also produce a scree plot, showing the variances for each principal component, and, if the analysis is by group, box plots of the values of the component for each group for the first two components.  An option for the principal components plot is to show confidence ellipses around the points from each group (source).  As in fn.2dPlot.Gauss(), the parameter Identify=T in this function allows the user to identify points of interest.  The function fn.pca.Gauss() provides information to evaluate whether the points from each group have a bivariate Gaussian distribution, with the same information provided by the function fn.2dPlot.Gauss().
+
+The function returns a list with numerical information on the analysis.  The component named variances is a data frame with the standard deviation, proportion of total variance, and cumulative proportion of variance for each component (see Table 8).  The component named weights contains, for each component, the weight for each predictor variable (for the obsidian data, each element) used to compute the value of the component for that variable; these weights are standardized so that the sum of the squares of the weights for each component is 1 (see Table 9 for the results for this analysis).  The components named Predicted and DataPlusPredicted contain the predicted principal component values and the original data plus the predicted values, respectively, for the data used in the analysis (see Table 10 for a partial table for the obsidian source data).  In addition, if the user identifies points of interest, the data generating those points are in the component data.check. 
+
+For the obsidian data, the scree plot (Figure x) shows that, of the five principal components, the first two components explain nearly all the variance in the source data.  Table 8 shows that the first two components explain 96% of the total variance.  A common rule of thumb is that the components used should explain at least 90% of the total variance.  Therefore, we should be able to draw valid conclusions using the first two components.
+
+The box plots (Figure y) show that the first component separates the five Jemez sources, except possibly for sources A and D (their box plots overlap slightly).  The box plots for A and D are widely separated by the second component: we should be able to separate the sources in a principal components analysis.
+
+The table of weights (Table 9) shows that the first principal component is essentially strontium minus the average of the other four elements (all weights for a component can be multiplied by -1 without affecting the results).  The second component is harder to describe, but strontium and zirconium have the greatest weights.
+
+Figure z containts the plot of the first two principal components by group with 95% and 99% confidence ellipses.  The groups are very well separated, so the fact that the confidence ellipses do not overlap is not necessary to conclude that we can separate the sources based on the principal component analysis (we would need to be concerned about the validity of the assumption that the bivariate distribution is Gaussian at each source if we wanted to use the confidence ellipses).  Note that sources A and D do overlap with respect to the first component, as predicted by the box plot, and that A and E nearly overlap, as shown by that plot.
+
+```{r  echo=FALSE, results='hide',message=FALSE}
+library(karon)
+data(ObsidianSources)
+analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+save.pca <- fn.pca(data=ObsidianSources, labID="ID", GroupVar="Code",Groups="All", AnalyticVars=analyticVars, pcPlot=F, ScreePlot=T)
+save.pca <- fn.pca(data=ObsidianSources, labID="ID", GroupVar="Code",Groups="All", AnalyticVars=analyticVars, pcPlot=F, BoxPlots=T)
+save.pca <- fn.pca(data=ObsidianSources, labID="ID", GroupVar="Code",Groups="All", AnalyticVars=analyticVars) 
+```
+```{r}
+save.pca <- fn.pca(data=ObsidianSources, labID="ID", GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
+                   pcPlot=F)
+knitr::kable(save.pca$Summary$importance, caption="Table 8.  Proportions of variance explained.")
+knitr::kable(save.pca$weights, caption="Table 9.  Weights for each principal component.")
+knitr::kable(head(save.pca$DataPlusPredicted), caption="Table 10.  Original data and principal components.")
+#
+```

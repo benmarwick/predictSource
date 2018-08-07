@@ -4,14 +4,23 @@
 #'
 #' @param doc: documentation in the list returned, default is the function name
 #' @param data: R matrix or data frame containing the data to be analyzed
+#' @param labID: optional name for an ID, default is " " if no ID
 #' @param GroupVar: name for variable defining grouping; if " ", no grouping
 #' @param Groups: vector of values of group variable for which plots are to be done. if "All": use all groups; if " ": no grouping
 #' @param AnalyticVars: vector of names (character values) of analytic results
+#' @param ScreePlot:  logical, if T create a scree plot, default is F
+#' @param BoxPlots:  logical, if T, create box plots of the first two components, default is F
+#' @param pcPlot:  logical, if T (the default), create the plot of the first two components
+#' @param PlotPoints:  logical, if T (the fault) and pcPlot=T, plot the points for the first two components
+#' @param PlotEllipses: logical, if T (the default), plot the confidence ellipse or ellipses for each group
+#' @param PlotHull:  logical, if T, plot the convex hull for each group, default is F
+#' @param PlotMedians:  logical, if T, plot the symbol for each group at the median point for that group, default is F
 #' @param Ellipses: value or vector of proportions for confidence ellipses default is c(.95,.99) to produce 95\% and 99\% confidence ellipses
 #' @param legendLoc: character, location of legend for a plot with points default is "topright", alternatives are combinations of "top", "bottom", "right", "left"
 #' @param PlotColors: if T, use list of colors in Colors for points; if F, plot points as black
 #' @param Colors: vector of color names
 #' @param Identify: if T, the user can identify points of interest in plots; information on these points is saved to a file; default is F
+#' @param digits: significant digits to return in objects in data frames, default is 3
 #' @param folder: folder in which excel files are to be stored
 #' @param ds.weights: excel file with principal component loadings, extension.csv
 #' @param ds.importance: excel file with percent of variation explained, extension.csv
@@ -30,7 +39,7 @@
 #'   \item{params.logical:}  {A vector with the values of the arguments ScreePlot,BoxPlots,PlotPoints,PlotEllipses,PlotHull,PlotMedians,PlotColors}
 #'   \item{analyticVars:}{  A vector with the value of the argument AnalyticVars}
 #'   \item{ellipse.pct:}{  The value of the argument Ellipses}
-#'   \item{Summary:}{  A list including the percent of variation explained by each principal component and the cumulative percent explained}
+#'   \item{variances:}{  A data frame including the percent of variation explained by each principal component and the cumulative percent explained}
 #'   \item{weights:}{  A data frame with the principal component weights for each observation}
 #'   \item{Predicted:}{  A data frame with the predicted values for each principal component, plus the value of Groups and
 #'   an integer GroupIndex (with values 1:number of Groups)}
@@ -45,14 +54,14 @@
 #' @examples
 #' data(ObsidianSources)
 #' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-#' save.pca <- fn.pca(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars)
+#' save.pca <- fn.pca(data=ObsidianSources, labID="ID", GroupVar="Code",Groups="All", AnalyticVars=analyticVars)
 #'
 #' @export
 #'
-fn.pca <-  function(doc = "fn.pca", data, GroupVar, Groups, AnalyticVars, ScreePlot = F, BoxPlots = F, PlotPoints = T,
-                    PlotEllipses = T, legendLoc="topright", PlotHull = F, PlotMedians = F, Ellipses = c(.95, .99),
-                    PlotColors = T, Colors = c("red","black","blue","green","purple"), Identify = F,
-                    folder = " ", ds.weights, ds.importance, ds.check) {
+fn.pca <-  function(doc = "fn.pca", data, labID=" ", GroupVar, Groups, AnalyticVars, ScreePlot = F, BoxPlots = F,
+                    pcPlot = T,PlotPoints = T, PlotEllipses = T, legendLoc="topright", PlotHull = F, PlotMedians = F,
+                    Ellipses = c(.95, .99), PlotColors = T, Colors = c("red","black","blue","green","purple"),
+                    Identify = F, digits=3, folder = " ", ds.weights, ds.importance, ds.check) {
    #
   #  define functions to plot convex hulls and ellipses
     fn.convexhull <- function(Code) {
@@ -90,7 +99,7 @@ fn.pca <-  function(doc = "fn.pca", data, GroupVar, Groups, AnalyticVars, ScreeP
     #
     pca <- prcomp(data.Used[, AnalyticVars], scale = TRUE)
     if (ScreePlot == T) {
-      plot(pca, main = " ", xlab = "Principal component")
+      plot(pca, main = "Scree plot", xlab = "Principal component")
       browser()
     }
     importance.pca <- summary(pca)$importance
@@ -106,7 +115,7 @@ fn.pca <-  function(doc = "fn.pca", data, GroupVar, Groups, AnalyticVars, ScreeP
     predict.pc2 <- predict(pca)[, 2]
     if (GroupVar[1] == " ") {
       plot(predict.pc1, predict.pc2, xlab = "Component 1",
-           ylab = "Component 2")
+           ylab = "Component 2", main = "Principal component plot for all groups combined")
       Predicted <- predict(pca)
       browser()
     }
@@ -121,21 +130,19 @@ fn.pca <-  function(doc = "fn.pca", data, GroupVar, Groups, AnalyticVars, ScreeP
                                                              GroupVar]), GroupIndex = GroupIndex, predict(pca))
       if (BoxPlots == T) {
         par(mfrow = c(1, 2))
-        plot(Predicted[, c("group", "PC1")], notch = T, main = "first PC")
-        plot(Predicted[, c("group", "PC2")], notch = T, main = "second PC")
+        plot(Predicted[, c("group", "PC1")], notch = T, main = "Box plots by group: first PC")
+        plot(Predicted[, c("group", "PC2")], notch = T, main = "Box plots by group: second PC")
         browser()
       }
-      plot.new()
+      if (pcPlot == T) {
       par(mfrow=c(1,1))
       if (PlotEllipses == F)
-        plot(x = range(Predicted[, "PC1"]), y = range(Predicted[,
-                                                                "PC2"]), type = "n", xlab = "first PC", ylab = "second PC")
+        plot(x = range(Predicted[, "PC1"]), y = range(Predicted[,"PC2"]), type = "n", xlab = "first PC",
+             ylab = "second PC", main = "Principal components plot")
       if (PlotEllipses == T)
-        plot(x = c(min(Predicted[, "PC1"], na.rm = T) - 1,
-                   max(Predicted[, "PC1"], na.rm = T) + 1), y = c(min(Predicted[,
-                                                                                "PC2"], na.rm = T) - 1, max(Predicted[, "PC2"],
-                                                                                                            na.rm = T) + 1), type = "n", xlab = "first PC",
-             ylab = "second PC")
+        plot(x = c(min(Predicted[, "PC1"], na.rm = T) - 1, max(Predicted[, "PC1"], na.rm = T) + 1),
+             y = c(min(Predicted[,"PC2"], na.rm = T) - 1, max(Predicted[, "PC2"], na.rm = T) + 1),
+             type = "n", xlab = "first PC", ylab = "second PC", main = "Principal components plot")
       if (PlotPoints == T) {
         if (PlotColors == T)
           points(x = Predicted[, "PC1"], y = Predicted[,
@@ -173,6 +180,7 @@ fn.pca <-  function(doc = "fn.pca", data, GroupVar, Groups, AnalyticVars, ScreeP
         text(x = medians[, "PC1"], y = medians[, "PC2"],
              labels = groups, cex = 0.75, adj = 0.5)
       }
+      }
     }
     if (GroupVar[1] == " ")
       DataPlusPredicted <- data.frame(data.Used, Predicted)
@@ -190,6 +198,15 @@ fn.pca <-  function(doc = "fn.pca", data, GroupVar, Groups, AnalyticVars, ScreeP
     params.logical<-c(ScreePlot,BoxPlots,PlotPoints,PlotEllipses,PlotHull,PlotMedians,PlotColors)
     names(params.logical)<-c("ScreePlot","BoxPlots","PlotPoints","PlotEllipses","PlotHull","PlotMedians","PlotColors")
     #
+    Predicted <- Predicted[,-2]  # remove GroupIndex
+    if (labID != " ") DataPlusPredicted <- DataPlusPredicted[,-(3+length(analyticVars))]
+      else  DataPlusPredicted <- DataPlusPredicted[,-(2+length(analyticVars))]#  remove GroupIndex
+    pcNames <- colnames(Predicted)[-1]
+    Predicted[,pcNames] <- round(Predicted[,pcNames], dig = digits)
+    DataPlusPredicted[,pcNames] <- round(DataPlusPredicted[,pcNames], dig = digits)
+    weights <- round(weights,dig = digits)
+    variances <- round(importance.pca, dig = digits)
+    #
     if ((substr(folder,1,1) == " ") & (!Identify))
       out<-list(usage=fcn.date.ver,
                 dataUsed = data.Used,
@@ -197,7 +214,7 @@ fn.pca <-  function(doc = "fn.pca", data, GroupVar, Groups, AnalyticVars, ScreeP
                 params.logical = params.logical,
                 params.grouping = params.grouping,
                 ellipse.pct = Ellipses,
-                Summary = summary(pca),
+                variances = variances,
                 weights = weights,
                 Predicted = Predicted,
                 DataPlusPredicted = DataPlusPredicted)
@@ -208,7 +225,7 @@ fn.pca <-  function(doc = "fn.pca", data, GroupVar, Groups, AnalyticVars, ScreeP
                 params.logical = params.logical,
                 params.grouping = params.grouping,
                 ellipse.pct = Ellipses,
-                Summary = summary(pca),
+                variances = variances,
                 weights = weights,
                 Predicted = Predicted,
                 DataPlusPredicted = DataPlusPredicted,
@@ -219,7 +236,7 @@ fn.pca <-  function(doc = "fn.pca", data, GroupVar, Groups, AnalyticVars, ScreeP
                 analyticVars=AnalyticVars,
                 params.grouping=params.grouping,
                 ellipse.pct=Ellipses,
-                Summary = summary(pca),
+                variances = variances,
                 weights = weights,
                 Predicted = Predicted,
                 DataPlusPredicted = DataPlusPredicted,
@@ -230,7 +247,7 @@ fn.pca <-  function(doc = "fn.pca", data, GroupVar, Groups, AnalyticVars, ScreeP
                 analyticVars=AnalyticVars,
                 params.grouping=params.grouping,
                 ellipse.pct=Ellipses,
-                Summary = summary(pca),
+                variances = variances,
                 weights = weights,
                 Predicted = Predicted,
                 DataPlusPredicted = DataPlusPredicted,
