@@ -2,7 +2,7 @@
 % Please edit documentation in R/fn.pca.Gauss.R
 \name{fn.pca.Gauss}
 \alias{fn.pca.Gauss}
-\title{fn.PCA.Gauss}
+\title{fn.pca.Gauss}
 \usage{
 fn.pca.Gauss(doc = "fn.pca.Gauss", data, GroupVar, Groups, AnalyticVars,
   QQtest = T, folder = " ", ds.pvalues)

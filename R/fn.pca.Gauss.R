@@ -84,7 +84,7 @@ fn.pca.Gauss <-
           "Mardia.kurtosis"
         )
       )
-    DataPlusPredicted <- data.frame(data,predict(pca))
+    DataPlusPredicted <- data.frame(data.Used,predict(pca))
     pc.GroupVar <- GroupVar
     pc.Groups <- Groups
     pc.QQtest <- F
