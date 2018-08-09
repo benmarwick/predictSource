@@ -1,4 +1,4 @@
-#' fn.PCA.Gauss
+#' fn.pca.Gauss
 #'
 #' Check whether first two principal components are Gaussian
 #'
@@ -84,15 +84,23 @@ fn.pca.Gauss <-
           "Mardia.kurtosis"
         )
       )
-
-    Predicted <-
-      data.frame(group = as.character(data.Used[, GroupVar]),
-                 GroupIndex = GroupIndex,
-                 predict(pca))
-
+    DataPlusPredicted <- data.frame(data,predict(pca))
+    pc.GroupVar <- GroupVar
+    pc.Groups <- Groups
+    pc.QQtest <- F
+    pc.digits <- 3
+#    Predicted <-
+#      data.frame(group = as.character(data.Used[, GroupVar]),
+ #                GroupIndex = GroupIndex,
+  #               predict(pca))
+    #
+    out <- fn.2dPlot.Gauss(data=DataPlusPredicted, GroupVar=pc.GroupVar, Groups=pc.Groups,
+                           AnalyticVars=c("PC1", "PC2"), QQtest=pc.QQtest, pvalue.digits=pc.digits,
+                           Identify=F)
+    browser()
     n.pages <-
-      round((length(groups) + 1) / 2, dig = 0)  # number of pages of plots, 2 groups to a page
-    i.group <- 0  # initialize choice for group
+     round((length(groups) + 1) / 2, dig = 0)  # number of pages of plots, 2 groups to a page
+ #   i.group <- 0  # initialize choice for group
     # qq plots and Anderson-Darling p-values
     fn.plot <- function() {
       temp <-
@@ -106,9 +114,9 @@ fn.pca.Gauss <-
       ADp1 <- round(ad.test(temp1)$p.value, dig = 3)
       ADp2 <- round(ad.test(temp2)$p.value, dig = 3)
       SWp1 <-
-        round(uniNorm(temp1, type = "SW")[[2]]$p.value, dig = 3)
+        round(shapiro.test(temp1)$p.value, dig = 3)
       SWp2 <-
-        round(uniNorm(temp2, type = "SW")[[2]]$p.value, dig = 3)
+        round(shapiro.test(temp2)$p.value, dig = 3)
       browser()
       mardia <- mardiaTest(data = temp)
       if (nrow(temp) >= 20)
@@ -122,17 +130,19 @@ fn.pca.Gauss <-
         SWp2,
         round(mardia@p.value.skew, dig = 3),
         p.kurtosis)
-    }
-    for (page in 1:n.pages) {
-      plot.new()
+    }  # end of function fn.plot()
+#    for (page in 1:n.pages) {
+ #     plot.new()
       par(mfrow = c(2, 2))
-      i.group <- i.group + 1  #  first group for this row and page
+#      i.group <- i.group + 1  #  first group for this row and page
+    for (i.group in 1:length(groups)) {
       pvalues[i.group,] <- fn.plot()
-      i.group <- i.group + 1  # second group
-      if (i.group <= length(groups))
-        pvalues[i.group,] <- fn.plot()
-      browser()
-    }
+#      i.group <- i.group + 1  # second group
+#      if (i.group <= length(groups))
+ #       pvalues[i.group,] <- fn.plot()
+        if (abs(int(i.group/4) - i.group/4 < 0.01) | (i.group == length(groups))) browser()
+      }
+    #
     # diagnostic plots from Mardia test multivariate diagnostic plots
     fn.Mardia.plot <- function() {
       temp <-
