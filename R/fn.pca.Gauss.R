@@ -89,114 +89,13 @@ fn.pca.Gauss <-
     pc.Groups <- Groups
     pc.QQtest <- F
     pc.digits <- 3
-#    Predicted <-
-#      data.frame(group = as.character(data.Used[, GroupVar]),
- #                GroupIndex = GroupIndex,
-  #               predict(pca))
     #
     out <- fn.2dPlot.Gauss(data=DataPlusPredicted, GroupVar=pc.GroupVar, Groups=pc.Groups,
                            AnalyticVars=c("PC1", "PC2"), QQtest=pc.QQtest, pvalue.digits=pc.digits,
                            Identify=F)
+    pvalues <- out$pvalues
     browser()
-    n.pages <-
-     round((length(groups) + 1) / 2, dig = 0)  # number of pages of plots, 2 groups to a page
- #   i.group <- 0  # initialize choice for group
-    # qq plots and Anderson-Darling p-values
-    fn.plot <- function() {
-      temp <-
-        Predicted[Predicted[, "group"] == groups[i.group], c("PC1", "PC2")]
-      temp1 <- temp[, "PC1"]
-      qqnorm(temp1, main = paste("pc.1: source", groups[i.group]))
-      qqline(temp1)
-      temp2 <- temp[, "PC2"]
-      qqnorm(temp2, main = paste("pc.2: source", groups[i.group]))
-      qqline(temp2)
-      ADp1 <- round(ad.test(temp1)$p.value, dig = 3)
-      ADp2 <- round(ad.test(temp2)$p.value, dig = 3)
-      SWp1 <-
-        round(shapiro.test(temp1)$p.value, dig = 3)
-      SWp2 <-
-        round(shapiro.test(temp2)$p.value, dig = 3)
-      browser()
-      mardia <- mardiaTest(data = temp)
-      if (nrow(temp) >= 20)
-        p.kurtosis <-
-        round(mardia@p.value.kurt, dig = 3)
-      else
-        p.kurtosis <- round(mardia@p.value.small, dig = 3)
-      c(ADp1,
-        ADp2,
-        SWp1,
-        SWp2,
-        round(mardia@p.value.skew, dig = 3),
-        p.kurtosis)
-    }  # end of function fn.plot()
-#    for (page in 1:n.pages) {
- #     plot.new()
-      par(mfrow = c(2, 2))
-#      i.group <- i.group + 1  #  first group for this row and page
-    for (i.group in 1:length(groups)) {
-      pvalues[i.group,] <- fn.plot()
-#      i.group <- i.group + 1  # second group
-#      if (i.group <= length(groups))
- #       pvalues[i.group,] <- fn.plot()
-        if (abs(int(i.group/4) - i.group/4 < 0.01) | (i.group == length(groups))) browser()
-      }
-    #
-    # diagnostic plots from Mardia test multivariate diagnostic plots
-    fn.Mardia.plot <- function() {
-      temp <-
-        Predicted[Predicted[, "group"] == groups[i.group], c("PC1", "PC2")]
-      mardia <- mardiaTest(data = temp)
-      mvnPlot(mardia, type = "persp")
-      mvnPlot(mardia, type = "contour")
-    }
-    i.group <- 0
-    for (page in 1:n.pages) {
-      plot.new()
-      par(mfrow = c(2, 2))
-      i.group <- i.group + 1  #  first group for this row and page
-      fn.Mardia.plot()
-      i.group <- i.group + 1  # second group
-      if (i.group <= length(groups))
-        fn.Mardia.plot()
-      browser()
-    }
-    if (QQtest) {
-      # plots using qqtest() qq plots and Anderson-Darling p-values
-      fn.qqtest <- function() {
-        temp <-
-          Predicted[Predicted[, "group"] == groups[i.group], c("PC1", "PC2")]
-        temp1 <- temp[, "PC1"]
-        qqtest(
-          data = temp1,
-          dist = "normal",
-          drawPercentiles = T,
-          main = paste("pc.1: source",
-                       groups[i.group])
-        )
-        temp2 <- temp[, "PC2"]
-        qqtest(
-          data = temp2,
-          dist = "normal",
-          drawPercentiles = T,
-          main = paste("pc.2: source",
-                       groups[i.group])
-        )
-      }
-      i.group <- 0  # initialize choice for group
-      for (page in 1:n.pages) {
-        plot.new()
-        par(mfrow = c(2, 2))
-        i.group <-
-          i.group + 1  #  first group for this row and page
-        fn.qqtest()
-        i.group <- i.group + 1  # second group
-        if (i.group <= length(groups))
-          fn.qqtest()
-        browser()
-      }
-    }
+
     if (substr(folder,1,1) != " ")  write.csv(pvalues, paste(folder, ds.pvalues, sep = ""))
     #
     fcn.date.ver<-paste(doc,date(),R.Version()$version.string)
