@@ -26,7 +26,7 @@ if "All", use all groups; if " ", no grouping}
 
 \item{pvalue.digits}{Numeric (default is 3): number of significant digits retained in tests for normality}
 
-\item{Identify}{Logical(default is F): if T, user can identify points of interest in the plots; qqPlot must be T}
+\item{Identify}{Logical(default is F): if T, user can identify points of interest in the plots}
 
 \item{folder}{In Windows, path to the folder containing an excel file with the identified points, ending with two forward slashes;
 if " ", no data set is written}

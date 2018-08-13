@@ -11,7 +11,7 @@
 #' @param AnalyticVars  Names of two analytic variables to be shown in the plots, vector of length 2
 #' @param qqPlot  Logical (default is T): specify whether to show q-q plots, including plots based on simulation and multivariate plots
 #' @param pvalue.digits  Numeric (default is 3): number of significant digits retained in tests for normality
-#' @param Identify  Logical(default is F): if T, user can identify points of interest in the plots; qqPlot must be T
+#' @param Identify  Logical(default is F): if T, user can identify points of interest in the plots
 #' @param folder  In Windows, path to the folder containing an excel file with the identified points, ending with two forward slashes;
 #'         if " ", no data set is written
 #' @param ds.identified  Excel file name with extension .csv containing information on the identified points
@@ -67,11 +67,11 @@ fn.2dPlot.Gauss <- function (doc = "fn.2dPlot.Gauss", data, GroupVar,labID, Grou
   fn.plot <- function() {
     temp <- data.Used[data.Used[, GroupVar] == groups[i.group],AnalyticVars]
     temp1 <- temp[, AnalyticVars[1]]
-    if (qqPlot) {
+    if (qqPlot | Identify) {
+      qqtest(data = temp1, dist = "normal", drawPercentiles = T,
+             main = paste(AnalyticVars[1],"source", groups[i.group]))
       qqnorm.pts<-qqnorm(temp1, main = paste(AnalyticVars[1],"source", groups[i.group]))
       qqline(temp1)
-      qqtest(data = temp1, dist = "normal", drawPercentiles = T,
-                       main = paste(AnalyticVars[1],"source", groups[i.group]))
       }
     if (Identify) {
       index<-identify(qqnorm.pts)
@@ -79,11 +79,11 @@ fn.2dPlot.Gauss <- function (doc = "fn.2dPlot.Gauss", data, GroupVar,labID, Grou
       data.check<<-rbind(data.check,data.grp[index,])
       }
     temp2 <- temp[, AnalyticVars[2]]
-    if (qqPlot) {
+    if (qqPlot | Identify) {
+      qqtest(data = temp2, dist = "normal", drawPercentiles = T,
+             main = paste(AnalyticVars[2],"source", groups[i.group]))
       qqnorm.pts<-qqnorm(temp2, main = paste(AnalyticVars[2],"source", groups[i.group]))
       qqline(temp2)
-      qqtest(data = temp2, dist = "normal", drawPercentiles = T,
-           main = paste(AnalyticVars[2],"source", groups[i.group]))
       browser()
       }
     if (Identify) {
@@ -96,17 +96,17 @@ fn.2dPlot.Gauss <- function (doc = "fn.2dPlot.Gauss", data, GroupVar,labID, Grou
     SWp1 <- shapiro.test(temp1)$p.value
     SWp2 <- shapiro.test(temp2)$p.value
     mardia <- MVN::mvn(data = temp, mvnTest="mardia")
-    p.mardia.skew <- as.numeric(as.character(mardia[[1]][[3]][[1]], mode="numeric"))
-    p.mardia.kurtosis <- as.numeric(as.character(mardia[[1]][[3]][[2]], mode="numeric"))
+    p.Mardia.skew <- as.numeric(as.character(mardia[[1]][[3]][[1]], mode="numeric"))
+    p.Mardia.kurtosis <- as.numeric(as.character(mardia[[1]][[3]][[2]], mode="numeric"))
     if (qqPlot) {
-      hz <- MVN::mvn(data=temp, mvnTest="hz",multivariatePlot="qq")
+      HZ <- MVN::mvn(data=temp, mvnTest="hz",multivariatePlot="qq")
       browser()
       }
-      else  hz <- MVN::mvn(data=temp, mvnTest="hz")
-    p.hz <- as.numeric(hz[[1]][[3]], mode = "numeric")
+      else  HZ <- MVN::mvn(data=temp, mvnTest="hz")
+    p.HZ <- as.numeric(HZ[[1]][[3]], mode = "numeric")
     royston <- MVN::mvn(data=temp, mvnTest="royston")
-    p.royston <- as.numeric(royston[[1]][[3]], mode = "numeric")
-    p.temp <- c(ADp1, ADp2, SWp1, SWp2, p.mardia.skew, p.mardia.kurtosis, p.hz, p.royston)  # return p-values
+    p.Royston <- as.numeric(royston[[1]][[3]], mode = "numeric")
+    p.temp <- c(ADp1, ADp2, SWp1, SWp2, p.Mardia.skew, p.Mardia.kurtosis, p.HZ, p.Royston)  # return p-values
     p.temp
   } # end of definition of function
   #
@@ -126,7 +126,7 @@ fn.2dPlot.Gauss <- function (doc = "fn.2dPlot.Gauss", data, GroupVar,labID, Grou
   numeric.pvalues[numeric.pvalues < 0] <- NA
   return.pvalues<-matrix(numeric.pvalues,nrow=length(groups),ncol=8)
   dimnames(return.pvalues) <- list(groups, c(paste("AD.",AnalyticVars,sep=""), paste("SW.",AnalyticVars,sep=""),
-                                             "Mardia.skew", "Mardia.kurtosis", "hz", "Royston"))
+                                             "Mardia.skew", "Mardia.kurtosis", "HZ", "Royston"))
   #
   if (substr(folder,1,1) != " ")
     if (substr(ds.pvalues,1,1) != " ") write.csv(returnname.pvalues, file = paste(folder, ds.pvalues, sep = ""))
