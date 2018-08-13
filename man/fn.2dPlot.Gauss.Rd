@@ -5,7 +5,7 @@
 \title{fn.2dPlot.Gauss}
 \usage{
 fn.2dPlot.Gauss(doc = "fn.2dPlot.Gauss", data, GroupVar, labID, Groups,
-  AnalyticVars, QQtest = T, pvalue.digits = 3, Identify = F,
+  AnalyticVars, qqPlot = T, pvalue.digits = 3, Identify = F,
   folder = " ", ds.pvalues, ds.data.check)
 }
 \arguments{
@@ -22,11 +22,11 @@ if "All", use all groups; if " ", no grouping}
 
 \item{AnalyticVars}{Names of two analytic variables to be shown in the plots, vector of length 2}
 
-\item{QQtest}{Logical (default is T): specify whether to run the package qqtest}
+\item{qqPlot}{Logical (default is T): specify whether to show q-q plots, including plots based on simulation and multivariate plots}
 
 \item{pvalue.digits}{Numeric (default is 3): number of significant digits retained in tests for normality}
 
-\item{Identify}{Logical(default is F): if T, user can identify points of interest in the plots}
+\item{Identify}{Logical(default is F): if T, user can identify points of interest in the plots; qqPlot must be T}
 
 \item{folder}{In Windows, path to the folder containing an excel file with the identified points, ending with two forward slashes;
 if " ", no data set is written}
@@ -36,18 +36,18 @@ if " ", no data set is written}
 \value{
 A list with the following components:
  \itemize{
-\item{usage}{  Vector with the contents of the argument doc, the date run, the version of R used}
-\item{dataUsed}{ The contents of the argument data restricted to the groups used}
-\item{analyticVars}{  The contents of the argument AnalyticVars}
-\item{parameters}{  A vector with argument values for GroupVar, Groups, pvalue.digits, and QQtest}
-\item{pvalues}{  A matrix with the p-values for univariate and bivariate tests of normality}
-\item{data.check}{ If Identify = T, a data frame with the information on user-identified points of interest}
-\item{file}{ If folder != " ", a string or list: the path to the excel file or files with pvalues and, if Identify = T,
+\item{usage:}{  Vector with the contents of the argument doc, the date run, the version of R used}
+\item{dataUsed:}{ The contents of the argument data restricted to the groups used}
+\item{analyticVars:}{  The contents of the argument AnalyticVars}
+\item{parameters:}{  A vector with argument values for GroupVar, Groups, pvalue.digits, and QQtest}
+\item{pvalues:}{  A data frame with the p-values for univariate and bivariate tests of normality}
+\item{data.check:}{ If Identify = T, a data frame with the information on user-identified points of interest}
+\item{file:}{ If folder != " ", a string or list: the path to the excel file or files with pvalues and, if Identify = T,
  the information on user-identified points of interest}
 }
 }
 \description{
-Plot and check specified pairs of analysis variables for bivariate normality. The function stops after producing each plot.  Enter c ("continue") at the prompt to get the next plot.  If this function is run using Rstudio, each plot appears in a separate window, not in the Rstudio plot pane.
+Plot and check specified pairs of analysis variables for bivariate normality. The function stops after producing each plot.  Enter c ("continue") at the prompt to get the next plot.
 }
 \section{Details}{
 
