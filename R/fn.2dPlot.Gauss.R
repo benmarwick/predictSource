@@ -91,27 +91,28 @@ fn.2dPlot.Gauss <- function (doc = "fn.2dPlot.Gauss", data, GroupVar,labID, Grou
     ADp2 <- ad.test(temp2)$p.value
     SWp1 <- shapiro.test(temp1)$p.value
     SWp2 <- shapiro.test(temp2)$p.value
-    mardia <- as.data.frame(MVN::mvn(data = temp, mvnTest="mardia")$multivariateNormality)[-3,]
-    if (mardia[2,4]=="YES")  p.kurtosis <- as.character(mardia[2,3])
-       else  p.kurtosis <- NA
-    if (mardia[1,4]=="YES")  p.skew <- as.character(mardia[1,3])
-       else  p.skew <- NA
-    temp <- c(ADp1, ADp2, SWp1, SWp2, p.skew, p.kurtosis)  # return p-values
-    temp
+    mardia <- MVN::mvn(data = temp, mvnTest="mardia")
+    p.mardia.skew <- as.numeric(as.character(mardia[[1]][[3]][[1]], mode="numeric"))
+    p.mardia.kurtosis <- as.numeric(as.character(mardia[[1]][[3]][[2]], mode="numeric"))
+    hz <- MVN::mvn(data=temp, mvnTest="hz",multivariatePlot="qq")
+    p.hz <- as.numeric(hz[[1]][[3]], mode = "numeric")
+    royston <- MVN::mvn(data=temp, mvnTest="royston",multivariatePlot="qq")
+    p.royston <- as.numeric(royston[[1]][[3]], mode = "numeric")
+    p.temp <- c(ADp1, ADp2, SWp1, SWp2, p.mardia.skew, p.mardia.kurtosis, p.hz, p.royston)  # return p-values
+    p.temp
   } # end of definition of function
   #
-  pvalues <- matrix(NA, nrow=length(groups), ncol = 6)
+  pvalues <- matrix(NA, nrow=length(groups), ncol = 8)
   par(mfrow = c(2, 2))
   for (i.group in 1:length(groups))
     pvalues[i.group, ] <- fn.plot()
   #
   numeric.pvalues<-as.numeric(pvalues)
-  numeric.pvalues[is.na(numeric.pvalues)] <- -1  # case of missing p-value in Mardia test
   numeric.pvalues<-round(numeric.pvalues,dig=pvalue.digits)
   numeric.pvalues[numeric.pvalues < 0] <- NA
-  return.pvalues<-matrix(numeric.pvalues,nrow=length(groups),ncol=6)
+  return.pvalues<-matrix(numeric.pvalues,nrow=length(groups),ncol=8)
   dimnames(return.pvalues) <- list(groups, c(paste("AD.",AnalyticVars,sep=""), paste("SW.",AnalyticVars,sep=""),
-                                             "Mardia.skew", "Mardia.kurtosis"))
+                                             "Mardia.skew", "Mardia.kurtosis", "hz", "Royston"))
   #
   if (substr(folder,1,1) != " ")
     if (substr(ds.pvalues,1,1) != " ") write.csv(returnname.pvalues, file = paste(folder, ds.pvalues, sep = ""))
