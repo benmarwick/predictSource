@@ -95,9 +95,10 @@ fn.2dPlot.Gauss <- function (doc = "fn.2dPlot.Gauss", data, GroupVar,labID, Grou
     ADp2 <- ad.test(temp2)$p.value
     SWp1 <- shapiro.test(temp1)$p.value
     SWp2 <- shapiro.test(temp2)$p.value
+    n.samples <- nrow(temp)
     mardia <- MVN::mvn(data = temp, mvnTest="mardia")
-    p.Mardia.skew <- as.numeric(as.character(mardia[[1]][[3]][[1]], mode="numeric"))
-    p.Mardia.kurtosis <- as.numeric(as.character(mardia[[1]][[3]][[2]], mode="numeric"))
+    p.mardia.skew <- as.numeric(as.character(mardia[[1]][[3]][[1]],mode="character"))
+    p.mardia.kurtosis <- as.numeric(as.character(mardia[[1]][[3]][[2]],mode="character"))
     if (qqPlot) {
       HZ <- MVN::mvn(data=temp, mvnTest="hz",multivariatePlot="qq")
       browser()
@@ -106,11 +107,12 @@ fn.2dPlot.Gauss <- function (doc = "fn.2dPlot.Gauss", data, GroupVar,labID, Grou
     p.HZ <- as.numeric(HZ[[1]][[3]], mode = "numeric")
     royston <- MVN::mvn(data=temp, mvnTest="royston")
     p.Royston <- as.numeric(royston[[1]][[3]], mode = "numeric")
-    p.temp <- c(ADp1, ADp2, SWp1, SWp2, p.Mardia.skew, p.Mardia.kurtosis, p.HZ, p.Royston)  # return p-values
+    p.temp <- c(n.samples, ADp1, ADp2, SWp1, SWp2, p.mardia.skew, p.mardia.kurtosis, p.HZ, p.Royston)
+    # return p-values
     p.temp
   } # end of definition of function
   #
-  pvalues <- matrix(NA, nrow=length(groups), ncol = 8)
+  pvalues <- matrix(NA, nrow=length(groups), ncol = 9)
   par(mfrow = c(2, 2))
   for (i.group in 1:length(groups)) {
     if ((i.group > 1) & (qqPlot==T)) {
@@ -124,9 +126,9 @@ fn.2dPlot.Gauss <- function (doc = "fn.2dPlot.Gauss", data, GroupVar,labID, Grou
   numeric.pvalues<-as.numeric(pvalues)
   numeric.pvalues<-round(numeric.pvalues,dig=pvalue.digits)
   numeric.pvalues[numeric.pvalues < 0] <- NA
-  return.pvalues<-matrix(numeric.pvalues,nrow=length(groups),ncol=8)
-  dimnames(return.pvalues) <- list(groups, c(paste("AD.",AnalyticVars,sep=""), paste("SW.",AnalyticVars,sep=""),
-                                             "Mardia.skew", "Mardia.kurtosis", "HZ", "Royston"))
+  return.pvalues<-matrix(numeric.pvalues,nrow=length(groups),ncol=9)
+  dimnames(return.pvalues) <- list(groups, c("n", paste("AD.",AnalyticVars,sep=""), paste("SW.",AnalyticVars,sep=""),
+                                             "maridaSkew", "mardiaKurtosis", "HZ", "Royston"))
   #
   if (substr(folder,1,1) != " ")
     if (substr(ds.pvalues,1,1) != " ") write.csv(returnname.pvalues, file = paste(folder, ds.pvalues, sep = ""))
