@@ -4,9 +4,9 @@
 \alias{fn.tree}
 \title{fn.tree}
 \usage{
-fn.tree(doc = "fn.tree", data, GroupVar = "Code", Groups = "All",
-  AnalyticVars, wts = NA, PlotTree = T, Model = "Rb+Y+Nb+Zr+Sr",
-  folder = " ", ds.Classify, ds.CpTable, ds.CVtable, ds.OptSplit)
+fn.tree(doc = "fn.tree", data, GroupVar, Groups = "All", AnalyticVars,
+  wts = NA, plotTree = T, plotCp = T, Model, folder = " ", ds.Classify,
+  ds.CpTable, ds.CVtable, ds.OptSplit)
 }
 \arguments{
 \item{doc}{Documentation, default is fn.tree (the function name)}
@@ -15,11 +15,15 @@ fn.tree(doc = "fn.tree", data, GroupVar = "Code", Groups = "All",
 
 \item{GroupVar}{Name of the variable defining groups, grouping is required}
 
-\item{Groups}{Vector of codes for groups to be used, 'All' if use all groups}
+\item{Groups}{Vector of codes for groups to be used, 'All' (the default) if use all groups}
 
 \item{AnalyticVars}{Names of analytic variables}
 
-\item{PlotTree}{If T (true, the default), plot the recursive partitioning tree}
+\item{wts}{Option to weight the observations, if used, vector with length nrow(data); if NA (the default), assume equal weights}
+
+\item{plotTree}{If T (true, the default), plot the recursive partitioning tree}
+
+\item{plotCp}{If T (tree, the default), plot the Cp table}
 
 \item{Model}{A character string containing the variables considered separated by + signs}
 
@@ -29,14 +33,10 @@ must end with two forward slashes}
 \item{ds.Classify}{Name of the excel file containing the results of classifying the data, must end with .csv}
 
 \item{ds.CpTable}{Name of the excel file containing the values of Cp at successive splits, must end with .csv}
-
-\item{ds.OptSplit}{Name of the excel file containing}
-
-\item{wts:}{Option to weight the observations, if used, vector with length nrow(data); if NA (the default), assume equal weights}
 }
 \value{
 The function fits a classification tree model.  The variables in AnalyticVars are considered in the order
-       they appear in the Model argument (from left to right).  See the for more details.
+       they appear in the Model argument (from left to right).  See the vignette for more details.
        The function returns a list with the following components:
 
 \itemize{
@@ -44,12 +44,12 @@ The function fits a classification tree model.  The variables in AnalyticVars ar
   \item{dataUsed:}{ The contents of the argument data restricted to the groups used}
   \item{params.grouping:}{ A list with the values of the arguments GroupVar and Groups}
   \item{analyticVars:}{ A vector with the value of the argument AnalyticVars}
-  \item{params.logical:}{ The value of PlotTree}
+  \item{params.logical:}{ The value of plotTree}
   \item{model:}{ A character string with the value of the argument Model}
-  \item{Classification:}  {A data frame showing the crossclassification of sources and predicted sources}
+  \item{classification:}  {A data frame showing the crossclassification of sources and predicted sources}
   \item{CpTable:}{  A data frame showing the decrease in Cp with increasing numbers of splits}
-  \item{NoptSplit:}{  A data frame with information on the optimal splitting}
-  \item{files:}{ If folder != " ", a character string with the path to the file containing the p-values}
+  \item{files:}{ If folder != " ", a character string with the path to the file containing the excel files
+   defined is ds.Classify and ds.CpTable.}
  }
 }
 \description{
@@ -59,6 +59,7 @@ Fit a recursive partitioning model
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 tree <- fn.tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
-                Model="Rb"+"Sr"+"Y"+"Zr"+"Nb")
+                Model="Sr"+"Nb"+"Rb"+"Y"+"Zr")
+ # variables in the model statement in order of importance from a random forst analysis
 
 }

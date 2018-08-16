@@ -326,3 +326,24 @@ pca.Gauss <- fn.pca.Gauss(data=ObsidianSources, GroupVar="Code",Groups="All", An
 knitr::kable(pca.Gauss$p.values, caption="Table 11. P-values from test statistics for a bivariate Gaussian distribution of the first two principal components at each obsidian source.")
 #
 ```
+## Classification trees (recursive partitioning)
+
+A classification tree is obtained from recursive partitioning when the target (dependent) variable is categorical (a regression tree has a continuous dependent variable).  A tree model does a succession of binary splits, so that the result is similar to a botanical key (when there are only two subgroups at each decision point).  The classification tree procedure has a number of desirable properties:
+it is nonparametric (data need not be transformed before being offered to the model, and outliers to not affect the results);
+the predictor variables can be continuous, categorical, or both;
+the procedure used yields a prediction error by using cross-validation (defined below);
+if the number of outcome groups and the number of predictor variables are both small enough, the tree can be displayed as a graph, showing the criterion for splitting at each node.
+The function fn.tree() implements the classification tree procedure.
+
+The tree procedure starts by finding the variable in the model statement and the two subgroups defined using that variable that yields two subgroups of the outcome variable (in the case of the obsidian data, subgroups of the sources) that are as "pure" as possible.  The default criterion, used in fn.tree(), is the Gini criterion. 
+
+The tree procedure is implemented using a model statement containing the predictor variables separated by "+" signs.  It is important to note that the variables are offered to the model in the order in which they appear in the model statement.  If several predictor variables yield equally good splits at a node, the procedure uses the variable that appears first in the model statement.  Therefore, model statements with variables in different orders can yield different categorical trees.  As a result, we suggest running a random forest analysis before a classification tree model, then list the predictor variables in the tree model statement in the order of importance estimated from the random forest model.  
+
+```{r  echo=FALSE, results='hide',message=FALSE}
+library(karon)
+data(ObsidianSources)
+analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+tree <- fn.tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
+                 Model="Sr"+"Nb"+"Rb"+"Y"+"Zr")
+```
+
