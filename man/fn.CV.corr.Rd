@@ -35,6 +35,8 @@ A list with the following components:
   \itemize{
   \item{usage:}{  A vector with the contents of the argument doc, the date run, the version of R used}
   \item{dataUsed:}{  The contents of the argument data restricted to the groups used}
+  \item{dataNA:}{  A data frame with observations containing a least one missing value
+  for an analysis variable, NA if no missing values}
   \item{params.numeric:}{  A vector with the values of the arguments CV.digits and corr.digits}
   \item{params.grouping:}{  A list with the values of the argument GroupVar and Groups}
   \item{analyticVars:}{  A vector with the value of the argument AnalyticVars}
@@ -46,7 +48,8 @@ A list with the following components:
 }
 \description{
 Compute coefficients of variation and correlations for specified
-analytic values, by specified groups
+analytic values, by specified groups.  Observations with missing values
+are removed from computations using them.
 }
 \section{Details}{
 

@@ -1,6 +1,6 @@
 #' fn.BoxPlots
 #'
-#' Box plots of specified analytic values, by specified groups
+#' Box plots of specified analytic values, by specified groups.  Missing values are not shown.
 #'
 #' @param doc: string documenting use, included in list returned
 #' @param data: data frame or matrix with data to be analyzed
@@ -14,10 +14,15 @@
 #' @return A list with the following components:
 #'  \itemize{
 #' \item{usage:}{  A vector with the value of the argument doc, date run, version of R used}
+#' \item{dataUsed:}{  A data frame with data restricted to data used for the box plots}
+#' \item{dataNA:}{  A data frame with observations containing a least one missing value
+#'   for an analysis variable, NA if no missing values}
 #' \item{analyticVars:}{  The vector specified by the parameter AnalyticVars}
 #' \item{params.numeric:}{  A vector with the values of the arguments Nrow and Ncol}
 #' \item{params.grouping:}{  A vector with the values of the arguments GroupVar and Groups}
 #' \item{analyticVars:}{  A vector with the value of the argument AnalyticVars}
+#' \item{dataNA:}{  A data frame with observations containing a least one missing value
+#'   for an analysis variable, NA if no missing values}
 #'}
 #'
 #' @section  DETAILS:
@@ -57,6 +62,12 @@ fn.BoxPlots <-
       data.BP <- data[BP.rows, c(GroupVar, AnalyticVars)]
     }
     else data.BP <- data
+    #
+    dataKeep <- rep(T, nrow(data.Used)) # will contain indices for observations with
+    # no missing values, used only in list returned
+    for (i in 1:length(AnalyticVars))
+      dataKeep[is.na(data.Used[,AnalyticVars[i]])] <- F
+    #
     if (Groups[1] != " ") {
       par(mfrow = c(Nrow, Ncol))
       plots.per.page <- Nrow * Ncol
@@ -87,8 +98,12 @@ fn.BoxPlots <-
     names(params.numeric)<-c("Nrow","Ncol")
     params.grouping<-list(GroupVar,Groups)
     names(params.grouping)<-c("GroupVar","Groups")
+    if (sum(dataKeep) < nrow(data.Used)) dataNA <- data.Used[!dataKeep]
+    else dataNA <- NA
+    #
     out<-list(usage=fcn.date.ver,
               dataUsed=data.BP,
+              dataNA = dataNA,
               params.numeric=params.numeric,
               params.grouping=params.grouping,
               analyticVars=AnalyticVars)

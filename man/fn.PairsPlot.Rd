@@ -26,6 +26,8 @@ A set of pairs plots as described above and a list with the following components
 \itemize{
 \item{usage:}{  A vector with the value of the argument doc, date run, version of R used}
 \item{dataUsed:}{  A data frame with the observations in data restricted to the groups analyzed}
+\item{dataNA:}{  A data frame with observations containing a least one missing value
+  for an analysis variable, NA if no missing values}
 \item{analyticVars:}{  The vector specified by the parameter AnalyticVars}
 \item{params.numeric:}{  The value of the argument Span}
 \item{params.grouping:}{  A vector with the values of the arguments GroupVar and Groups}

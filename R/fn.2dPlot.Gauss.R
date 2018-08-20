@@ -20,6 +20,8 @@
 #'  \itemize{
 #' \item{usage:}{  Vector with the contents of the argument doc, the date run, the version of R used}
 #' \item{dataUsed:}{ The contents of the argument data restricted to the groups used}
+#' \item{dataNA:}{  A data frame with observations containing a least one missing value
+#'   for an analysis variable, NA if no missing values}
 #' \item{analyticVars:}{  The contents of the argument AnalyticVars}
 #' \item{parameters:}{  A vector with argument values for GroupVar, Groups, pvalue.digits, and QQtest}
 #' \item{pvalues:}{  A data frame with the p-values for univariate and bivariate tests of normality}
@@ -51,6 +53,11 @@ fn.2dPlot.Gauss <- function (doc = "fn.2dPlot.Gauss", data, GroupVar,labID, Grou
   }
   else data.Used <- data
   #
+  dataKeep <- rep(T, nrow(data.Used)) # will contain indices for observations with
+  # no missing values
+  for (i in 1:length(AnalyticVars))
+    dataKeep[is.na(data.Used[,AnalyticVars[i]])] <- F
+  #
   if (Groups[1] == "All")
     groups <- as.character(unique(data.Used[, GroupVar]))
   else groups <- as.character(Groups)
@@ -67,6 +74,7 @@ fn.2dPlot.Gauss <- function (doc = "fn.2dPlot.Gauss", data, GroupVar,labID, Grou
   fn.plot <- function() {
     temp <- data.Used[data.Used[, GroupVar] == groups[i.group],AnalyticVars]
     temp1 <- temp[, AnalyticVars[1]]
+    temp1 <- temp1[!is.na(temp[,AnalyticVars[1]])]
     if (qqPlot | Identify) {
       qqtest(data = temp1, dist = "normal", drawPercentiles = T,
              main = paste(AnalyticVars[1],"source", groups[i.group]))
@@ -79,6 +87,7 @@ fn.2dPlot.Gauss <- function (doc = "fn.2dPlot.Gauss", data, GroupVar,labID, Grou
       data.check<<-rbind(data.check,data.grp[index,])
       }
     temp2 <- temp[, AnalyticVars[2]]
+    temp2 <- temp2[!is.na(temp[,AnalyticVars[2]])]
     if (qqPlot | Identify) {
       qqtest(data = temp2, dist = "normal", drawPercentiles = T,
              main = paste(AnalyticVars[2],"source", groups[i.group]))
@@ -95,6 +104,7 @@ fn.2dPlot.Gauss <- function (doc = "fn.2dPlot.Gauss", data, GroupVar,labID, Grou
     ADp2 <- ad.test(temp2)$p.value
     SWp1 <- shapiro.test(temp1)$p.value
     SWp2 <- shapiro.test(temp2)$p.value
+    temp <- temp[!is.na(temp[,AnalyticVars[1]]) & !is.na(temp[,AnalyticVars[2]]),]
     n.samples <- nrow(temp)
     mardia <- MVN::mvn(data = temp, mvnTest="mardia")
     p.mardia.skew <- as.numeric(as.character(mardia[[1]][[3]][[1]],mode="character"))
@@ -148,22 +158,45 @@ fn.2dPlot.Gauss <- function (doc = "fn.2dPlot.Gauss", data, GroupVar,labID, Grou
   #
   fcn.date.ver<-c(doc,date(),R.Version()$version.string)
   parameters<-c(groupVar=GroupVar,groups=Groups,digits.pvalue=pvalue.digits,qqPlot=qqPlot, Identify=Identify)
+  if (sum(dataKeep) < nrow(data.Used)) dataNA <- data.Used[!dataKeep]
+  else dataNA <- NA
+  #
   if (substr(folder,1,1) == " ") {
-    if ((!Identify)) out<-list(usage=fcn.date.ver,dataUsed=data.Used,analyticVars=AnalyticVars,parameters=parameters,
+    if ((!Identify)) out<-list(usage=fcn.date.ver,
+                               dataUsed=data.Used,
+                               dataNA=dataNA,
+                               analyticVars=AnalyticVars,
+                               parameters=parameters,
                                pvalues=return.pvalues)
-    if (( Identify)) out<-list(usage=fcn.date.ver,dataUsed=data.Used,analyticVars=AnalyticVars,parameters=parameters,
-                               pvalues=return.pvalues,data.check=data.check)
+    if (( Identify)) out<-list(usage=fcn.date.ver,
+                               dataUsed=data.Used,
+                               dataNA=dataNA,
+                               analyticVars=AnalyticVars,
+                               parameters=parameters,
+                               pvalues=return.pvalues,
+                               data.check=data.check)
     }
   if (substr(folder,1,1) != " ") {
     if (!Identify) {
       file<-paste(folder,ds.pvalues,sep="")
-      out<-list(usage=fcn.date.ver,data.Used=dataUsed,analyticVars=AnalyticVars,parameters=parameters,
-                pvalues=return.pvalues,file=file)
+      out<-list(usage=fcn.date.ver,
+                data.Used=dataUsed,
+                dataNA=dataNA,
+                analyticVars=AnalyticVars,
+                parameters=parameters,
+                pvalues=return.pvalues,
+                file=file)
       }
     if ( Identify) {
       file<-list(pvalues=paste(folder,ds.pvalues,sep=""),data,check=paste(folder,ds.data.check,sep=""))
-      out<-list(usager=fcn.date.ver,data.Used=dataUsed,analyticVars=AnalyticVars, parameters=parameters,
-                pvalues=return.pvalues,data.check=data.check,file=file)
+      out<-list(usager=fcn.date.ver,
+                data.Used=dataUsed,
+                dataNA=dataNA,
+                analyticVars=AnalyticVars,
+                parameters=parameters,
+                pvalues=return.pvalues,
+                data.check=data.check,
+                file=file)
       }
     }
   out

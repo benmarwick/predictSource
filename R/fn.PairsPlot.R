@@ -24,6 +24,8 @@
 #' \itemize{
 #' \item{usage:}{  A vector with the value of the argument doc, date run, version of R used}
 #' \item{dataUsed:}{  A data frame with the observations in data restricted to the groups analyzed}
+#' \item{dataNA:}{  A data frame with observations containing a least one missing value
+#'   for an analysis variable, NA if no missing values}
 #' \item{analyticVars:}{  The vector specified by the parameter AnalyticVars}
 #' \item{params.numeric:}{  The value of the argument Span}
 #' \item{params.grouping:}{  A vector with the values of the arguments GroupVar and Groups}
@@ -51,6 +53,12 @@ fn.PairsPlot <-
       data.Plot <- data[Plot.rows, c(GroupVar, AnalyticVars)]
     }
     else data.Plot <- data
+    #
+    dataKeep <- rep(T, nrow(data.Used)) # will contain indices for observations with
+    # no missing values
+    for (i in 1:length(AnalyticVars))
+      dataKeep[is.na(data.Used[,AnalyticVars[i]])] <- F
+    #
     if (Groups[1] == " ")
       pairs(data.Plot[, AnalyticVars], panel = panel.smooth,
             span = Span)
@@ -73,8 +81,11 @@ fn.PairsPlot <-
     names(params.numeric)<-"Span"
     params.grouping<-list(GroupVar,Groups)
     names(params.grouping)<-c("GroupVar","Groups")
+    if (sum(dataKeep) < nrow(data.Used)) dataNA <- data.Used[!dataKeep]
+    else dataNA <- NA
     out<-list(usage=fcn.date.ver,
               dataUsed=data,
+              dataNA = dataNA,
               params.numeric=params.numeric,
               params.grouping=params.grouping,
               analyticVars=AnalyticVars)

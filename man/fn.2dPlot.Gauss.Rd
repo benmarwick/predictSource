@@ -38,6 +38,8 @@ A list with the following components:
  \itemize{
 \item{usage:}{  Vector with the contents of the argument doc, the date run, the version of R used}
 \item{dataUsed:}{ The contents of the argument data restricted to the groups used}
+\item{dataNA:}{  A data frame with observations containing a least one missing value
+  for an analysis variable, NA if no missing values}
 \item{analyticVars:}{  The contents of the argument AnalyticVars}
 \item{parameters:}{  A vector with argument values for GroupVar, Groups, pvalue.digits, and QQtest}
 \item{pvalues:}{  A data frame with the p-values for univariate and bivariate tests of normality}

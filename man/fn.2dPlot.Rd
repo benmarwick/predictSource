@@ -65,6 +65,8 @@ A list with the following components:
  \itemize{
 \item{usage: }{  A vector with the contents of the argument doc, the date run, the version of R used}
 \item{dataUsed: }{ The contents of the argument data restricted to the groups used}
+\item{dataNA:}{  A data frame with observations containing a least one missing value
+  for an analysis variable, NA if no missing values}
 \item{params.numeric: }{ A vector with the values of the arguments Lowess.f and KernelWidth}
 \item{params.grouping: }{ A character vector with the values of the arguments GroupVar and Groups}
 \item{ellipse.pct: }{ The value of the argument Ellipses}

@@ -33,6 +33,8 @@
 #'  \itemize{
 #' \item{usage: }{  A vector with the contents of the argument doc, the date run, the version of R used}
 #' \item{dataUsed: }{ The contents of the argument data restricted to the groups used}
+#' \item{dataNA:}{  A data frame with observations containing a least one missing value
+#'   for an analysis variable, NA if no missing values}
 #' \item{params.numeric: }{ A vector with the values of the arguments Lowess.f and KernelWidth}
 #' \item{params.grouping: }{ A character vector with the values of the arguments GroupVar and Groups}
 #' \item{ellipse.pct: }{ The value of the argument Ellipses}
@@ -74,6 +76,12 @@ fn.2dPlot <- function (doc = "fn.2dPlot", data, GroupVar, labID, Groups,
     data.Used <- data[Use.rows,]
   }
   else data.Used <- data
+  #
+  dataKeep <- rep(T, nrow(data.Used)) # will contain indices for observations with
+  # no missing values
+  for (i in 1:length(AnalyticVars))
+    dataKeep[is.na(data.Used[,AnalyticVars[i]])] <- F
+  #
   if (Groups[1] == "All")
     groups <- as.character(unique(data.Used[, GroupVar]))
   else groups <- as.character(Groups)
@@ -101,6 +109,9 @@ fn.2dPlot <- function (doc = "fn.2dPlot", data, GroupVar, labID, Groups,
     #
     fn.plot <- function(group,group.j, groupName) {
       temp <- data.Used[(data.Used[, GroupVar] == groups[group]),]
+      # restrict to observtions with both variables not NA
+      notNA <- !is.na(temp[,AnalyticVars[group.j,1]]) & !is.na(temp[,AnalyticVars[group.j,2]])
+      temp <- temp[notNA,]
       # set up plot
       rangeX<-range(temp[,AnalyticVars[group.j,1]])
       rangeY<-range(temp[,AnalyticVars[group.j,2]])
@@ -150,21 +161,13 @@ fn.2dPlot <- function (doc = "fn.2dPlot", data, GroupVar, labID, Groups,
     par(mfrow = c(2, 2))
     i.plot<-0
     for (i.group in 1:length(groups)) {
-
-#      n.page<-0
        for (k in 1:n.pairs) {
-#        n.page<-n.page+1
-#        if (n.page > 4) {
-#          browser()
-#          plot.new()
-#          n.page<-0
-#        }
         if (!Identify)  fn.plot(group=i.group,group.j=k,groupName=groups[i.group])
         if ( Identify)  data.check<-fn.plot(group=i.group,group.j=k,groupName=groups[i.group])
         i.plot <- i.plot + 1
-        if ((i.plot == 4) | (i.group == length(groups))) {
-          i.plot <- 0
-          browser()
+        if ((i.plot == 4) | (i.plot == nrow(AnalyticVars))) {
+        i.plot <- 0
+        browser()
           }
        } # end of loop on k
     }  # end of loop on i.group
@@ -271,16 +274,20 @@ fn.2dPlot <- function (doc = "fn.2dPlot", data, GroupVar, labID, Groups,
   names(params.numeric)<-c("Lowess.f","KernelWidth")
   params.grouping<-list(GroupVar,Groups)
   names(params.grouping)<-c("GroupVar","Groups")
+  if (sum(dataKeep) < nrow(data.Used)) dataNA <- data.Used[!dataKeep]
+  else dataNA <- NA
   #
   if ((substr(folder,1,1) == " ") & (!Identify))
     out<-list(usage=fcn.date.ver,
               dataUsed=data.Used,
+              dataNA = dataNA,
               params.numeric=params.numeric,
               params.grouping=params.grouping,
               ellipse.pct=Ellipses)
   if ((substr(folder,1,1) == " ") & (Identify))
     out<-list(usage=fcn.date.ver,
               dataUsed=data.Used,
+              dataNA = dataNA,
               params.numeric=params.numeric,
               params.grouping=params.grouping,
               ellipse.pct=Ellipses,
@@ -288,6 +295,7 @@ fn.2dPlot <- function (doc = "fn.2dPlot", data, GroupVar, labID, Groups,
   if ((substr(folder,1,1) != " ") * (Identify))
     out<-list(usage=fcn.date.ver,
               dataUsed=data.Used,
+              dataNA=dataNA,
               params.numeric=params.numeric,
               params.grouping=params.grouping,
               ellipse.pct=Ellipses,
