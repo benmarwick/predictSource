@@ -5,9 +5,9 @@
 \title{fn.3dPlot.rotate}
 \usage{
 fn.3dPlot.rotate(doc = "fn.3dPlot.rotate version 0.1", data, GroupVar, Groups,
-  AnalyticVars, Selections, ByGroup = F, SymbolSize = 0.7,
-  Colors = c("red", "black", "blue", "green", "purple"), folder = " ",
-  ds.3dPlot, extension = "pdf")
+  AnalyticVars, Selections, ByGroup = F, SymbolSize = 1, Colors = c("red",
+  "black", "blue", "green", "purple"), folder = " ", ds.3dPlot,
+  extension = "pdf")
 }
 \arguments{
 \item{doc}{A string documenting usage written to the list return, default is the function name}
@@ -40,6 +40,8 @@ A list with the following components:
 \itemize{
 \item{"usage"}{a vector with the contents of the argument doc, the date run, the version of R used}
 \item{"dataUsed"}{the contents of the argument data restricted to the groups used}
+\item{dataNA:}{  A data frame with observations containing a least one missing value
+  for an analysis variable, NA if no missing values}
 \item{"params"}{a vector with the values of the arguments ByGroup and SymbolSize}
 \item{"groups"}{a vector (may be of length 1) with the value of the argument Groups}
 \item{"analyticVars"}{a vector with the value of the argument AnalyticVars}

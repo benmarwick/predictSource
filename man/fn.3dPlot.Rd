@@ -28,18 +28,19 @@ if "All", use all groups; if " ", no grouping}
 
 \item{Colors}{colors of plotted points, default is a vector for showing several groups on one plot}
 
-\item{SymbolSize}{value at most 1, smaller value gives smaller diameter points}
-}
-\value{
-A list with the following components:
+\item{SymbolSize}{value at most 1, smaller value gives smaller diameter points
+
+#' @return   A list with the following components:
  \itemize{
 \item{"usage"}{a vector with the contents of the argument doc, the date run, the version of R used}
 \item{"dataUsed"}{the contents of the argument data restricted to the groups used}
+\item{dataNA:}{  A data frame with observations containing a least one missing value
+  for an analysis variable, NA if no missing values}
 \item{"params"}{a vector with the values of the arguments ByGroup and SymbolSize}
 \item{"groups"}{a vector (may be of length 1) with the value of the argument Groups}
 \item{"analyticVars"}{a vector with the value of the argument AnalyticVars}
 \item{"colors"}{a vector with the value of the argument Color}
-}
+}}
 }
 \description{
 Create 3-dimensional data plot. The function stops after producing each plot.  Enter c ("continue") at the prompt to get the next plot.  If this function is run using Rstudio, each plot appears in a separate window, not in the Rstudio plot pane.

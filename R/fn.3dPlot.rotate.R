@@ -27,6 +27,8 @@
 #' \itemize{
 #' \item{"usage"}{a vector with the contents of the argument doc, the date run, the version of R used}
 #' \item{"dataUsed"}{the contents of the argument data restricted to the groups used}
+#' \item{dataNA:}{  A data frame with observations containing a least one missing value
+#'   for an analysis variable, NA if no missing values}
 #' \item{"params"}{a vector with the values of the arguments ByGroup and SymbolSize}
 #' \item{"groups"}{a vector (may be of length 1) with the value of the argument Groups}
 #' \item{"analyticVars"}{a vector with the value of the argument AnalyticVars}
@@ -54,7 +56,7 @@ fn.3dPlot.rotate <-
            AnalyticVars,
            Selections,
            ByGroup = F,
-           SymbolSize = 0.7,
+           SymbolSize = 1,
            Colors = c("red","black","blue","green","purple"),
            folder = " ",
            ds.3dPlot,
@@ -67,12 +69,18 @@ fn.3dPlot.rotate <-
     else if (GroupVar[1] == " ")
       data.Used <- data[, AnalyticVars]
     else data.Used <- data[, c(GroupVar, AnalyticVars)]
+    #
+    dataKeep <- rep(T, nrow(data.Used)) # will contain indices for observations with
+    # no missing values
+    for (i in 1:length(AnalyticVars))
+      dataKeep[is.na(data.Used[,AnalyticVars[i]])] <- F
+    #
     if ((GroupVar[1] != " ") & (Groups[1] == "All"))
       groups <- as.character(unique(data.Used[, GroupVar]))
     else if (GroupVar[1] != " ")
       groups <- as.character(Groups)
     #
-    #  check for number of cols specified
+    #  check for number of colors specified
     #
     if (!ByGroup)
       if (length(Colors) < length(groups))  stop("too few cols specified")
@@ -96,16 +104,20 @@ fn.3dPlot.rotate <-
       data.Used<-cbind(data.Used,group.index=group.index)
     }
     #  plot points
-    if (!ByGroup) {
+    if (!ByGroup) { # groups combined
       # create title with groups and colors
       header<-paste(Groups[1],": ",Colors[1],sep="")
       for (i in 2:length(Groups))
         header<-paste(header,"  ",Groups[i],": ",Colors[i],sep="")
       if (is.vector(Selections)) {
         plot.new()
-        plot3d(data.Used[, Selections[1]], data.Used[,Selections[2]], data.Used[, Selections[3]],
+        index <- is.na(data.Used[, Selections[1]]) | is.na(data.Used[,Selections[2]]) |
+          is.na(data.Used[, Selections[3]])
+        browser()
+        plot3d(data.Used[!index, Selections[1]], data.Used[!index,Selections[2]],
+               data.Used[!index, Selections[3]],
                xlab = Selections[1], ylab = Selections[2], zlab = Selections[3],
-               col = Colors[data.Used[,"group.index"]],
+               col = Colors[data.Used[!index,"group.index"]],
                pch = 16, cex.symbols = SymbolSize, main = header)
         browser()
         if (folder!=" ") {
@@ -113,13 +125,16 @@ fn.3dPlot.rotate <-
                          fmt=extension,drawText=T)
           browser()
         }
-      }
+      }  # end of code for Selections as vector
+      #
       if (is.matrix(Selections)) {
         for (i in 1:nrow(Selections)) {
           plot.new()
           par(oma=rep(2,4))
-          plot3d(data.Used[, Selections[i, 1]], data.Used[, Selections[i, 2]],
-                 data.Used[, Selections[i, 3]], xlab = Selections[i, 1],
+          index <- is.na(data.Used[, Selections[i,1]]) | is.na(data.Used[,Selections[i,2]]) |
+            is.na(data.Used[, Selections[i,3]])
+          plot3d(data.Used[!index, Selections[i, 1]], data.Used[!index, Selections[i, 2]],
+                 data.Used[!index, Selections[i, 3]], xlab = Selections[i, 1],
                  ylab = Selections[i, 2], zlab = Selections[i, 3],
                  col = Colors[data.Used[,"group.index"]], pch = 16, cex.symbols = SymbolSize,
                  main=header)
@@ -130,15 +145,49 @@ fn.3dPlot.rotate <-
             browser()
           }
         }
-      }
-    }
+      } # end of code for Selections as a matrix
+    } # end of code for plot points with groups combined
+    #
+    if ((GroupVar[1] != " ") & (ByGroup)) { # plot points by group
+      if (is.vector(Selections)) {
+        for (i in 1:length(groups)) {
+          win.graph()
+          data.i<-data.Used[data.Used[,GroupVar]==groups[i],Selections]
+          index <- is.na(data.i[, Selections[1]]) | is.na(data.i[,Selections[2]]) |
+            is.na(data.i[, Selections[3]])
+          plot3d(data.i[!index,], xlab = Selections[1], ylab = Selections[2], zlab = Selections[3],
+                        col = Colors[1], pch = 16, cex.symbols = SymbolSize,
+                        main = paste(groups[i],": ",Selections[1]," ,", Selections[2], ",", Selections[3],sep=""))
+          browser()
+        }
+      } # end of code for Selections as vector
+      if (is.matrix(Selections)) {
+        for (i in 1:nrow(Selections)) {
+          for (j in 1:length(groups)) {
+            win.graph()
+            data.j<-data.Used[data.Used[,GroupVar]==groups[j],Selections[i,]]
+            index <- is.na(data.j[, Selections[i,1]]) | is.na(data.j[,Selections[i,2]]) |
+              is.na(data.j[, Selections[i,3]])
+            plot3d(data.j[!index,], xlab = Selections[i, 1], ylab = Selections[i, 2],
+                          zlab = Selections[i,3], col = Colors[1], pch = 16, cex.symbols = SymbolSize,
+                          main = paste(groups[i],": ",Selections[i, 1], ",", Selections[i,2], ",",
+                                       Selections[i, 3]))
+            browser()
+          }
+        }
+      } # end of code for Selections as a vector
+    } # end of plot points by group
+    #
     fcn.date.ver<-c(doc,date(),R.Version()$version.string)
     params<-list(ByGroup,SymbolSize)
     names(params)<-c("ByGroup","SymbolSize")
+    if (sum(dataKeep) < nrow(data.Used)) dataNA <- data.Used[!dataKeep]
+    else dataNA <- NA
     #
     if (folder == " ")
       out<-list(usage=fcn.date.ver,
               dataUsed=data.Used,
+              dataNA=dataNA,
               params=params,
               groups=Groups,
               analyticVars=AnalyticVars,
@@ -147,6 +196,7 @@ fn.3dPlot.rotate <-
     if (folder != " ")
       out<-list(usage=fcn.date.ver,
                 dataUsed=data.Used,
+                dataNA=dataNA,
                 params=params,
                 groups=Groups,
                 analyticVars=AnalyticVars,
