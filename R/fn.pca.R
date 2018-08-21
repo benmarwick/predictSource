@@ -35,6 +35,8 @@
 #' \itemize{
 #'   \item{usage:}{  A vector with the contents of the argument doc, the date run, the version of R used}
 #'   \item{dataUsed:}{  The contents of the argument data restricted to the groups used}
+#'   \item{dataNA:}{  A data frame with observations containing a least one missing value
+#'   for an analysis variable, NA if no missing values}
 #'   \item{params.grouping:}{  A list with the values of the arguments GroupVar and Groups}
 #'   \item{params.logical:}  {A vector with the values of the arguments ScreePlot,BoxPlots,PlotPoints,PlotEllipses,PlotHull,PlotMedians,PlotColors}
 #'   \item{analyticVars:}{  A vector with the value of the argument AnalyticVars}
@@ -89,6 +91,9 @@ fn.pca <-  function(doc = "fn.pca", data, labID=" ", GroupVar, Groups, AnalyticV
       data.Used <- data[Use.rows,]
     }
     else  data.Used <- data[, ]
+    #
+    dataKeep <- rep(T, nrow(data.Used)) # will contain indices for observations with
+    data.Used <- data.Used[dataKeep,]
     #
     if ((GroupVar[1] != " ") & (Groups[1] == "All"))
       groups <- as.character(unique(data.Used[, GroupVar]))
@@ -206,10 +211,13 @@ fn.pca <-  function(doc = "fn.pca", data, labID=" ", GroupVar, Groups, AnalyticV
     DataPlusPredicted[,pcNames] <- round(DataPlusPredicted[,pcNames], dig = digits)
     weights <- round(weights,dig = digits)
     variances <- round(importance.pca, dig = digits)
+    if (sum(dataKeep) < nrow(data.Used)) dataNA <- data.Used[!dataKeep]
+    else dataNA <- NA
     #
     if ((substr(folder,1,1) == " ") & (!Identify))
       out<-list(usage=fcn.date.ver,
                 dataUsed = data.Used,
+                dataNA=dataNA,
                 analyticVars = AnalyticVars,
                 params.logical = params.logical,
                 params.grouping = params.grouping,
@@ -221,6 +229,7 @@ fn.pca <-  function(doc = "fn.pca", data, labID=" ", GroupVar, Groups, AnalyticV
     if ((substr(folder,1,1) != " ") & (!Identify))
       out<-list(usage = fcn.date.ver,
                 dataUsed = data.Used,
+                dataNA=dataNA,
                 analyticVars = AnalyticVars,
                 params.logical = params.logical,
                 params.grouping = params.grouping,
@@ -233,6 +242,7 @@ fn.pca <-  function(doc = "fn.pca", data, labID=" ", GroupVar, Groups, AnalyticV
     if ((substr(folder,1,1) == " ") & (Identify))
       out<-list(usage=fcn.date.ver,
                 dataUsed=data.Used,
+                dataNA=dataNA,
                 analyticVars=AnalyticVars,
                 params.grouping=params.grouping,
                 ellipse.pct=Ellipses,
@@ -244,6 +254,7 @@ fn.pca <-  function(doc = "fn.pca", data, labID=" ", GroupVar, Groups, AnalyticV
     if ((substr(folder,1,1) != " ") & (Identify))
       out<-list(usage=fcn.date.ver,
                 dataUsed=data.Used,
+                dataNA=dataNA,
                 analyticVars=AnalyticVars,
                 params.grouping=params.grouping,
                 ellipse.pct=Ellipses,

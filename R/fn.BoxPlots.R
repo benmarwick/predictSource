@@ -63,10 +63,10 @@ fn.BoxPlots <-
     }
     else data.BP <- data
     #
-    dataKeep <- rep(T, nrow(data.Used)) # will contain indices for observations with
+    dataKeep <- rep(T, nrow(data.BP)) # will contain indices for observations with
     # no missing values, used only in list returned
     for (i in 1:length(AnalyticVars))
-      dataKeep[is.na(data.Used[,AnalyticVars[i]])] <- F
+      dataKeep[is.na(data.BP[,AnalyticVars[i]])] <- F
     #
     if (Groups[1] != " ") {
       par(mfrow = c(Nrow, Ncol))
@@ -98,7 +98,7 @@ fn.BoxPlots <-
     names(params.numeric)<-c("Nrow","Ncol")
     params.grouping<-list(GroupVar,Groups)
     names(params.grouping)<-c("GroupVar","Groups")
-    if (sum(dataKeep) < nrow(data.Used)) dataNA <- data.Used[!dataKeep]
+    if (sum(dataKeep) < nrow(data.BP)) dataNA <- data.BP[!dataKeep]
     else dataNA <- NA
     #
     out<-list(usage=fcn.date.ver,

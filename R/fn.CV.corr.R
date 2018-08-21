@@ -6,7 +6,8 @@
 #'
 #' @param data: R matrix or data frame containing the data to be analyzedfn
 #' @param GroupVar: name for variable defining grouping; if " ", if no grouping
-#' @param Groups: vector of values of group variable for which plots are to be done. if "All", use all groups, if " ", no grouping
+#' @param Groups: vector of values of group variable for which plots are to be done. if "All" (the default),
+#'  use all groups, if " ", no grouping
 #' @param AnalyticVars: vector of names (character values) of analytic results
 #' @param Transpose: see Details
 #' @param CV.digits: number of significant digits in CV estimates, default is 2
@@ -48,7 +49,7 @@ fn.CV.corr <-
   function(doc = "fn.CV.corr",
            data,
            GroupVar,
-           Groups,
+           Groups="All",
            AnalyticVars,
            Transpose = T,
            CV.digits = 2,

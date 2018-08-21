@@ -54,10 +54,10 @@ fn.PairsPlot <-
     }
     else data.Plot <- data
     #
-    dataKeep <- rep(T, nrow(data.Used)) # will contain indices for observations with
+    dataKeep <- rep(T, nrow(data.Plot)) # will contain indices for observations with
     # no missing values
     for (i in 1:length(AnalyticVars))
-      dataKeep[is.na(data.Used[,AnalyticVars[i]])] <- F
+      dataKeep[is.na(data.Plot[,AnalyticVars[i]])] <- F
     #
     if (Groups[1] == " ")
       pairs(data.Plot[, AnalyticVars], panel = panel.smooth,
@@ -81,7 +81,7 @@ fn.PairsPlot <-
     names(params.numeric)<-"Span"
     params.grouping<-list(GroupVar,Groups)
     names(params.grouping)<-c("GroupVar","Groups")
-    if (sum(dataKeep) < nrow(data.Used)) dataNA <- data.Used[!dataKeep]
+    if (sum(dataKeep) < nrow(data.Plot)) dataNA <- data.Plot[!dataKeep]
     else dataNA <- NA
     out<-list(usage=fcn.date.ver,
               dataUsed=data,

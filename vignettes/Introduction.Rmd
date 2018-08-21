@@ -155,16 +155,28 @@ pairsPlot <- fn.PairsPlot(data=ObsidianSources, GroupVar="Code", Groups="A", Ana
 
 Numerical estimates of the associations between pairs of analytic variables at each source, in the form of Spearman correlation coefficients, are produced by the function fn.CV.corr().  This function also produces an estimate of the coefficient of variation (the standard deviation divided by the mean) for each variable at each source.  Because the Spearman correlation coefficient is computed from the ranks of the data, it is not affected by the numerical value of an outlier.  The coefficient of variation does use the numerical values, hence is affected by an outlier.  This function returns a list with elements with tne names CV (the coefficients of variation) and corr (the correlations).  By default, both the coefficients of variation and the correlations are rounded to two decimal places.    
 
-Table 4 contains the correlation coefficient estimates for all pairs of variables at each source.  Each estimate describes how close the relation between a pair of variables is to strictly monotone.  If a relationship is roughly monotone, the correlation coefficient does not describe how rapidly one variable changes with respect to the other (the correlation coefficient for a linear relationship can be large even if the slope of the line describing the relationship is small).  For example, the estimated correlation between strontium and zirconium at source A is 0.51, even though the pairs plot of these elements with strontium as the ordinate shows that strontium increases slowly as zirconium increases.  The correlation table is very useful for summarizing relationships between pairs of elements at the sources: it is clear that these relationships vary substantially among these sources.
+Table 4a contains the Spearman correlation coefficient estimates for all pairs of variables at each source.  Each estimate describes how close the relation between a pair of variables is to strictly monotone.  If a relationship is roughly monotone, the correlation coefficient does not describe how rapidly one variable changes with respect to the other (the correlation coefficient for a linear relationship can be large even if the slope of the line describing the relationship is small).  For example, the estimated correlation between strontium and zirconium at source A is 0.51, even though the pairs plot of these elements with strontium as the ordinate shows that strontium increases slowly as zirconium increases.  The correlation table is very useful for summarizing relationships between pairs of elements at the sources: it is clear that these relationships vary substantially among these sources.
+
+Table 4b contains the Spearman correlation coefficients if group membership is ignored.  The high correlation between pairs of variables suggests that principal components will be a useful method for showing the variation among source groups in two dimensions.  
 
 ```{r } 
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 CV.corr<-fn.CV.corr(data = ObsidianSources, GroupVar="Code", Groups = "All", AnalyticVars=analyticVars)
-knitr::kable(CV.corr$corr, caption="Table 4.  Spearman correlations among pairs of elements from the Jemez sources.")
+knitr::kable(CV.corr$corr, caption="Table 4a.  Spearman correlations among pairs of elements from the Jemez sources, by group.")
 #
 ```
+
+```{r } 
+library(karon)
+data(ObsidianSources)
+analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+CV.corr<-fn.CV.corr(data = ObsidianSources, GroupVar=" ", Groups=" ", AnalyticVars=analyticVars)
+knitr::kable(CV.corr$corr, caption="Table 4b.  Spearman correlations among pairs of elements from the Jemez sources, all groups combined.")
+#
+```
+
 Table 5 shows the coefficients of variation for each element at each source.  Each standard deviation is small compared to the corresponding mean (each coefficient of variation is at most 0.11, and most are 0.05 or less) except for strontium at sources C and D.  The relatively large values of the coefficient of variation for strontium at those sources is a result of the small mean strontium values at those sources: the table of descriptive statistics (not shown) gives mean values for strontium of 5 and 10, at C and D, respectively, with ranges of 0 to 8 and 2 to 11, respectively.
 
 ```{r } 
@@ -308,7 +320,18 @@ library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 save.pca <- fn.pca(data=ObsidianSources, labID="ID", GroupVar="Code",Groups="All", AnalyticVars=analyticVars, pcPlot=F, ScreePlot=T)
+```
+
+```{r  echo=FALSE, results='hide',message=FALSE}
+library(karon)
+data(ObsidianSources)
+analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 save.pca <- fn.pca(data=ObsidianSources, labID="ID", GroupVar="Code",Groups="All", AnalyticVars=analyticVars, pcPlot=F, BoxPlots=T)
+```
+```{r  echo=FALSE, results='hide',message=FALSE}
+library(karon)
+data(ObsidianSources)
+analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 save.pca <- fn.pca(data=ObsidianSources, labID="ID", GroupVar="Code",Groups="All", AnalyticVars=analyticVars) 
 ```
 ```{r}
@@ -332,12 +355,13 @@ A classification tree is obtained from recursive partitioning when the target (d
 it is nonparametric (data need not be transformed before being offered to the model, and outliers to not affect the results);
 the predictor variables can be continuous, categorical, or both;
 the procedure used yields a prediction error by using cross-validation (defined below);
+the procedure allows some missing values (EXPLAIN);
 if the number of outcome groups and the number of predictor variables are both small enough, the tree can be displayed as a graph, showing the criterion for splitting at each node.
 The function fn.tree() implements the classification tree procedure.
 
 The tree procedure starts by finding the variable in the model statement and the two subgroups defined using that variable that yields two subgroups of the outcome variable (in the case of the obsidian data, subgroups of the sources) that are as "pure" as possible.  The default criterion, used in fn.tree(), is the Gini criterion. 
 
-The tree procedure is implemented using a model statement containing the predictor variables separated by "+" signs.  It is important to note that the variables are offered to the model in the order in which they appear in the model statement.  If several predictor variables yield equally good splits at a node, the procedure uses the variable that appears first in the model statement.  Therefore, model statements with variables in different orders can yield different categorical trees.  As a result, we suggest running a random forest analysis before a classification tree model, then list the predictor variables in the tree model statement in the order of importance estimated from the random forest model.  
+The tree procedure is implemented using a model statement containing the predictor variables separated by "+" signs.  The order in which the variables appear in the model statement may affect the tree produced by the algorithm (if several predictor variables yield equally good splits at a node, the procedure may use the variable that appears first in the model statement).  Therefore, model statements with variables in different orders can yield different categorical trees.  As a result, we suggest running a random forest analysis before a classification tree model, then list the predictor variables in the tree model statement in the order of importance estimated from the random forest model.  
 
 ```{r  echo=FALSE, results='hide',message=FALSE}
 library(karon)

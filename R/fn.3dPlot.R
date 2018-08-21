@@ -16,14 +16,14 @@
 #'
 #'#' @return   A list with the following components:
 #'  \itemize{
-#' \item{"usage"}{a vector with the contents of the argument doc, the date run, the version of R used}
-#' \item{"dataUsed"}{the contents of the argument data restricted to the groups used}
+#' \item{usage:}{  A vector with the contents of the argument doc, the date run, the version of R used}
+#' \item{dataUsed:}{  The contents of the argument data restricted to the groups used}
 #' \item{dataNA:}{  A data frame with observations containing a least one missing value
 #'   for an analysis variable, NA if no missing values}
-#' \item{"params"}{a vector with the values of the arguments ByGroup and SymbolSize}
-#' \item{"groups"}{a vector (may be of length 1) with the value of the argument Groups}
-#' \item{"analyticVars"}{a vector with the value of the argument AnalyticVars}
-#' \item{"colors"}{a vector with the value of the argument Color}
+#' \item{params:}{  A vector with the values of the arguments ByGroup and SymbolSize}
+#' \item{groups:}{  A vector (may be of length 1) with the value of the argument Groups}
+#' \item{analyticVars:}{  A vector with the value of the argument AnalyticVars}
+#' \item{colors:}{  A vector with the value of the argument Color}
 #' }
 #'
 #' @section Details:
@@ -67,6 +67,7 @@ fn.3dPlot <-
     # no missing values
     for (i in 1:length(AnalyticVars))
       dataKeep[is.na(data.Used[,AnalyticVars[i]])] <- F
+    data.Used <- data.Used[dataKeep,]  # remove observations with any analysis variable with missing data
     #
     if ((GroupVar[1] != " ") & (Groups[1] == "All"))
       groups <- as.character(unique(data.Used[, GroupVar]))
