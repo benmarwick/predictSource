@@ -8,9 +8,12 @@
 #' @param Groups  Vector of codes for groups to be used, 'All' (the default) if use all groups
 #' @param AnalyticVars  Names of analytic variables
 #' @param wts Option to weight the observations, if used, vector with length nrow(data); if NA (the default), assume equal weights
+#' @param CpDigits  Number of significant digits to display in the Cp table, default is value is 3
 #' @param plotTree If T (true, the default), plot the recursive partitioning tree
 #' @param plotCp  If T (tree, the default), plot the Cp table
 #' @param Model  A character string containing the variables considered separated by + signs
+#' @param minSplit  The minimum size of a group for splitting, default is 20 (the default in rpart())
+#' @parma cP  The required improvement in Cp for a group to be split, default is .01 (the default in rpart())
 #' @param folder  If " ", no files are written; otherwise, the path to the folder containing the excel files,
 #'                must end with two forward slashes
 #' @param ds.Classify  Name of the excel file containing the results of classifying the data, must end with .csv
@@ -51,15 +54,17 @@ fn.tree <-
            Groups = "All",
            AnalyticVars ,
            wts = NA,
+           CpDigits = 3,
            plotTree = T,
            plotCp = T,
            Model,
+           minSplit = 20,
+           cP = 0.01,
            folder = " ",
            ds.Classify,
            ds.CpTable,
            ds.CVtable,
            ds.OptSplit) {
-
 
     # create dataset Data based on grouping restrict to desired set of groups
     if (Groups[1] != "All") {
@@ -88,7 +93,9 @@ fn.tree <-
       rpart(formula.tree,
             data = Data.used,
             weights = Weights,
-            method = "class")
+            method = "class",
+            minsplit=minSplit,
+            cp=cP)
     if (plotTree == T)
       plot(as.party(Tree), tp_args = list(id = FALSE))
     browser()
@@ -99,17 +106,19 @@ fn.tree <-
     CpTable <- Tree$cptable
     if (folder != " ")  write.csv(CpTable, paste(folder, ds.CpTable, sep = ""))
     #
-    plot(
+    if (plotCp) {
+      plot(
       x = CpTable[, "nsplit"],
       y = CpTable[, "xerror"],
       ylim = c(0, 1),
       xlab = "number of splits",
       ylab = "rpart cross-validation error estimate",
       pch = 1
-    )
-    lines(x = CpTable[, "nsplit"], y = CpTable[, "xerror"], lty = 1)
-    legend(x = "bottomleft", legend = formula.rhs, bty = "n")
-    browser()
+             )
+      lines(x = CpTable[, "nsplit"], y = CpTable[, "xerror"], lty = 1)
+      legend(x = "bottomleft", legend = formula.rhs, bty = "n")
+      browser()
+     }
     # optimal number of splits
     nsplitopt <- vector(mode = "integer", length = 25)
     for (i in 1:length(nsplitopt)) {
@@ -126,6 +135,13 @@ fn.tree <-
     names(params.grouping)<-c("GroupVar","Groups")
     params.logical<-c(plotTree, plotCp)
     names(params.logical)<-c("plotTree", "plotCp")
+    params.splitting <- c(minSplit, cP)
+    names(params.splitting) <- c("minSplit","cP")
+    #
+    nsplit <- CpTable[,"nsplit"]
+    Cp <- round(CpTable[,-2],dig = CpDigits)
+    CpTable <- rbind(nsplit=nsplit,Cp)
+    #
     if (folder != " ")
       fileNames <- list(paste(folder,ds.Classify,sep=""),paste(folder,ds.CpTable,sep=""),
                         paste(folder,ds.CVtable,sep=""),paste(folder,ds.OptSplit,sep=""))
@@ -136,6 +152,7 @@ fn.tree <-
                 analyticVars=AnalyticVars,
                 params.grouping=params.grouping,
                 params.logical=params.logical,
+                params.splitting=params.splitting,
                 Tree = Tree,
                 classification = classification,
                 CpTable = CpTable
@@ -146,6 +163,7 @@ fn.tree <-
                 analyticVars=AnalyticVars,
                 params.grouping=params.grouping,
                 params.logical=params.logical,
+                params.splitting=params.splitting,
                 Tree = Tree,
                 classification = classification,
                 CpTable = CpTable,
