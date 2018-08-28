@@ -37,10 +37,7 @@
 #'  }
 #'
 #' @examples
-#' data(ObsidianSources)
-#' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-#' tree <- fn.tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
-#'                 Model="Sr"+"Nb"+"Rb"+"Y"+"Zr")
+#'
 #'  # variables in the model statement in order of importance from a random forst analysis
 #'
 #' @import rpart partykit Formula
@@ -140,7 +137,7 @@ fn.tree <-
     #
     nsplit <- CpTable[,"nsplit"]
     Cp <- round(CpTable[,-2],dig = CpDigits)
-    CpTable <- rbind(nsplit=nsplit,Cp)
+    CpTable <- cbind(nsplit,Cp)
     #
     if (folder != " ")
       fileNames <- list(paste(folder,ds.Classify,sep=""),paste(folder,ds.CpTable,sep=""),

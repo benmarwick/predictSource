@@ -12,6 +12,9 @@
 #' @param NvarUsed: If not NA, number of variables to use in each random forest call to rpart;
 #'                  if NA, rpart uses the default (the square root of the number of candidate variables)
 #' @param Seed: If not NA, a random number generator seed to produce reproducible results
+#' @param digitsImportance:  Significant digits for the importance measure, default is 1
+#' @param plotErrorRate: Logical, whether to show the error rate plot, default is T
+#' @param plotImportance: Logical, whether to show the plot of variable importance, default is T
 #' @param folder: If not " " (the default), the path to folder containing excel files, must end with '\\'
 #' @param ds.importance: Excel file with importance measures, extension .csv
 #' @param ds.confusion: Excel file with confusion matrix, extension.csv
@@ -53,8 +56,11 @@ fn.randomForest <-
            Groups = "All",
            AnalyticVars,
            Ntrees = 500,
-           NvarUsed,
+           NvarUsed = NA,
            Seed = 11111,
+           digitsImportance = 1,
+           plotErrorRate = T,
+           plotImportance = T,
            folder = " ",
            ds.importance ,
            ds.confusion ) {
@@ -90,11 +96,13 @@ fn.randomForest <-
                    mtry = NvarUsed,
                    ntree = Ntrees)
     # specify number of variables in each call to rpart
-    plot(fit.rf, main = "Estimated error rate by number of trees")
-    browser()
+    if (plotErrorRate) {
+      plot(fit.rf, main = "Estimated error rate by number of trees")
+      browser()
+    }
     #
     importance.rf <- importance(fit.rf)
-    varImpPlot(fit.rf, main = "Variable importance")
+    if (plotImportance)  varImpPlot(fit.rf, main = "Variable importance")
     if (substr(folder,1,1) != " ")  write.csv(importance.rf, file = paste(folder, ds.importance, sep = ""))
     #
     if (substr(folder,1,1) != " ")  write.csv(fit.rf$confusion, file = paste(folder, ds.confusion, sep = ""))
@@ -102,8 +110,11 @@ fn.randomForest <-
     fcn.date.ver<-paste(doc,date(),R.Version()$version.string)
     params.grouping<-list(GroupVar,Groups)
     names(params.grouping)<-c("GroupVar","Groups")
-    params.numeric<-c(NvarUsed, Ntrees, Seed)
-    names(params.numeric)<-c("NvarUsed", "Ntrees", "Seed")
+    params.numeric<-c(NvarUsed, Ntrees, Seed, digitsImportance)
+    names(params.numeric)<-c("NvarUsed", "Ntrees", "Seed", "digitsImportance")
+    params.logical<-c("plotErrorRate","plotImportance")
+    names(params.logical) <- c("plotErrorRate","plotImportance")
+    importance.rf <- round(importance.rf, dig=digitsImportance)
     if (folder != " ")
       fileNames <- list(paste(folder,ds.importance,sep=""),paste(folder,ds.confusion,sep=""))
     #
@@ -113,6 +124,7 @@ fn.randomForest <-
                 analyticVars=AnalyticVars,
                 params.grouping=params.grouping,
                 params.numeric=params.numeric,
+                params.logical=params.logical,
                 formula.rf=formula.rf,
                 forest = fit.rf,
                 importance = importance.rf,
@@ -124,6 +136,7 @@ fn.randomForest <-
                 analyticVars=AnalyticVars,
                 params.grouping=params.grouping,
                 params.numeric=params.numeric,
+                params.logical=params.logical,
                 formula.rf=formula.rf,
                 forest = fit.rf,
                 importance = importance.rf,
