@@ -5,8 +5,9 @@
 \title{fn.tree}
 \usage{
 fn.tree(doc = "fn.tree", data, GroupVar, Groups = "All", AnalyticVars,
-  wts = NA, plotTree = T, plotCp = T, Model, folder = " ", ds.Classify,
-  ds.CpTable, ds.CVtable, ds.OptSplit)
+  wts = NA, CpDigits = 3, plotTree = T, plotCp = T, Model,
+  minSplit = 20, cP = 0.01, folder = " ", ds.Classify, ds.CpTable,
+  ds.CVtable, ds.OptSplit)
 }
 \arguments{
 \item{doc}{Documentation, default is fn.tree (the function name)}
@@ -21,11 +22,15 @@ fn.tree(doc = "fn.tree", data, GroupVar, Groups = "All", AnalyticVars,
 
 \item{wts}{Option to weight the observations, if used, vector with length nrow(data); if NA (the default), assume equal weights}
 
+\item{CpDigits}{Number of significant digits to display in the Cp table, default is value is 3}
+
 \item{plotTree}{If T (true, the default), plot the recursive partitioning tree}
 
 \item{plotCp}{If T (tree, the default), plot the Cp table}
 
 \item{Model}{A character string containing the variables considered separated by + signs}
+
+\item{minSplit}{The minimum size of a group for splitting, default is 20 (the default in rpart())}
 
 \item{folder}{If " ", no files are written; otherwise, the path to the folder containing the excel files,
 must end with two forward slashes}
@@ -56,10 +61,7 @@ The function fits a classification tree model.  The variables in AnalyticVars ar
 Fit a recursive partitioning model
 }
 \examples{
-data(ObsidianSources)
-analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-tree <- fn.tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
-                Model="Sr"+"Nb"+"Rb"+"Y"+"Zr")
+
  # variables in the model statement in order of importance from a random forst analysis
 
 }

@@ -5,8 +5,9 @@
 \title{fn.randomForest}
 \usage{
 fn.randomForest(doc = "fn.randomForest", data, GroupVar, Groups = "All",
-  AnalyticVars, Ntrees = 500, NvarUsed, Seed = 11111, folder = " ",
-  ds.importance, ds.confusion)
+  AnalyticVars, Ntrees = 500, NvarUsed = NA, Seed = 11111,
+  digitsImportance = 1, plotErrorRate = T, plotImportance = T,
+  folder = " ", ds.importance, ds.confusion)
 }
 \arguments{
 \item{doc}{Documentation for the function use, default value is the function name}
@@ -25,6 +26,12 @@ fn.randomForest(doc = "fn.randomForest", data, GroupVar, Groups = "All",
 if NA, rpart uses the default (the square root of the number of candidate variables)}
 
 \item{Seed:}{If not NA, a random number generator seed to produce reproducible results}
+
+\item{digitsImportance:}{Significant digits for the importance measure, default is 1}
+
+\item{plotErrorRate:}{Logical, whether to show the error rate plot, default is T}
+
+\item{plotImportance:}{Logical, whether to show the plot of variable importance, default is T}
 
 \item{folder:}{If not " " (the default), the path to folder containing excel files, must end with '\\'}
 

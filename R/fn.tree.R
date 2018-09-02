@@ -13,9 +13,13 @@
 #' @param plotCp  If T (tree, the default), plot the Cp table
 #' @param Model  A character string containing the variables considered separated by + signs
 #' @param minSplit  The minimum size of a group for splitting, default is 20 (the default in rpart())
-#' @parma cP  The required improvement in Cp for a group to be split, default is .01 (the default in rpart())
+#' @param cP  The required improvement in Cp for a group to be split, default is .01 (the default in rpart())
+#' @param predictSources  Logical: if T, use the tree to predict sources for observations in predictData; default is F
+#' @param predictData  Data frame with data used to predict sources, must contain all variables in AnalyticVars
 #' @param folder  If " ", no files are written; otherwise, the path to the folder containing the excel files,
 #'                must end with two forward slashes
+#' @param ds.predictedSourcess  Name of the excel file containing the results of classifying the data, must end with .csv
+#' @param ds.predictedTotals Name of the excel file containing the total number of objects predicted to be from each sources, must end with .csv
 #' @param ds.Classify  Name of the excel file containing the results of classifying the data, must end with .csv
 #' @param ds.CpTable Name of the excel file containing the values of Cp at successive splits, must end with .csv
 #'
@@ -28,17 +32,29 @@
 #'   \item{dataUsed:}{ The contents of the argument data restricted to the groups used}
 #'   \item{params.grouping:}{ A list with the values of the arguments GroupVar and Groups}
 #'   \item{analyticVars:}{ A vector with the value of the argument AnalyticVars}
-#'   \item{params.logical:}{ The value of plotTree}
+#'   \item{params.logical:}{ The values of plotTree, predictSources}
 #'   \item{model:}{ A character string with the value of the argument Model}
 #'   \item{classification:}  {A data frame showing the crossclassification of sources and predicted sources}
 #'   \item{CpTable:}{  A data frame showing the decrease in Cp with increasing numbers of splits}
+#'   \item{predictedSources:}{  If predictSources = T, a data frame with the predicted sources}
+#'   \item{predictedTotals}{  If predictedSources = T, a vector with the number of objects predicted to be from each source}
 #'   \item{files:}{ If folder != " ", a character string with the path to the file containing the excel files
 #'    defined is ds.Classify and ds.CpTable.}
 #'  }
 #'
 #' @examples
-#'
+#' data(ObsidianSources)
+#' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+#' save.tree <- fn.tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
+#'   Model = "Rb"+"Sr"+"Y"+"Zr"+"Nb")
 #'  # variables in the model statement in order of importance from a random forst analysis
+#'  #
+#'  #  predict sources of artifacts
+#' data(ObsidianSources)
+#' data(ObsidianArtifacts)
+#' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+#' save.tree <- fn.tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
+#'   Model = "Rb"+"Sr"+"Y"+"Zr"+"Nb", predictSources=T, predictData=ObsidianArtifacts)
 #'
 #' @import rpart partykit Formula
 #'
@@ -57,11 +73,14 @@ fn.tree <-
            Model,
            minSplit = 20,
            cP = 0.01,
+           predictSources = F,
+           predictData,
            folder = " ",
            ds.Classify,
            ds.CpTable,
-           ds.CVtable,
-           ds.OptSplit) {
+           ds.OptSplit,
+           ds.predictedSources,
+           ds.predictedTotals) {
 
     # create dataset Data based on grouping restrict to desired set of groups
     if (Groups[1] != "All") {
@@ -127,11 +146,21 @@ fn.tree <-
       table(Model = nsplitopt[, "Model"], Splits = nsplitopt[, "Splits"])
     if (folder != " ")  write.csv(table(Nsplitopt), paste(folder, ds.OptSplit, sep = ""))
     #
+    if (predictSources == T) {
+      predictedSources <- predict(object = Tree, newdata = predictData)
+      predictedTotals <- apply(predictedSources,2,sum)
+      predictedResults <- cbind(predictedSources, predictData)
+      browser()
+      if (folder != " ") {
+        write.csv(predictedSources,paste(folder,ds.predictedSources, sep = ""))
+        write.csv(predictedTotals, paste(folder,ds.predictedTotals, sep = ""))
+      }
+    }
     fcn.date.ver<-paste(doc,date(),R.Version()$version.string)
     params.grouping<-list(GroupVar,Groups)
     names(params.grouping)<-c("GroupVar","Groups")
-    params.logical<-c(plotTree, plotCp)
-    names(params.logical)<-c("plotTree", "plotCp")
+    params.logical<-c(plotTree, plotCp, predictedSources)
+    names(params.logical)<-c("plotTree", "plotCp", "predictedSources")
     params.splitting <- c(minSplit, cP)
     names(params.splitting) <- c("minSplit","cP")
     #
@@ -139,10 +168,19 @@ fn.tree <-
     Cp <- round(CpTable[,-2],dig = CpDigits)
     CpTable <- cbind(nsplit,Cp)
     #
-    if (folder != " ")
+    if (folder != " ") {
+      if  (predictedSources == F)
       fileNames <- list(paste(folder,ds.Classify,sep=""),paste(folder,ds.CpTable,sep=""),
-                        paste(folder,ds.CVtable,sep=""),paste(folder,ds.OptSplit,sep=""))
+                        paste(folder,ds.CVtable,sep=""))
+      }
+    if (folder != " ") {
+      if (predictedSources == T)
+      fileNames <- list(paste(folder,ds.Classify,sep=""),paste(folder,ds.CpTable,sep=""),
+                        paste(folder,ds.CVtable,sep=""),
+                        paste(folder,ds.predictedSources,sep=""),paste(folder,ds.predictedTotals,sep=""))
+      }
     #
+    if (!predictSources) {
     if (substr(folder,1,1) == " ")
       out<-list(usage=fcn.date.ver,
                 dataUsed=Data.used,
@@ -166,5 +204,36 @@ fn.tree <-
                 CpTable = CpTable,
                 files = fileNames
       )
+    }
+    #
+    if (predictSources) {
+      if (substr(folder,1,1) == " ")
+        out<-list(usage=fcn.date.ver,
+                  dataUsed=Data.used,
+                  analyticVars=AnalyticVars,
+                  params.grouping=params.grouping,
+                  params.logical=params.logical,
+                  params.splitting=params.splitting,
+                  Tree = Tree,
+                  classification = classification,
+                  CpTable = CpTable,
+                  predictedResults = predictedResults,
+                  predictedTotals = predictedTotals
+        )
+      if (substr(folder,1,1) != " ")
+        out<-list(usage=fcn.date.ver,
+                  dataUsed=Data.used,
+                  analyticVars=AnalyticVars,
+                  params.grouping=params.grouping,
+                  params.logical=params.logical,
+                  params.splitting=params.splitting,
+                  Tree = Tree,
+                  classification = classification,
+                  CpTable = CpTable,
+                  predictedResults = predictedResults,
+                  predictedTotals = predictedTotals,
+                  files = fileNames
+        )
+    }
     out
   }
