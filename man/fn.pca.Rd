@@ -63,6 +63,8 @@ The function produces a plot of the first two principal components, the contents
 \itemize{
   \item{usage:}{  A vector with the contents of the argument doc, the date run, the version of R used}
   \item{dataUsed:}{  The contents of the argument data restricted to the groups used}
+  \item{dataNA:}{  A data frame with observations containing a least one missing value
+  for an analysis variable, NA if no missing values}
   \item{params.grouping:}{  A list with the values of the arguments GroupVar and Groups}
   \item{params.logical:}  {A vector with the values of the arguments ScreePlot,BoxPlots,PlotPoints,PlotEllipses,PlotHull,PlotMedians,PlotColors}
   \item{analyticVars:}{  A vector with the value of the argument AnalyticVars}

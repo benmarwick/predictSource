@@ -35,6 +35,8 @@ The function produces Q-Q plots (univariate and multivariate) of the first two p
 \itemize{
   \item{usage:}{ A vector with the contents of the argument doc, the date run, the version of R used}
   \item{dataUsed:}{ The contents of the argument data restricted to the groups used}
+  \item{dataNA:}{  A data frame with observations containing a least one missing value
+  for an analysis variable, NA if no missing values}
   \item{params.grouping:}{ A list with the values of the arguments GroupVar and Groups}
   \item{analyticVars:}{ A vector with the value of the argument AnalyticVars}
   \item{params.logical:}{ The value of QQtest}
