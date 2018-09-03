@@ -5,9 +5,10 @@
 \title{fn.randomForest}
 \usage{
 fn.randomForest(doc = "fn.randomForest", data, GroupVar, Groups = "All",
-  AnalyticVars, Ntrees = 500, NvarUsed = NA, Seed = 11111,
+  AnalyticVars, ID = " ", Ntrees = 500, NvarUsed = NA, Seed = 11111,
   digitsImportance = 1, plotErrorRate = T, plotImportance = T,
-  folder = " ", ds.importance, ds.confusion)
+  predictSources = F, predictData, folder = " ", ds.importance,
+  ds.confusion)
 }
 \arguments{
 \item{doc}{Documentation for the function use, default value is the function name}
@@ -17,6 +18,8 @@ fn.randomForest(doc = "fn.randomForest", data, GroupVar, Groups = "All",
 \item{GroupVar:}{Name of variable defining groups, grouping is required}
 
 \item{Groups:}{Vector of codes for groups to be used, 'All' if use all groups}
+
+\item{ID:}{if not " " (the default), the name of the variable with sample ID}
 
 \item{AnalyticVars:}{Vector with names of analytic variables}
 
@@ -33,11 +36,20 @@ if NA, rpart uses the default (the square root of the number of candidate variab
 
 \item{plotImportance:}{Logical, whether to show the plot of variable importance, default is T}
 
+\item{predictSources:}{Logical; if T, predict sources for the data in predictData; default is F}
+
+\item{predictData:}{data frame or matrix with data used to predict sources for observations,
+must contain all variables in AnalyticVars}
+
 \item{folder:}{If not " " (the default), the path to folder containing excel files, must end with '\\'}
 
 \item{ds.importance:}{Excel file with importance measures, extension .csv}
 
 \item{ds.confusion:}{Excel file with confusion matrix, extension.csv}
+
+\item{ds.predictedSources:}{If predictSources = T, an excel file with the information in predictedSources}
+
+\item{ds.predictedTotals:}{If predictSources = T, an excel file with the vector predictedTotals}
 }
 \value{
 The function implements a random forest analysis.  For each analysis, the variables used in the
@@ -56,6 +68,9 @@ The function implements a random forest analysis.  For each analysis, the variab
   \item{forest:}{  The random forest}
   \item{importance:}{  A data frame with information on the importance of each variable in AnalyticVars}
   \item{confusion:}{  A data frame with the estimate of the confusion matrix}
+  \item{predictedSources:}{  A data frame with prediction information, sample ID (if requested),
+     and values of AnalyticVars}
+  \item{predictedTotals:}{  A vector with the predicted totals for each group (source)}
   \item{files:}{ If folder != " ", a character string with the path to the file containing the excel files
                  with the importance and confusion estimates}
  }
@@ -68,5 +83,12 @@ data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 save.randomForest <- fn.randomForest(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
   NvarUsed=3)
+#
+# predicted sources for artifacts
+data(ObsidianSources)
+data(ObsidianArtifacts)
+analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+save.randomForest <- fn.randomForest(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
+  NvarUsed=3, predictSources=T,predictData=ObsidianArtifacts)
 
 }

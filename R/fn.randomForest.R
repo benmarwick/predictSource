@@ -7,6 +7,7 @@
 #' @param data:  Data frame with the data to be analyzed
 #' @param GroupVar: Name of variable defining groups, grouping is required
 #' @param Groups: Vector of codes for groups to be used, 'All' if use all groups
+#' @param ID: if not " " (the default), the name of the variable with sample ID
 #' @param AnalyticVars: Vector with names of analytic variables
 #' @param Ntrees: Number of trees grown, default value of 500 is that for the randomForest function
 #' @param NvarUsed: If not NA, number of variables to use in each random forest call to rpart;
@@ -15,9 +16,14 @@
 #' @param digitsImportance:  Significant digits for the importance measure, default is 1
 #' @param plotErrorRate: Logical, whether to show the error rate plot, default is T
 #' @param plotImportance: Logical, whether to show the plot of variable importance, default is T
+#' @param predictSources: Logical; if T, predict sources for the data in predictData; default is F
+#' @param predictData: data frame or matrix with data used to predict sources for observations,
+#'    must contain all variables in AnalyticVars
 #' @param folder: If not " " (the default), the path to folder containing excel files, must end with '\\'
 #' @param ds.importance: Excel file with importance measures, extension .csv
 #' @param ds.confusion: Excel file with confusion matrix, extension.csv
+#' @param ds.predictedSources: If predictSources = T, an excel file with the information in predictedSources
+#' @param ds.predictedTotals: If predictSources = T, an excel file with the vector predictedTotals
 #'
 #' @return The function implements a random forest analysis.  For each analysis, the variables used in the
 #'           analysis are considered in the order in which they appear in AnalyticVars (from left to right);
@@ -35,6 +41,9 @@
 #'   \item{forest:}{  The random forest}
 #'   \item{importance:}{  A data frame with information on the importance of each variable in AnalyticVars}
 #'   \item{confusion:}{  A data frame with the estimate of the confusion matrix}
+#'   \item{predictedSources:}{  A data frame with prediction information, sample ID (if requested),
+#'      and values of AnalyticVars}
+#'   \item{predictedTotals:}{  A vector with the predicted totals for each group (source)}
 #'   \item{files:}{ If folder != " ", a character string with the path to the file containing the excel files
 #'                  with the importance and confusion estimates}
 #'  }
@@ -44,6 +53,13 @@
 #' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 #' save.randomForest <- fn.randomForest(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
 #'   NvarUsed=3)
+#' #
+#' # predicted sources for artifacts
+#' data(ObsidianSources)
+#' data(ObsidianArtifacts)
+#' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+#' save.randomForest <- fn.randomForest(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
+#'   NvarUsed=3, predictSources=T,predictData=ObsidianArtifacts)
 #'
 #' @import  MASS randomForest rpart
 #'
@@ -55,12 +71,15 @@ fn.randomForest <-
            GroupVar,
            Groups = "All",
            AnalyticVars,
+           ID = " ",
            Ntrees = 500,
            NvarUsed = NA,
            Seed = 11111,
            digitsImportance = 1,
            plotErrorRate = T,
            plotImportance = T,
+           predictSources = F,
+           predictData,
            folder = " ",
            ds.importance ,
            ds.confusion ) {
@@ -107,6 +126,20 @@ fn.randomForest <-
     #
     if (substr(folder,1,1) != " ")  write.csv(fit.rf$confusion, file = paste(folder, ds.confusion, sep = ""))
     #
+    if (predictSources == T) {
+      response <- predict(object=fit.rf, newdata=predictData, type="response")
+      probMatrix <- predict(object=fit.rf, newdata=predictData, type="prob")
+      pred.source <- table(response)
+      pred.probs <- apply(probMatrix,2,sum)
+      predictedTotals <- list(source = pred.source, probs = pred.probs)
+      if (ID == " ")
+        predictions <- data.frame(source=as.character(response), as.matrix(probMatrix),
+                                  predictData[,AnalyticVars])
+      if (ID != " ")
+        predictions <- data.frame(source=as.character(response), as.matrix(probMatrix),
+                                predictData[,c(ID,AnalyticVars)])
+    }
+    #
     fcn.date.ver<-paste(doc,date(),R.Version()$version.string)
     params.grouping<-list(GroupVar,Groups)
     names(params.grouping)<-c("GroupVar","Groups")
@@ -115,11 +148,20 @@ fn.randomForest <-
     params.logical<-c("plotErrorRate","plotImportance")
     names(params.logical) <- c("plotErrorRate","plotImportance")
     importance.rf <- round(importance.rf, dig=digitsImportance)
-    if (folder != " ")
-      fileNames <- list(paste(folder,ds.importance,sep=""),paste(folder,ds.confusion,sep=""))
     #
-    if (substr(folder,1,1) == " ")
-      out<-list(usage=fcn.date.ver,
+    if (folder != " ") {
+      if (predictSources == F)
+      fileNames <- list(paste(folder,ds.importance,sep=""),paste(folder,ds.confusion,sep=""))
+    }
+    if (folder != " ") {
+      if (predictSources == T)
+        fileNames <- list(paste(folder,ds.importance,sep=""),paste(folder,ds.confusion,sep=""),
+                          paste(folder,ds.predictedSources,sep=""),paste(folder,ds.predictedTotals,sep=""))
+    }
+    #
+    if (substr(folder,1,1) == " ") {
+      if (predictSources == F)
+        out<-list(usage=fcn.date.ver,
                 dataUsed=Data.used,
                 analyticVars=AnalyticVars,
                 params.grouping=params.grouping,
@@ -130,7 +172,9 @@ fn.randomForest <-
                 importance = importance.rf,
                 confusion = fit.rf$confusion
       )
-    if (substr(folder,1,1) != " ")
+    }
+    if (substr(folder,1,1) != " ") {
+      if (predictSources == F)
       out<-list(usage=fcn.date.ver,
                 dataUsed=Data.used,
                 analyticVars=AnalyticVars,
@@ -143,5 +187,40 @@ fn.randomForest <-
                 confusion = fit.rf$confusion,
                 files = fileNames
       )
+    }
+    #
+    if (substr(folder,1,1) == " ") {
+      if (predictSources == T)
+        out<-list(usage=fcn.date.ver,
+                  dataUsed=Data.used,
+                  analyticVars=AnalyticVars,
+                  params.grouping=params.grouping,
+                  params.numeric=params.numeric,
+                  params.logical=params.logical,
+                  formula.rf=formula.rf,
+                  forest = fit.rf,
+                  importance = importance.rf,
+                  confusion = fit.rf$confusion,
+                  predictedSources = predictions,
+                  predictedTotals = predictedTotals
+        )
+    }
+    if (substr(folder,1,1) != " ") {
+      if (predictSources == T)
+        out<-list(usage=fcn.date.ver,
+                  dataUsed=Data.used,
+                  analyticVars=AnalyticVars,
+                  params.grouping=params.grouping,
+                  params.numeric=params.numeric,
+                  params.logical=params.logical,
+                  formula.rf=formula.rf,
+                  forest = fit.rf,
+                  importance = importance.rf,
+                  confusion = fit.rf$confusion,
+                  predictedSources = predictions,
+                  predictedTotals = predictedTotals,
+                  files = fileNames
+        )
+    }
     out
   }
