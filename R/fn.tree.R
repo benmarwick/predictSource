@@ -16,6 +16,7 @@
 #' @param cP  The required improvement in Cp for a group to be split, default is .01 (the default in rpart())
 #' @param predictSources  Logical: if T, use the tree to predict sources for observations in predictData; default is F
 #' @param predictData  Data frame with data used to predict sources, must contain all variables in AnalyticVars
+#' @param ID  If not " " (the default), name of a variable identifying a sample in predictData
 #' @param folder  If " ", no files are written; otherwise, the path to the folder containing the excel files,
 #'                must end with two forward slashes
 #' @param ds.predictedSourcess  Name of the excel file containing the results of classifying the data, must end with .csv
@@ -54,7 +55,7 @@
 #' data(ObsidianArtifacts)
 #' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 #' save.tree <- fn.tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
-#'   Model = "Rb"+"Sr"+"Y"+"Zr"+"Nb", predictSources=T, predictData=ObsidianArtifacts)
+#'   Model = "Rb"+"Sr"+"Y"+"Zr"+"Nb", predictSources=T, predictData=ObsidianArtifacts, ID="labID")
 #'
 #' @import rpart partykit Formula
 #'
@@ -75,6 +76,7 @@ fn.tree <-
            cP = 0.01,
            predictSources = F,
            predictData,
+           ID = " ",
            folder = " ",
            ds.Classify,
            ds.CpTable,
@@ -149,7 +151,12 @@ fn.tree <-
     if (predictSources == T) {
       predictedSources <- predict(object = Tree, newdata = predictData)
       predictedTotals <- apply(predictedSources,2,sum)
-      predictedResults <- cbind(predictedSources, predictData)
+      #  create vector with predicted source for each observation
+      source <- rep(" ",nrow(predictedSources))
+      for (i in 1:ncol(predictedSources))
+        source[predictedSources[,i]==1] <- colnames(predictedSources)[i]
+      if (substr(ID,1,1) == " ")  predictedResults<-data.frame(source,predictData[,AnalyticVars])
+      if (substr(ID,1,1) != " ")  predictedResults<-data.frame(source, predictData[,c(ID, AnalyticVars)])
       browser()
       if (folder != " ") {
         write.csv(predictedSources,paste(folder,ds.predictedSources, sep = ""))

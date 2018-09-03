@@ -6,7 +6,7 @@
 \usage{
 fn.tree(doc = "fn.tree", data, GroupVar, Groups = "All", AnalyticVars,
   wts = NA, CpDigits = 3, plotTree = T, plotCp = T, Model,
-  minSplit = 20, cP = 0.01, predictSources = F, predictData,
+  minSplit = 20, cP = 0.01, predictSources = F, predictData, ID = " ",
   folder = " ", ds.Classify, ds.CpTable, ds.OptSplit, ds.predictedSources,
   ds.predictedTotals)
 }
@@ -38,6 +38,8 @@ fn.tree(doc = "fn.tree", data, GroupVar, Groups = "All", AnalyticVars,
 \item{predictSources}{Logical: if T, use the tree to predict sources for observations in predictData; default is F}
 
 \item{predictData}{Data frame with data used to predict sources, must contain all variables in AnalyticVars}
+
+\item{ID}{If not " " (the default), name of a variable identifying a sample in predictData}
 
 \item{folder}{If " ", no files are written; otherwise, the path to the folder containing the excel files,
 must end with two forward slashes}
@@ -85,6 +87,6 @@ data(ObsidianSources)
 data(ObsidianArtifacts)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 save.tree <- fn.tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
-  Model = "Rb"+"Sr"+"Y"+"Zr"+"Nb", predictSources=T, predictData=ObsidianArtifacts)
+  Model = "Rb"+"Sr"+"Y"+"Zr"+"Nb", predictSources=T, predictData=ObsidianArtifacts, ID="labID")
 
 }
