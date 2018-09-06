@@ -157,7 +157,7 @@ fn.tree <-
         source[predictedSources[,i]==1] <- colnames(predictedSources)[i]
       if (substr(ID,1,1) == " ")  predictedResults<-data.frame(source,predictData[,AnalyticVars])
       if (substr(ID,1,1) != " ")  predictedResults<-data.frame(source, predictData[,c(ID, AnalyticVars)])
-      browser()
+      #
       if (folder != " ") {
         write.csv(predictedSources,paste(folder,ds.predictedSources, sep = ""))
         write.csv(predictedTotals, paste(folder,ds.predictedTotals, sep = ""))

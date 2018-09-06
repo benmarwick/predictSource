@@ -19,6 +19,8 @@
 #' @param predictSources: Logical; if T, predict sources for the data in predictData; default is F
 #' @param predictData: data frame or matrix with data used to predict sources for observations,
 #'    must contain all variables in AnalyticVars
+#' @param plotSourceProbs: Logical, if T (the default) and predictSources=T, show box plots of source
+#'    probabilities
 #' @param folder: If not " " (the default), the path to folder containing excel files, must end with '\\'
 #' @param ds.importance: Excel file with importance measures, extension .csv
 #' @param ds.confusion: Excel file with confusion matrix, extension.csv
@@ -80,6 +82,7 @@ fn.randomForest <-
            plotImportance = T,
            predictSources = F,
            predictData,
+           plotSourceProbs=T,
            folder = " ",
            ds.importance ,
            ds.confusion ) {
@@ -138,6 +141,17 @@ fn.randomForest <-
       if (ID != " ")
         predictions <- data.frame(source=as.character(response), as.matrix(probMatrix),
                                 predictData[,c(ID,AnalyticVars)])
+      #
+      #  box plots of source probabilities
+      browser()
+      probFrame <- data.frame(source=response, probMatrix)
+      probSource <- data.frame(source=response,SourceProbability=rep(NA,length(response)))
+      for (i in 1:length(response)) {
+        for (j in 1:ncol(probMatrix))
+          if (response[i]==colnames(probMatrix)[j])  probSource[i,2] <- probMatrix[i,j]
+        }
+      fn.BoxPlots(data = probSource, GroupVar="source", Groups="All",
+                  AnalyticVars="SourceProbability", Nrow=1, Ncol=1)
     }
     #
     fcn.date.ver<-paste(doc,date(),R.Version()$version.string)
@@ -145,8 +159,8 @@ fn.randomForest <-
     names(params.grouping)<-c("GroupVar","Groups")
     params.numeric<-c(NvarUsed, Ntrees, Seed, digitsImportance)
     names(params.numeric)<-c("NvarUsed", "Ntrees", "Seed", "digitsImportance")
-    params.logical<-c("plotErrorRate","plotImportance")
-    names(params.logical) <- c("plotErrorRate","plotImportance")
+    params.logical<-c(plotErrorRate,plotImportance,predictSources,plotSourceProbs)
+    names(params.logical) <- c("plotErrorRate","plotImportance","plotSourceProbs")
     importance.rf <- round(importance.rf, dig=digitsImportance)
     #
     if (folder != " ") {
@@ -193,6 +207,7 @@ fn.randomForest <-
       if (predictSources == T)
         out<-list(usage=fcn.date.ver,
                   dataUsed=Data.used,
+                  predictData=predictData,
                   analyticVars=AnalyticVars,
                   params.grouping=params.grouping,
                   params.numeric=params.numeric,
@@ -209,6 +224,7 @@ fn.randomForest <-
       if (predictSources == T)
         out<-list(usage=fcn.date.ver,
                   dataUsed=Data.used,
+                  predictData=predictData,
                   analyticVars=AnalyticVars,
                   params.grouping=params.grouping,
                   params.numeric=params.numeric,

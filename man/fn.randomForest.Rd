@@ -7,8 +7,8 @@
 fn.randomForest(doc = "fn.randomForest", data, GroupVar, Groups = "All",
   AnalyticVars, ID = " ", Ntrees = 500, NvarUsed = NA, Seed = 11111,
   digitsImportance = 1, plotErrorRate = T, plotImportance = T,
-  predictSources = F, predictData, folder = " ", ds.importance,
-  ds.confusion)
+  predictSources = F, predictData, plotSourceProbs = T, folder = " ",
+  ds.importance, ds.confusion)
 }
 \arguments{
 \item{doc}{Documentation for the function use, default value is the function name}
@@ -40,6 +40,9 @@ if NA, rpart uses the default (the square root of the number of candidate variab
 
 \item{predictData:}{data frame or matrix with data used to predict sources for observations,
 must contain all variables in AnalyticVars}
+
+\item{plotSourceProbs:}{Logical, if T (the default) and predictSources=T, show box plots of source
+probabilities}
 
 \item{folder:}{If not " " (the default), the path to folder containing excel files, must end with '\\'}
 
