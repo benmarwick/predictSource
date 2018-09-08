@@ -5,6 +5,7 @@
 
 #' @param doc Documentation for the function use, default value is the function name
 #' @param data:  Data frame with the data to be analyzed
+#' @param predictData:  Data frame with data on unknowns, NA if predictions not made (default value)
 #' @param GroupVar: Name of variable defining groups, grouping is required
 #' @param Groups: Vector of codes for groups to be used, 'All' if use all groups
 #' @param ID: if not " " (the default), the name of the variable with sample ID
@@ -35,6 +36,7 @@
 #' \itemize{
 #'   \item{usage:}{ A vector with the contents of the argument doc, the date run, the version of R used}
 #'   \item{dataUsed:}{ The contents of the argument data restricted to the groups used}
+#'   \item{predictData:}{  The data frame in the argument predictData}
 #'   \item{params.grouping:}{ A list with the values of the arguments GroupVar and Groups}
 #'   \item{analyticVars:}{ A vector with the value of the argument AnalyticVars}
 #'   \item{params.numeric:}{ A numeric vector with the values of the arguments Ntrees, NvarUsed, and Seed}
@@ -81,7 +83,7 @@ fn.randomForest <-
            plotErrorRate = T,
            plotImportance = T,
            predictSources = F,
-           predictData,
+           predictData = NA,
            plotSourceProbs=T,
            folder = " ",
            ds.importance ,
@@ -124,7 +126,10 @@ fn.randomForest <-
     }
     #
     importance.rf <- importance(fit.rf)
-    if (plotImportance)  varImpPlot(fit.rf, main = "Variable importance")
+    if (plotImportance)  {
+      varImpPlot(fit.rf, main = "Variable importance")
+      browser()
+    }
     if (substr(folder,1,1) != " ")  write.csv(importance.rf, file = paste(folder, ds.importance, sep = ""))
     #
     if (substr(folder,1,1) != " ")  write.csv(fit.rf$confusion, file = paste(folder, ds.confusion, sep = ""))
@@ -143,16 +148,35 @@ fn.randomForest <-
                                 predictData[,c(ID,AnalyticVars)])
       #
       #  box plots of source probabilities
-      browser()
-      probFrame <- data.frame(source=response, probMatrix)
+      # probFrame <- data.frame(source=response, probMatrix)
       probSource <- data.frame(source=response,SourceProbability=rep(NA,length(response)))
+         # data frame with assignment probabilities for the assigned source for each unknown
       for (i in 1:length(response)) {
         for (j in 1:ncol(probMatrix))
           if (response[i]==colnames(probMatrix)[j])  probSource[i,2] <- probMatrix[i,j]
         }
       fn.BoxPlots(data = probSource, GroupVar="source", Groups="All",
                   AnalyticVars="SourceProbability", Nrow=1, Ncol=1)
-    }
+      #
+      # box plots of probabilities for sources not assigned to each unknown
+      notSource<- rep("x", 4*length(response))
+      prob <- rep(NA, 4*length(response))
+      i.row <- 0
+      colNames <- as.character(colnames(probMatrix), mode="character")
+      for (i in 1:length(response)) {
+        for (j in 1:ncol(probMatrix)) {
+          if (response[i]!=colnames(probMatrix)[j]) {
+            i.row <- i.row + 1
+            notSource[i.row] <- as.character(colNames[j])
+            prob[i.row] <- probMatrix[i,j]
+          }
+        } # end of loop on j
+      } # end of loop on i
+      probNotSource <- data.frame(source=notSource, sourceProbability=prob)
+      browser()
+      fn.BoxPlots(data = probNotSource, GroupVar="source", Groups="All",
+                  AnalyticVars="sourceProbability", Nrow=1, Ncol=1)
+    } # end of code for predictSources == T
     #
     fcn.date.ver<-paste(doc,date(),R.Version()$version.string)
     params.grouping<-list(GroupVar,Groups)
