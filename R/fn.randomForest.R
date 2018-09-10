@@ -55,15 +55,10 @@
 #' @examples
 #' data(ObsidianSources)
 #' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-#' save.randomForest <- fn.randomForest(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
-#'   NvarUsed=3)
+#' save.randomForest <- fn.randomForest(data=ObsidianSources, GroupVar="Code",Groups="All",
+#'   ID="labID", AnalyticVars=analyticVars, NvarUsed=3)
 #' #
 #' # predicted sources for artifacts
-#' data(ObsidianSources)
-#' data(ObsidianArtifacts)
-#' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-#' save.randomForest <- fn.randomForest(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
-#'   NvarUsed=3, predictSources=T,predictData=ObsidianArtifacts)
 #'
 #' @import  MASS randomForest rpart
 #'
@@ -139,7 +134,8 @@ fn.randomForest <-
       probMatrix <- predict(object=fit.rf, newdata=predictData, type="prob")
       pred.source <- table(response)
       pred.probs <- apply(probMatrix,2,sum)
-      predictedTotals <- list(source = pred.source, probs = pred.probs)
+      predictedTotals <- rbind(pred.source, pred.probs)
+      rownames(predictedTotals) <- c("source", "sum probabilities")
       if (ID == " ")
         predictions <- data.frame(source=as.character(response), as.matrix(probMatrix),
                                   predictData[,AnalyticVars])
@@ -155,8 +151,11 @@ fn.randomForest <-
         for (j in 1:ncol(probMatrix))
           if (response[i]==colnames(probMatrix)[j])  probSource[i,2] <- probMatrix[i,j]
         }
-      fn.BoxPlots(data = probSource, GroupVar="source", Groups="All",
+      if (plotSourceProbs) {
+        fn.BoxPlots(data = probSource, GroupVar="source", Groups="All",
                   AnalyticVars="SourceProbability", Nrow=1, Ncol=1)
+        browser()
+      }
       #
       # box plots of probabilities for sources not assigned to each unknown
       notSource<- rep("x", 4*length(response))
@@ -173,8 +172,8 @@ fn.randomForest <-
         } # end of loop on j
       } # end of loop on i
       probNotSource <- data.frame(source=notSource, sourceProbability=prob)
-      browser()
-      fn.BoxPlots(data = probNotSource, GroupVar="source", Groups="All",
+      if (plotSourceProbs)
+        fn.BoxPlots(data = probNotSource, GroupVar="source", Groups="All",
                   AnalyticVars="sourceProbability", Nrow=1, Ncol=1)
     } # end of code for predictSources == T
     #

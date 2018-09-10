@@ -166,8 +166,8 @@ fn.tree <-
     fcn.date.ver<-paste(doc,date(),R.Version()$version.string)
     params.grouping<-list(GroupVar,Groups)
     names(params.grouping)<-c("GroupVar","Groups")
-    params.logical<-c(plotTree, plotCp, predictedSources)
-    names(params.logical)<-c("plotTree", "plotCp", "predictedSources")
+    params.logical<-c(plotTree, plotCp, predictSources)
+    names(params.logical)<-c("plotTree", "plotCp", "predictSources")
     params.splitting <- c(minSplit, cP)
     names(params.splitting) <- c("minSplit","cP")
     #

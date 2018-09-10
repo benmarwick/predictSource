@@ -470,5 +470,26 @@ knitr::kable(save.randomForest$confusion, caption="Table z. The confusion matrix
 #
 ```
 
-## Evalution of the predictions
+Setting the parameter predictSources to T and specifying the data frame with information on the unknowns (artifacts) in the parameter predictData yields the predicted sources for the unknowns from a random forest analysis.  
+
+```{r  echo=FALSE, message=FALSE}
+data(ObsidianSources)
+data(ObsidianArtifacts)
+analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+save.randomForest <- fn.randomForest(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars, NvarUsed=3, plotErrorRate=F, plotImportance=F, predictSources=T,predictData=ObsidianArtifacts, plotSourceProbs=F)
+knitr::kable(save.randomForest$predictedSources[1:5,], caption="Table z1. The predicted source and predicted 
+  source probabilities from a random forest model for the Jemez obsidian artifact data.")
+knitr::kable(save.randomForest$predictedTotals, caption="Table z2. The predicted number of artifacts from 
+  each Jemez source from a random forest model for the Jemez obsidian artifact data.")
+#
+```
+
+
+```{r  echo=FALSE, results='hide',message=FALSE}
+data(ObsidianSources)
+data(ObsidianArtifacts)
+analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+save.randomForest <- fn.randomForest(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars, NvarUsed=3, plotErrorRate=F, plotImportance=F, predictSources=T,predictData=ObsidianArtifacts, plotSourceProbs=T)
+```
+## Evalution of the predictions 
 
