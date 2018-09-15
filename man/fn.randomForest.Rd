@@ -7,13 +7,15 @@
 fn.randomForest(doc = "fn.randomForest", data, GroupVar, Groups = "All",
   AnalyticVars, ID = " ", Ntrees = 500, NvarUsed = NA, Seed = 11111,
   digitsImportance = 1, plotErrorRate = T, plotImportance = T,
-  predictSources = F, predictData, plotSourceProbs = T, folder = " ",
-  ds.importance, ds.confusion)
+  predictSources = F, predictData = NA, plotSourceProbs = T,
+  folder = " ", ds.importance, ds.confusion)
 }
 \arguments{
 \item{doc}{Documentation for the function use, default value is the function name}
 
 \item{data:}{Data frame with the data to be analyzed}
+
+\item{predictData:}{Data frame with data on unknowns, NA if predictions not made (default value)}
 
 \item{GroupVar:}{Name of variable defining groups, grouping is required}
 
@@ -63,6 +65,7 @@ The function implements a random forest analysis.  For each analysis, the variab
 \itemize{
   \item{usage:}{ A vector with the contents of the argument doc, the date run, the version of R used}
   \item{dataUsed:}{ The contents of the argument data restricted to the groups used}
+  \item{predictData:}{  The data frame in the argument predictData}
   \item{params.grouping:}{ A list with the values of the arguments GroupVar and Groups}
   \item{analyticVars:}{ A vector with the value of the argument AnalyticVars}
   \item{params.numeric:}{ A numeric vector with the values of the arguments Ntrees, NvarUsed, and Seed}
@@ -84,14 +87,15 @@ Random forest analysis
 \examples{
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-save.randomForest <- fn.randomForest(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
-  NvarUsed=3)
+save.randomForest <- fn.randomForest(data=ObsidianSources, GroupVar="Code",Groups="All",
+  ID="labID", AnalyticVars=analyticVars, NvarUsed=3)
 #
 # predicted sources for artifacts
 data(ObsidianSources)
 data(ObsidianArtifacts)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-save.randomForest <- fn.randomForest(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
-  NvarUsed=3, predictSources=T,predictData=ObsidianArtifacts)
+save.randomForest <- fn.randomForest(data=ObsidianSources, GroupVar="Code",Groups="All",
+AnalyticVars=analyticVars, NvarUsed=3, plotErrorRate=F, plotImportance=F, predictSources=T,
+predictData=ObsidianArtifacts, plotSourceProbs=T)
 
 }

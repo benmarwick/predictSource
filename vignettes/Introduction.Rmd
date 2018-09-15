@@ -491,5 +491,27 @@ data(ObsidianArtifacts)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 save.randomForest <- fn.randomForest(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars, NvarUsed=3, plotErrorRate=F, plotImportance=F, predictSources=T,predictData=ObsidianArtifacts, plotSourceProbs=T)
 ```
+
+
+```{r  echo=FALSE, message=FALSE}
+data(ObsidianSources)
+data(ObsidianArtifacts)
+analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+save.randomForest <- fn.randomForest(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars, NvarUsed=3, plotErrorRate=F, plotImportance=F, predictSources=T,predictData=ObsidianArtifacts, plotSourceProbs=F)
+check<-save.randomForest$predictedSources
+rows<-((check[,"B"] > 0.19) & (check[,"B"] < 0.30)) | ((check[,"C"] > 0.19) & (check[,"C"] < 0.30))
+knitr::kable(check[rows,], caption="Table z3.  Selected rows with relative large probabilities of
+             misclassification.")
+```
+
+```{r  echo=FALSE, results='hide', message=FALSE}
+data(ObsidianSources)
+data(ObsidianArtifacts)
+analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+save.randomForest <- fn.randomForest(data=ObsidianSources, GroupVar="Code",Groups="All", ID="labID", AnalyticVars=analyticVars, NvarUsed=3, plotErrorRate=F, plotImportance=F, predictSources=T,predictData=ObsidianArtifacts, plotSourceProbs=F)
+predictedSources<-save.randomForest$predictedSources[save.randomForest$predictedSources[,"source"]!="A",]
+save.pca <- fn.pca(data=predictedSources, labID="labID", GroupVar="source",Groups="All", AnalyticVars=analyticVars, PlotEllipses=F)
+```
+
 ## Evalution of the predictions 
 
