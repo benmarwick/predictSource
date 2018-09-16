@@ -445,7 +445,7 @@ data(ObsidianSources)
  save.randomForest <- fn.randomForest(data=ObsidianSources, GroupVar="Code",Groups="All",   AnalyticVars=analyticVars, NvarUsed=3, plotImportance=F)
 ```                                      
 
-The variable importance plot is shown in Figure y, and the corresponding table saved in the component named "importance" by the function is in Table z.  The corresponding estimaes of variable importance using the summary() function on the Tree component of the list produced by fn.tree() are quite different: in the order of the variables in Table z, those are 24, 21, 16, 17, 23.  Note that these sum to 101, and so are normalized, whereas those estimates in Table z sum to 86. Although the magnitudes are not necessarily comparable, the ordering is different (e.g., random forests estimates strontium to be most important, while it is third most important in the fn.tree() estimate; rubidium is of modest importance using the random forests estimate, while it is most important based on the fn.tree() estimate). 
+The variable importance plot is shown in Figure y, and the corresponding table saved in the component named "importance" by the function is in Table z.  The corresponding estimaes of variable importance using the summary() function on the Tree component of the list produced by fn.tree() are quite different: in the order of the variables in Table z, those are 24, 21, 16, 17, 23.  Note that these sum to 101, and so are normalized, whereas those estimates in Table z sum to 86. Although the magnitudes are not necessarily comparable, the ordering is different: random forests estimates strontium to be most important, while it is third most important in the fn.tree() estimate; rubidium is of modest importance using the random forests estimate, while it is most important based on the fn.tree() estimate. 
 
 ```{r  echo=FALSE, results='hide',message=FALSE}
 data(ObsidianSources)
@@ -470,7 +470,7 @@ knitr::kable(save.randomForest$confusion, caption="Table z. The confusion matrix
 #
 ```
 
-Setting the parameter predictSources to T and specifying the data frame with information on the unknowns (artifacts) in the parameter predictData yields the predicted sources for the unknowns from a random forest analysis.  
+Setting the parameter predictSources to T and specifying the data frame with information on the unknowns (artifacts) in the parameter predictData yields the predicted sources for the unknowns from a random forest analysis. Detailed information for each unknown is in the member predictedSources of the list returned by the function.  A sample of the information in this data frame is in Table z1. The predicted source, in the variable "source", is the source with the greatest origin probability; the data frame also includes the estimated probability of each source as origin.  Each probability is calculated as the number of trees predicting the unknown to be from that source, divided by the number of trees grown (by default, 500).  The data frame predictedTotals in the list returned by the function has two rows (Table z2).  The first row tabulates the number of unknowns predicted to be from each source (using the variable "source"); the second row contains the sum of the probabilities for each potential source. Note that the predictions in the first row agree with the estimates from the classification tree model in Table x.x.    
 
 ```{r  echo=FALSE, message=FALSE}
 data(ObsidianSources)
@@ -484,6 +484,11 @@ knitr::kable(save.randomForest$predictedTotals, caption="Table z2. The predicted
 #
 ```
 
+With the logical parameter plotSourceProbs set equal to T, the user obtains two box plots, in Figures z1 and z2.  The figures provide information on the frequency with which the number of analytic variables used in the random forest analysis (in this case, 3) can predict the source of an unknown correctly.
+
+The first plot uses only the probability for the predicted source for each unknown; the second uses all other probabilities.  We ignore the single unknown prediced to be from source A.  In the first plot, the median probability is 1 for artifacts from source C and only slightly less than 1 for artifacts from sources B and D. The first quartile of probabilities of unknowns from B is smaller then those from C and D: unknowns from source B are harder to predict than from C and D using three analytic variables. 
+
+The second plot shows that there are a few relatively large probabilities for unknowns incorrectly assigned to sources B and C.  Table z3 displays the data from the data frame predictedSources yielding the probabilities between 0.19 and 0.30 (note that a single point on the plot can represent more than one unknown).  The unknown yielding the large probability in Figure z2 for source B was predicted to be from source C; the unknowns yielding the large probabilties for source C were predicted to be from source B.  This suggests that it could be somewhat difficult to distinguish between artifacts from sources B and C.  Figure z3 shows a principal components plot (using fn.pca()) of the artifacts predicted to be from sources B, C, and D (the artifact from A was eliminated, as its point is far from the others).  Artifacts predicted to be from sources B and C appear to be well separated, so additional analysis would be necessary if potential misclassification between B and C were of concern.
 
 ```{r  echo=FALSE, results='hide',message=FALSE}
 data(ObsidianSources)
@@ -497,7 +502,7 @@ save.randomForest <- fn.randomForest(data=ObsidianSources, GroupVar="Code",Group
 data(ObsidianSources)
 data(ObsidianArtifacts)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-save.randomForest <- fn.randomForest(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars, NvarUsed=3, plotErrorRate=F, plotImportance=F, predictSources=T,predictData=ObsidianArtifacts, plotSourceProbs=F)
+save.randomForest <- fn.randomForest(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars, ID="labID", NvarUsed=3, plotErrorRate=F, plotImportance=F, predictSources=T,predictData=ObsidianArtifacts, plotSourceProbs=F)
 check<-save.randomForest$predictedSources
 rows<-((check[,"B"] > 0.19) & (check[,"B"] < 0.30)) | ((check[,"C"] > 0.19) & (check[,"C"] < 0.30))
 knitr::kable(check[rows,], caption="Table z3.  Selected rows with relative large probabilities of

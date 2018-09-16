@@ -73,7 +73,7 @@ The function fits a classification tree model.  The variables in AnalyticVars ar
  }
 }
 \description{
-Fit a recursive partitioning model
+Fit a recursive partitioning model (classification tree)
 }
 \examples{
 data(ObsidianSources)
@@ -84,9 +84,5 @@ save.tree <- fn.tree(data=ObsidianSources, GroupVar="Code",Groups="All", Analyti
  #
  #  predict sources of artifacts
 data(ObsidianSources)
-data(ObsidianArtifacts)
-analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-save.tree <- fn.tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
-  Model = "Rb"+"Sr"+"Y"+"Zr"+"Nb", predictSources=T, predictData=ObsidianArtifacts, ID="labID")
 
 }

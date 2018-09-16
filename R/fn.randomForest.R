@@ -63,8 +63,8 @@
 #' data(ObsidianArtifacts)
 #' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 #' save.randomForest <- fn.randomForest(data=ObsidianSources, GroupVar="Code",Groups="All",
-#' AnalyticVars=analyticVars, NvarUsed=3, plotErrorRate=F, plotImportance=F, predictSources=T,
-#' predictData=ObsidianArtifacts, plotSourceProbs=T)
+#' AnalyticVars=analyticVars, ID="labID", NvarUsed=3, plotErrorRate=F, plotImportance=F,
+#' predictSources=T, predictData=ObsidianArtifacts, plotSourceProbs=T)
 #'
 #' @import  MASS randomForest rpart
 #'

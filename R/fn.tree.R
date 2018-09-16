@@ -1,6 +1,6 @@
 #' fn.tree
 #'
-#' Fit a recursive partitioning model
+#' Fit a recursive partitioning model (classification tree)
 #'
 #' @param doc Documentation, default is fn.tree (the function name)
 #' @param data  Data frame with the data to be analyzed
@@ -52,10 +52,10 @@
 #'  #
 #'  #  predict sources of artifacts
 #' data(ObsidianSources)
-#' data(ObsidianArtifacts)
-#' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-#' save.tree <- fn.tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
-#'   Model = "Rb"+"Sr"+"Y"+"Zr"+"Nb", predictSources=T, predictData=ObsidianArtifacts, ID="labID")
+#`  data(ObsidianArtifacts)
+#``  analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+#1  save.tree <- fn.tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
+#``   Model = "Rb"+"Sr"+"Y"+"Zr"+"Nb", predictSources=T, predictData=ObsidianArtifacts, ID="labID")
 #'
 #' @import rpart partykit Formula
 #'
