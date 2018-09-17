@@ -10,11 +10,19 @@
 #' @param ArtifactGroup: name of variable with code for predicted source
 #' @param known.sources: vector of locations to be considered as sources
 #' @param predicted.soures: vector of predicted sources to be considered, not all must be in known.sources
-#' @param AnalyticVars: elements used in principal component analyses
+#' @param AnalyticVars: elements used in the principal component analyses
 #' @param loc.legend: location of legend added to plots (alternates are "topleft",
 #'    "bottomright","bottomleft")
 #' @param Identify: if T, the user can identify artifacts of interest and obtain a data set with information on those artifacts
 #'    (default is F)
+#' @param plotAllPoints: if T (the default), show a plot with two panes: all source points and
+#'    the convex hulls for the sources, and all unknown points with these source hulls
+#' @param plotHullsOutsidePoints: if T (the default), show a plot with two panes: all source points and
+#'    the convex hulls for the sources, and the unknown points lying outside of their predicted source
+#'    convex hulls and these hulls
+#' @param plotOutsidePoints: if T (the default), show a plot with one pane: athe unknown points lying
+#'  outside of their predicted source convex hulls and these hulls (the second pane for
+#'  plotHullsOutsidePoints)
 #' @param folder: path to folder containing result files each file name should end with .csv
 #' @param ds.importance: name of file with percent of variance explained for the known source analysis
 #' @param ds.pts.outside: name of file with information on artifacts with principal component pointsoutside of hull for predicted source
@@ -69,6 +77,9 @@ fn.pca.evaluation <-
            AnalyticVars,
            Identify = F,
            loc.legend = "topright",
+           plotAllPoints = T,
+           plotHullsOutsidePoints = T,
+           plotOutsidePoints = T,
            folder = " ",
            ds.importance,
            ds.pts.outside,
@@ -351,6 +362,41 @@ fn.pca.evaluation <-
     #  end of code for two-panel evaluation plot
     browser()
     #
+    #  code for single panel evaluation plot
+    #
+    if (plotOutsidePoints) {
+    par(mfrow=c(1,1))
+    plot(
+      type = "n",
+      x = range.pc1,
+      y = range.pc2,
+      xlab = "first PC",
+      ylab = "second PC",
+      main = "Points outside source hulls"
+    )
+    #
+    # plot source convex hulls
+    #
+    for (i in 1:length(known.sources))
+      lines(plot.data[[i]])
+    legend(
+      x = loc.legend,
+      legend = known.sources,
+      pch = 1:length(known.sources),
+      bty = "n"
+    )  # legend for plot
+    #
+    #  plot points outside of predicted hull
+    #
+    points(x = pcaLocationsArtifacts[!pcaLocationsArtifacts["in.hull"], "pc1"],
+           y = pcaLocationsArtifacts[!pcaLocationsArtifacts["in.hull"], "pc2"],
+           cex = .5,
+           pch = pcaLocationsArtifacts[!pcaLocationsArtifacts["in.hull"], "index"])
+    #
+    #  end of code for one-panel evaluation plot
+    browser()
+    }
+    #
     # code to create plot to identify points of interest
     #
     if (Identify == T) {
@@ -391,8 +437,11 @@ fn.pca.evaluation <-
     #  return information to an R object
     #
     fcn.date.ver<-paste(doc,date(),R.Version()$version.string)
-    params<-list(SourceGroup, ArtifactGroup,known.sources,predicted.sources)
-    names(params)<-c("SourceGroup","ArtifactGroup","known.sources","predicted.sources")
+    logicalParams <- c(plotAllPoints, plotHullsOutsidePoints, plotOutsidePoints)
+    names(logicalParams) <- c("plotAllPoints", "plotHullsOutsidePoints", "plotOutsidePoints")
+    params<-list(SourceGroup, ArtifactGroup,known.sources,predicted.sources,logicalParams)
+    names(params)<-c("SourceGroup","ArtifactGroup","known.sources","predicted.sources",
+                     "logicalParams")
     #
     if ((substr(folder,1,1) != " ") & (Identify == F)) {
       files=list(paste(folder,ds.importance,sep=""),paste(folder,ds.pts.outside,sep=""),
