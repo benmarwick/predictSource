@@ -407,7 +407,7 @@ tree$Tree
 
 The component classification in the list produced by fn.tree() contains a table with the predicted sources for the data used to create the tree.  The results for the Jemez obsidian source data are in Table y.  These results reproduce the information in Figure x.  Note that, in Figure x, the terminal nodes from left to right (1 to 5) contain the observations from sources B, A, D, C, and E, in that order, which is different from the row order in Table y.
 
-```{r, echo=FALSE  }
+```{r, echo=FALSE, message=FALSE  }
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
@@ -417,16 +417,41 @@ knitr::kable(tree$classification, caption = "Table y.  Classification tree resul
 #
 ```
 
-Table z contains the improvement in predicted group purity, as measured by Cp, and the estimated relative error rates and theirstandard errorsobtained from cross-validation from the tree procedure using the Jemez obsidian data. 
+Table z contains the improvement in predicted group purity, as measured by Cp, and the estimated relative error rates and theirstandard errorsobtained from cross-validation from the tree procedure using the Jemez obsidian source data. 
 
-```{r, echo=FALSE }
+```{r, echo=FALSE, message=FALSE }
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
  tree <- fn.tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
                  Model="Sr"+"Nb"+"Rb"+"Y"+"Zr", plotTree=F, plotCp = F)
-knitr::kable(tree$CpTable, caption = "Table z.  Cp table from the classification tree tree for the obsidian sources.")
+knitr::kable(tree$CpTable, caption = "Table z.  Cp table from the classification tree for the obsidian sources.")
 #
+```
+
+The fn.tree() function will predict sources of unknowns when the parameter predictSources is T and the parameter predictData specifies the data on the unknowns.  The member of the list produced by the function named predictedSources (a data frame) contains the predicted source for each observation, the analytic variables, and, if specified, a sample ID.  An example using the obsidian artifact data is in Table zz.  The member of the list named predictedTotals is a vector with the number of unknowns predicted to be from each source; Table zz1 contains the results using the obsidian data.
+
+```{r, echo=FALSE, message=FALSE }
+library(karon)
+data(ObsidianSources)
+data(ObsidianArtifacts)
+analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+save.tree <- fn.tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
+   Model = "Rb"+"Sr"+"Y"+"Zr"+"Nb", predictSources=T, predictData=ObsidianArtifacts, ID="labID",
+   plotTree=F, plotCp=F)
+knitr::kable(save.tree$predictedSources[1:5,], caption = "Table zz.  An example of the data frame containing predicted sources of obsidian artifacts from the classification tree for the obsidian sources.")
+```
+
+```{r, echo=FALSE, message=FALSE }
+library(karon)
+data(ObsidianSources)
+data(ObsidianArtifacts)
+analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+save.tree <- fn.tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
+   Model = "Rb"+"Sr"+"Y"+"Zr"+"Nb", predictSources=T, predictData=ObsidianArtifacts, ID="labID",
+   plotTree=F, plotCp=F)
+knitr::kable(save.tree$predictedTotals, caption = "Table zz1.  Predicted number of obsidian artifacts
+from each source based on the classification tree for the obsidian sources.")
 ```
 
 ## Random forests
