@@ -52,9 +52,9 @@
 #'  #
 #'  #  predict sources of artifacts
 #' data(ObsidianSources)
-#`  data(ObsidianArtifacts)
-#`   analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-#`   save.tree <- fn.tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
+#` data(ObsidianArtifacts)
+#` analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+#` save.tree <- fn.tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
 #`      Model = "Rb"+"Sr"+"Y"+"Zr"+"Nb", predictSources=T, predictData=ObsidianArtifacts, ID="labID",
 #`      plotTree=F, plotCp=F)
 #'

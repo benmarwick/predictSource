@@ -60,9 +60,22 @@
 #' data(ObsidianArtifacts)
 #' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 #' sources <- unique(ObsidianSources[,"Code"])
-#' pca.eval <- fn.pca.evaluation(SourceData=ObsidianSources, ArtifactData=ObsidianArtifacts,SourceGroup= "Code",
-#'    ArtifactGroup="Code",known.sources=sources, predicted.sources=sources, AnalyticVars=analyticVars)
+#' pca.eval <- fn.pca.evaluation(SourceData=ObsidianSources, ArtifactData=ObsidianArtifacts,
+#' SourceGroup= "Code", ArtifactGroup="Code",known.sources=sources, predicted.sources=sources,
+#' AnalyticVars=analyticVars)
 #'
+#' # evaluate predictions from a tree model
+#' data(ObsidianSources)
+#` data(ObsidianArtifacts)
+#` analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+#` sources <- unique(ObsidianSources[,"Code"])
+#` save.tree <- fn.tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
+#`       Model = "Rb"+"Sr"+"Y"+"Zr"+"Nb", predictSources=T, predictData=ObsidianArtifacts, ID="labID",
+#`       plotTree=F, plotCp=F)
+#` pca.eval <- fn.pca.evaluation(SourceData=ObsidianSources, ArtifactData=save.tree$predictedSources,
+#`        SourceGroup= "Code", ArtifactGroup="source",known.sources=sources, predicted.sources=sources,
+#`        AnalyticVars=analyticVars)
+#`
 #' @export
 
 fn.pca.evaluation <-
@@ -122,7 +135,7 @@ fn.pca.evaluation <-
     ArtifactIndex <- rep(NA, nrow(artifactData))
     for (i in 1:nrow(artifactData)) {
       for (j in 1:length(known.sources))
-        if (artifactData[i, ArtifactGroup] == predicted.sources[j])
+        if (artifactData[i, ArtifactGroup] == as.character(predicted.sources[j],type="character"))
           ArtifactIndex[i] <- j
     }  # end of loop on i
     data.Source <- rep(F,nrow(artifactData))
@@ -283,7 +296,12 @@ fn.pca.evaluation <-
     #  table with counts of artifacts inside and outside of predicted source hull
     #
     n.in.out <- table(pcaLocationsArtifacts[,"group"],pcaLocationsArtifacts[,"in.hull"])
-    colnames(n.in.out) <- c("outside", "inside")
+    dummy<-matrix(NA, nrow = nrow(n.in.out), ncol = ncol(n.in.out)+1)
+    dummy[1:nrow(n.in.out),1:ncol(n.in.out)]<-n.in.out
+    dummy[,ncol(n.in.out)+1] <- apply(n.in.out,1,sum)
+    dummy <- rbind(dummy, apply(dummy, 2, sum))
+    colnames(dummy) <- c("outside", "inside", "total")
+    rownames(dummy) <- c(rownames(n.in.out), "total")
     if (folder != " ") write.csv(in.out, file = paste(folder, ds.in.out, sep = ""))
     #
     #  evaluation plots

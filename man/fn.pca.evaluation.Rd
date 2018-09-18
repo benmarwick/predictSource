@@ -6,7 +6,8 @@
 \usage{
 fn.pca.evaluation(doc = "fn.pca.evaluation", SourceData, ArtifactData,
   labID = " ", SourceGroup, ArtifactGroup, known.sources, predicted.sources,
-  AnalyticVars, Identify = F, loc.legend = "topright", folder = " ",
+  AnalyticVars, Identify = F, loc.legend = "topright", plotAllPoints = T,
+  plotHullsOutsidePoints = T, plotOutsidePoints = T, folder = " ",
   ds.importance, ds.pts.outside, ds.in.out, ds.identified, ds.data.check)
 }
 \arguments{
@@ -26,13 +27,24 @@ fn.pca.evaluation(doc = "fn.pca.evaluation", SourceData, ArtifactData,
 
 \item{predicted.soures:}{vector of predicted sources to be considered, not all must be in known.sources}
 
-\item{AnalyticVars:}{elements used in principal component analyses}
+\item{AnalyticVars:}{elements used in the principal component analyses}
 
 \item{loc.legend:}{location of legend added to plots (alternates are "topleft",
 "bottomright","bottomleft")}
 
 \item{Identify:}{if T, the user can identify artifacts of interest and obtain a data set with information on those artifacts
 (default is F)}
+
+\item{plotAllPoints:}{if T (the default), show a plot with two panes: all source points and
+the convex hulls for the sources, and all unknown points with these source hulls}
+
+\item{plotHullsOutsidePoints:}{if T (the default), show a plot with two panes: all source points and
+the convex hulls for the sources, and the unknown points lying outside of their predicted source
+convex hulls and these hulls}
+
+\item{plotOutsidePoints:}{if T (the default), show a plot with one pane: athe unknown points lying
+outside of their predicted source convex hulls and these hulls (the second pane for
+plotHullsOutsidePoints)}
 
 \item{folder:}{path to folder containing result files each file name should end with .csv}
 
@@ -69,7 +81,10 @@ data(ObsidianSources)
 data(ObsidianArtifacts)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 sources <- unique(ObsidianSources[,"Code"])
-pca.eval <- fn.pca.evaluation(SourceData=ObsidianSources, ArtifactData=ObsidianArtifacts,SourceGroup= "Code",
-   ArtifactGroup="Code",known.sources=sources, predicted.sources=sources, AnalyticVars=analyticVars)
+pca.eval <- fn.pca.evaluation(SourceData=ObsidianSources, ArtifactData=ObsidianArtifacts,
+SourceGroup= "Code", ArtifactGroup="Code",known.sources=sources, predicted.sources=sources,
+AnalyticVars=analyticVars)
 
+# evaluate predictions from a tree model
+data(ObsidianSources)
 }
