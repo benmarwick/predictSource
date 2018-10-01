@@ -56,26 +56,41 @@
 #' @import mgcv
 #'
 #' @examples
+#'
+#' # Evaluate predicted sources of artifacts from using scatterplots
 #' data(ObsidianSources)
 #' data(ObsidianArtifacts)
 #' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 #' sources <- unique(ObsidianSources[,"Code"])
 #' pca.eval <- fn.pca.evaluation(SourceData=ObsidianSources, ArtifactData=ObsidianArtifacts,
 #' SourceGroup= "Code", ArtifactGroup="Code",known.sources=sources, predicted.sources=sources,
-#' AnalyticVars=analyticVars)
+#' AnalyticVars=analyticVars, plotOutsidePoints=F)
 #'
-#' # evaluate predictions from a tree model
+#' # evaluate predictions from a tree model: plot only points outside the predicted source hull
 #' data(ObsidianSources)
 #` data(ObsidianArtifacts)
 #` analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 #` sources <- unique(ObsidianSources[,"Code"])
 #` save.tree <- fn.tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
-#`       Model = "Rb"+"Sr"+"Y"+"Zr"+"Nb", predictSources=T, predictData=ObsidianArtifacts, ID="labID",
-#`       plotTree=F, plotCp=F)
-#` pca.eval <- fn.pca.evaluation(SourceData=ObsidianSources, ArtifactData=save.tree$predictedSources,
-#`        SourceGroup= "Code", ArtifactGroup="source",known.sources=sources, predicted.sources=sources,
-#`        AnalyticVars=analyticVars)
+#`     Model = "Rb"+"Sr"+"Y"+"Zr"+"Nb", predictSources=T, predictData=ObsidianArtifacts, ID="labID",
+#`     plotTree=F, plotCp=F)
+#' pca.eval <- fn.pca.evaluation(SourceData=ObsidianSources, ArtifactData=save.tree$predictedSources,
+#`         SourceGroup= "Code", ArtifactGroup="source",known.sources=sources, predicted.sources=sources,
+#`         AnalyticVars=analyticVars, plotAllPoints=F, plotHullsOutsidePoints = F, plotOutsidePoints = T)
 #`
+#' # evaluate predictions from a random forest analysis: plot only points outside the predicted source hull
+#' data(ObsidianSources)
+#` data(ObsidianArtifacts)
+#` analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+#` sources <- unique(ObsidianSources[,"Code"])
+#` save.randomForest <- fn.randomForest(data=ObsidianSources, GroupVar="Code",Groups="All",
+#`   AnalyticVars=analyticVars, ID="labID", NvarUsed=3, plotErrorRate=F, plotImportance=F,
+#`   predictSources=T, predictData=ObsidianArtifacts, plotSourceProbs=F)
+#' pca.eval <- fn.pca.evaluation(SourceData=ObsidianSources,
+#'   ArtifactData=save.randomForest$predictedSources, SourceGroup= "Code", ArtifactGroup="source",
+#'   known.sources=sources, predicted.sources=sources, AnalyticVars=analyticVars,
+#'   plotAllPoints=F, plotHullsOutsidePoints = F, plotOutsidePoints = T)
+#'
 #' @export
 
 fn.pca.evaluation <-
@@ -205,6 +220,9 @@ fn.pca.evaluation <-
     plot.data <-
       list(rep(NA, length(known.sources))) # save convex hull data for second plot
     #
+    # code for first two panel plot: source points and convex hulls, and all artifact poins with hulls
+    #
+    if (plotAllPoints == T) {
     plot.new()  # plots of source and artifact data with source convex hulls
     par(mfrow = c(1, 2))  #  two plots on one page
     #  first plot is convex hulls for sources and all artifact points
@@ -264,13 +282,13 @@ fn.pca.evaluation <-
       bty = "n"
     )
     browser()
-    #
-    # plots to check whether artifact points are in the predicted convex hulls
+    } # end of code for first two panel plot
     #
     #  create vector of indicators for whether principal components point for a artifact is in predicted source hull
     #
     artifact.in.hull <- rep(NA, nrow(pcaLocationsArtifacts))  # indicator, T if artifact in predicted source convex hull
     for (i in 1:length(known.sources)) {
+      plot.data[[i]] <- fn.convex.hull(hull.group = known.sources[i])
       index.i <- (known.sources[pcaLocationsArtifacts[, "index"]] == known.sources[i]) # rows with data prediced from this source
       if (sum(index.i) > 0) {
         # at least one artifact from source i
@@ -304,10 +322,15 @@ fn.pca.evaluation <-
     rownames(dummy) <- c(rownames(n.in.out), "total")
     if (folder != " ") write.csv(in.out, file = paste(folder, ds.in.out, sep = ""))
     #
-    #  evaluation plots
+    # end of code to create and use indicator for artifact points outside of predicted hulls
+    #
+    if (plotHullsOutsidePoints == T) {
+      #
+      #  two panel plot to check whether artifact points are in the predicted convex hulls
+      #  first panel is source convex hulls, second panel is hulls with artifact points outside of
+      #  predicted hull
     #
     #  if Identify = T, do not create the evaluation plot, but only the plot of points outside predicted hulls
-    #
     #
     #  left plot panel: convex hulls for sources
     #
@@ -377,12 +400,13 @@ fn.pca.evaluation <-
            cex = .5,
            pch = pcaLocationsArtifacts[!pcaLocationsArtifacts["in.hull"], "index"])
     #
-    #  end of code for two-panel evaluation plot
-    browser()
+        browser()
+    }  #  end of code for two-panel evaluation plot
     #
-    #  code for single panel evaluation plot
+    if (plotOutsidePoints == T) {
+    #  code for single panel evaluation plot; source convex hulls and artifact points outside
+    #  of predicted hull
     #
-    if (plotOutsidePoints) {
     par(mfrow=c(1,1))
     plot(
       type = "n",
@@ -396,6 +420,7 @@ fn.pca.evaluation <-
     # plot source convex hulls
     #
     for (i in 1:length(known.sources))
+      plot.data[[i]] <- fn.convex.hull(hull.group = known.sources[i])
       lines(plot.data[[i]])
     legend(
       x = loc.legend,
@@ -411,9 +436,8 @@ fn.pca.evaluation <-
            cex = .5,
            pch = pcaLocationsArtifacts[!pcaLocationsArtifacts["in.hull"], "index"])
     #
-    #  end of code for one-panel evaluation plot
     browser()
-    }
+    }   #  end of code for one-panel evaluation plot
     #
     # code to create plot to identify points of interest
     #

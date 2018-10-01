@@ -77,14 +77,24 @@ The function produces two plots: the convex hulls of the first two principal com
 Create plots to evaluate the predicted artifact sources using the source data principal component loadings
 }
 \examples{
+
+# Evaluate predicted sources of artifacts from using scatterplots
 data(ObsidianSources)
 data(ObsidianArtifacts)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 sources <- unique(ObsidianSources[,"Code"])
 pca.eval <- fn.pca.evaluation(SourceData=ObsidianSources, ArtifactData=ObsidianArtifacts,
 SourceGroup= "Code", ArtifactGroup="Code",known.sources=sources, predicted.sources=sources,
-AnalyticVars=analyticVars)
+AnalyticVars=analyticVars, plotOutsidePoints=F)
 
-# evaluate predictions from a tree model
+# evaluate predictions from a tree model: plot only points outside the predicted source hull
 data(ObsidianSources)
+pca.eval <- fn.pca.evaluation(SourceData=ObsidianSources, ArtifactData=save.tree$predictedSources,
+# evaluate predictions from a random forest analysis: plot only points outside the predicted source hull
+data(ObsidianSources)
+pca.eval <- fn.pca.evaluation(SourceData=ObsidianSources,
+  ArtifactData=save.randomForest$predictedSources, SourceGroup= "Code", ArtifactGroup="source",
+  known.sources=sources, predicted.sources=sources, AnalyticVars=analyticVars,
+  plotAllPoints=F, plotHullsOutsidePoints = F, plotOutsidePoints = T)
+
 }
