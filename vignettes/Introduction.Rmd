@@ -583,9 +583,9 @@ analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 sources <- unique(ObsidianSources[,"Code"])
 save.randomForest <- fn.randomForest(data=ObsidianSources, GroupVar="Code",Groups="All",
   AnalyticVars=analyticVars, ID="labID", NvarUsed=3, plotErrorRate=F, plotImportance=F,
-  predictSources=T, predictData=ObsidianArtifacts, plotSourceProbs=F)
-# pca.eval <- fn.pca.evaluation(SourceData=ObsidianSources,
-#   ArtifactData=save.randomForest$predictedSources, SourceGroup= "Code", ArtifactGroup="source",
-#   known.sources=sources, predicted.sources=sources, AnalyticVars=analyticVars,
-#  plotAllPoints=F, plotHullsOutsidePoints = F, plotOutsidePoints = T)
+  predictSources=T, predictData=ObsidianArtifacts, plotSourceProbs=F) 
+pca.eval <-fn.pca.evaluation(SourceData=ObsidianSources,
+   ArtifactData=save.randomForest$predictedSources, SourceGroup= "Code", ArtifactGroup="source",
+   known.sources=sources, predicted.sources=sources, AnalyticVars=analyticVars,
+   plotAllPoints=F, plotHullsOutsidePoints = F, plotOutsidePoints = T)
  ```

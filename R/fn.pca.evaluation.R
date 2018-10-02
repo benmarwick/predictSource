@@ -204,6 +204,7 @@ fn.pca.evaluation <-
     #
     range.pc1 <- range(pcaLocations[, "pc1"])
     range.pc2 <- range(pcaLocations[, "pc2"])
+    plot.new()
     #
     #  convex hulls for source data
     #
@@ -219,6 +220,7 @@ fn.pca.evaluation <-
     #
     plot.data <-
       list(rep(NA, length(known.sources))) # save convex hull data for second plot
+    browser()
     #
     # code for first two panel plot: source points and convex hulls, and all artifact poins with hulls
     #
@@ -400,14 +402,12 @@ fn.pca.evaluation <-
            cex = .5,
            pch = pcaLocationsArtifacts[!pcaLocationsArtifacts["in.hull"], "index"])
     #
-        browser()
     }  #  end of code for two-panel evaluation plot
     #
     if (plotOutsidePoints == T) {
     #  code for single panel evaluation plot; source convex hulls and artifact points outside
     #  of predicted hull
     #
- #   plot.new()
     par(mfrow=c(1,1))
     plot(
       type = "n",
