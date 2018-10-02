@@ -223,7 +223,7 @@ fn.pca.evaluation <-
     # code for first two panel plot: source points and convex hulls, and all artifact poins with hulls
     #
     if (plotAllPoints == T) {
-    plot.new()  # plots of source and artifact data with source convex hulls
+  #  plot.new()  # plots of source and artifact data with source convex hulls
     par(mfrow = c(1, 2))  #  two plots on one page
     #  first plot is convex hulls for sources and all artifact points
     #  second plot is convex hulls and artifacts lying outside of predicted hull
@@ -334,7 +334,7 @@ fn.pca.evaluation <-
     #
     #  left plot panel: convex hulls for sources
     #
-    plot.new()
+  #  plot.new()
     par(mfrow = c(1, 2))
     #  set up plot
     plot(
@@ -407,6 +407,7 @@ fn.pca.evaluation <-
     #  code for single panel evaluation plot; source convex hulls and artifact points outside
     #  of predicted hull
     #
+ #   plot.new()
     par(mfrow=c(1,1))
     plot(
       type = "n",
