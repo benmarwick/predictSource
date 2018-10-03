@@ -204,7 +204,6 @@ fn.pca.evaluation <-
     #
     range.pc1 <- range(pcaLocations[, "pc1"])
     range.pc2 <- range(pcaLocations[, "pc2"])
-    plot.new()
     #
     #  convex hulls for source data
     #
@@ -220,12 +219,11 @@ fn.pca.evaluation <-
     #
     plot.data <-
       list(rep(NA, length(known.sources))) # save convex hull data for second plot
-    browser()
     #
     # code for first two panel plot: source points and convex hulls, and all artifact poins with hulls
     #
     if (plotAllPoints == T) {
-  #  plot.new()  # plots of source and artifact data with source convex hulls
+    # plots of source and artifact data with source convex hulls
     par(mfrow = c(1, 2))  #  two plots on one page
     #  first plot is convex hulls for sources and all artifact points
     #  second plot is convex hulls and artifacts lying outside of predicted hull
@@ -239,7 +237,7 @@ fn.pca.evaluation <-
       y = range.pc2,
       xlab = "first PC",
       ylab = "second PC",
-      main = "Principal component plot of source data"
+      main = "Sources"
     )
     #  plot points
     points(
@@ -266,7 +264,7 @@ fn.pca.evaluation <-
       y = range.pc2,
       xlab = "first PC",
       ylab = "second PC",
-      main = "Artifact points and hulls of predicted sources"
+      main = "Hulls and unknowns"
     )
     #
     # convex hulls of source data
@@ -336,7 +334,6 @@ fn.pca.evaluation <-
     #
     #  left plot panel: convex hulls for sources
     #
-  #  plot.new()
     par(mfrow = c(1, 2))
     #  set up plot
     plot(
@@ -345,7 +342,7 @@ fn.pca.evaluation <-
       y = range.pc2,
       xlab = "first PC",
       ylab = "second PC",
-      main = "Convex hulls for sources"
+      main = "Source hulls"
     )
     #
     #  plot convex hulls of sources
@@ -381,7 +378,7 @@ fn.pca.evaluation <-
       y = range.pc2,
       xlab = "first PC",
       ylab = "second PC",
-      main = "Points outside source hulls"
+      main = "Unknowns outside hulls"
     )
     #
     # plot source convex hulls
@@ -401,6 +398,7 @@ fn.pca.evaluation <-
            y = pcaLocationsArtifacts[!pcaLocationsArtifacts["in.hull"], "pc2"],
            cex = .5,
            pch = pcaLocationsArtifacts[!pcaLocationsArtifacts["in.hull"], "index"])
+    browser()
     #
     }  #  end of code for two-panel evaluation plot
     #
@@ -485,6 +483,7 @@ fn.pca.evaluation <-
     params<-list(SourceGroup, ArtifactGroup,known.sources,predicted.sources,logicalParams)
     names(params)<-c("SourceGroup","ArtifactGroup","known.sources","predicted.sources",
                      "logicalParams")
+    colnames(n.in.out) <- c("outside","inside")
     #
     if ((substr(folder,1,1) != " ") & (Identify == F)) {
       files=list(paste(folder,ds.importance,sep=""),paste(folder,ds.pts.outside,sep=""),
