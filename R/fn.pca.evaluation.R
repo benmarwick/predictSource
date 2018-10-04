@@ -204,18 +204,7 @@ fn.pca.evaluation <-
     #
     range.pc1 <- range(pcaLocations[, "pc1"])
     range.pc2 <- range(pcaLocations[, "pc2"])
-    #
-    #  convex hulls for source data
-    #
-    fn.convex.hull <- function(hull.group) {
-      locations <- pcaLocationsSources[pcaLocationsSources[, "group"] == hull.group, c("pc1", "pc2")]
-      chull <- chull(x = locations[, "pc1"], y = locations[, "pc2"])
-      chull <- c(chull, chull[1])
-      hull.pts <-
-        locations[chull, c("pc1", "pc2")]  # points in order defining hull
-      lines(x = hull.pts[, "pc1"], y = hull.pts[, "pc2"])
-      hull.pts
-    }  # end of fn.convex.hull
+
     #
     plot.data <-
       list(rep(NA, length(known.sources))) # save convex hull data for second plot
@@ -230,6 +219,18 @@ fn.pca.evaluation <-
     #
     #  first plot: convex hulls and all source data
     #
+    #  convex hulls for source data
+    #
+      fn.convex.hull <- function(hull.group) {
+        locations <- pcaLocationsSources[pcaLocationsSources[, "group"] == hull.group, c("pc1", "pc2")]
+        chull <- chull(x = locations[, "pc1"], y = locations[, "pc2"])
+        chull <- c(chull, chull[1])
+        hull.pts <-
+          locations[chull, c("pc1", "pc2")]  # points in order defining hull
+        lines(x = hull.pts[, "pc1"], y = hull.pts[, "pc2"])
+        hull.pts
+      }  # end of fn.convex.hull
+      #
     #  set up size of plot
     plot(
       type = "n",
@@ -287,7 +288,20 @@ fn.pca.evaluation <-
     #  create vector of indicators for whether principal components point for a artifact is in predicted source hull
     #
     artifact.in.hull <- rep(NA, nrow(pcaLocationsArtifacts))  # indicator, T if artifact in predicted source convex hull
-    for (i in 1:length(known.sources)) {
+    #
+    #   convex hulls for source data
+    #
+    fn.convex.hull <- function(hull.group) {
+      locations <- pcaLocationsSources[pcaLocationsSources[, "group"] == hull.group, c("pc1", "pc2")]
+      chull <- chull(x = locations[, "pc1"], y = locations[, "pc2"])
+      chull <- c(chull, chull[1])
+      hull.pts <-
+        locations[chull, c("pc1", "pc2")]  # points in order defining hull
+      lines(x = hull.pts[, "pc1"], y = hull.pts[, "pc2"])
+      hull.pts
+    }  # end of fn.convex.hull
+    #
+        for (i in 1:length(known.sources)) {
       plot.data[[i]] <- fn.convex.hull(hull.group = known.sources[i])
       index.i <- (known.sources[pcaLocationsArtifacts[, "index"]] == known.sources[i]) # rows with data prediced from this source
       if (sum(index.i) > 0) {
@@ -334,6 +348,19 @@ fn.pca.evaluation <-
     #
     #  left plot panel: convex hulls for sources
     #
+    #  convex hulls for source data
+    #
+      fn.convex.hull <- function(hull.group) {
+        locations <- pcaLocationsSources[pcaLocationsSources[, "group"] == hull.group, c("pc1", "pc2")]
+        chull <- chull(x = locations[, "pc1"], y = locations[, "pc2"])
+        chull <- c(chull, chull[1])
+        hull.pts <-
+          locations[chull, c("pc1", "pc2")]  # points in order defining hull
+        lines(x = hull.pts[, "pc1"], y = hull.pts[, "pc2"])
+        hull.pts
+      }  # end of fn.convex.hull
+      #
+      if (plotAllPoints == F)  plot.new()
     par(mfrow = c(1, 2))
     #  set up plot
     plot(
@@ -406,6 +433,18 @@ fn.pca.evaluation <-
     #  code for single panel evaluation plot; source convex hulls and artifact points outside
     #  of predicted hull
     #
+    #  convex hulls for source data
+    #
+      fn.convex.hull <- function(hull.group) {
+        locations <- pcaLocationsSources[pcaLocationsSources[, "group"] == hull.group, c("pc1", "pc2")]
+        chull <- chull(x = locations[, "pc1"], y = locations[, "pc2"])
+        chull <- c(chull, chull[1])
+        hull.pts <-
+          locations[chull, c("pc1", "pc2")]  # points in order defining hull
+        lines(x = hull.pts[, "pc1"], y = hull.pts[, "pc2"])
+        hull.pts
+      }  # end of fn.convex.hull
+      #
     par(mfrow=c(1,1))
     plot(
       type = "n",
