@@ -115,9 +115,10 @@ fn.tree <-
             method = "class",
             minsplit=minSplit,
             cp=cP)
-    if (plotTree == T)
+    if (plotTree == T) {
       plot(as.party(Tree), tp_args = list(id = FALSE))
-    browser()
+      browser()
+      }
     # classification
     classification <- table(Tree$y, Sources)
     if (folder != " ") write.csv(t(classification), paste(folder, ds.Classify, sep = ""))

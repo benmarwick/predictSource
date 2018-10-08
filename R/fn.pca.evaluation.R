@@ -67,17 +67,18 @@
 #' AnalyticVars=analyticVars, plotOutsidePoints=F)
 #'
 #' # evaluate predictions from a tree model: plot only points outside the predicted source hull
-#' data(ObsidianSources)
+#` data(ObsidianSources)
 #` data(ObsidianArtifacts)
 #` analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 #` sources <- unique(ObsidianSources[,"Code"])
-#` save.tree <- fn.tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
-#`     Model = "Rb"+"Sr"+"Y"+"Zr"+"Nb", predictSources=T, predictData=ObsidianArtifacts, ID="labID",
-#`     plotTree=F, plotCp=F)
-#' pca.eval <- fn.pca.evaluation(SourceData=ObsidianSources, ArtifactData=save.tree$predictedSources,
-#`         SourceGroup= "Code", ArtifactGroup="source",known.sources=sources, predicted.sources=sources,
-#`         AnalyticVars=analyticVars, plotAllPoints=F, plotHullsOutsidePoints = F, plotOutsidePoints = T)
-#`
+#` save.tree <- fn.tree(data=ObsidianSources, GroupVar="Code",Groups="All",
+#`   AnalyticVars=analyticVars, ID="labID", Model = "Rb"+"Sr"+"Y"+"Zr"+"Nb",
+#`   predictSources=T, predictData=ObsidianArtifacts, ID="labID", plotTree=F, plotCp=F))
+#' pca.eval <- fn.pca.evaluation(SourceData=ObsidianSources,
+#'   ArtifactData=save.tree$predictedSources, SourceGroup= "Code", ArtifactGroup="source",
+#'   known.sources=sources, predicted.sources=sources, AnalyticVars=analyticVars,
+#'   plotAllPoints=F, plotHullsOutsidePoints = F, plotOutsidePoints = T)
+#'
 #' # evaluate predictions from a random forest analysis: plot only points outside the predicted source hull
 #' data(ObsidianSources)
 #` data(ObsidianArtifacts)
@@ -134,10 +135,10 @@ fn.pca.evaluation <-
     #
     #  if needed, create dummy lab ID
     #
-    if (labID != " ") {
-      ID = rep(" ", nrow(sourceData))
-      sourceData <- data.frame(sourceData[,c("group",AnalyticVars,"index", "data.source")], ID = ID)
-      }
+#    if (labID != " ") {
+#      ID = rep(" ", nrow(sourceData))
+#      sourceData <- data.frame(sourceData[,c("group",AnalyticVars,"index", "data.source")], ID = ID)
+#      }
     #
     #  create artifact data with group code and elements, restricted to potential sources of interest
     #
@@ -429,7 +430,7 @@ fn.pca.evaluation <-
     #
     }  #  end of code for two-panel evaluation plot
     #
-    if (plotOutsidePoints == T) {
+    if ((plotOutsidePoints == T) | (Identify == T)) {
     #  code for single panel evaluation plot; source convex hulls and artifact points outside
     #  of predicted hull
     #
@@ -469,50 +470,20 @@ fn.pca.evaluation <-
     #
     #  plot points outside of predicted hull
     #
-    points(x = pcaLocationsArtifacts[!pcaLocationsArtifacts["in.hull"], "pc1"],
-           y = pcaLocationsArtifacts[!pcaLocationsArtifacts["in.hull"], "pc2"],
-           cex = .5,
-           pch = pcaLocationsArtifacts[!pcaLocationsArtifacts["in.hull"], "index"])
+    points(x = pts.outside[, "pc1"], y = pts.outside[,"pc2"],
+           cex = .5, pch = pts.outside[, "index"])
+    #
+    if (Identify == T) {
+    # identify points of interest
+    index<-identify(pts.outside[,c("pc1","pc2")])
+    data.check<-pts.outside[index,]
+    colnames.data.check<-colnames(data.check)[(colnames(data.check)!="index")&(colnames(data.check)!="data.source")]
+    data.check<-data.check[,colnames.data.check]
+    data.check[,c("pc1","pc2")] <- round(as.matrix(data.check[,c("pc1","pc2")],mode="numeric"),dig=2)
+    }
     #
     browser()
     }   #  end of code for one-panel evaluation plot
-    #
-    # code to create plot to identify points of interest
-    #
-    if (Identify == T) {
-      plot.new()
-      par(mfrow = c(1,1))
-      plot(
-      type = "n",
-      x = range.pc1,
-      y = range.pc2,
-      xlab = "first PC",
-      ylab = "second PC",
-      main = "Points outside source hulls"
-    )
-    #
-    # plot source convex hulls
-    #
-    for (i in 1:length(known.sources))
-      lines(plot.data[[i]])
-    legend(
-      x = loc.legend,
-      legend = known.sources,
-      pch = 1:length(known.sources),
-      bty = "n" )  # legend for plot
-    #
-    #  plot points outside of predicted hull
-    #
-    points(x = pts.outside[, "pc1"], y = pts.outside[,"pc2"],
-           cex = .5, pch = pts.outside[, "index"])
-    # identify points of interest
-      index<-identify(pts.outside[,c("pc1","pc2")])
-      data.check<-pts.outside[index,]
-      colnames.data.check<-colnames(data.check)[(colnames(data.check)!="index")&(colnames(data.check)!="data.source")]
-      data.check<-data.check[,colnames.data.check]
-      data.check[,c("pc1","pc2")] <- round(as.matrix(data.check[,c("pc1","pc2")],mode="numeric"),dig=2)
-      browser()
-        }  # end of code for Identify = T
     #
     #  return information to an R object
     #
@@ -523,6 +494,10 @@ fn.pca.evaluation <-
     names(params)<-c("SourceGroup","ArtifactGroup","known.sources","predicted.sources",
                      "logicalParams")
     colnames(n.in.out) <- c("outside","inside")
+    #
+    keepVars <- c("group", AnalyticVars, "pc1", "pc2")
+    pts.outside <- pts.outside[,keepVars]
+    if (Identify == T) data.check <- data.check[,keepVars]
     #
     if ((substr(folder,1,1) != " ") & (Identify == F)) {
       files=list(paste(folder,ds.importance,sep=""),paste(folder,ds.pts.outside,sep=""),
