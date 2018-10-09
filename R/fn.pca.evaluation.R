@@ -73,7 +73,7 @@
 #` sources <- unique(ObsidianSources[,"Code"])
 #` save.tree <- fn.tree(data=ObsidianSources, GroupVar="Code",Groups="All",
 #`   AnalyticVars=analyticVars, ID="labID", Model = "Rb"+"Sr"+"Y"+"Zr"+"Nb",
-#`   predictSources=T, predictData=ObsidianArtifacts, ID="labID", plotTree=F, plotCp=F))
+#`   predictSources=T, predictData=ObsidianArtifacts, plotTree=F, plotCp=F)
 #' pca.eval <- fn.pca.evaluation(SourceData=ObsidianSources,
 #'   ArtifactData=save.tree$predictedSources, SourceGroup= "Code", ArtifactGroup="source",
 #'   known.sources=sources, predicted.sources=sources, AnalyticVars=analyticVars,
@@ -133,18 +133,20 @@ fn.pca.evaluation <-
     sourceData <- data.frame(sourceData[,c(SourceGroup,AnalyticVars)], SourceIndex, data.Source)
     colnames(sourceData) <- c("group",AnalyticVars,"index", "data.source")
     #
-    #  if needed, create dummy lab ID
+    #  create dummy lab ID for adding ArtifactData to sourceData
     #
-#    if (labID != " ") {
-#      ID = rep(" ", nrow(sourceData))
-#      sourceData <- data.frame(sourceData[,c("group",AnalyticVars,"index", "data.source")], ID = ID)
-#      }
+    ID = rep(" ", nrow(sourceData))
+    sourceData <- data.frame(sourceData[,c("group",AnalyticVars,"index", "data.source")], ID = ID)
     #
     #  create artifact data with group code and elements, restricted to potential sources of interest
     #
     artifactRows <- ArtifactData[, ArtifactGroup] %in% predicted.sources
-    if (labID == " ")  artifactData <- ArtifactData[artifactRows, c(ArtifactGroup, AnalyticVars)]
-      else  artifactData <- ArtifactData[artifactRows, c(ArtifactGroup, ID = labID, AnalyticVars)]
+    artifactData <- ArtifactData[artifactRows,]
+    if (labID == " ")  {
+      ID = rep(" ", nrow(artifactData))
+      artifactData <- cbind(artifactData[, c(ArtifactGroup, AnalyticVars)], ID = ID)
+      }
+    else  artifactData <- ArtifactData[, c(ArtifactGroup, AnalyticVars, ID = labID)]
     #
     #  add numeric code for predicted source to data set
     #
@@ -155,14 +157,9 @@ fn.pca.evaluation <-
           ArtifactIndex[i] <- j
     }  # end of loop on i
     data.Source <- rep(F,nrow(artifactData))
-    if (labID == " ") {
-      artifactData <- data.frame(artifactData[,c(ArtifactGroup,AnalyticVars)], ArtifactIndex, data.Source)
-      colnames(artifactData) <- c("group",AnalyticVars,"index", "data.source")
-      }
-    else {
-      artifactData <- data.frame(artifactData[,c(ArtifactGroup,AnalyticVars)], ArtifactIndex, data.Source, ID = labID)
-      colnames(artifactData) <- c("group", AnalyticVars, "index", "data.source", "ID")
-       }
+    artifactData <- cbind(artifactData[,c("source",AnalyticVars)], ArtifactIndex, data.Source, ID)
+    colnames(artifactData) <- c("group", AnalyticVars, "index", "data.source", "ID")
+    browser()
     #
     #  combine data sets for principal components analysis
     #
