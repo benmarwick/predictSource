@@ -145,8 +145,9 @@ fn.pca.evaluation <-
     if (labID == " ")  {
       ID = rep(" ", nrow(artifactData))
       artifactData <- cbind(artifactData[, c(ArtifactGroup, AnalyticVars)], ID = ID)
-      }
-    else  artifactData <- ArtifactData[, c(ArtifactGroup, AnalyticVars, ID = labID)]
+    }
+    else  artifactData <- cbind(artifactData[, c(ArtifactGroup, AnalyticVars)],
+                                           ID = artifactData[artifactRows,labID])
     #
     #  add numeric code for predicted source to data set
     #
@@ -157,9 +158,9 @@ fn.pca.evaluation <-
           ArtifactIndex[i] <- j
     }  # end of loop on i
     data.Source <- rep(F,nrow(artifactData))
-    artifactData <- cbind(artifactData[,c("source",AnalyticVars)], ArtifactIndex, data.Source, ID)
+    artifactData <- cbind(artifactData[,c("source",AnalyticVars)], ArtifactIndex, data.Source,
+                          artifactData[,"ID"])
     colnames(artifactData) <- c("group", AnalyticVars, "index", "data.source", "ID")
-    browser()
     #
     #  combine data sets for principal components analysis
     #
@@ -443,6 +444,7 @@ fn.pca.evaluation <-
         hull.pts
       }  # end of fn.convex.hull
       #
+    if ((plotAllPoints == F) & (plotHullsOutsidePoints == F))  plot.new()
     par(mfrow=c(1,1))
     plot(
       type = "n",
@@ -492,7 +494,8 @@ fn.pca.evaluation <-
                      "logicalParams")
     colnames(n.in.out) <- c("outside","inside")
     #
-    keepVars <- c("group", AnalyticVars, "pc1", "pc2")
+    if (labID == " ")  keepVars <- c("group", AnalyticVars, "pc1", "pc2")
+      else  keepVars <- c("group", "ID", AnalyticVars, "pc1", "pc2")
     pts.outside <- pts.outside[,keepVars]
     if (Identify == T) data.check <- data.check[,keepVars]
     #
