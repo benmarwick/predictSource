@@ -95,6 +95,9 @@ fn.pca <-  function(doc = "fn.pca", data, labID=" ", GroupVar, Groups, AnalyticV
     dataKeep <- rep(T, nrow(data.Used)) # will contain indices for observations with
     data.Used <- data.Used[dataKeep,]
     #
+    sortOnGroup <- order(data.Used[,GroupVar])
+    data.Used <- data.Used[sortOnGroup,]
+    #
     if ((GroupVar[1] != " ") & (Groups[1] == "All"))
       groups <- as.character(unique(data.Used[, GroupVar]))
     else if (GroupVar[1] != " ")

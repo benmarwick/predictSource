@@ -54,6 +54,9 @@ fn.PairsPlot <-
     }
     else data.Plot <- data
     #
+    sortOnGroup <- order(data.Plot[,GroupVar])
+    data.Plot <- data.Plot[sortOnGroup,]
+    #
     dataKeep <- rep(T, nrow(data.Plot)) # will contain indices for observations with
     # no missing values
     for (i in 1:length(AnalyticVars))
@@ -70,10 +73,9 @@ fn.PairsPlot <-
       for (i in 1:length(groups)) {
         rows.temp <- (data.Plot[, GroupVar] %in% groups[i])
         data.temp <- data.Plot[rows.temp, AnalyticVars]
-        if (i > 1) plot.new()
         pairs(data.temp, panel = panel.smooth, span = Span,
               main = paste("group", groups[i]))
- #      browser()
+        browser()
        }
     }
     fcn.date.ver<-paste(doc,date(),R.Version()$version.string)

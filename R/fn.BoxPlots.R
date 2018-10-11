@@ -63,6 +63,9 @@ fn.BoxPlots <-
     }
     else data.BP <- data
     #
+    sortGroup<-order(data.BP[,GroupVar])
+    data.BP <- data.BP[sortGroup,]
+    #
     dataKeep <- rep(T, nrow(data.BP)) # will contain indices for observations with
     # no missing values, used only in list returned
     for (i in 1:length(AnalyticVars))
@@ -87,6 +90,7 @@ fn.BoxPlots <-
         }
         plot.index <- plot.index + plots.per.page
         n.plots.remaining <- n.plots.remaining - plots.per.page
+        browser()
       }
     }
     if (Groups[1] == " ") {

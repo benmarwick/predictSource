@@ -64,6 +64,9 @@ fn.pca.Gauss <-
     dataKeep <- rep(T, nrow(data.Used)) # will contain indices for observations with
     data.Used <- data.Used[dataKeep,]
     #
+    sortOnGroup <- order(data.Used[,GroupVar])
+    data.Used <- data.Used[sortOnGroup,]
+    #
     # define variable groups as groups used in analysis
     if (Groups[1] == "All")
       groups <-
