@@ -67,6 +67,11 @@ fn.CV.corr <-
     else
       data.Used <- data[, c(GroupVar, AnalyticVars)] # includes observations with missing values
     #
+    # sort data by GroupVar
+    #
+    sortByGroup <- order(data.Used[,GroupVar])
+    data.Used <- data.Used[sortByGroup,]
+    #
     dataKeep <- rep(T, nrow(data.Used)) # will contain indices for observations with
         # no missing values
     for (i in 1:length(AnalyticVars))
