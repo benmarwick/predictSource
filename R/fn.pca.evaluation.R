@@ -158,8 +158,7 @@ fn.pca.evaluation <-
           ArtifactIndex[i] <- j
     }  # end of loop on i
     data.Source <- rep(F,nrow(artifactData))
-    browser()
-    artifactData <- cbind(artifactData[,c("source",AnalyticVars)], ArtifactIndex, data.Source,
+    artifactData <- cbind(artifactData[,c(ArtifactGroup,AnalyticVars)], ArtifactIndex, data.Source,
                           artifactData[,"ID"])
     colnames(artifactData) <- c("group", AnalyticVars, "index", "data.source", "ID")
     #
