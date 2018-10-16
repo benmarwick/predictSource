@@ -4,7 +4,7 @@
 \alias{fn.pca}
 \title{fn.pca}
 \usage{
-fn.pca(doc = "fn.pca", data, labID = " ", GroupVar, Groups, AnalyticVars,
+fn.pca(doc = "fn.pca", data, ID = " ", GroupVar, Groups, AnalyticVars,
   ScreePlot = F, BoxPlots = F, pcPlot = T, PlotPoints = T,
   PlotEllipses = T, legendLoc = "topright", PlotHull = F,
   PlotMedians = F, Ellipses = c(0.95, 0.99), PlotColors = T,
@@ -16,7 +16,7 @@ fn.pca(doc = "fn.pca", data, labID = " ", GroupVar, Groups, AnalyticVars,
 
 \item{data:}{R matrix or data frame containing the data to be analyzed}
 
-\item{labID:}{optional name for an ID, default is " " if no ID}
+\item{ID:}{optional name for an ID, default is " " if no ID}
 
 \item{GroupVar:}{name for variable defining grouping; if " ", no grouping}
 
@@ -92,6 +92,6 @@ To go to the next pane, right click and select "Stop" in base R; click on "Finis
 \examples{
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-save.pca <- fn.pca(data=ObsidianSources, labID="ID", GroupVar="Code",Groups="All", AnalyticVars=analyticVars)
+save.pca <- fn.pca(data=ObsidianSources, ID="ID", GroupVar="Code",Groups="All", AnalyticVars=analyticVars)
 
 }

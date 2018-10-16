@@ -5,7 +5,7 @@
 \title{fn.pca.evaluation}
 \usage{
 fn.pca.evaluation(doc = "fn.pca.evaluation", SourceData, ArtifactData,
-  labID = " ", SourceGroup, ArtifactGroup, known.sources, predicted.sources,
+  ID = " ", SourceGroup, ArtifactGroup, known.sources, predicted.sources,
   AnalyticVars, Identify = F, loc.legend = "topright", plotAllPoints = T,
   plotHullsOutsidePoints = T, plotOutsidePoints = T, folder = " ",
   ds.importance, ds.pts.outside, ds.in.out, ds.identified, ds.data.check)
@@ -17,7 +17,7 @@ fn.pca.evaluation(doc = "fn.pca.evaluation", SourceData, ArtifactData,
 
 \item{artifactData:}{corresponding data from artifacts}
 
-\item{labID:}{ID for sample, " " if none (default value)}
+\item{ID:}{ID for sample, " " if none (default value)}
 
 \item{SourceGroup:}{name of variable with code for location}
 
@@ -84,12 +84,15 @@ data(ObsidianArtifacts)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 sources <- unique(ObsidianSources[,"Code"])
 pca.eval <- fn.pca.evaluation(SourceData=ObsidianSources, ArtifactData=ObsidianArtifacts,
-SourceGroup= "Code", ArtifactGroup="Code",known.sources=sources, predicted.sources=sources,
-AnalyticVars=analyticVars, plotOutsidePoints=F)
+SourceGroup= "Code", ID="ID", ArtifactGroup="Code",known.sources=sources, predicted.sources=sources,
+AnalyticVars=analyticVars)
 
 # evaluate predictions from a tree model: plot only points outside the predicted source hull
-data(ObsidianSources)
-pca.eval <- fn.pca.evaluation(SourceData=ObsidianSources, ArtifactData=save.tree$predictedSources,
+pca.eval <- fn.pca.evaluation(SourceData=ObsidianSources,
+  ArtifactData=save.tree$predictedSources, SourceGroup= "Code", ArtifactGroup="source",
+  known.sources=sources, predicted.sources=sources, AnalyticVars=analyticVars,
+  plotAllPoints=F, plotHullsOutsidePoints = F, plotOutsidePoints = T)
+
 # evaluate predictions from a random forest analysis: plot only points outside the predicted source hull
 data(ObsidianSources)
 pca.eval <- fn.pca.evaluation(SourceData=ObsidianSources,

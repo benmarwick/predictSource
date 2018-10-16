@@ -164,7 +164,8 @@ library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 CV.corr<-fn.CV.corr(data = ObsidianSources, GroupVar="Code", Groups = "All", AnalyticVars=analyticVars)
-knitr::kable(CV.corr$corr, caption="Table 4a.  Spearman correlations among pairs of elements from the Jemez sources, by group.")
+knitr::kable(CV.corr$corr, caption="Table 4a.  Spearman correlations among pairs of elements from the Jemez sources,
+by group.")
 #
 ```
 

@@ -4,9 +4,9 @@
 \alias{fn.CV.corr}
 \title{fn.CV.corr}
 \usage{
-fn.CV.corr(doc = "fn.CV.corr", data, GroupVar, Groups = "All", AnalyticVars,
-  Transpose = T, CV.digits = 2, corr.digits = 2, folder = " ", ds.CV,
-  ds.corr)
+fn.CV.corr(doc = "fn.CV.corr", data, GroupVar, Groups = "All", ID = " ",
+  AnalyticVars, Transpose = T, CV.digits = 2, corr.digits = 2,
+  folder = " ", ds.CV, ds.corr)
 }
 \arguments{
 \item{data:}{R matrix or data frame containing the data to be analyzedfn}
@@ -15,6 +15,8 @@ fn.CV.corr(doc = "fn.CV.corr", data, GroupVar, Groups = "All", AnalyticVars,
 
 \item{Groups:}{vector of values of group variable for which plots are to be done. if "All" (the default),
 use all groups, if " ", no grouping}
+
+\item{ID:}{name of a variable with a lab ID (used for sorting data), default is " "}
 
 \item{AnalyticVars:}{vector of names (character values) of analytic results}
 

@@ -7,6 +7,7 @@
 #' @param GroupVar  name for variable defining grouping, " " if no grouping
 #' @param Groups  vector of values of group variable for which
 #' plots are to be done; if "All"', use all groups
+#' @param ID: optional name for an ID, default is " " if no ID
 #' @param AnalyticVars  vector of names (character values) of analytic results
 #' @param qqPlot  Logical, should Q-Q plots (univariate, multivariate) be shown, default is T
 #' @param Identify  Logical, should user identify points of interest, default is F
@@ -48,6 +49,7 @@ fn.pca.Gauss <-
            data,
            GroupVar,
            Groups,
+           ID = " ",
            AnalyticVars,
            qqPlot = T,
            Identify = F,
@@ -57,15 +59,23 @@ fn.pca.Gauss <-
     # restrict to desired set of groups
     if (Groups[1] != "All") {
       Use.rows <- (data[, GroupVar] %in% Groups)
-      data.Used <- data[Use.rows, c(GroupVar, AnalyticVars)]
+      data.Used <- data[Use.rows, ]
     } else
-      data.Used <- data[, c(GroupVar, AnalyticVars)]
+      data.Used <- data[, ]
     #
-    dataKeep <- rep(T, nrow(data.Used)) # will contain indices for observations with
+    dataKeep <- rep(T, nrow(data.Used)) # will contain indices for observations with data kept
     data.Used <- data.Used[dataKeep,]
     #
-    sortOnGroup <- order(data.Used[,GroupVar])
-    data.Used <- data.Used[sortOnGroup,]
+    #  sort on GroupVar and ID if specified
+    #
+    if (GroupVar[1] != " ") {
+      rowsSort <- order(data.Used[,GroupVar])
+      data.Used <- data.Used[rowsSort,]
+    }
+    if (ID[1] != " ") {
+      rowsSort <- order(data.Used[,ID])
+      data.Used <- data.Used[rowsSort,]
+    }
     #
     # define variable groups as groups used in analysis
     if (Groups[1] == "All")

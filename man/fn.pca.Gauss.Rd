@@ -4,8 +4,8 @@
 \alias{fn.pca.Gauss}
 \title{fn.pca.Gauss}
 \usage{
-fn.pca.Gauss(doc = "fn.pca.Gauss", data, GroupVar, Groups, AnalyticVars,
-  qqPlot = T, Identify = F, folder = " ", ds.pvalues)
+fn.pca.Gauss(doc = "fn.pca.Gauss", data, GroupVar, Groups, ID = " ",
+  AnalyticVars, qqPlot = T, Identify = F, folder = " ", ds.pvalues)
 }
 \arguments{
 \item{doc}{documentation for the analysis, default if the function name}
@@ -27,6 +27,8 @@ plots are to be done; if "All"', use all groups}
 
 \item{ds.pvalues}{excel file with Anderson-Darling and Mardia p-values, with
 extension .csv}
+
+\item{ID:}{optional name for an ID, default is " " if no ID}
 }
 \value{
 The function produces Q-Q plots (univariate and multivariate) of the first two principal components for each group if qqPlot=T.

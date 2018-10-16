@@ -8,6 +8,7 @@
 #' @param GroupVar: name for variable defining grouping; if " ", if no grouping
 #' @param Groups: vector of values of group variable for which plots are to be done. if "All" (the default),
 #'  use all groups, if " ", no grouping
+#' @param ID: name of a variable with a lab ID (used for sorting data), default is " "
 #' @param AnalyticVars: vector of names (character values) of analytic results
 #' @param Transpose: see Details
 #' @param CV.digits: number of significant digits in CV estimates, default is 2
@@ -50,6 +51,7 @@ fn.CV.corr <-
            data,
            GroupVar,
            Groups="All",
+           ID = " ",
            AnalyticVars,
            Transpose = T,
            CV.digits = 2,
@@ -60,18 +62,25 @@ fn.CV.corr <-
 
     if ((Groups[1] != " ") & (Groups[1] != "All")) {
       Use.rows <- (data[, GroupVar] %in% Groups)
-      data.Used <- data[Use.rows, c(GroupVar, AnalyticVars)]
+      data.Used <- data[Use.rows, ]
       }
-    else if (GroupVar[1] == " ")
-      data.Used <- data[, AnalyticVars]
-    else
-      data.Used <- data[, c(GroupVar, AnalyticVars)] # includes observations with missing values
+    else  data.Used <- data
+ #   else if (GroupVar[1] == " ")
+  #    data.Used <- data[, AnalyticVars]
+   # else
+    #  data.Used <- data[, c(GroupVar, AnalyticVars)] # includes observations with missing values
     #
-    # sort data by GroupVar
+    #  sort on GroupVar and ID if specified
     #
-    sortByGroup <- order(data.Used[,GroupVar])
-    data.Used <- data.Used[sortByGroup,]
-    #
+    if (GroupVar[1] != " ") {
+      rowsSort <- order(data.Used[,GroupVar])
+      data.Used <- data.Used[rowsSort,]
+    }
+    if (ID[1] != " ") {
+      rowsSort <- order(data.Used[,ID])
+      data.Used <- data.Used[rowsSort,]
+    }
+       #
     dataKeep <- rep(T, nrow(data.Used)) # will contain indices for observations with
         # no missing values
     for (i in 1:length(AnalyticVars))
@@ -84,8 +93,8 @@ fn.CV.corr <-
       #  coefficient of variation
       #
       CV <- rep(NA, length(AnalyticVars))
-      means <- apply(data.Used, 2, mean, na.rm=TRUE)
-      std <- sqrt(apply(data.Used, 2, var, na.rm=TRUE))
+      means <- apply(data.Used[, AnalyticVars], 2, mean, na.rm=TRUE)
+      std <- sqrt(apply(data.Used[,AnalyticVars], 2, var, na.rm=TRUE))
       CV <- round(std / means, dig = CV.digits)
       names(CV) <- AnalyticVars
       #
@@ -93,7 +102,7 @@ fn.CV.corr <-
       #
       Corrs <-
         round(cor(
-          x = data.Used,
+          x = data.Used[,AnalyticVars],
           method = "spearman",
           use = "pairwise.complete.obs"
         ),
@@ -124,8 +133,8 @@ fn.CV.corr <-
         #
         #  coefficients of variation, with NA observations removed
         #
-        means.i <- apply(data.i, 2, mean, na.rm = TRUE)
-        std.i <- sqrt(apply(data.i, 2, var, na.rm = TRUE))
+        means.i <- apply(data.i[,AnalyticVars], 2, mean, na.rm = TRUE)
+        std.i <- sqrt(apply(data.i[,AnalyticVars], 2, var, na.rm = TRUE))
         compute.CV[i,] <- round(std.i / means.i, dig = CV.digits)
         CV <- data.frame(groups, compute.CV)
         colnames(CV) <- c(GroupVar, AnalyticVars)
@@ -146,14 +155,14 @@ fn.CV.corr <-
       # data frame with Code and desired elements
       DataEls <- data.Used[, "Code"]
       for (i in 1:length(AnalyticVars))
-        DataEls <- data.frame(DataEls, data[, AnalyticVars[i]])
+        DataEls <- data.frame(DataEls, data.Used[, AnalyticVars[i]])
       colnames(DataEls) <- c("Code", AnalyticVars)
       # compute correlations and store in Corrs
       for (j in 1:length(groups)) {
         SourceData <- DataEls[DataEls[, GroupVar] == groups[j],]
         SourceCorr <-
           round(cor(
-            x = SourceData[, -1],
+            x = SourceData[,AnalyticVars],
             method = "spearman",
             use = "pairwise.complete.obs"
           ),

@@ -5,7 +5,7 @@
 #' @param doc: documentation in list returned by function
 #' @param sourceData: data from known sources, including code for location and element analyses, restricted to specified sources
 #' @param artifactData: corresponding data from artifacts
-#' @param labID: ID for sample, " " if none (default value)
+#' @param ID: ID for sample, " " if none (default value)
 #' @param SourceGroup: name of variable with code for location
 #' @param ArtifactGroup: name of variable with code for predicted source
 #' @param known.sources: vector of locations to be considered as sources
@@ -63,8 +63,8 @@
 #' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 #' sources <- unique(ObsidianSources[,"Code"])
 #' pca.eval <- fn.pca.evaluation(SourceData=ObsidianSources, ArtifactData=ObsidianArtifacts,
-#' SourceGroup= "Code", ArtifactGroup="Code",known.sources=sources, predicted.sources=sources,
-#' AnalyticVars=analyticVars, plotOutsidePoints=F)
+#' SourceGroup= "Code", ID="ID", ArtifactGroup="Code",known.sources=sources, predicted.sources=sources,
+#' AnalyticVars=analyticVars)
 #'
 #' # evaluate predictions from a tree model: plot only points outside the predicted source hull
 #` data(ObsidianSources)
@@ -72,7 +72,7 @@
 #` analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 #` sources <- unique(ObsidianSources[,"Code"])
 #` save.tree <- fn.tree(data=ObsidianSources, GroupVar="Code",Groups="All",
-#`   AnalyticVars=analyticVars, ID="labID", Model = "Rb"+"Sr"+"Y"+"Zr"+"Nb",
+#`   AnalyticVars=analyticVars, ID="ID", Model = "Rb"+"Sr"+"Y"+"Zr"+"Nb",
 #`   predictSources=T, predictData=ObsidianArtifacts, plotTree=F, plotCp=F)
 #' pca.eval <- fn.pca.evaluation(SourceData=ObsidianSources,
 #'   ArtifactData=save.tree$predictedSources, SourceGroup= "Code", ArtifactGroup="source",
@@ -85,7 +85,7 @@
 #` analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 #` sources <- unique(ObsidianSources[,"Code"])
 #` save.randomForest <- fn.randomForest(data=ObsidianSources, GroupVar="Code",Groups="All",
-#`   AnalyticVars=analyticVars, ID="labID", NvarUsed=3, plotErrorRate=F, plotImportance=F,
+#`   AnalyticVars=analyticVars, ID="ID", NvarUsed=3, plotErrorRate=F, plotImportance=F,
 #`   predictSources=T, predictData=ObsidianArtifacts, plotSourceProbs=F)
 #' pca.eval <- fn.pca.evaluation(SourceData=ObsidianSources,
 #'   ArtifactData=save.randomForest$predictedSources, SourceGroup= "Code", ArtifactGroup="source",
@@ -98,7 +98,7 @@ fn.pca.evaluation <-
   function(doc = "fn.pca.evaluation",
            SourceData,
            ArtifactData,
-           labID = " ",
+           ID = " ",
            SourceGroup,
            ArtifactGroup,
            known.sources,
@@ -135,19 +135,30 @@ fn.pca.evaluation <-
     #
     #  create dummy lab ID for adding ArtifactData to sourceData
     #
-    ID = rep(" ", nrow(sourceData))
-    sourceData <- data.frame(sourceData[,c("group",AnalyticVars,"index", "data.source")], ID = ID)
+    dummyID = rep(" ", nrow(sourceData))
+    sourceData <- data.frame(sourceData[,c("group",AnalyticVars,"index", "data.source")], ID = dummyID)
     #
     #  create artifact data with group code and elements, restricted to potential sources of interest
     #
     artifactRows <- ArtifactData[, ArtifactGroup] %in% predicted.sources
     artifactData <- ArtifactData[artifactRows,]
-    if (labID == " ")  {
+    if (ID == " ")  {
       ID = rep(" ", nrow(artifactData))
       artifactData <- cbind(artifactData[, c(ArtifactGroup, AnalyticVars)], ID = ID)
     }
     else  artifactData <- cbind(artifactData[, c(ArtifactGroup, AnalyticVars)],
-                                           ID = artifactData[artifactRows,labID])
+                                           ID = artifactData[artifactRows,ID])
+    #
+    #  sort on ArtifactGroup and ID
+    #
+    if (ArtifactGroup[1] != " ") {
+      rowsSort <- order(artifactData[,ArtifactGroup])
+      artifactData <- artifactData[rowsSort,]
+    }
+    if (ID[1] != " ") {
+      rowsSort <- order(artifactData[,ID])
+      artifactData <- artifactData[rowsSort,]
+    }
     #
     #  add numeric code for predicted source to data set
     #
@@ -177,7 +188,7 @@ fn.pca.evaluation <-
     #
     #  compute locations of points on principal component plot
     #
-    if (labID == " ")
+    if (ID == " ")
       pcaLocations <- cbind(analysisData[, c("group", AnalyticVars, "index","data.source")], pc1 = predict(pca)[, 1],
         pc2 = predict(pca)[, 2])
       else
@@ -494,7 +505,7 @@ fn.pca.evaluation <-
                      "logicalParams")
     colnames(n.in.out) <- c("outside","inside")
     #
-    if (labID == " ")  keepVars <- c("group", AnalyticVars, "pc1", "pc2")
+    if (ID == " ")  keepVars <- c("group", AnalyticVars, "pc1", "pc2")
       else  keepVars <- c("group", "ID", AnalyticVars, "pc1", "pc2")
     pts.outside <- pts.outside[,keepVars]
     if (Identify == T) data.check <- data.check[,keepVars]

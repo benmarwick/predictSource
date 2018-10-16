@@ -6,29 +6,30 @@
 #' @param data: R object (data frame) containing analytic data
 #' @param CheckDupVars: vector with names of identifying variables, typically group and lab ID
 #' @param GroupVar: if there are groups, name of variable defining the groups, default value of " ": no grouping
-#' @param Groups: character vector of groups by which numbers of samples and summary statistics will be tabulated default value of " ": tabulations are done for the entire data set value = "All": tabulation for each distinct code in GroupVar
+#' @param Groups: character vector of groups by which numbers of samples and statistics statistics will be tabulated default value of " ": tabulations are done for the entire data set value = "All": tabulation for each distinct code in GroupVar
+#' @param ID: name of lab ID, default is " " (no lab ID)
 #' @param AnalyticVars: character vector of names of analytic variables for which tabulations are done
 #' @param folder: character; if " ", no files are saved; if not, path to folder in which to store excel files with results (see Detail)
 #' @param ds.duplicates: file name for excel file with duplicate records, with extension csv (e.g. "duplicates.csv")
 #' @param ds.NegValues: file name for excel file with observations with negative analytic values (e.g. "negValues.csv")
 #' @param ds.Nsamples: file name for excel file with numbers of samples, with extension csv (e.g. "Nresults.csv")
-#' @param ds.summary: file with summary statistics for each analytic variable
+#' @param ds.statistics: file with statistics statistics for each analytic variable
 #'
 #' @return
 #'   If folder != " ", four excel files with duplicate observations, observations with negative
 #'       values for one or more analytic variables, numbers of observations for each analytic
-#'       variable, and summary statistics (quartiles and number missing)
-#'       if Groups != " ", numbers of observations and summary statistics are by group
+#'       variable, and statistics statistics (quartiles and number missing)
+#'       if Groups != " ", numbers of observations and statistics statistics are by group
 #'   A list with the following components:
 #'   \itemize{
 #' \item{usage:}{  A string with the contents of the argument doc, date run, R version used}
-#' \item{dataUsed:}{  The data frame specified by the argument data}|
+#' \item{dataUsed:}{  The data frame specified by the argument data and GroupVar}|
 #' \item{params:}{  A character vector with the values of CheckDupVars, GroupVar, and Groups}
 #' \item{analyticVars:}{  The vector of names specified by the argument AnalyticVars}
 #' \item{Duplicates:}{  A data frame containing the observations with duplicate values}
 #' \item{NegativeValues:}{  A data frame containing the observations with at least one negative value for a variable in AnalyticVars}
 #' \item{Nvalues:}{  A data frame contain the number of observations with a value for each analytic variable}
-#' \item{Summary:}{  A data frame containing the summary statistics (by group, if Group is specified)}
+#' \item{statistics:}{  A data frame containing the statistics statistics (by group, if Group is specified)}
 #' \item{files:}{  If folder != " ", a list containing the folder name and the name of each of the excel files}
 #'         }
 #'
@@ -39,7 +40,8 @@
 #' @examples
 #' data(ObsidianSources)
 #' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-#' CheckData<-fn.CheckData(data=ObsidianSources,CheckDupVars=c("Code","ID"),GroupVar="Code",Groups="All",AnalyticVars=analyticVars)
+#' CheckData<-fn.CheckData(data=ObsidianSources,CheckDupVars=c("Code","ID"),GroupVar="Code",Groups="All",
+#'   ID = "ID", AnalyticVars=analyticVars)
 #'
 #' @export
 
@@ -47,35 +49,48 @@ fn.CheckData <-
   function(doc = "fn.CheckData",
            data,
            CheckDupVars,
-           GroupVar,
+           GroupVar = " ",
            Groups,
+           ID = " ",
            AnalyticVars,
            folder = " ",
            ds.duplicates,
            ds.NegValues,
            ds.Nsamples,
-           ds.summary) {
+           ds.statistics) {
+    #
+    #  restrict data if specified
     #
     if ((Groups[1] != " ") & (Groups[1] != "All")) {
       UseRows <- (data[, GroupVar] %in% Groups)
-      data.subset <- data[UseRows, ]
-      DupRows <- duplicated(data.subset[, CheckDupVars])
-      DupRowNumbers <- (1:nrow(data.subset))[DupRows]
-      if (sum(DupRowNumbers) == 0)
-        duplicates <- NA
-      else  duplicates <- data[DupRows, ]
+      data.Used <- data[UseRows, ]
     }
-    else {
-      DupRows <- duplicated(data[, CheckDupVars])
-      DupRowNumbers <- (1:nrow(data))[DupRows]
-      if (sum(DupRowNumbers) == 0)
-        duplicates <- NA
-      else duplicates <- data[DupRows, ]
-    }
-    if (substr(folder,1,1) != " ")  write.csv(duplicates, paste(folder, ds.duplicates,
-                                                                sep = ""))
+    else  data.Used <- data
     #
-    MinimumValues <- apply(data[, AnalyticVars], 1, min, na.rm = T)
+    #  sort on GroupVar and ID if specified
+    #
+    if (GroupVar[1] != " ") {
+      rowsSort <- order(data.Used[,GroupVar])
+      data.Used <- data.Used[rowsSort,]
+    }
+    if (ID[1] != " ") {
+      rowsSort <- order(data.Used[,ID])
+      data.Used <- data.Used[rowsSort,]
+    }
+    #
+    #  check for duplicates
+    #
+    DupRows <- duplicated(data.Used[, CheckDupVars])
+    DupRowNumbers <- (1:nrow(data.Used))[DupRows]
+    if (sum(DupRowNumbers) == 0)
+        duplicates <- NA
+    else  duplicates <- data[DupRows, ]
+    if (substr(folder,1,1) != " ")  write.csv(duplicates, paste(folder, ds.duplicates,
+                                                           sep = ""))
+    #
+    #  statistics statistics
+    #
+    MinimumValues <- apply(data.Used[, AnalyticVars], 1, min, na.rm = T)
     NegRows <- (MinimumValues < 0)
     if (sum(NegRows) == 0)
       NegativeValues <- NA
@@ -84,60 +99,61 @@ fn.CheckData <-
       if (substr(folder,1,1) != " ")  write.csv(NegativeValues, paste(folder, ds.NegValues,
                                                                       sep = ""))
     }
-    if (GroupVar == " ") {
+    if ((GroupVar[1] == " ") | (Groups[1] == " ")) {
       Nvalues <- rep(0, length(AnalyticVars))
       for (i in 1:length(AnalyticVars)) Nvalues[i] <- sum(!is.na(data[,
                                                                       AnalyticVars[i]]))
     }
-    if (Groups[1] == "All") {
-      groups <- as.character(unique(data[, GroupVar]))
+    if (Groups == "All") {
+      groups <- as.character(unique(data.Used[, GroupVar]))
       n.groups <- length(groups)
       nvalues <- matrix(0, nrow = n.groups + 1, ncol = length(AnalyticVars))
       for (i in 1:n.groups) {
-        data.groupi <- data[data[, GroupVar] == groups[i],
+        data.groupi <- data.Used[data.Used[, GroupVar] == groups[i],
                             AnalyticVars]
         for (j in 1:length(AnalyticVars)) nvalues[i, j] <- sum(!is.na(data.groupi[,
                                                                                   AnalyticVars[j]]))
-      }
+      }  # end of loop on i
       nvalues[nrow(nvalues), ] <- apply(nvalues[-nrow(nvalues),
                                                 ], 2, sum)
       colnames(nvalues) <- AnalyticVars
       Nvalues <- data.frame(Group = c(groups, "Total"), nvalues)
-    }
-    if ((Groups[1] != " ") & (Groups[1] != "All")) {
+    } # end of code for Groups == "All"
+    #
+    if ((Groups[1] != " ") & (Groups != "All")) {
       n.groups <- length(Groups)
       nvalues <- matrix(0, nrow = n.groups + 1, ncol = length(AnalyticVars))
       for (i in 1:n.groups) {
-        data.groupi <- data[data[, GroupVar] == Groups[i],
+        data.groupi <- data.Used[data.Used[, GroupVar] == Groups[i],
                             AnalyticVars]
         for (j in 1:length(AnalyticVars)) nvalues[i, j] <- sum(!is.na(data.groupi[,
                                                                                   AnalyticVars[j]]))
-      }
+      } # end of loop on i
       nvalues[nrow(nvalues), ] <- apply(nvalues[-nrow(nvalues),
                                                 ], 2, sum)
       colnames(nvalues) <- AnalyticVars
       Nvalues <- data.frame(Group = c(Groups, "Total"), nvalues)
-    }
+    } # end of loop for restricted groups
     if (substr(folder,1,1) != " ")  write.csv(Nvalues, paste(folder, ds.Nsamples, sep = ""))
+    #
     if (GroupVar == " ") {
-      summary <- matrix(NA, nrow = length(AnalyticVars), ncol = 7)
+      statistics <- matrix(NA, nrow = length(AnalyticVars), ncol = 7)
       for (j in 1:length(AnalyticVars)) {
-        summaryj <- summary(data[, AnalyticVars[j]])
-        summary[j, 1:length(summaryj)] <- summaryj
-      }
-      summary[is.na(summary[, 7]), 7] <- 0
-      colnames(summary) <- c("min", "Q1", "median", "mean",
+        statisticsj <- summary(data.Used[, AnalyticVars[j]])
+        statistics[j, 1:length(statisticsj)] <- statisticsj
+      } # end of loop on j
+      statistics[is.na(statistics[, 7]), 7] <- 0
+      colnames(statistics) <- c("min", "Q1", "median", "mean",
                              "Q3", "max", "n.missing")
-      Summary <- data.frame(Analysis = AnalyticVars, summary)
-    }
-    else {
-      if (Groups[1] == "All")
-        groups <- as.character(unique(data[, GroupVar]))
-      if ((Groups[1] != " ") & (Groups[1] != "All"))
-        groups <- Groups
+      statistics <- data.frame(Analysis = AnalyticVars, statistics)
+    } # end of code for GroupVar == " "
+    else if (Groups[1] != " ") {
+      if (Groups == "All")
+        groups <- as.character(unique(data.Used[, GroupVar]))
+        else  groups <- Groups
       n.groups <- length(groups)
       n.vars <- length(AnalyticVars)
-      summary.values <- matrix(NA, nrow = (n.groups + 1) *
+      statistics.values <- matrix(NA, nrow = (n.groups + 1) *
                                  n.vars, ncol = 7)
       row <- 0
       vector.groups <- rep(c(groups, " "), n.vars)
@@ -145,44 +161,45 @@ fn.CheckData <-
       for (i in 1:n.vars) {
         vector.values[(row + 1):(row + n.groups)] <- AnalyticVars[i]
         for (j in 1:n.groups) {
-          data.valuesij <- data[data[, GroupVar] == groups[j],
+          data.valuesij <- data.Used[data.Used[, GroupVar] == groups[j],
                                 AnalyticVars[i]]
-          summaryij <- summary(data.valuesij)
-          summary.values[row + j, 1:length(summaryij)] <- summaryij
-        }
+          statisticsij <- summary(data.valuesij)
+          statistics.values[row + j, 1:length(statisticsij)] <- statisticsij
+        }  # end of loop on j
         row <- row + n.groups + 1
-      }
-      summary.values <- round(summary.values, dig = 0)
-      colnames(summary.values) <- c("min", "Q1", "median",
+      }  # end of code for specified groups
+      statistics.values <- round(statistics.values, dig = 0)
+      colnames(statistics.values) <- c("min", "Q1", "median",
                                     "mean", "Q3", "max", "n.missing")
-      summary.values[is.na(summary.values[, 7]), 7] <- 0
-      Summary <- data.frame(Analysis = vector.values, Group = vector.groups,
-                            summary.values)
+      statistics.values[is.na(statistics.values[, 7]), 7] <- 0
+      statistics <- data.frame(Analysis = vector.values, Group = vector.groups,
+                            statistics.values)
     }
-    if (substr(folder,1,1) != " ")  write.csv(Summary, paste(folder, ds.summary, sep = ""))
+    if (substr(folder,1,1) != " ")  write.csv(statistics, paste(folder, ds.statistics, sep = ""))
     #
     fcn.date.ver<-c(doc,date(),R.Version()$version.string)
     params<-list(CheckDupVars,GroupVar,Groups)
     names(params)<-c("CheckDupVars","GroupVar","Groups")
+    statistics[,"mean"] <- round(statistics[,"mean"], dig = 0)
     if (folder != " ")  {
-      files<-list(folder, ds.duplicates, ds.NegValues, ds.Nsamples, ds.summary)
-      names(files)<-c("folder","ds.duplicates","ds.NegValues","ds.Nsamples","ds.summary")
+      files<-list(folder, ds.duplicates, ds.NegValues, ds.Nsamples, ds.statistics)
+      names(files)<-c("folder","ds.duplicates","ds.NegValues","ds.Nsamples","ds.statistics")
     }
     if (folder == " ") out<-list(usage=fcn.date.ver,
-                                 dataUsed=data,
+                                 dataUsed=data.Used,
                                  params=params,
                                  analyticVars=AnalyticVars,
                                  Duplicates = duplicates,
                                  NegativeValues = NegativeValues,
                                  Nvalues = Nvalues,
-                                 Summary = Summary)
+                                 statistics = statistics)
     if (folder != " ") out<-list(usage=fcn.date.ver,
                                  dataUsed=data,params=params,
                                  analyticVars=AnalyticVars,
                                  Duplicates = duplicates,
                                  NegativeValues = NegativeValues,
                                  Nvalues = Nvalues,
-                                 Summary = Summary,
+                                 statistics = statistics,
                                  files=files)
     out
   }

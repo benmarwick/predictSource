@@ -4,7 +4,7 @@
 #'
 #' @param doc: documentation in the list returned, default is the function name
 #' @param data: R matrix or data frame containing the data to be analyzed
-#' @param labID: optional name for an ID, default is " " if no ID
+#' @param ID: optional name for an ID, default is " " if no ID
 #' @param GroupVar: name for variable defining grouping; if " ", no grouping
 #' @param Groups: vector of values of group variable for which plots are to be done. if "All": use all groups; if " ": no grouping
 #' @param AnalyticVars: vector of names (character values) of analytic results
@@ -56,14 +56,31 @@
 #' @examples
 #' data(ObsidianSources)
 #' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-#' save.pca <- fn.pca(data=ObsidianSources, labID="ID", GroupVar="Code",Groups="All", AnalyticVars=analyticVars)
+#' save.pca <- fn.pca(data=ObsidianSources, ID="ID", GroupVar="Code",Groups="All", AnalyticVars=analyticVars)
 #'
 #' @export
 #'
-fn.pca <-  function(doc = "fn.pca", data, labID=" ", GroupVar, Groups, AnalyticVars, ScreePlot = F, BoxPlots = F,
-                    pcPlot = T,PlotPoints = T, PlotEllipses = T, legendLoc="topright", PlotHull = F, PlotMedians = F,
-                    Ellipses = c(.95, .99), PlotColors = T, Colors = c("red","black","blue","green","purple"),
-                    Identify = F, digits=3, folder = " ", ds.weights, ds.importance, ds.check) {
+fn.pca <-  function(doc = "fn.pca",
+                    data,
+                    ID=" ",
+                    GroupVar,
+                    Groups, AnalyticVars,
+                    ScreePlot = F,
+                    BoxPlots = F,
+                    pcPlot = T,
+                    PlotPoints = T,
+                    PlotEllipses = T,
+                    legendLoc="topright",
+                    PlotHull = F, PlotMedians = F,
+                    Ellipses = c(.95, .99),
+                    PlotColors = T,
+                    Colors = c("red","black","blue","green","purple"),
+                    Identify = F,
+                    digits=3,
+                    folder = " ",
+                    ds.weights,
+                    ds.importance,
+                    ds.check) {
    #
   #  define functions to plot convex hulls and ellipses
     fn.convexhull <- function(Code) {
@@ -86,6 +103,8 @@ fn.pca <-  function(doc = "fn.pca", data, labID=" ", GroupVar, Groups, AnalyticV
       }
     }
     #
+    #  restrict data if specified
+    #
     if ((Groups[1] != " ") & (Groups[1] != "All")) {
       Use.rows <- (data[, GroupVar] %in% Groups)
       data.Used <- data[Use.rows,]
@@ -95,9 +114,17 @@ fn.pca <-  function(doc = "fn.pca", data, labID=" ", GroupVar, Groups, AnalyticV
     dataKeep <- rep(T, nrow(data.Used)) # will contain indices for observations with
     data.Used <- data.Used[dataKeep,]
     #
-    sortOnGroup <- order(data.Used[,GroupVar])
-    data.Used <- data.Used[sortOnGroup,]
+    #  sort on GroupVar and ID if specified
     #
+    if (GroupVar[1] != " ") {
+      rowsSort <- order(data.Used[,GroupVar])
+      data.Used <- data.Used[rowsSort,]
+    }
+    if (ID[1] != " ") {
+      rowsSort <- order(data.Used[,ID])
+      data.Used <- data.Used[rowsSort,]
+    }
+     #
     if ((GroupVar[1] != " ") & (Groups[1] == "All"))
       groups <- as.character(unique(data.Used[, GroupVar]))
     else if (GroupVar[1] != " ")
@@ -207,7 +234,7 @@ fn.pca <-  function(doc = "fn.pca", data, labID=" ", GroupVar, Groups, AnalyticV
     names(params.logical)<-c("ScreePlot","BoxPlots","PlotPoints","PlotEllipses","PlotHull","PlotMedians","PlotColors")
     #
     Predicted <- Predicted[,-2]  # remove GroupIndex
-    if (labID != " ") DataPlusPredicted <- DataPlusPredicted[,-(3+length(analyticVars))]
+    if (ID != " ") DataPlusPredicted <- DataPlusPredicted[,-(3+length(analyticVars))]
       else  DataPlusPredicted <- DataPlusPredicted[,-(2+length(analyticVars))]#  remove GroupIndex
     pcNames <- colnames(Predicted)[-1]
     Predicted[,pcNames] <- round(Predicted[,pcNames], dig = digits)

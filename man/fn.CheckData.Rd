@@ -4,9 +4,9 @@
 \alias{fn.CheckData}
 \title{fn.CheckData}
 \usage{
-fn.CheckData(doc = "fn.CheckData", data, CheckDupVars, GroupVar, Groups,
-  AnalyticVars, folder = " ", ds.duplicates, ds.NegValues, ds.Nsamples,
-  ds.summary)
+fn.CheckData(doc = "fn.CheckData", data, CheckDupVars, GroupVar = " ",
+  Groups, ID = " ", AnalyticVars, folder = " ", ds.duplicates, ds.NegValues,
+  ds.Nsamples, ds.statistics)
 }
 \arguments{
 \item{doc:}{a character string written to the output list; default is the function name}
@@ -17,7 +17,9 @@ fn.CheckData(doc = "fn.CheckData", data, CheckDupVars, GroupVar, Groups,
 
 \item{GroupVar:}{if there are groups, name of variable defining the groups, default value of " ": no grouping}
 
-\item{Groups:}{character vector of groups by which numbers of samples and summary statistics will be tabulated default value of " ": tabulations are done for the entire data set value = "All": tabulation for each distinct code in GroupVar}
+\item{Groups:}{character vector of groups by which numbers of samples and statistics statistics will be tabulated default value of " ": tabulations are done for the entire data set value = "All": tabulation for each distinct code in GroupVar}
+
+\item{ID:}{name of lab ID, default is " " (no lab ID)}
 
 \item{AnalyticVars:}{character vector of names of analytic variables for which tabulations are done}
 
@@ -29,23 +31,23 @@ fn.CheckData(doc = "fn.CheckData", data, CheckDupVars, GroupVar, Groups,
 
 \item{ds.Nsamples:}{file name for excel file with numbers of samples, with extension csv (e.g. "Nresults.csv")}
 
-\item{ds.summary:}{file with summary statistics for each analytic variable}
+\item{ds.statistics:}{file with statistics statistics for each analytic variable}
 }
 \value{
 If folder != " ", four excel files with duplicate observations, observations with negative
       values for one or more analytic variables, numbers of observations for each analytic
-      variable, and summary statistics (quartiles and number missing)
-      if Groups != " ", numbers of observations and summary statistics are by group
+      variable, and statistics statistics (quartiles and number missing)
+      if Groups != " ", numbers of observations and statistics statistics are by group
   A list with the following components:
   \itemize{
 \item{usage:}{  A string with the contents of the argument doc, date run, R version used}
-\item{dataUsed:}{  The data frame specified by the argument data}|
+\item{dataUsed:}{  The data frame specified by the argument data and GroupVar}|
 \item{params:}{  A character vector with the values of CheckDupVars, GroupVar, and Groups}
 \item{analyticVars:}{  The vector of names specified by the argument AnalyticVars}
 \item{Duplicates:}{  A data frame containing the observations with duplicate values}
 \item{NegativeValues:}{  A data frame containing the observations with at least one negative value for a variable in AnalyticVars}
 \item{Nvalues:}{  A data frame contain the number of observations with a value for each analytic variable}
-\item{Summary:}{  A data frame containing the summary statistics (by group, if Group is specified)}
+\item{statistics:}{  A data frame containing the statistics statistics (by group, if Group is specified)}
 \item{files:}{  If folder != " ", a list containing the folder name and the name of each of the excel files}
         }
 }
@@ -61,6 +63,7 @@ If folder = " ", no excel files are written.  If not, in windows OS, the path mu
 \examples{
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-CheckData<-fn.CheckData(data=ObsidianSources,CheckDupVars=c("Code","ID"),GroupVar="Code",Groups="All",AnalyticVars=analyticVars)
+CheckData<-fn.CheckData(data=ObsidianSources,CheckDupVars=c("Code","ID"),GroupVar="Code",Groups="All",
+  ID = "ID", AnalyticVars=analyticVars)
 
 }
