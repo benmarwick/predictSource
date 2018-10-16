@@ -64,7 +64,7 @@
 #' sources <- unique(ObsidianSources[,"Code"])
 #' pca.eval <- fn.pca.evaluation(SourceData=ObsidianSources, ArtifactData=ObsidianArtifacts,
 #' SourceGroup= "Code", ArtifactGroup="Code",known.sources=sources, predicted.sources=sources,
-#' AnalyticVars=analyticVars, plotOutsidePoints=F)
+#' AnalyticVars=analyticVars)
 #'
 #' # evaluate predictions from a tree model: plot only points outside the predicted source hull
 #` data(ObsidianSources)

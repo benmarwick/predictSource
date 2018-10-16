@@ -69,8 +69,10 @@ fn.CV.corr <-
     #
     # sort data by GroupVar
     #
+    if (GroupVar != " ") {
     sortByGroup <- order(data.Used[,GroupVar])
     data.Used <- data.Used[sortByGroup,]
+    }
     #
     dataKeep <- rep(T, nrow(data.Used)) # will contain indices for observations with
         # no missing values
