@@ -85,12 +85,25 @@ fn.tree <-
            ds.predictedSources,
            ds.predictedTotals) {
 
-    # create dataset Data based on grouping restrict to desired set of groups
+    # create dataset Data.used based on grouping restrict to desired set of groups
     if (Groups[1] != "All") {
       Use.rows <- (data[, GroupVar] %in% Groups)
-      Data.used <- data[Use.rows, c(GroupVar, AnalyticVars)]
+      Data.used <- data[Use.rows, ]
     } else
-      Data.used <- data[, c(GroupVar, AnalyticVars)]
+      Data.used <- data[, ]
+    #
+    #  sort source data on GroupVar
+    #
+    rowsSort <- order(Data.used[,GroupVar])
+    Data.used <- Data.used[rowsSort,]
+    #
+    #  if predictions to be made and ID used, sort on ID
+    #
+    if ((predictSources == T) & (ID[1] != " ")) {
+      rowsSort <- order(predictData[,ID])
+      predictData <- predictData[rowsSort,]
+    }
+    #
     # define variable groups as groups used in analysis
     if ((GroupVar[1] != " ") & (Groups[1] == "All"))
       groups <-
@@ -152,6 +165,7 @@ fn.tree <-
     #
     if (predictSources == T) {
       predictedSources <- predict(object = Tree, newdata = predictData)
+      if (substr(ID,1,1) != " ")  predictData <- data.frame(ID = ObsidianArtifacts[,ID], predictData)
       predictedTotals <- apply(predictedSources,2,sum)
       #  create vector with predicted source for each observation
       source <- rep(" ",nrow(predictedSources))

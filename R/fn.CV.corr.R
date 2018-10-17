@@ -34,7 +34,6 @@
 #'   \item{analyticVars:}{  A vector with the value of the argument AnalyticVars}
 #'   \item{CV:}{  A data frame with the coefficients of variation for each analytic variable in each group}
 #'   \item{corr:}{  A data frame with the correlations between pairs of variables in each group}
-
 #'   \item{files:}{  If folder != " ": a list with path and data set names to the excel files containing
 #'       the coefficients of variations and the correlations}
 #'       }
@@ -65,10 +64,6 @@ fn.CV.corr <-
       data.Used <- data[Use.rows, ]
       }
     else  data.Used <- data
- #   else if (GroupVar[1] == " ")
-  #    data.Used <- data[, AnalyticVars]
-   # else
-    #  data.Used <- data[, c(GroupVar, AnalyticVars)] # includes observations with missing values
     #
     #  sort on GroupVar and ID if specified
     #
