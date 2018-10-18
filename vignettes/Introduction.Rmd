@@ -320,23 +320,23 @@ Figure z containts the plot of the first two principal components by group with 
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-save.pca <- fn.pca(data=ObsidianSources, labID="ID", GroupVar="Code",Groups="All", AnalyticVars=analyticVars, pcPlot=F, ScreePlot=T)
+save.pca <- fn.pca(data=ObsidianSources, ID="ID", GroupVar="Code",Groups="All", AnalyticVars=analyticVars, pcPlot=F, ScreePlot=T)
 ```
 
 ```{r  echo=FALSE, results='hide',message=FALSE}
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-save.pca <- fn.pca(data=ObsidianSources, labID="ID", GroupVar="Code",Groups="All", AnalyticVars=analyticVars, pcPlot=F, BoxPlots=T)
+save.pca <- fn.pca(data=ObsidianSources, ID="ID", GroupVar="Code",Groups="All", AnalyticVars=analyticVars, pcPlot=F, BoxPlots=T)
 ```
 ```{r  echo=FALSE, results='hide',message=FALSE}
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-save.pca <- fn.pca(data=ObsidianSources, labID="ID", GroupVar="Code",Groups="All", AnalyticVars=analyticVars) 
+save.pca <- fn.pca(data=ObsidianSources, ID="ID", GroupVar="Code",Groups="All", AnalyticVars=analyticVars) 
 ```
 ```{r}
-save.pca <- fn.pca(data=ObsidianSources, labID="ID", GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
+save.pca <- fn.pca(data=ObsidianSources, ID="ID", GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
                    pcPlot=F)
 knitr::kable(save.pca$Summary$importance, caption="Table 8.  Proportions of variance explained.")
 knitr::kable(save.pca$weights, caption="Table 9.  Weights for each principal component.")
@@ -466,7 +466,7 @@ tree <- fn.tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars
                 ID="labID", Model="Sr"+"Nb"+"Rb"+"Y"+"Zr", plotTree=F, plotCp = F, predictSources=T,
                 predictData=ObsidianArtifacts)
 predictedSources<-tree$predictedSources[tree$predictedSources[,"source"]!="A",]
-save.pca <- fn.pca(data=predictedSources, labID="labID", GroupVar="source",Groups="All", AnalyticVars=analyticVars, PlotEllipses=F)
+save.pca <- fn.pca(data=predictedSources, ID="labID", GroupVar="source",Groups="All", AnalyticVars=analyticVars, PlotEllipses=F)
 ```
 
 ## Random forests
@@ -555,7 +555,7 @@ data(ObsidianArtifacts)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 save.randomForest <- fn.randomForest(data=ObsidianSources, GroupVar="Code",Groups="All", ID="labID", AnalyticVars=analyticVars, NvarUsed=3, plotErrorRate=F, plotImportance=F, predictSources=T,predictData=ObsidianArtifacts, plotSourceProbs=F)
 predictedSources<-save.randomForest$predictedSources[save.randomForest$predictedSources[,"source"]!="A",]
-save.pca <- fn.pca(data=predictedSources, labID="labID", GroupVar="source",Groups="All", AnalyticVars=analyticVars, PlotEllipses=F)
+save.pca <- fn.pca(data=predictedSources, ID="labID", GroupVar="source",Groups="All", AnalyticVars=analyticVars, PlotEllipses=F)
 ```
 
 ## Evalution of the predictions 
