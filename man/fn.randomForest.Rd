@@ -13,6 +13,8 @@ fn.randomForest(doc = "fn.randomForest", data, GroupVar, Groups = "All",
 \arguments{
 \item{doc}{Documentation for the function use, default value is the function name}
 
+\item{folder}{The path to the folder in which data frames will be saved; default is " "}
+
 \item{data:}{Data frame with the data to be analyzed}
 
 \item{predictData:}{Data frame with data on unknowns, NA if predictions not made (default value)}
@@ -45,16 +47,6 @@ must contain all variables in AnalyticVars}
 
 \item{plotSourceProbs:}{Logical, if T (the default) and predictSources=T, show box plots of source
 probabilities}
-
-\item{folder:}{If not " " (the default), the path to folder containing excel files, must end with '\\'}
-
-\item{ds.importance:}{Excel file with importance measures, extension .csv}
-
-\item{ds.confusion:}{Excel file with confusion matrix, extension.csv}
-
-\item{ds.predictedSources:}{If predictSources = T, an excel file with the information in predictedSources}
-
-\item{ds.predictedTotals:}{If predictSources = T, an excel file with the vector predictedTotals}
 }
 \value{
 The function implements a random forest analysis.  For each analysis, the variables used in the
@@ -77,8 +69,7 @@ The function implements a random forest analysis.  For each analysis, the variab
   \item{predictedSources:}{  A data frame with prediction information, sample ID (if requested),
      and values of AnalyticVars}
   \item{predictedTotals:}{  A vector with the predicted totals for each group (source)}
-  \item{files:}{ If folder != " ", a character string with the path to the file containing the excel files
-                 with the importance and confusion estimates}
+  \item{location:}{ If folder != " ", the value of the parameter folder}
  }
 }
 \description{

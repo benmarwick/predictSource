@@ -13,10 +13,7 @@
 #' @param Transpose: see Details
 #' @param CV.digits: number of significant digits in CV estimates, default is 2
 #' @param corr.digits: number of significant digits in correlation estimates, default is 2
-#' @param folder: location to store excel files with coefficients of variation and Spearman correlations
-#'  if " " (the default), no excel files are created
-#' @param ds.CV: file name for coefficients of variation, with extension .csv
-#' @param ds.corr: file name for Spearman correlation coefficients, with extension .csv
+#' @param folder  The path to the folder in which data frames will be saved; default is " "
 #'
 #' @section Details:
 #'   If Transpose=T, the correlation matrix has rows defined by the group variable and columns defined by the pairs of analytic variables.  If Transpose=F, the rows are defined by pairs of analytic variables and the columns are defined by the groups.
@@ -34,8 +31,7 @@
 #'   \item{analyticVars:}{  A vector with the value of the argument AnalyticVars}
 #'   \item{CV:}{  A data frame with the coefficients of variation for each analytic variable in each group}
 #'   \item{corr:}{  A data frame with the correlations between pairs of variables in each group}
-#'   \item{files:}{  If folder != " ": a list with path and data set names to the excel files containing
-#'       the coefficients of variations and the correlations}
+#'   \item{location:}{  If folder != " ", the value of the parameter folder}
 #'       }
 #'
 #' @examples
@@ -176,11 +172,6 @@ fn.CV.corr <-
 #
     if (Transpose == T)
       Corrs <- t(Corrs)
-    if (folder != " ") {
-      write.csv(Corrs, file = paste(folder, ds.corr, sep = ""))
-      write.csv(CV, paste(folder, ds.CV, sep = ""))
-      files <- list(Cv = paste(folder, ds.CV, sep = ""), Corrs = paste(folder, ds.corr, sep = ""))
-    }
     #
     fcn.date.ver<-c(doc,date(),R.Version()$version.string)
     params.numeric<-c(digits.CV=CV.digits,digits.corr=corr.digits)
@@ -208,6 +199,6 @@ fn.CV.corr <-
                 analyticVars=AnalyticVars,
                 CV=CV,
                 corr=Corrs,
-                files=files)
+                location=folder)
     out
   }

@@ -21,10 +21,7 @@
 #' @param Colors: vector of color names
 #' @param Identify: if T, the user can identify points of interest in plots; information on these points is saved to a file; default is F
 #' @param digits: significant digits to return in objects in data frames, default is 3
-#' @param folder: folder in which excel files are to be stored
-#' @param ds.weights: excel file with principal component loadings, extension.csv
-#' @param ds.importance: excel file with percent of variation explained, extension.csv
-#' @param ds.identified:  excel file with identified points, if Identify == T
+#' @param folder  The path to the folder in which data frames will be saved; default is " "
 #'
 #' @section Details:
 #' If Identify=T, the user must interact with each plot (or pane, if there is more than one pane on a plot).
@@ -77,10 +74,8 @@ fn.pca <-  function(doc = "fn.pca",
                     Colors = c("red","black","blue","green","purple"),
                     Identify = F,
                     digits=3,
-                    folder = " ",
-                    ds.weights,
-                    ds.importance,
-                    ds.check) {
+                    folder = " ")
+{
    #
   #  define functions to plot convex hulls and ellipses
     fn.convexhull <- function(Code) {
@@ -221,12 +216,6 @@ fn.pca <-  function(doc = "fn.pca",
       DataPlusPredicted <- data.frame(data.Used, Predicted)
     else DataPlusPredicted <- data.frame(data.Used, Predicted[,-1])
     #
-    if (substr(folder,1,1) != " ")  {
-      write.csv(importance.pca, file = paste(folder, ds.importance, sep=""))
-      write.csv(t(weights), file = paste(folder, ds.weights, sep = ""))
-      if (Identify == T)  write.csv(data.check, file = paste(folder, ds.identified, sep = ""))
-    }
-    #
     fcn.date.ver<-paste(doc,date(),R.Version()$version.string)
     params.grouping<-list(GroupVar,Groups)
     names(params.grouping)<-c("GroupVar","Groups")
@@ -268,7 +257,7 @@ fn.pca <-  function(doc = "fn.pca",
                 weights = weights,
                 Predicted = Predicted,
                 DataPlusPredicted = DataPlusPredicted,
-                files=list(paste(folder,ds.weights,sep=""),paste(folder,ds.importance,sep="")))
+                location=folder)
     if ((substr(folder,1,1) == " ") & (Identify))
       out<-list(usage=fcn.date.ver,
                 dataUsed=data.Used,
@@ -293,7 +282,6 @@ fn.pca <-  function(doc = "fn.pca",
                 Predicted = Predicted,
                 DataPlusPredicted = DataPlusPredicted,
                 data.check=data.check,
-                files=list(paste(folder,ds.identified,sep=""),paste(folder,ds.weights,sep=""),
-                                 paste(folder,ds.importance,sep="")))
+                location=folder)
     out
   }

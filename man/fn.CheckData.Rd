@@ -5,8 +5,7 @@
 \title{fn.CheckData}
 \usage{
 fn.CheckData(doc = "fn.CheckData", data, CheckDupVars, GroupVar = " ",
-  Groups, ID = " ", AnalyticVars, folder = " ", ds.duplicates, ds.NegValues,
-  ds.Nsamples, ds.statistics)
+  Groups, ID = " ", AnalyticVars, folder = " ")
 }
 \arguments{
 \item{doc:}{a character string written to the output list; default is the function name}
@@ -23,18 +22,11 @@ fn.CheckData(doc = "fn.CheckData", data, CheckDupVars, GroupVar = " ",
 
 \item{AnalyticVars:}{character vector of names of analytic variables for which tabulations are done}
 
-\item{folder:}{character; if " ", no files are saved; if not, path to folder in which to store excel files with results (see Detail)}
-
-\item{ds.duplicates:}{file name for excel file with duplicate records, with extension csv (e.g. "duplicates.csv")}
-
-\item{ds.NegValues:}{file name for excel file with observations with negative analytic values (e.g. "negValues.csv")}
-
-\item{ds.Nsamples:}{file name for excel file with numbers of samples, with extension csv (e.g. "Nresults.csv")}
-
-\item{ds.statistics:}{file with statistics statistics for each analytic variable}
+\item{folder:}{the path to a folder in which data frames will be saved; default is " "
+#``}
 }
 \value{
-If folder != " ", four excel files with duplicate observations, observations with negative
+Four data frames with duplicate observations, observations with negative
       values for one or more analytic variables, numbers of observations for each analytic
       variable, and statistics statistics (quartiles and number missing)
       if Groups != " ", numbers of observations and statistics statistics are by group
@@ -48,7 +40,7 @@ If folder != " ", four excel files with duplicate observations, observations wit
 \item{NegativeValues:}{  A data frame containing the observations with at least one negative value for a variable in AnalyticVars}
 \item{Nvalues:}{  A data frame contain the number of observations with a value for each analytic variable}
 \item{statistics:}{  A data frame containing the statistics statistics (by group, if Group is specified)}
-\item{files:}{  If folder != " ", a list containing the folder name and the name of each of the excel files}
+\item{location:}{  If folder != " ", the parth to the folder in which data frames will be saved}
         }
 }
 \description{
@@ -57,7 +49,6 @@ Data checks and summaries: duplicate records, negative analytic values, numbers 
 \section{Detail}{
 
 AnalyticVars must be a vector of length at least 2.
-If folder = " ", no excel files are written.  If not, in windows OS, the path must end with two slashes.
 }
 
 \examples{

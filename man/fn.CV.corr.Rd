@@ -9,6 +9,8 @@ fn.CV.corr(doc = "fn.CV.corr", data, GroupVar, Groups = "All", ID = " ",
   folder = " ", ds.CV, ds.corr)
 }
 \arguments{
+\item{folder}{The path to the folder in which data frames will be saved; default is " "}
+
 \item{data:}{R matrix or data frame containing the data to be analyzedfn}
 
 \item{GroupVar:}{name for variable defining grouping; if " ", if no grouping}
@@ -25,13 +27,6 @@ use all groups, if " ", no grouping}
 \item{CV.digits:}{number of significant digits in CV estimates, default is 2}
 
 \item{corr.digits:}{number of significant digits in correlation estimates, default is 2}
-
-\item{folder:}{location to store excel files with coefficients of variation and Spearman correlations
-if " " (the default), no excel files are created}
-
-\item{ds.CV:}{file name for coefficients of variation, with extension .csv}
-
-\item{ds.corr:}{file name for Spearman correlation coefficients, with extension .csv}
 }
 \value{
 A list with the following components:
@@ -45,8 +40,7 @@ A list with the following components:
   \item{analyticVars:}{  A vector with the value of the argument AnalyticVars}
   \item{CV:}{  A data frame with the coefficients of variation for each analytic variable in each group}
   \item{corr:}{  A data frame with the correlations between pairs of variables in each group}
-  \item{files:}{  If folder != " ": a list with path and data set names to the excel files containing
-      the coefficients of variations and the correlations}
+  \item{location:}{  If folder != " ", the value of the parameter folder}
       }
 }
 \description{

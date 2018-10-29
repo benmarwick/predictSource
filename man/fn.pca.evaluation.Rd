@@ -7,10 +7,11 @@
 fn.pca.evaluation(doc = "fn.pca.evaluation", SourceData, ArtifactData,
   ID = " ", SourceGroup, ArtifactGroup, known.sources, predicted.sources,
   AnalyticVars, Identify = F, loc.legend = "topright", plotAllPoints = T,
-  plotHullsOutsidePoints = T, plotOutsidePoints = T, folder = " ",
-  ds.importance, ds.pts.outside, ds.in.out, ds.identified, ds.data.check)
+  plotHullsOutsidePoints = T, plotOutsidePoints = T, folder = " ")
 }
 \arguments{
+\item{folder}{The path to the folder in which data frames will be saved; default is " "}
+
 \item{doc:}{documentation in list returned by function}
 
 \item{sourceData:}{data from known sources, including code for location and element analyses, restricted to specified sources}
@@ -45,21 +46,12 @@ convex hulls and these hulls}
 \item{plotOutsidePoints:}{if T (the default), show a plot with one pane: athe unknown points lying
 outside of their predicted source convex hulls and these hulls (the second pane for
 plotHullsOutsidePoints)}
-
-\item{folder:}{path to folder containing result files each file name should end with .csv}
-
-\item{ds.importance:}{name of file with percent of variance explained for the known source analysis}
-
-\item{ds.pts.outside:}{name of file with information on artifacts with principal component pointsoutside of hull for predicted source}
-
-\item{ds.in.out:}{table with number of artifacts, by whether inside or outside hull for predicted  source, for each predicted source}
-
-\item{ds.data.check:}{if Identify = T, data for observations outside of the predicted hull identified as of interest}
 }
 \value{
 The function produces two plots: the convex hulls of the first two principal components of the source data,
  and a plot with those convex hulls and the artifact data (using the weights obtained from the source data).
  The function returns a list with the following components:
+
 \itemize{
   \item{usage:}{  A vector with the contents of the argument doc, the date run, the version of R used}
   \item{dataUsed:}{  The contents of the argument data restricted to the groups used}
@@ -69,8 +61,7 @@ The function produces two plots: the convex hulls of the first two principal com
    predicted source location}
   \item{pts.outside:}  {  A data frame with the data for artifact points located outside of the predicted source}
   \item{data.check:}{  If Identify=T, a data frame with the observations in dataUsed identified as of interest}
-  \item{files:}{  If folder != " ", a list with path and data set names to the excel files containing importance,
-  ds.in.out, pts.outside, and, if Identify=T, data.check}
+  \item{location:}{  If folder != " ", the values of the parameter folder}
    }
 }
 \description{

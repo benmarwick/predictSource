@@ -11,9 +11,7 @@
 #' @param AnalyticVars  vector of names (character values) of analytic results
 #' @param qqPlot  Logical, should Q-Q plots (univariate, multivariate) be shown, default is T
 #' @param Identify  Logical, should user identify points of interest, default is F
-#' @param folder  folder in which the excel file is to be stored, default is " " (no file is created)
-#' @param ds.pvalues  excel file with Anderson-Darling and Mardia p-values, with
-#' extension .csv
+#' @param folder  The path to the folder in which data frames will be saved; default is " "
 #'
 #' @return The function produces Q-Q plots (univariate and multivariate) of the first two principal components for each group if qqPlot=T.
 #'    The function produces p-values from univariate and multivariate tests of normality.  The function returns a list with the
@@ -27,7 +25,7 @@
 #'   \item{analyticVars:}{ A vector with the value of the argument AnalyticVars}
 #'   \item{params.logical:}{ The value of QQtest}
 #'   \item{p.values:}{ T data frame with the p-values for the Gaussian assumptions for each group specified}
-#'   \item{files:}{ If folder != " ", a character string with the path to the file containing the p-values}
+#'   \item{location:}{ If folder != " ", the value of the parameter folder}
 #'  }
 #'
 #'@section  Details
@@ -53,9 +51,8 @@ fn.pca.Gauss <-
            AnalyticVars,
            qqPlot = T,
            Identify = F,
-           folder = " ",
-           ds.pvalues ) {
-
+           folder = " ")
+    {
     # restrict to desired set of groups
     if (Groups[1] != "All") {
       Use.rows <- (data[, GroupVar] %in% Groups)
@@ -122,8 +119,6 @@ fn.pca.Gauss <-
                            Identify=F)
     pvalues <- out$pvalues
     browser()
-
-    if (substr(folder,1,1) != " ")  write.csv(pvalues, paste(folder, ds.pvalues, sep = ""))
     #
     fcn.date.ver<-paste(doc,date(),R.Version()$version.string)
     params.grouping<-list(GroupVar,Groups)
@@ -150,7 +145,6 @@ fn.pca.Gauss <-
                 params.grouping=params.grouping,
                 params.logical=params.logical,
                 p.values = pvalues,
-                files=paste(folder,ds.pvalues,sep="")
-                )
+                location=folder)
     out
   }

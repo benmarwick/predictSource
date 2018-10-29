@@ -22,11 +22,7 @@
 #'    must contain all variables in AnalyticVars
 #' @param plotSourceProbs: Logical, if T (the default) and predictSources=T, show box plots of source
 #'    probabilities
-#' @param folder: If not " " (the default), the path to folder containing excel files, must end with '\\'
-#' @param ds.importance: Excel file with importance measures, extension .csv
-#' @param ds.confusion: Excel file with confusion matrix, extension.csv
-#' @param ds.predictedSources: If predictSources = T, an excel file with the information in predictedSources
-#' @param ds.predictedTotals: If predictSources = T, an excel file with the vector predictedTotals
+#' @param folder  The path to the folder in which data frames will be saved; default is " "
 #'
 #' @return The function implements a random forest analysis.  For each analysis, the variables used in the
 #'           analysis are considered in the order in which they appear in AnalyticVars (from left to right);
@@ -48,8 +44,7 @@
 #'   \item{predictedSources:}{  A data frame with prediction information, sample ID (if requested),
 #'      and values of AnalyticVars}
 #'   \item{predictedTotals:}{  A vector with the predicted totals for each group (source)}
-#'   \item{files:}{ If folder != " ", a character string with the path to the file containing the excel files
-#'                  with the importance and confusion estimates}
+#'   \item{location:}{ If folder != " ", the value of the parameter folder}
 #'  }
 #'
 #' @examples
@@ -131,10 +126,7 @@ fn.randomForest <-
       varImpPlot(fit.rf, main = "Variable importance")
       browser()
     }
-    if (substr(folder,1,1) != " ")  write.csv(importance.rf, file = paste(folder, ds.importance, sep = ""))
-    #
-    if (substr(folder,1,1) != " ")  write.csv(fit.rf$confusion, file = paste(folder, ds.confusion, sep = ""))
-    #
+#
     if (predictSources == T) {
       response <- predict(object=fit.rf, newdata=predictData, type="response")
       probMatrix <- predict(object=fit.rf, newdata=predictData, type="prob")
@@ -192,16 +184,6 @@ fn.randomForest <-
     names(params.logical) <- c("plotErrorRate","plotImportance","plotSourceProbs")
     importance.rf <- round(importance.rf, dig=digitsImportance)
     #
-    if (folder != " ") {
-      if (predictSources == F)
-      fileNames <- list(paste(folder,ds.importance,sep=""),paste(folder,ds.confusion,sep=""))
-    }
-    if (folder != " ") {
-      if (predictSources == T)
-        fileNames <- list(paste(folder,ds.importance,sep=""),paste(folder,ds.confusion,sep=""),
-                          paste(folder,ds.predictedSources,sep=""),paste(folder,ds.predictedTotals,sep=""))
-    }
-    #
     if (substr(folder,1,1) == " ") {
       if (predictSources == F)
         out<-list(usage=fcn.date.ver,
@@ -228,7 +210,7 @@ fn.randomForest <-
                 forest = fit.rf,
                 importance = importance.rf,
                 confusion = fit.rf$confusion,
-                files = fileNames
+                location=folder
       )
     }
     #
@@ -264,7 +246,7 @@ fn.randomForest <-
                   confusion = fit.rf$confusion,
                   predictedSources = predictions,
                   predictedTotals = predictedTotals,
-                  files = fileNames
+                  location=folder
         )
     }
     out

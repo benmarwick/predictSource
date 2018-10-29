@@ -9,14 +9,10 @@
 #' @param Groups: character vector of groups by which numbers of samples and statistics statistics will be tabulated default value of " ": tabulations are done for the entire data set value = "All": tabulation for each distinct code in GroupVar
 #' @param ID: name of lab ID, default is " " (no lab ID)
 #' @param AnalyticVars: character vector of names of analytic variables for which tabulations are done
-#' @param folder: character; if " ", no files are saved; if not, path to folder in which to store excel files with results (see Detail)
-#' @param ds.duplicates: file name for excel file with duplicate records, with extension csv (e.g. "duplicates.csv")
-#' @param ds.NegValues: file name for excel file with observations with negative analytic values (e.g. "negValues.csv")
-#' @param ds.Nsamples: file name for excel file with numbers of samples, with extension csv (e.g. "Nresults.csv")
-#' @param ds.statistics: file with statistics statistics for each analytic variable
-#'
+#' @param folder:  the path to a folder in which data frames will be saved; default is " "
+#' #``
 #' @return
-#'   If folder != " ", four excel files with duplicate observations, observations with negative
+#'   Four data frames with duplicate observations, observations with negative
 #'       values for one or more analytic variables, numbers of observations for each analytic
 #'       variable, and statistics statistics (quartiles and number missing)
 #'       if Groups != " ", numbers of observations and statistics statistics are by group
@@ -30,12 +26,11 @@
 #' \item{NegativeValues:}{  A data frame containing the observations with at least one negative value for a variable in AnalyticVars}
 #' \item{Nvalues:}{  A data frame contain the number of observations with a value for each analytic variable}
 #' \item{statistics:}{  A data frame containing the statistics statistics (by group, if Group is specified)}
-#' \item{files:}{  If folder != " ", a list containing the folder name and the name of each of the excel files}
+#' \item{location:}{  If folder != " ", the parth to the folder in which data frames will be saved}
 #'         }
 #'
 #' @section Detail:
 #' AnalyticVars must be a vector of length at least 2.
-#' If folder = " ", no excel files are written.  If not, in windows OS, the path must end with two slashes.
 #'
 #' @examples
 #' data(ObsidianSources)
@@ -53,11 +48,7 @@ fn.CheckData <-
            Groups,
            ID = " ",
            AnalyticVars,
-           folder = " ",
-           ds.duplicates,
-           ds.NegValues,
-           ds.Nsamples,
-           ds.statistics) {
+           folder = " ") {
     #
     #  restrict data if specified
     #
@@ -85,25 +76,23 @@ fn.CheckData <-
     if (sum(DupRowNumbers) == 0)
         duplicates <- NA
     else  duplicates <- data[DupRows, ]
-    if (substr(folder,1,1) != " ")  write.csv(duplicates, paste(folder, ds.duplicates,
-                                                           sep = ""))
     #
-    #  statistics statistics
+    #  data summaries
     #
     MinimumValues <- apply(data.Used[, AnalyticVars], 1, min, na.rm = T)
     NegRows <- (MinimumValues < 0)
-    if (sum(NegRows) == 0)
+    if (sum(NegRows) == 0) {
       NegativeValues <- NA
-    else {
-      NegativeValues <- data[NegRows, ]
-      if (substr(folder,1,1) != " ")  write.csv(NegativeValues, paste(folder, ds.NegValues,
-                                                                      sep = ""))
-    }
-    if ((GroupVar[1] == " ") | (Groups[1] == " ")) {
+    browser() }
+    else    NegativeValues <- data[NegRows, ]
+ #
+      if ((GroupVar[1] == " ") | (Groups[1] == " ")) {
       Nvalues <- rep(0, length(AnalyticVars))
-      for (i in 1:length(AnalyticVars)) Nvalues[i] <- sum(!is.na(data[,
-                                                                      AnalyticVars[i]]))
-    }
+      for (i in 1:length(AnalyticVars))
+        Nvalues[i] <- sum(!is.na(data[, AnalyticVars[i]]))
+      }
+      browser()
+      #
     if (Groups == "All") {
       groups <- as.character(unique(data.Used[, GroupVar]))
       n.groups <- length(groups)
@@ -111,14 +100,15 @@ fn.CheckData <-
       for (i in 1:n.groups) {
         data.groupi <- data.Used[data.Used[, GroupVar] == groups[i],
                             AnalyticVars]
-        for (j in 1:length(AnalyticVars)) nvalues[i, j] <- sum(!is.na(data.groupi[,
-                                                                                  AnalyticVars[j]]))
+        for (j in 1:length(AnalyticVars))
+          nvalues[i, j] <- sum(!is.na(data.groupi[, AnalyticVars[j]]))
       }  # end of loop on i
       nvalues[nrow(nvalues), ] <- apply(nvalues[-nrow(nvalues),
                                                 ], 2, sum)
       colnames(nvalues) <- AnalyticVars
       Nvalues <- data.frame(Group = c(groups, "Total"), nvalues)
     } # end of code for Groups == "All"
+      browser()
     #
     if ((Groups[1] != " ") & (Groups != "All")) {
       n.groups <- length(Groups)
@@ -126,16 +116,15 @@ fn.CheckData <-
       for (i in 1:n.groups) {
         data.groupi <- data.Used[data.Used[, GroupVar] == Groups[i],
                             AnalyticVars]
-        for (j in 1:length(AnalyticVars)) nvalues[i, j] <- sum(!is.na(data.groupi[,
-                                                                                  AnalyticVars[j]]))
+        for (j in 1:length(AnalyticVars))
+          nvalues[i, j] <- sum(!is.na(data.groupi[, AnalyticVars[j]]))
       } # end of loop on i
       nvalues[nrow(nvalues), ] <- apply(nvalues[-nrow(nvalues),
                                                 ], 2, sum)
       colnames(nvalues) <- AnalyticVars
       Nvalues <- data.frame(Group = c(Groups, "Total"), nvalues)
     } # end of loop for restricted groups
-    if (substr(folder,1,1) != " ")  write.csv(Nvalues, paste(folder, ds.Nsamples, sep = ""))
-    #
+#
     if (GroupVar == " ") {
       statistics <- matrix(NA, nrow = length(AnalyticVars), ncol = 7)
       for (j in 1:length(AnalyticVars)) {
@@ -148,8 +137,7 @@ fn.CheckData <-
       statistics <- data.frame(Analysis = AnalyticVars, statistics)
     } # end of code for GroupVar == " "
     else if (Groups[1] != " ") {
-      if (Groups == "All")
-        groups <- as.character(unique(data.Used[, GroupVar]))
+      if (Groups == "All")  groups <- as.character(unique(data.Used[, GroupVar]))
         else  groups <- Groups
       n.groups <- length(groups)
       n.vars <- length(AnalyticVars)
@@ -167,6 +155,7 @@ fn.CheckData <-
           statistics.values[row + j, 1:length(statisticsij)] <- statisticsij
         }  # end of loop on j
         row <- row + n.groups + 1
+      }  # end of loop on i
       }  # end of code for specified groups
       statistics.values <- round(statistics.values, dig = 0)
       colnames(statistics.values) <- c("min", "Q1", "median",
@@ -174,17 +163,12 @@ fn.CheckData <-
       statistics.values[is.na(statistics.values[, 7]), 7] <- 0
       statistics <- data.frame(Analysis = vector.values, Group = vector.groups,
                             statistics.values)
-    }
-    if (substr(folder,1,1) != " ")  write.csv(statistics, paste(folder, ds.statistics, sep = ""))
-    #
+      #
     fcn.date.ver<-c(doc,date(),R.Version()$version.string)
     params<-list(CheckDupVars,GroupVar,Groups)
     names(params)<-c("CheckDupVars","GroupVar","Groups")
     statistics[,"mean"] <- round(statistics[,"mean"], dig = 0)
-    if (folder != " ")  {
-      files<-list(folder, ds.duplicates, ds.NegValues, ds.Nsamples, ds.statistics)
-      names(files)<-c("folder","ds.duplicates","ds.NegValues","ds.Nsamples","ds.statistics")
-    }
+ #
     if (folder == " ") out<-list(usage=fcn.date.ver,
                                  dataUsed=data.Used,
                                  params=params,
@@ -200,6 +184,6 @@ fn.CheckData <-
                                  NegativeValues = NegativeValues,
                                  Nvalues = Nvalues,
                                  statistics = statistics,
-                                 files=files)
+                                 locaton=folder)
     out
   }

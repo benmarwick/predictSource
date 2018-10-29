@@ -5,7 +5,7 @@
 #' @param doc A string documenting use written to the output list; default is the function name
 #' @param data R matrix or data frame containing the data to be analyzed
 #' @param GroupVar name for the variable defining grouping, " " if no grouping
-#' @param labID name for the variable with a lab ID, " " if no lab ID is used
+#' @param ID name for the variable with a lab ID, " " if no lab ID is used
 #' @param Groups vector of values of the group variable for which plots are to be done;
 #'    if "All", use all groups; if " ", no grouping
 #' @param AnalyticVars names of two analytic variables to be shown in the plots, vector of length 2 or matrix with 2 columns;
@@ -25,9 +25,7 @@
 #' @param PlotColors: if T, colors are assigned to the groups
 #' @param Colors: single value or vector of color names; if PlotByGroup = F, the vector must have the same number of colors as the number of groups
 #' @param legendLoc: character, location of legend for a plot with points default is "topright", alternatives are combinations of "top", "bottom", "right", "left"
-#' @param folder in Windows, path to the folder containing an excel file with the identified points, ending with two forward slashes;
-#'         if " ", no data set is written
-#' @param ds.identified excel file name with extension .csv containing information on the identified points
+#' @param folder:  The path to the folder in which data frames will be saved; default is " "
 #'
 #' @return   A list with the following components:
 #'  \itemize{
@@ -41,8 +39,8 @@
 #' \item{analyticVars: }{ The value of the argument AnalyticVars}
 #' \item{colors:}{  A vector with the value of the argument Color}
 #' \item{data.check: }{ If Identify = T, a data frame with the information on user-identified points of interest}
-#' \item{folder.data.check: }{ If folder != " " and Identify = T, the path to the excel file with the information on user-identified points of interest}
-#' }
+#' \item{location:}{ If folder != " ", the contents of the parameter folder}
+#'  }
 #'
 #' @section Details:
 #'  See the vignette for more information: visualizing each plot, use of colors, and identifying points of interest.
@@ -52,24 +50,39 @@
 #' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 #' #
 #' #  plot four pairs of variables by source (default has four plots on a page)
-#' plot.2d <- fn.2dPlot(data = ObsidianSources, GroupVar = "Code", labID = "ID", Groups = c("A","B"),
+#' plot.2d <- fn.2dPlot(data = ObsidianSources, GroupVar = "Code", ID = "ID", Groups = c("A","B"),
 #'           AnalyticVars = rbind(analyticVars[1:2],analyticVars[c(1,3)], analyticVars[c(1,4)],
 #'           analyticVars[2:3]), PlotEllipses=T, LowessLine=T)
 #' #
 #' #  plot one pair of variables with all sources on one plot
-#' plot.2d <- fn.2dPlot(data = ObsidianSources, GroupVar = "Code", labID = "ID", Groups = "All",
+#' plot.2d <- fn.2dPlot(data = ObsidianSources, GroupVar = "Code", ID = "ID", Groups = "All",
 #'           AnalyticVars =analyticVars[1:2], PlotByGroup=F, PlotColors=T, namesPlotEllipses=T, LowessLine=T)
 #'
 #' @import MASS
 #'
 #' @export
 #'
-fn.2dPlot <- function (doc = "fn.2dPlot", data, GroupVar, labID, Groups,
-          AnalyticVars, PlotByGroup=T, PlotPoints = T, LowessLine=F, Lowess.f=NA,
-          KernelSmooth=F,KernelWidth=0.3, PlotEllipses = F,
-          PlotHulls = F, PlotMedians = F, Ellipses = c(0.95, 0.99), Identify=F,
-          PlotColors = F, Colors=c("black","red","blue","green","purple"),
-          legendLoc = "topright", folder=" ",ds.identified)
+fn.2dPlot <- function (doc = "fn.2dPlot",
+                       data,
+                       GroupVar,
+                       ID,
+                       Groups,
+                       AnalyticVars,
+                       PlotByGroup=T,
+                       PlotPoints = T,
+                       LowessLine=F,
+                       Lowess.f=NA,
+                       KernelSmooth=F,
+                       KernelWidth=0.3,
+                       PlotEllipses = F,
+                       PlotHulls = F,
+                       PlotMedians = F,
+                        Ellipses = c(0.95, 0.99),
+                       Identify=F,
+                       PlotColors = F,
+                       Colors=c("black","red","blue","green","purple"),
+                       legendLoc = "topright",
+                       folder=" ")
 {
   if (Groups[1] != "All") {
     Use.rows <- (data[, GroupVar] %in% Groups)
@@ -260,11 +273,11 @@ fn.2dPlot <- function (doc = "fn.2dPlot", data, GroupVar, labID, Groups,
     #  remove duplicated observations from data.check
     #
     if (Identify) {
-      if (labID != " ") index<-duplicated(data.check[,labID])
+      if (ID != " ") index<-duplicated(data.check[,ID])
       else  index<-duplicated(data.check[,c(GroupVar,AnalyticVars)])
       if (length(index) > 0)  data.check<-data.check[!index,]
-      if (labID != " ") {
-        index.ID<-order(data.check[,labID])
+      if (ID != " ") {
+        index.ID<-order(data.check[,ID])
         data.check<-data.check[index.ID,]
       }
     }
@@ -292,13 +305,22 @@ fn.2dPlot <- function (doc = "fn.2dPlot", data, GroupVar, labID, Groups,
               params.grouping=params.grouping,
               ellipse.pct=Ellipses,
               data.check=data.check)
-  if ((substr(folder,1,1) != " ") * (Identify))
+  if ((substr(folder,1,1) != " ") & (!Identify))
     out<-list(usage=fcn.date.ver,
               dataUsed=data.Used,
               dataNA=dataNA,
               params.numeric=params.numeric,
               params.grouping=params.grouping,
               ellipse.pct=Ellipses,
-              data.check=data.check,folder.data.check=paste(folder,ds.identified,sep=""))
+              location=folder)
+  if ((substr(folder,1,1) != " ") & (Identify))
+    out<-list(usage=fcn.date.ver,
+              dataUsed=data.Used,
+              dataNA=dataNA,
+              params.numeric=params.numeric,
+              params.grouping=params.grouping,
+              ellipse.pct=Ellipses,
+              data.check=data.check,
+              location=folder)
   out
 }

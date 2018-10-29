@@ -9,9 +9,11 @@ fn.pca(doc = "fn.pca", data, ID = " ", GroupVar, Groups, AnalyticVars,
   PlotEllipses = T, legendLoc = "topright", PlotHull = F,
   PlotMedians = F, Ellipses = c(0.95, 0.99), PlotColors = T,
   Colors = c("red", "black", "blue", "green", "purple"), Identify = F,
-  digits = 3, folder = " ", ds.weights, ds.importance, ds.check)
+  digits = 3, folder = " ")
 }
 \arguments{
+\item{folder}{The path to the folder in which data frames will be saved; default is " "}
+
 \item{doc:}{documentation in the list returned, default is the function name}
 
 \item{data:}{R matrix or data frame containing the data to be analyzed}
@@ -49,14 +51,6 @@ fn.pca(doc = "fn.pca", data, ID = " ", GroupVar, Groups, AnalyticVars,
 \item{Identify:}{if T, the user can identify points of interest in plots; information on these points is saved to a file; default is F}
 
 \item{digits:}{significant digits to return in objects in data frames, default is 3}
-
-\item{folder:}{folder in which excel files are to be stored}
-
-\item{ds.weights:}{excel file with principal component loadings, extension.csv}
-
-\item{ds.importance:}{excel file with percent of variation explained, extension.csv}
-
-\item{ds.identified:}{excel file with identified points, if Identify == T}
 }
 \value{
 The function produces a plot of the first two principal components, the contents of which are defined by the arguments PlotPoints, PlotEllipses, PlotHull, and PlotMedians. A scree plot and box plots are produced if requested.  The function returns a list with the following components:

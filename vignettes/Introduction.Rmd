@@ -22,11 +22,21 @@ knitr::opts_chunk$set(
 
 ## Introduction
 
-A common problem in archaeology is estimating or predicting the source of the material used to form an artifact.  Archaeologists may use 2- or 3-dimensional scatterplots of artifact chemical composition data to predict the source of an artifact.  This package contains a suite of R functions to apply multivariate statistical methods to this problem, as well as functions to create analysis data sets, carry out some basic data quality checks, and perform several descriptive statistical analyses.  Results are returned as tables or plots; appropriate tables can be saved as excel files, and the user can interact with some plots to identify data observations yielding points suggesting the need for closer identification.
+A common problem in archaeology is estimating or predicting the source of the material used to form an artifact.  Archaeologists may use 2- or 3-dimensional scatterplots of artifact chemical composition data to predict the source of an artifact.  This package contains a suite of R functions to apply multivariate statistical methods to this problem, as well as functions to create analysis data sets, carry out some basic data quality checks, and perform some descriptive statistical analyses.  Results are returned as tables or plots; appropriate tables can be saved as excel files, and the user can interact with some plots to identify data observations yielding points suggesting the need for closer identification.
 
 The package implements three multivariate statistical procedures: principal component analysis (yielding 2-dimensional plots), recursive partitioning (classification trees), and random forests.  It may be of interest that classification trees and random forests can use both quantitative (e.g. chemical composition) and qualitative (e.g. color) data in the same analysis.
 
-After creating analysis files and carrying out standard data quality and descriptive analyses, our suggested analysis strategy is the following: first, use these methods to evaluate whether the data available are sufficient to distinguish among sources.  Second, use a random forest analysis to order the characteristics according to their importance in distinguishing among sources.  Third, supply these characteristics in the specified order to a classification tree model, in order to predict the source of each artifact.  Finally, if all characteristics used are quantitative, plot the artifact points on a 2-dimensional principal component plot with the convex hulls of the source points, to identify artifacts for which the predicted sources are not plausible.
+After creating analysis files and carrying out standard data quality and descriptive analyses, our suggested analysis strategy is the following.  First, do a principal components analysis on the quantitative source data to evaluate whether the first two principal components account for a sufficient proportion of the variance among source samples, and to evaluate the separation among sources.  Assuming that it appears that the sources can be separated, use a random forest analysis to order the characteristics (which can include qualitative as well as quantitative characteristics) according to their importance in distinguishing among sources, then use a classification tree analysis to identify the characteristics used to separate the sources (an example is in Figure 1).  Third, use a random forest analysis of the source data to predict the source of each artifact.  Finally, use the  quantitative characteristics to plot the artifact points on a 2-dimensional principal component plot with the convex hulls of the source points, to identify artifacts for which the predicted sources are not plausible (an example is in Figure 2).  The second last section of this vignette contains a discussion of using this procedure.
+
+```{r  echo=FALSE, results='hide',message=FALSE}
+library(karon)
+data(ObsidianSources)
+analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+tree <- fn.tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
+                 Model="Sr"+"Nb"+"Rb"+"Y"+"Zr", plotCp=F)
+```
+
+[Figure 2 to be inserted]
 
 The final section of this vignette contains useful summary information on the functions in this package, including arguments that are standard among the functions, names of components of the list returned by each function, and instructions for selecting points of interest in some of the plots.  We also provide information on the differences between interacting with plots in base R versus Rstudio.  For those using Rstudio, we provide simple instructions for running the example code for a function.
 
@@ -34,12 +44,12 @@ The final section of this vignette contains useful summary information on the fu
 
 The example data available with this package are data on obsidian from five sources in the Jemez caldera in northern New Mexico and on obsidian artifacts from sites in the Pojoaque Valley east of that caldera.  For both the source and artifact samples, our example analyses use five elements (rubidium, Rb; strontium, Sr; ytterbium, Y; niobium, Nb; and zirconium, Zr; numerical values are in parts per million) analyzed by Steven Shackley using x-ray fluorescence.  These are the elements that Shackley uses to distinguish among sources and predict the source of an artifact.  The source data are publicly available (http://www.swxrflab.net/jemez.htm).  This site also contains discussions of the geology of the source sites.
 
-We selected data on 91 artifacts from approximately 450 artifacts collected under the supervision of James Moore, Office of Archaeological Studies, New Mexico state government.  Shackley predicted the sources of these artifacts; all except two were from the Jemez caldera (we omitted those two from consideration); we randomly reassigned the sources of a proportion of the artifacts we selected in order to introduce misclassification.  These artifact data have not been published.
+We selected data on 91 artifacts from approximately 450 artifacts collected under the supervision of James Moore, Office of Archaeological Studies, New Mexico state government.  Shackley predicted the sources of these artifacts using two- and three-dimensional scatterplots; all except two were from the Jemez caldera (we omitted those two from consideration).  These artifact data have not been published.
 
 The artifacts were analyzed in Shackley’s lab in Albuquerque, New Mexico, using different instrumentation than that used for the sources.  For a discussion, see
 http://www.swxrflab.net/labfees.htm#QuanX%20Energy-Dispersive%20X-Ray%20Fluorescence%20Spectrometer%20(EDXRF).  For a more general discussion of Shackley’s procedures, see http://www.swxrflab.net/swobsrcs.htm.
 
-The five obsidian sources are coded as A, B, C, D, and E in the source and artifact data sets (ObsidianSources and ObsidianArtifacts, respectively).  The source (or predicted source for an artifact) is in the character-valued variable Code.  Each data set contains the variables Code, the five elements (as numeric variables, with variable names the element symbols), and a character-valued variable ID containing an artificial lab ID.  For example, the first few rows of ObsidianSources are in Table 1.
+The five obsidian sources are coded as A, B, C, D, and E in the source and artifact data sets (ObsidianSources and ObsidianArtifacts, respectively).  The source (or predicted source for an artifact) is in the character-valued variable Code. Each data set contains the variables Code, the five elements (as numeric variables, with variable names the element symbols), and a character-valued variable ID containing an artificial lab ID.  For example, the first few rows of ObsidianSources are in Table 1.
 
 ```{r }
 library(karon)
@@ -368,13 +378,13 @@ The function fn.tree() defines splits using a dichotomous criterion for a single
 There are a number of implementations of recursive partitioning.  We used the rpart() function in the rpart library in R.  This function provides an estimate of the potential error (misclassification) in a tree using cross-validation: a subset of the data is deleted, the tree is created using the remaining data; the tree is applied to the subset, to obtain an error rate; this process is repeated, by default 10 times.  The rpart() function also has a statistical procedure for choosing the proper number of splits (recursive partitioning trees tend to be too complex, overfitting the data).   The software grows a tree with too many nodes (overfits the data), then prunes back the tree so that each split results in a specified minimum improvement (by default, 0.01) in a measure of diversity within a node.  
 
 The tree procedure is implemented using a model statement assigned in the parameter Model containing the predictor variables separated by "+" signs.  For the examples below, the values of Model is
-"Sr"+"Nb"+"Rb"+"Y"+"Zr".  The order in which the variables appear in the model statement may affect the tree produced by the algorithm (if several predictor variables yield equally good splits at a node, the procedure may use the variable that appears first in the model statement).  Therefore, model statements with variables in different orders can yield different categorical trees.  As a result, we suggest running a random forest analysis before a classification tree model, then listing the predictor variables in the tree model statement in the order of importance estimated from the random forest model.  
+"Sr"+"Nb"+"Rb"+"Y"+"Zr".  The order in which the variables appear in the model statement may affect the tree produced by the algorithm (if several predictor variables yield equally good splits at a node, the procedure may use the variable that appears first in the model statement).  Therefore, model statements with variables in different orders can yield different categorical trees.  As a result, we suggest running a random forest analysis before a classification tree model, then listing the predictor variables in the tree model statement in the order of importance estimated from the random forest model.  The value of Model uses that predicted order.  
 
 The function produces two plots, the classification tree and the reduction in the cross-validation error estimate with an increasing number of splits.  It returns a list with three results of the computations: a definition of the tree (incuding the split criteria; this is useful if the tree is too large to be plotted), the classification results, and the Cp table (defined below).  
 
 In addition, the function can predict group (source) membership for new observations (artifacts).  To do so, set the parameter predictSources equal to T and the parameter predictData equal to the name of a data set with analytic data for the new observations.  In this case, the list returned by the function also has components predictedSources, a data frame with the predicted group (source) and analytic data for each new observation (also the sample ID, if there is one), and predictedTotals, a vector with the number of observations assigned to each group (source).  Missing values in an observation are also handled using surrogates.  
 
-Figure X shows the classification tree using the obsidian source data.  Note that there are four splits, rubidium is used twice, two of the potential predictor variables are not used, and each terminal node is pure (contains observations from a single source).  [The final document will contain a plot in which the scale for each terminal box shows the code for all sources.]
+Figure X shows the classification tree using the obsidian source data.  Note that there are four splits, rubidium is used twice, two of the potential predictor variables are not used, and each terminal node is pure (contains observations from a single source).  Note that rubidium is used instead of niobium in the tree, even though the random forest analysis predicts that niobium is more important.  Zirconium, predicted to be the least important predictor, is not used.  Rubidium and niobium have a very strong correlation (0.92) if source is ignored, and have high correlations at sources A, C, and D; rubidium is used to identify sources A and C.
 
 ```{r  echo=FALSE, results='hide',message=FALSE}
 library(karon)
@@ -438,7 +448,7 @@ data(ObsidianSources)
 data(ObsidianArtifacts)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 save.tree <- fn.tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
-   Model = "Rb"+"Sr"+"Y"+"Zr"+"Nb", predictSources=T, predictData=ObsidianArtifacts, ID="labID",
+   Model = "Rb"+"Sr"+"Y"+"Zr"+"Nb", predictSources=T, predictData=ObsidianArtifacts, ID="ID",
    plotTree=F, plotCp=F)
 knitr::kable(save.tree$predictedSources[1:5,], caption = "Table zz.  An example of the data frame containing predicted sources of obsidian artifacts from the classification tree for the obsidian sources.")
 ```
@@ -449,7 +459,7 @@ data(ObsidianSources)
 data(ObsidianArtifacts)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 save.tree <- fn.tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
-   Model = "Rb"+"Sr"+"Y"+"Zr"+"Nb", predictSources=T, predictData=ObsidianArtifacts, ID="labID",
+   Model = "Rb"+"Sr"+"Y"+"Zr"+"Nb", predictSources=T, predictData=ObsidianArtifacts, ID="ID",
    plotTree=F, plotCp=F)
 knitr::kable(save.tree$predictedTotals, caption = "Table zz1.  Predicted number of obsidian artifacts
 from each source based on the classification tree for the obsidian sources.")
@@ -463,10 +473,10 @@ data(ObsidianSources)
 data(ObsidianArtifacts)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 tree <- fn.tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
-                ID="labID", Model="Sr"+"Nb"+"Rb"+"Y"+"Zr", plotTree=F, plotCp = F, predictSources=T,
+                ID="ID", Model="Sr"+"Nb"+"Rb"+"Y"+"Zr", plotTree=F, plotCp = F, predictSources=T,
                 predictData=ObsidianArtifacts)
 predictedSources<-tree$predictedSources[tree$predictedSources[,"source"]!="A",]
-save.pca <- fn.pca(data=predictedSources, ID="labID", GroupVar="source",Groups="All", AnalyticVars=analyticVars, PlotEllipses=F)
+save.pca <- fn.pca(data=predictedSources, ID="ID", GroupVar="source",Groups="All", AnalyticVars=analyticVars, PlotEllipses=F)
 ```
 
 ## Random forests
@@ -496,7 +506,7 @@ data(ObsidianSources)
 ```{r  echo=FALSE, message=FALSE}
 data(ObsidianSources)
  analyticVars<-c("Rb","Sr","Y","Zr","Nb")
- save.randomForest <- fn.randomForest(data=ObsidianSources, GroupVar="Code",Groups="All",   AnalyticVars=analyticVars, NvarUsed=3, plotImportance=F, plotErrorRate=F)
+ save.randomForest <- fn.randomForest(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars, NvarUsed=3, plotImportance=F, plotErrorRate=F)
 knitr::kable(save.randomForest$importance, caption="Table z. Relative variable importance in a random forest model for the Jemez obsidian source data.")
 #
 ```
@@ -506,7 +516,7 @@ The accuracy of classification from the random forest analysis is reported in th
 ```{r  echo=FALSE, message=FALSE}
 data(ObsidianSources)
  analyticVars<-c("Rb","Sr","Y","Zr","Nb")
- save.randomForest <- fn.randomForest(data=ObsidianSources, GroupVar="Code",Groups="All",   AnalyticVars=analyticVars, NvarUsed=3, plotImportance=F, plotErrorRate=F)
+ save.randomForest <- fn.randomForest(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars, NvarUsed=3, plotImportance=F, plotErrorRate=F)
 knitr::kable(save.randomForest$confusion, caption="Table z. The confusion matrix from a random forest model for the Jemez obsidian source data: accuracy of classification.")
 #
 ```
@@ -542,7 +552,7 @@ save.randomForest <- fn.randomForest(data=ObsidianSources, GroupVar="Code",Group
 data(ObsidianSources)
 data(ObsidianArtifacts)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-save.randomForest <- fn.randomForest(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars, ID="labID", NvarUsed=3, plotErrorRate=F, plotImportance=F, predictSources=T,predictData=ObsidianArtifacts, plotSourceProbs=F)
+save.randomForest <- fn.randomForest(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars, ID="ID", NvarUsed=3, plotErrorRate=F, plotImportance=F, predictSources=T,predictData=ObsidianArtifacts, plotSourceProbs=F)
 check<-save.randomForest$predictedSources
 rows<-((check[,"B"] > 0.19) & (check[,"B"] < 0.30)) | ((check[,"C"] > 0.19) & (check[,"C"] < 0.30))
 knitr::kable(check[rows,], caption="Table z3.  Selected rows with relative large probabilities of
@@ -553,9 +563,9 @@ knitr::kable(check[rows,], caption="Table z3.  Selected rows with relative large
 data(ObsidianSources)
 data(ObsidianArtifacts)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-save.randomForest <- fn.randomForest(data=ObsidianSources, GroupVar="Code",Groups="All", ID="labID", AnalyticVars=analyticVars, NvarUsed=3, plotErrorRate=F, plotImportance=F, predictSources=T,predictData=ObsidianArtifacts, plotSourceProbs=F)
+save.randomForest <- fn.randomForest(data=ObsidianSources, GroupVar="Code",Groups="All", ID="ID", AnalyticVars=analyticVars, NvarUsed=3, plotErrorRate=F, plotImportance=F, predictSources=T,predictData=ObsidianArtifacts, plotSourceProbs=F)
 predictedSources<-save.randomForest$predictedSources[save.randomForest$predictedSources[,"source"]!="A",]
-save.pca <- fn.pca(data=predictedSources, ID="labID", GroupVar="source",Groups="All", AnalyticVars=analyticVars, PlotEllipses=F)
+save.pca <- fn.pca(data=predictedSources, ID="ID", GroupVar="source",Groups="All", AnalyticVars=analyticVars, PlotEllipses=F)
 ```
 
 ## Evalution of the predictions 
@@ -576,7 +586,7 @@ data(ObsidianArtifacts)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 sources <- unique(ObsidianSources[,"Code"])
 save.tree <- fn.tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
-  Model = "Rb"+"Sr"+"Y"+"Zr"+"Nb", predictSources=T, predictData=ObsidianArtifacts, ID="labID",
+  Model = "Rb"+"Sr"+"Y"+"Zr"+"Nb", predictSources=T, predictData=ObsidianArtifacts, ID="ID",
   plotTree=F, plotCp=F)
 pca.eval <- fn.pca.evaluation(SourceData=ObsidianSources, ArtifactData=save.tree$predictedSources,
   SourceGroup= "Code", ArtifactGroup="source",known.sources=sources, predicted.sources=sources,

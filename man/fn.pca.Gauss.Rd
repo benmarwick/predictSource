@@ -5,7 +5,7 @@
 \title{fn.pca.Gauss}
 \usage{
 fn.pca.Gauss(doc = "fn.pca.Gauss", data, GroupVar, Groups, ID = " ",
-  AnalyticVars, qqPlot = T, Identify = F, folder = " ", ds.pvalues)
+  AnalyticVars, qqPlot = T, Identify = F, folder = " ")
 }
 \arguments{
 \item{doc}{documentation for the analysis, default if the function name}
@@ -23,10 +23,7 @@ plots are to be done; if "All"', use all groups}
 
 \item{Identify}{Logical, should user identify points of interest, default is F}
 
-\item{folder}{folder in which the excel file is to be stored, default is " " (no file is created)}
-
-\item{ds.pvalues}{excel file with Anderson-Darling and Mardia p-values, with
-extension .csv}
+\item{folder}{The path to the folder in which data frames will be saved; default is " "}
 
 \item{ID:}{optional name for an ID, default is " " if no ID}
 }
@@ -43,7 +40,7 @@ The function produces Q-Q plots (univariate and multivariate) of the first two p
   \item{analyticVars:}{ A vector with the value of the argument AnalyticVars}
   \item{params.logical:}{ The value of QQtest}
   \item{p.values:}{ T data frame with the p-values for the Gaussian assumptions for each group specified}
-  \item{files:}{ If folder != " ", a character string with the path to the file containing the p-values}
+  \item{location:}{ If folder != " ", the value of the parameter folder}
  }
 }
 \description{

@@ -12,12 +12,8 @@
 #' @param Selections: vector of length 3, or data frame with 3 columns, with combinations to be plotted
 #' @param ByGroup: if T, show scatterplot for each group for each selection of 3 variables
 #' @param Color: color of plotted points
-#' @param folder: default is " ", when no rotated 3-d plot is saved to a file
-#'      if a rotated 3-d plot is to be saved, the path (ending in \\) to the folder in which the file is saved
-#' @param ds.3dPlot: if folder != " ",the file name (with no extension) in which the plot is saved
-#' @param extension: if folder != " ", the format in which the file should be saved;
-#'        options are pdf ("pdf", the default) and postscript (value is "ps")
-#'
+#' @param folder  The path to the folder in which a rotated 3-d plot will be saved; default is " "
+#`
 #' @import MASS rgl scatterplot3d
 #'
 #' @section: Details
@@ -25,16 +21,16 @@
 #'
 #' @return A list with the following components:
 #' \itemize{
-#' \item{"usage"}{a vector with the contents of the argument doc, the date run, the version of R used}
-#' \item{"dataUsed"}{the contents of the argument data restricted to the groups used}
+#' \item{usage}{  A vector with the contents of the argument doc, the date run, the version of R used}
+#' \item{dataUsed}{  The contents of the argument data restricted to the groups used}
 #' \item{dataNA:}{  A data frame with observations containing a least one missing value
 #'   for an analysis variable, NA if no missing values}
-#' \item{"params"}{a vector with the values of the arguments ByGroup and SymbolSize}
-#' \item{"groups"}{a vector (may be of length 1) with the value of the argument Groups}
-#' \item{"analyticVars"}{a vector with the value of the argument AnalyticVars}
-#' \item{"selections"}{a vector or matrix with the value of the argument Selections}
-#' \item{"colors"}{a vector with the value of the argument Color}
-#' \item{"file"}{if folder != " ": the path and file name ds.3dPlot}
+#' \item{params}{  A vector with the values of the arguments ByGroup and SymbolSize}
+#' \item{groups}{  A vector (may be of length 1) with the value of the argument Groups}
+#' \item{analyticVars}{  A vector with the value of the argument AnalyticVars}
+#' \item{selections}{  A vector or matrix with the value of the argument Selections}
+#' \item{colors}{  A vector with the value of the argument Color}
+#' \item{location}{  If folder != " ", the value of the parameter folder}
 #' }
 #'
 #' @examples
@@ -49,7 +45,7 @@
 #' @export
 
 fn.3dPlot.rotate <-
-  function(doc = "fn.3dPlot.rotate version 0.1",
+  function(doc = "fn.3dPlot.rotate",
            data,
            GroupVar,
            Groups,
@@ -58,9 +54,8 @@ fn.3dPlot.rotate <-
            ByGroup = F,
            SymbolSize = 1,
            Colors = c("red","black","blue","green","purple"),
-           folder = " ",
-           ds.3dPlot,
-           extension="pdf") {
+           folder = " ")
+    {
 #
     if ((Groups[1] != " ") & (Groups[1] != "All")) {
       Use.rows <- (data[, GroupVar] %in% Groups)
@@ -202,6 +197,6 @@ fn.3dPlot.rotate <-
                 analyticVars=AnalyticVars,
                 selections=Selections,
                 colors=Colors,
-                file=paste(folder,ds.3dPlot,".",extension,sep=""))
+                location=folder)
     out
   }

@@ -4,9 +4,9 @@
 \alias{fn.2dPlot.Gauss}
 \title{fn.2dPlot.Gauss}
 \usage{
-fn.2dPlot.Gauss(doc = "fn.2dPlot.Gauss", data, GroupVar, labID, Groups,
+fn.2dPlot.Gauss(doc = "fn.2dPlot.Gauss", data, GroupVar, ID, Groups,
   AnalyticVars, qqPlot = T, pvalue.digits = 3, Identify = F,
-  folder = " ", ds.pvalues, ds.data.check)
+  folder = " ")
 }
 \arguments{
 \item{doc}{A string documenting use written to the output list; default is the function name}
@@ -15,7 +15,7 @@ fn.2dPlot.Gauss(doc = "fn.2dPlot.Gauss", data, GroupVar, labID, Groups,
 
 \item{GroupVar}{Name for the variable defining grouping, " " if no grouping}
 
-\item{labID}{Name for the variable with a lab ID, " " if no lab ID is used}
+\item{ID}{Name for the variable with a lab ID, " " if no lab ID is used}
 
 \item{Groups}{Vector of values of the group variable for which plots are to be done;
 if "All", use all groups; if " ", no grouping}
@@ -28,10 +28,7 @@ if "All", use all groups; if " ", no grouping}
 
 \item{Identify}{Logical(default is F): if T, user can identify points of interest in the plots}
 
-\item{folder}{In Windows, path to the folder containing an excel file with the identified points, ending with two forward slashes;
-if " ", no data set is written}
-
-\item{ds.identified}{Excel file name with extension .csv containing information on the identified points}
+\item{folder}{The path to the folder in which data frames will be saved; default is " "}
 }
 \value{
 A list with the following components:
@@ -44,8 +41,7 @@ A list with the following components:
 \item{parameters:}{  A vector with argument values for GroupVar, Groups, pvalue.digits, and QQtest}
 \item{pvalues:}{  A data frame with the p-values for univariate and bivariate tests of normality}
 \item{data.check:}{ If Identify = T, a data frame with the information on user-identified points of interest}
-\item{file:}{ If folder != " ", a string or list: the path to the excel file or files with pvalues and, if Identify = T,
- the information on user-identified points of interest}
+\item{location:}{ If folder != " ", the contents of the parameter folder}
 }
 }
 \description{
@@ -59,7 +55,7 @@ Plot and check specified pairs of analysis variables for bivariate normality. Th
 
 \examples{
 data(ObsidianSources)
-plot.2d.Gauss<-fn.2dPlot.Gauss(data=ObsidianSources, GroupVar="Code", labID="ID", Groups=c("A","B"),
+plot.2d.Gauss<-fn.2dPlot.Gauss(data=ObsidianSources, GroupVar="Code", ID="ID", Groups=c("A","B"),
    AnalyticVars=c("Rb","Zr"))
 
 }

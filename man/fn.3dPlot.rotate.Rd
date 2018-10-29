@@ -4,13 +4,14 @@
 \alias{fn.3dPlot.rotate}
 \title{fn.3dPlot.rotate}
 \usage{
-fn.3dPlot.rotate(doc = "fn.3dPlot.rotate version 0.1", data, GroupVar, Groups,
+fn.3dPlot.rotate(doc = "fn.3dPlot.rotate", data, GroupVar, Groups,
   AnalyticVars, Selections, ByGroup = F, SymbolSize = 1, Colors = c("red",
-  "black", "blue", "green", "purple"), folder = " ", ds.3dPlot,
-  extension = "pdf")
+  "black", "blue", "green", "purple"), folder = " ")
 }
 \arguments{
 \item{doc}{A string documenting usage written to the list return, default is the function name}
+
+\item{folder}{The path to the folder in which a rotated 3-d plot will be saved; default is " "}
 
 \item{data:}{R matrix or data frame containing the data to be analyzed}
 
@@ -26,28 +27,20 @@ fn.3dPlot.rotate(doc = "fn.3dPlot.rotate version 0.1", data, GroupVar, Groups,
 \item{ByGroup:}{if T, show scatterplot for each group for each selection of 3 variables}
 
 \item{Color:}{color of plotted points}
-
-\item{folder:}{default is " ", when no rotated 3-d plot is saved to a file
-if a rotated 3-d plot is to be saved, the path (ending in \\) to the folder in which the file is saved}
-
-\item{ds.3dPlot:}{if folder != " ",the file name (with no extension) in which the plot is saved}
-
-\item{extension:}{if folder != " ", the format in which the file should be saved;
-options are pdf ("pdf", the default) and postscript (value is "ps")}
 }
 \value{
 A list with the following components:
 \itemize{
-\item{"usage"}{a vector with the contents of the argument doc, the date run, the version of R used}
-\item{"dataUsed"}{the contents of the argument data restricted to the groups used}
+\item{usage}{  A vector with the contents of the argument doc, the date run, the version of R used}
+\item{dataUsed}{  The contents of the argument data restricted to the groups used}
 \item{dataNA:}{  A data frame with observations containing a least one missing value
   for an analysis variable, NA if no missing values}
-\item{"params"}{a vector with the values of the arguments ByGroup and SymbolSize}
-\item{"groups"}{a vector (may be of length 1) with the value of the argument Groups}
-\item{"analyticVars"}{a vector with the value of the argument AnalyticVars}
-\item{"selections"}{a vector or matrix with the value of the argument Selections}
-\item{"colors"}{a vector with the value of the argument Color}
-\item{"file"}{if folder != " ": the path and file name ds.3dPlot}
+\item{params}{  A vector with the values of the arguments ByGroup and SymbolSize}
+\item{groups}{  A vector (may be of length 1) with the value of the argument Groups}
+\item{analyticVars}{  A vector with the value of the argument AnalyticVars}
+\item{selections}{  A vector or matrix with the value of the argument Selections}
+\item{colors}{  A vector with the value of the argument Color}
+\item{location}{  If folder != " ", the value of the parameter folder}
 }
 }
 \description{

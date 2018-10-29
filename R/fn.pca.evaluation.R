@@ -23,11 +23,7 @@
 #' @param plotOutsidePoints: if T (the default), show a plot with one pane: athe unknown points lying
 #'  outside of their predicted source convex hulls and these hulls (the second pane for
 #'  plotHullsOutsidePoints)
-#' @param folder: path to folder containing result files each file name should end with .csv
-#' @param ds.importance: name of file with percent of variance explained for the known source analysis
-#' @param ds.pts.outside: name of file with information on artifacts with principal component pointsoutside of hull for predicted source
-#' @param ds.in.out: table with number of artifacts, by whether inside or outside hull for predicted  source, for each predicted source
-#' @param ds.data.check: if Identify = T, data for observations outside of the predicted hull identified as of interest
+#' @param folder  The path to the folder in which data frames will be saved; default is " "
 #'
 #' @section Details
 #' See the vignette for instructions for identifying points of interest using the paramter Identify = T.
@@ -35,6 +31,7 @@
 #'@return The function produces two plots: the convex hulls of the first two principal components of the source data,
 #'  and a plot with those convex hulls and the artifact data (using the weights obtained from the source data).
 #'  The function returns a list with the following components:
+#'
 #' \itemize{
 #'   \item{usage:}{  A vector with the contents of the argument doc, the date run, the version of R used}
 #'   \item{dataUsed:}{  The contents of the argument data restricted to the groups used}
@@ -44,8 +41,7 @@
 #'    predicted source location}
 #'   \item{pts.outside:}  {  A data frame with the data for artifact points located outside of the predicted source}
 #'   \item{data.check:}{  If Identify=T, a data frame with the observations in dataUsed identified as of interest}
-#'   \item{files:}{  If folder != " ", a list with path and data set names to the excel files containing importance,
-#'   ds.in.out, pts.outside, and, if Identify=T, data.check}
+#'   \item{location:}{  If folder != " ", the values of the parameter folder}
 #'    }
 #'
 #' @section  Details
@@ -109,12 +105,8 @@ fn.pca.evaluation <-
            plotAllPoints = T,
            plotHullsOutsidePoints = T,
            plotOutsidePoints = T,
-           folder = " ",
-           ds.importance,
-           ds.pts.outside,
-           ds.in.out,
-           ds.identified,
-           ds.data.check) {
+           folder = " ")
+{
     #
     #  create source data set with group code and elements, restricted to identified sources
     #
@@ -184,7 +176,6 @@ fn.pca.evaluation <-
     #  matrix with information from summary
     #
     importance.pca <- summary(pca)$importance
-    if (folder != " ")  write.csv(importance.pca, file = paste(folder, ds.importance, sep = ""))
     #
     #  compute locations of points on principal component plot
     #
@@ -323,8 +314,7 @@ fn.pca.evaluation <-
     }  # end of loop on i
     pcaLocationsArtifacts <- data.frame(pcaLocationsArtifacts, in.hull = artifact.in.hull)
     #
-    #  create data frame with data on points outside predicted hull and, if requested, write to excel
-    #  keep desired columns
+    #  create data frame with data on points outside predicted hull
     #
     pts.outside <- pcaLocationsArtifacts[!pcaLocationsArtifacts[,"in.hull",],]
     pts.outside.pc <- round(as.matrix(pts.outside[, c("pc1","pc2")], mode = "numeric"), dig=2)
@@ -333,7 +323,6 @@ fn.pca.evaluation <-
                                        (colnames(pts.outside) != "pc1") & (colnames(pts.outside) != "pc2")]
     pts.outside <- pts.outside[, cols.keep]
     pts.outside <- data.frame(pts.outside, pts.outside.pc)
-    if (folder != " ")  write.csv(pts.outside, file = paste(folder, ds.pts.outside, sep = ""))
     #
     #  table with counts of artifacts inside and outside of predicted source hull
     #
@@ -344,7 +333,6 @@ fn.pca.evaluation <-
     dummy <- rbind(dummy, apply(dummy, 2, sum))
     colnames(dummy) <- c("outside", "inside", "total")
     rownames(dummy) <- c(rownames(n.in.out), "total")
-    if (folder != " ") write.csv(in.out, file = paste(folder, ds.in.out, sep = ""))
     #
     # end of code to create and use indicator for artifact points outside of predicted hulls
     #
@@ -515,13 +503,7 @@ fn.pca.evaluation <-
                  paste(folder,ds.in.out,sep=""))
       names(files) <- c("ds.importance", "ds.pts.outside", "ds.in.out")
     }
-    if ((substr(folder,1,1) != " ") & (Identify == T)) {
-      files=list(paste(folder,ds.importance,sep=""), paste(folder,ds.pts.outside,sep=""),
-                 paste(folder,ds.in.out,sep=""), paste(folder,ds.identified,sep=""),
-                 paste(folder,ds.data.check,sep=""))
-      names(files) <- c("ds.importance", "ds.pts.outside", "ds.in.out","ds.identified", "ds.data.check")
-    }
-    #
+ #
     if ((substr(folder,1,1) == " ") & (!Identify))
       out<-list(usage=fcn.date.ver,
                 sourceData = sourceData,
@@ -538,7 +520,7 @@ fn.pca.evaluation <-
                 params = params,
                 table.in.out = n.in.out,
                 points.outside = pts.outside,
-                files = files)
+                location=folder)
     if ((substr(folder,1,1) == " ") & (Identify))
       out<-list(usage=fcn.date.ver,
                 sourceData = sourceData,
@@ -557,7 +539,7 @@ fn.pca.evaluation <-
                 table.in.out = n.in.out,
                 points.outside = pts.outside,
                 data.check = data.check,
-                files = files)
+                location=folder)
     if ((substr(folder,1,1) != " ") & (Identify) == F)
       out<-list(usage=fcn.date.ver,
               sourceData = sourceData,
@@ -566,6 +548,6 @@ fn.pca.evaluation <-
               params = params,
               table.in.out = n.in.out,
               points.outside = pts.outside,
-              files = files)
+              location=folder)
     out
    }

@@ -17,12 +17,7 @@
 #' @param predictSources  Logical: if T, use the tree to predict sources for observations in predictData; default is F
 #' @param predictData  Data frame with data used to predict sources, must contain all variables in AnalyticVars
 #' @param ID  If not " " (the default), name of a variable identifying a sample in predictData
-#' @param folder  If " ", no files are written; otherwise, the path to the folder containing the excel files,
-#'                must end with two forward slashes
-#' @param ds.predictedSourcess  Name of the excel file containing the results of classifying the data, must end with .csv
-#' @param ds.predictedTotals Name of the excel file containing the total number of objects predicted to be from each sources, must end with .csv
-#' @param ds.Classify  Name of the excel file containing the results of classifying the data, must end with .csv
-#' @param ds.CpTable Name of the excel file containing the values of Cp at successive splits, must end with .csv
+#' @param folder  The path to the folder in which data frames will be saved; default is " "
 #'
 #' @return The function fits a classification tree model.  The variables in AnalyticVars are considered in the order
 #'        they appear in the Model argument (from left to right).  See the vignette for more details.
@@ -55,7 +50,7 @@
 #` data(ObsidianArtifacts)
 #` analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 #` save.tree <- fn.tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
-#`      Model = "Rb"+"Sr"+"Y"+"Zr"+"Nb", predictSources=T, predictData=ObsidianArtifacts, ID="labID",
+#`      Model = "Sr"+ "Nb" + "Rb" + Y"+"Zr", predictSources=T, predictData=ObsidianArtifacts, ID="labID",
 #`      plotTree=F, plotCp=F)
 #'
 #' @import rpart partykit Formula
@@ -78,13 +73,8 @@ fn.tree <-
            predictSources = F,
            predictData,
            ID = " ",
-           folder = " ",
-           ds.Classify,
-           ds.CpTable,
-           ds.OptSplit,
-           ds.predictedSources,
-           ds.predictedTotals) {
-
+           folder = " ")
+{
     # create dataset Data.used based on grouping restrict to desired set of groups
     if (Groups[1] != "All") {
       Use.rows <- (data[, GroupVar] %in% Groups)
@@ -134,10 +124,8 @@ fn.tree <-
       }
     # classification
     classification <- table(Tree$y, Sources)
-    if (folder != " ") write.csv(t(classification), paste(folder, ds.Classify, sep = ""))
     # evaluate tree size
     CpTable <- Tree$cptable
-    if (folder != " ")  write.csv(CpTable, paste(folder, ds.CpTable, sep = ""))
     #
     if (plotCp) {
       plot(
@@ -151,7 +139,7 @@ fn.tree <-
       lines(x = CpTable[, "nsplit"], y = CpTable[, "xerror"], lty = 1)
       legend(x = "bottomleft", legend = formula.rhs, bty = "n")
       browser()
-     }
+     } # end of code for plotCp
     # optimal number of splits
     nsplitopt <- vector(mode = "integer", length = 25)
     for (i in 1:length(nsplitopt)) {
@@ -161,7 +149,6 @@ fn.tree <-
     nsplitopt <- cbind(Model = rep(0, 25), Splits = nsplitopt)
     Nsplitopt <-
       table(Model = nsplitopt[, "Model"], Splits = nsplitopt[, "Splits"])
-    if (folder != " ")  write.csv(table(Nsplitopt), paste(folder, ds.OptSplit, sep = ""))
     #
     if (predictSources == T) {
       predictedSources <- predict(object = Tree, newdata = predictData)
@@ -174,11 +161,8 @@ fn.tree <-
       if (substr(ID,1,1) == " ")  predictedResults<-data.frame(source,predictData[,AnalyticVars])
       if (substr(ID,1,1) != " ")  predictedResults<-data.frame(source, predictData[,c(ID, AnalyticVars)])
       #
-      if (folder != " ") {
-        write.csv(predictedSources,paste(folder,ds.predictedSources, sep = ""))
-        write.csv(predictedTotals, paste(folder,ds.predictedTotals, sep = ""))
-      }
-    }
+      } # end of code for predictSources == T
+   #
     fcn.date.ver<-paste(doc,date(),R.Version()$version.string)
     params.grouping<-list(GroupVar,Groups)
     names(params.grouping)<-c("GroupVar","Groups")
@@ -190,18 +174,6 @@ fn.tree <-
     nsplit <- CpTable[,"nsplit"]
     Cp <- round(CpTable[,-2],dig = CpDigits)
     CpTable <- cbind(nsplit,Cp)
-    #
-    if (folder != " ") {
-      if  (predictedSources == F)
-      fileNames <- list(paste(folder,ds.Classify,sep=""),paste(folder,ds.CpTable,sep=""),
-                        paste(folder,ds.CVtable,sep=""))
-      }
-    if (folder != " ") {
-      if (predictedSources == T)
-      fileNames <- list(paste(folder,ds.Classify,sep=""),paste(folder,ds.CpTable,sep=""),
-                        paste(folder,ds.CVtable,sep=""),
-                        paste(folder,ds.predictedSources,sep=""),paste(folder,ds.predictedTotals,sep=""))
-      }
     #
     if (!predictSources) {
     if (substr(folder,1,1) == " ")
@@ -225,7 +197,7 @@ fn.tree <-
                 Tree = Tree,
                 classification = classification,
                 CpTable = CpTable,
-                files = fileNames
+                location=folder
       )
     }
     #
@@ -255,7 +227,7 @@ fn.tree <-
                   CpTable = CpTable,
                   predictedSources = predictedResults,
                   predictedTotals = data.frame(t(predictedTotals)),
-                  files = fileNames
+                  location=folder
         )
     }
     out

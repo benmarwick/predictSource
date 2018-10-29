@@ -5,16 +5,14 @@
 #' @param doc  A string documenting use written to the output list; default is the function name
 #' @param data  R matrix or data frame containing the data to be analyzed
 #' @param GroupVar  Name for the variable defining grouping, " " if no grouping
-#' @param labID  Name for the variable with a lab ID, " " if no lab ID is used
+#' @param ID  Name for the variable with a lab ID, " " if no lab ID is used
 #' @param Groups  Vector of values of the group variable for which plots are to be done;
 #'    if "All", use all groups; if " ", no grouping
 #' @param AnalyticVars  Names of two analytic variables to be shown in the plots, vector of length 2
 #' @param qqPlot  Logical (default is T): specify whether to show q-q plots, including plots based on simulation and multivariate plots
 #' @param pvalue.digits  Numeric (default is 3): number of significant digits retained in tests for normality
 #' @param Identify  Logical(default is F): if T, user can identify points of interest in the plots
-#' @param folder  In Windows, path to the folder containing an excel file with the identified points, ending with two forward slashes;
-#'         if " ", no data set is written
-#' @param ds.identified  Excel file name with extension .csv containing information on the identified points
+#' @param folder  The path to the folder in which data frames will be saved; default is " "
 #'
 #' @return   A list with the following components:
 #'  \itemize{
@@ -26,8 +24,7 @@
 #' \item{parameters:}{  A vector with argument values for GroupVar, Groups, pvalue.digits, and QQtest}
 #' \item{pvalues:}{  A data frame with the p-values for univariate and bivariate tests of normality}
 #' \item{data.check:}{ If Identify = T, a data frame with the information on user-identified points of interest}
-#' \item{file:}{ If folder != " ", a string or list: the path to the excel file or files with pvalues and, if Identify = T,
-#'  the information on user-identified points of interest}
+#' \item{location:}{ If folder != " ", the contents of the parameter folder}
 #' }
 #'
 #' @section Details:
@@ -37,13 +34,22 @@
 #' @import MASS  qqtest  MVN
 #' @examples
 #' data(ObsidianSources)
-#' plot.2d.Gauss<-fn.2dPlot.Gauss(data=ObsidianSources, GroupVar="Code", labID="ID", Groups=c("A","B"),
+#' plot.2d.Gauss<-fn.2dPlot.Gauss(data=ObsidianSources, GroupVar="Code", ID="ID", Groups=c("A","B"),
 #'    AnalyticVars=c("Rb","Zr"))
 #'
 #' @export
 #'
-fn.2dPlot.Gauss <- function (doc = "fn.2dPlot.Gauss", data, GroupVar,labID, Groups,
-          AnalyticVars, qqPlot = T, pvalue.digits=3, Identify=F, folder=" ", ds.pvalues, ds.data.check)
+fn.2dPlot.Gauss <- function (doc = "fn.2dPlot.Gauss",
+                             data,
+                             GroupVar,
+                             ID,
+                             Groups,
+                             AnalyticVars,
+                             qqPlot = T,
+                             pvalue.digits=3,
+                             Identify=F,
+                             folder=" "
+                            )
 {
   if (length(AnalyticVars)!=2)  stop("length of AnalyticVars must be 2")
   #
@@ -140,18 +146,15 @@ fn.2dPlot.Gauss <- function (doc = "fn.2dPlot.Gauss", data, GroupVar,labID, Grou
   dimnames(return.pvalues) <- list(groups, c("n", paste("AD.",AnalyticVars,sep=""), paste("SW.",AnalyticVars,sep=""),
                                              "maridaSkew", "mardiaKurtosis", "HZ", "Royston"))
   #
-  if (substr(folder,1,1) != " ")
-    if (substr(ds.pvalues,1,1) != " ") write.csv(returnname.pvalues, file = paste(folder, ds.pvalues, sep = ""))
-  #
   #  remove duplicated observations from data.check
   #
   if (Identify) {
     data.check<-data.check[-1,]  # remove dummy first row
-    if (labID != " ") index<-duplicated(data.check[,labID])
+    if (ID != " ") index<-duplicated(data.check[,ID])
     else  index<-duplicated(data.check[,c(GroupVar,AnalyticVars)])
     if (length(index) > 0)  data.check<-data.check[!index,]
-    if (labID != " ") {
-      index.ID<-order(data.check[,labID])
+    if (ID != " ") {
+      index.ID<-order(data.check[,ID])
       data.check<-data.check[index.ID,]
     }
   }
@@ -178,17 +181,15 @@ fn.2dPlot.Gauss <- function (doc = "fn.2dPlot.Gauss", data, GroupVar,labID, Grou
     }
   if (substr(folder,1,1) != " ") {
     if (!Identify) {
-      file<-paste(folder,ds.pvalues,sep="")
       out<-list(usage=fcn.date.ver,
                 data.Used=dataUsed,
                 dataNA=dataNA,
                 analyticVars=AnalyticVars,
                 parameters=parameters,
                 pvalues=return.pvalues,
-                file=file)
+                location=folder)
       }
     if ( Identify) {
-      file<-list(pvalues=paste(folder,ds.pvalues,sep=""),data,check=paste(folder,ds.data.check,sep=""))
       out<-list(usager=fcn.date.ver,
                 data.Used=dataUsed,
                 dataNA=dataNA,
@@ -196,7 +197,7 @@ fn.2dPlot.Gauss <- function (doc = "fn.2dPlot.Gauss", data, GroupVar,labID, Grou
                 parameters=parameters,
                 pvalues=return.pvalues,
                 data.check=data.check,
-                file=file)
+                location=folder)
       }
     }
   out

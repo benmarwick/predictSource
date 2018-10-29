@@ -7,8 +7,7 @@
 fn.tree(doc = "fn.tree", data, GroupVar, Groups = "All", AnalyticVars,
   wts = NA, CpDigits = 3, plotTree = T, plotCp = T, Model,
   minSplit = 20, cP = 0.01, predictSources = F, predictData, ID = " ",
-  folder = " ", ds.Classify, ds.CpTable, ds.OptSplit, ds.predictedSources,
-  ds.predictedTotals)
+  folder = " ")
 }
 \arguments{
 \item{doc}{Documentation, default is fn.tree (the function name)}
@@ -41,16 +40,7 @@ fn.tree(doc = "fn.tree", data, GroupVar, Groups = "All", AnalyticVars,
 
 \item{ID}{If not " " (the default), name of a variable identifying a sample in predictData}
 
-\item{folder}{If " ", no files are written; otherwise, the path to the folder containing the excel files,
-must end with two forward slashes}
-
-\item{ds.Classify}{Name of the excel file containing the results of classifying the data, must end with .csv}
-
-\item{ds.CpTable}{Name of the excel file containing the values of Cp at successive splits, must end with .csv}
-
-\item{ds.predictedTotals}{Name of the excel file containing the total number of objects predicted to be from each sources, must end with .csv}
-
-\item{ds.predictedSourcess}{Name of the excel file containing the results of classifying the data, must end with .csv}
+\item{folder}{The path to the folder in which data frames will be saved; default is " "}
 }
 \value{
 The function fits a classification tree model.  The variables in AnalyticVars are considered in the order
