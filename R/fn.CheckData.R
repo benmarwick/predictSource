@@ -81,9 +81,8 @@ fn.CheckData <-
     #
     MinimumValues <- apply(data.Used[, AnalyticVars], 1, min, na.rm = T)
     NegRows <- (MinimumValues < 0)
-    if (sum(NegRows) == 0) {
+    if (sum(NegRows) == 0)
       NegativeValues <- NA
-    browser() }
     else    NegativeValues <- data[NegRows, ]
  #
       if ((GroupVar[1] == " ") | (Groups[1] == " ")) {
@@ -91,8 +90,7 @@ fn.CheckData <-
       for (i in 1:length(AnalyticVars))
         Nvalues[i] <- sum(!is.na(data[, AnalyticVars[i]]))
       }
-      browser()
-      #
+    #
     if (Groups == "All") {
       groups <- as.character(unique(data.Used[, GroupVar]))
       n.groups <- length(groups)
@@ -108,7 +106,6 @@ fn.CheckData <-
       colnames(nvalues) <- AnalyticVars
       Nvalues <- data.frame(Group = c(groups, "Total"), nvalues)
     } # end of code for Groups == "All"
-      browser()
     #
     if ((Groups[1] != " ") & (Groups != "All")) {
       n.groups <- length(Groups)
