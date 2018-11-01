@@ -40,7 +40,7 @@ A list with the following components:
   \item{analyticVars:}{  A vector with the value of the argument AnalyticVars}
   \item{CV:}{  A data frame with the coefficients of variation for each analytic variable in each group}
   \item{corr:}{  A data frame with the correlations between pairs of variables in each group}
-  \item{location:}{  If folder != " ", the value of the parameter folder}
+  \item{location:}{  The value of the parameter folder}
       }
 }
 \description{

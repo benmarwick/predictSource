@@ -40,8 +40,9 @@ A list with the following components:
 \item{analyticVars:}{  The contents of the argument AnalyticVars}
 \item{parameters:}{  A vector with argument values for GroupVar, Groups, pvalue.digits, and QQtest}
 \item{pvalues:}{  A data frame with the p-values for univariate and bivariate tests of normality}
-\item{data.check:}{ If Identify = T, a data frame with the information on user-identified points of interest}
-\item{location:}{ If folder != " ", the contents of the parameter folder}
+\item{data.check:}{ A data frame with the information on user-identified points of interest;
+    NA if no data identified}
+\item{location:}{ The contents of the parameter folder}
 }
 }
 \description{

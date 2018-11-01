@@ -58,8 +58,7 @@ The function fits a classification tree model.  The variables in AnalyticVars ar
   \item{CpTable:}{  A data frame showing the decrease in Cp with increasing numbers of splits}
   \item{predictedSources:}{  If predictSources = T, a data frame with the predicted sources}
   \item{predictedTotals}{  If predictedSources = T, a vector with the number of objects predicted to be from each source}
-  \item{files:}{ If folder != " ", a character string with the path to the file containing the excel files
-   defined is ds.Classify and ds.CpTable.}
+  \item{location:}{ The value of the parameter folder}
  }
 }
 \description{

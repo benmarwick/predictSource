@@ -23,8 +23,9 @@
 #' \item{analyticVars:}{  The contents of the argument AnalyticVars}
 #' \item{parameters:}{  A vector with argument values for GroupVar, Groups, pvalue.digits, and QQtest}
 #' \item{pvalues:}{  A data frame with the p-values for univariate and bivariate tests of normality}
-#' \item{data.check:}{ If Identify = T, a data frame with the information on user-identified points of interest}
-#' \item{location:}{ If folder != " ", the contents of the parameter folder}
+#' \item{data.check:}{ A data frame with the information on user-identified points of interest;
+#'     NA if no data identified}
+#' \item{location:}{ The contents of the parameter folder}
 #' }
 #'
 #' @section Details:
@@ -75,7 +76,8 @@ fn.2dPlot.Gauss <- function (doc = "fn.2dPlot.Gauss",
       GroupIndex[i] <- j
   }
   #
-  if (Identify) data.check<-data.Used[1,]  # set up data frame to store identified points
+  if (Identify) data.check<-data.Used[1,]
+      else  data.check <- NA  # set up data frame to store identified points
   #
   fn.plot <- function() {
     temp <- data.Used[data.Used[, GroupVar] == groups[i.group],AnalyticVars]
@@ -164,33 +166,7 @@ fn.2dPlot.Gauss <- function (doc = "fn.2dPlot.Gauss",
   if (sum(dataKeep) < nrow(data.Used)) dataNA <- data.Used[!dataKeep]
   else dataNA <- NA
   #
-  if (substr(folder,1,1) == " ") {
-    if ((!Identify)) out<-list(usage=fcn.date.ver,
-                               dataUsed=data.Used,
-                               dataNA=dataNA,
-                               analyticVars=AnalyticVars,
-                               parameters=parameters,
-                               pvalues=return.pvalues)
-    if (( Identify)) out<-list(usage=fcn.date.ver,
-                               dataUsed=data.Used,
-                               dataNA=dataNA,
-                               analyticVars=AnalyticVars,
-                               parameters=parameters,
-                               pvalues=return.pvalues,
-                               data.check=data.check)
-    }
-  if (substr(folder,1,1) != " ") {
-    if (!Identify) {
-      out<-list(usage=fcn.date.ver,
-                data.Used=dataUsed,
-                dataNA=dataNA,
-                analyticVars=AnalyticVars,
-                parameters=parameters,
-                pvalues=return.pvalues,
-                location=folder)
-      }
-    if ( Identify) {
-      out<-list(usager=fcn.date.ver,
+  list(         usage=fcn.date.ver,
                 data.Used=dataUsed,
                 dataNA=dataNA,
                 analyticVars=AnalyticVars,
@@ -198,7 +174,4 @@ fn.2dPlot.Gauss <- function (doc = "fn.2dPlot.Gauss",
                 pvalues=return.pvalues,
                 data.check=data.check,
                 location=folder)
-      }
-    }
-  out
-}
+   }

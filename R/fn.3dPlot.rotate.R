@@ -30,7 +30,7 @@
 #' \item{analyticVars}{  A vector with the value of the argument AnalyticVars}
 #' \item{selections}{  A vector or matrix with the value of the argument Selections}
 #' \item{colors}{  A vector with the value of the argument Color}
-#' \item{location}{  If folder != " ", the value of the parameter folder}
+#' \item{location}{  The value of the parameter folder}
 #' }
 #'
 #' @examples
@@ -179,17 +179,7 @@ fn.3dPlot.rotate <-
     if (sum(dataKeep) < nrow(data.Used)) dataNA <- data.Used[!dataKeep]
     else dataNA <- NA
     #
-    if (folder == " ")
-      out<-list(usage=fcn.date.ver,
-              dataUsed=data.Used,
-              dataNA=dataNA,
-              params=params,
-              groups=Groups,
-              analyticVars=AnalyticVars,
-              selections=Selections,
-              colors=Colors)
-    if (folder != " ")
-      out<-list(usage=fcn.date.ver,
+    out<-list(usage=fcn.date.ver,
                 dataUsed=data.Used,
                 dataNA=dataNA,
                 params=params,

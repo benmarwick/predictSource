@@ -85,11 +85,11 @@ fn.PairsPlot <-
     names(params.grouping)<-c("GroupVar","Groups")
     if (sum(dataKeep) < nrow(data.Plot)) dataNA <- data.Plot[!dataKeep]
     else dataNA <- NA
-    out<-list(usage=fcn.date.ver,
+    #
+    list(usage=fcn.date.ver,
               dataUsed=data,
               dataNA = dataNA,
               params.numeric=params.numeric,
               params.grouping=params.grouping,
               analyticVars=AnalyticVars)
-    out
-  }
+    }

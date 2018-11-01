@@ -25,7 +25,7 @@
 #'   \item{analyticVars:}{ A vector with the value of the argument AnalyticVars}
 #'   \item{params.logical:}{ The value of QQtest}
 #'   \item{p.values:}{ T data frame with the p-values for the Gaussian assumptions for each group specified}
-#'   \item{location:}{ If folder != " ", the value of the parameter folder}
+#'   \item{location:}{ The value of the parameter folder}
 #'  }
 #'
 #'@section  Details
@@ -128,17 +128,7 @@ fn.pca.Gauss <-
     if (sum(dataKeep) < nrow(data.Used)) dataNA <- data.Used[!dataKeep]
     else dataNA <- NA
     #
-    if (substr(folder,1,1) == " ")
-      out<-list(usage=fcn.date.ver,
-                dataUsed=data.Used,
-                dataNA=dataNA,
-                analyticVars=AnalyticVars,
-                params.grouping=params.grouping,
-                params.logical=params.logical,
-                p.values = pvalues
-                )
-    if (substr(folder,1,1) != " ")
-      out<-list(usage=fcn.date.ver,
+    out<-list(usage=fcn.date.ver,
                 dataUsed=data.Used,
                 dataNA=dataNA,
                 analyticVars=AnalyticVars,

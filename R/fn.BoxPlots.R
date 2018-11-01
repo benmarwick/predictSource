@@ -105,11 +105,10 @@ fn.BoxPlots <-
     if (sum(dataKeep) < nrow(data.BP)) dataNA <- data.BP[!dataKeep]
     else dataNA <- NA
     #
-    out<-list(usage=fcn.date.ver,
+   list(usage=fcn.date.ver,
               dataUsed=data.BP,
               dataNA = dataNA,
               params.numeric=params.numeric,
               params.grouping=params.grouping,
               analyticVars=AnalyticVars)
-    out
-  }
+    }

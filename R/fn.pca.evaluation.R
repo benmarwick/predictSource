@@ -41,7 +41,7 @@
 #'    predicted source location}
 #'   \item{pts.outside:}  {  A data frame with the data for artifact points located outside of the predicted source}
 #'   \item{data.check:}{  If Identify=T, a data frame with the observations in dataUsed identified as of interest}
-#'   \item{location:}{  If folder != " ", the values of the parameter folder}
+#'   \item{location:}{  The values of the parameter folder}
 #'    }
 #'
 #' @section  Details
@@ -471,6 +471,7 @@ fn.pca.evaluation <-
     points(x = pts.outside[, "pc1"], y = pts.outside[,"pc2"],
            cex = .5, pch = pts.outside[, "index"])
     #
+    data.check <- NA  # value returned if no points identified
     if (Identify == T) {
     # identify points of interest
     index<-identify(pts.outside[,c("pc1","pc2")])
@@ -504,34 +505,7 @@ fn.pca.evaluation <-
       names(files) <- c("ds.importance", "ds.pts.outside", "ds.in.out")
     }
  #
-    if ((substr(folder,1,1) == " ") & (!Identify))
-      out<-list(usage=fcn.date.ver,
-                sourceData = sourceData,
-                artifactData = artifactData,
-                analyticVars = AnalyticVars,
-                params = params,
-                table.in.out = n.in.out,
-                points.outside = pts.outside)
-    if ((substr(folder,1,1) != " ") & (!Identify))
-      out<-list(usage = fcn.date.ver,
-                sourceData = sourceData,
-                artifactData = artifactData,
-                analyticVars = AnalyticVars,
-                params = params,
-                table.in.out = n.in.out,
-                points.outside = pts.outside,
-                location=folder)
-    if ((substr(folder,1,1) == " ") & (Identify))
-      out<-list(usage=fcn.date.ver,
-                sourceData = sourceData,
-                artifactData = artifactData,
-                analyticVars=AnalyticVars,
-                params=params,
-                table.in.out = n.in.out,
-                points.outside = pts.outside,
-                data.check = data.check)
-    if ((substr(folder,1,1) != " ") & (Identify == T))
-      out<-list(usage=fcn.date.ver,
+  out<-list(usage=fcn.date.ver,
                 sourceData = sourceData,
                 artifactData = ArtifactData,
                 analyticVars = AnalyticVars,
@@ -540,14 +514,5 @@ fn.pca.evaluation <-
                 points.outside = pts.outside,
                 data.check = data.check,
                 location=folder)
-    if ((substr(folder,1,1) != " ") & (Identify) == F)
-      out<-list(usage=fcn.date.ver,
-              sourceData = sourceData,
-              artifactData = artifactData,
-              analyticVars = AnalyticVars,
-              params = params,
-              table.in.out = n.in.out,
-              points.outside = pts.outside,
-              location=folder)
-    out
+   out
    }

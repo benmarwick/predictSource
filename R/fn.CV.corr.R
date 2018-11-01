@@ -31,7 +31,7 @@
 #'   \item{analyticVars:}{  A vector with the value of the argument AnalyticVars}
 #'   \item{CV:}{  A data frame with the coefficients of variation for each analytic variable in each group}
 #'   \item{corr:}{  A data frame with the correlations between pairs of variables in each group}
-#'   \item{location:}{  If folder != " ", the value of the parameter folder}
+#'   \item{location:}{  The value of the parameter folder}
 #'       }
 #'
 #' @examples
@@ -181,17 +181,7 @@ fn.CV.corr <-
     if (sum(dataKeep) < nrow(data.Used)) dataNA <- data.Used[!dataKeep]
       else dataNA <- NA
     #
-    if (substr(folder,1,1) == " ")
-      out<-list(usage=fcn.date.ver,
-                dataUsed=data.Used,
-                dataNA = dataNA,
-                params.numeric=params.numeric,
-                params.grouping=params.grouping,
-                analyticVars=AnalyticVars,
-                CV=CV,
-                corr=Corrs)
-    else
-      out<-list(usage=fcn.date.ver,
+    list(usage=fcn.date.ver,
                 dataUsed=data.Used,
                 dataNA = dataNA,
                 params.numeric=params.numeric,
@@ -200,5 +190,4 @@ fn.CV.corr <-
                 CV=CV,
                 corr=Corrs,
                 location=folder)
-    out
-  }
+   }

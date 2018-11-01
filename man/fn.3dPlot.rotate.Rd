@@ -40,7 +40,7 @@ A list with the following components:
 \item{analyticVars}{  A vector with the value of the argument AnalyticVars}
 \item{selections}{  A vector or matrix with the value of the argument Selections}
 \item{colors}{  A vector with the value of the argument Color}
-\item{location}{  If folder != " ", the value of the parameter folder}
+\item{location}{  The value of the parameter folder}
 }
 }
 \description{

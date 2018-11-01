@@ -166,15 +166,7 @@ fn.CheckData <-
     names(params)<-c("CheckDupVars","GroupVar","Groups")
     statistics[,"mean"] <- round(statistics[,"mean"], dig = 0)
  #
-    if (folder == " ") out<-list(usage=fcn.date.ver,
-                                 dataUsed=data.Used,
-                                 params=params,
-                                 analyticVars=AnalyticVars,
-                                 Duplicates = duplicates,
-                                 NegativeValues = NegativeValues,
-                                 Nvalues = Nvalues,
-                                 statistics = statistics)
-    if (folder != " ") out<-list(usage=fcn.date.ver,
+ list(usage=fcn.date.ver,
                                  dataUsed=data,params=params,
                                  analyticVars=AnalyticVars,
                                  Duplicates = duplicates,
@@ -182,5 +174,4 @@ fn.CheckData <-
                                  Nvalues = Nvalues,
                                  statistics = statistics,
                                  locaton=folder)
-    out
   }

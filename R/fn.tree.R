@@ -34,8 +34,7 @@
 #'   \item{CpTable:}{  A data frame showing the decrease in Cp with increasing numbers of splits}
 #'   \item{predictedSources:}{  If predictSources = T, a data frame with the predicted sources}
 #'   \item{predictedTotals}{  If predictedSources = T, a vector with the number of objects predicted to be from each source}
-#'   \item{files:}{ If folder != " ", a character string with the path to the file containing the excel files
-#'    defined is ds.Classify and ds.CpTable.}
+#'   \item{location:}{ The value of the parameter folder}
 #'  }
 #'
 #' @examples
@@ -175,19 +174,7 @@ fn.tree <-
     Cp <- round(CpTable[,-2],dig = CpDigits)
     CpTable <- cbind(nsplit,Cp)
     #
-    if (!predictSources) {
-    if (substr(folder,1,1) == " ")
-      out<-list(usage=fcn.date.ver,
-                dataUsed=Data.used,
-                analyticVars=AnalyticVars,
-                params.grouping=params.grouping,
-                params.logical=params.logical,
-                params.splitting=params.splitting,
-                Tree = Tree,
-                classification = classification,
-                CpTable = CpTable
-                )
-    if (substr(folder,1,1) != " ")
+    if (!predictSources)
       out<-list(usage=fcn.date.ver,
                 dataUsed=Data.used,
                 analyticVars=AnalyticVars,
@@ -197,25 +184,9 @@ fn.tree <-
                 Tree = Tree,
                 classification = classification,
                 CpTable = CpTable,
-                location=folder
-      )
-    }
+                location=folder)
     #
-    if (predictSources) {
-      if (substr(folder,1,1) == " ")
-        out<-list(usage=fcn.date.ver,
-                  dataUsed=Data.used,
-                  analyticVars=AnalyticVars,
-                  params.grouping=params.grouping,
-                  params.logical=params.logical,
-                  params.splitting=params.splitting,
-                  Tree = Tree,
-                  classification = classification,
-                  CpTable = CpTable,
-                  predictedSources = predictedResults,
-                  predictedTotals = data.frame(t(predictedTotals))
-                  )
-      if (substr(folder,1,1) != " ")
+    if (predictSources)
         out<-list(usage=fcn.date.ver,
                   dataUsed=Data.used,
                   analyticVars=AnalyticVars,
@@ -227,8 +198,6 @@ fn.tree <-
                   CpTable = CpTable,
                   predictedSources = predictedResults,
                   predictedTotals = data.frame(t(predictedTotals)),
-                  location=folder
-        )
-    }
-    out
+                  location=folder)
+   out
   }

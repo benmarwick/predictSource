@@ -69,7 +69,7 @@ The function implements a random forest analysis.  For each analysis, the variab
   \item{predictedSources:}{  A data frame with prediction information, sample ID (if requested),
      and values of AnalyticVars}
   \item{predictedTotals:}{  A vector with the predicted totals for each group (source)}
-  \item{location:}{ If folder != " ", the value of the parameter folder}
+  \item{location:}{ The value of the parameter folder}
  }
 }
 \description{

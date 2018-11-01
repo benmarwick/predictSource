@@ -40,7 +40,7 @@ The function produces Q-Q plots (univariate and multivariate) of the first two p
   \item{analyticVars:}{ A vector with the value of the argument AnalyticVars}
   \item{params.logical:}{ The value of QQtest}
   \item{p.values:}{ T data frame with the p-values for the Gaussian assumptions for each group specified}
-  \item{location:}{ If folder != " ", the value of the parameter folder}
+  \item{location:}{ The value of the parameter folder}
  }
 }
 \description{

@@ -70,7 +70,7 @@ The function produces a plot of the first two principal components, the contents
   \item{DataPlusPredicted:}{  A data frame with the data used to compute the principal components, plus GroupIndex (as defined
  above) and predicted values for each principal component}
   \item{data.check:}{  If Identify=T, a data frame with the observations in dataUsed identified as of interest}
-  \item{files:}{  If folder != " ", a list with path and data set names to the excel files containing weights, importance, and, if Identify=T, data for the points of interest}
+  \item{location:}{  The value of the parameter folder}
  }
 }
 \description{

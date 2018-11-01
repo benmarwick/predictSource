@@ -61,7 +61,7 @@ The function produces two plots: the convex hulls of the first two principal com
    predicted source location}
   \item{pts.outside:}  {  A data frame with the data for artifact points located outside of the predicted source}
   \item{data.check:}{  If Identify=T, a data frame with the observations in dataUsed identified as of interest}
-  \item{location:}{  If folder != " ", the values of the parameter folder}
+  \item{location:}{  The values of the parameter folder}
    }
 }
 \description{

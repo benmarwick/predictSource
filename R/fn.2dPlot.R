@@ -39,7 +39,7 @@
 #' \item{analyticVars: }{ The value of the argument AnalyticVars}
 #' \item{colors:}{  A vector with the value of the argument Color}
 #' \item{data.check: }{ If Identify = T, a data frame with the information on user-identified points of interest}
-#' \item{location:}{ If folder != " ", the contents of the parameter folder}
+#' \item{location:}{ The contents of the parameter folder}
 #'  }
 #'
 #' @section Details:
@@ -113,7 +113,9 @@ fn.2dPlot <- function (doc = "fn.2dPlot",
     n.pairs<-1
   }
   else n.pairs<-nrow(AnalyticVars)
-  if (Identify)  data.check<-data.Used[1,]  # dummy row to set up information on identified observations
+  if (Identify)  data.check<-data.Used[1,]  # dummy row to set up information on
+     # identified observations
+     else  data.check <- NA
   #
   #   plots by Group
   #
@@ -290,31 +292,7 @@ fn.2dPlot <- function (doc = "fn.2dPlot",
   if (sum(dataKeep) < nrow(data.Used)) dataNA <- data.Used[!dataKeep]
   else dataNA <- NA
   #
-  if ((substr(folder,1,1) == " ") & (!Identify))
-    out<-list(usage=fcn.date.ver,
-              dataUsed=data.Used,
-              dataNA = dataNA,
-              params.numeric=params.numeric,
-              params.grouping=params.grouping,
-              ellipse.pct=Ellipses)
-  if ((substr(folder,1,1) == " ") & (Identify))
-    out<-list(usage=fcn.date.ver,
-              dataUsed=data.Used,
-              dataNA = dataNA,
-              params.numeric=params.numeric,
-              params.grouping=params.grouping,
-              ellipse.pct=Ellipses,
-              data.check=data.check)
-  if ((substr(folder,1,1) != " ") & (!Identify))
-    out<-list(usage=fcn.date.ver,
-              dataUsed=data.Used,
-              dataNA=dataNA,
-              params.numeric=params.numeric,
-              params.grouping=params.grouping,
-              ellipse.pct=Ellipses,
-              location=folder)
-  if ((substr(folder,1,1) != " ") & (Identify))
-    out<-list(usage=fcn.date.ver,
+  list(       usage=fcn.date.ver,
               dataUsed=data.Used,
               dataNA=dataNA,
               params.numeric=params.numeric,
@@ -322,5 +300,4 @@ fn.2dPlot <- function (doc = "fn.2dPlot",
               ellipse.pct=Ellipses,
               data.check=data.check,
               location=folder)
-  out
 }

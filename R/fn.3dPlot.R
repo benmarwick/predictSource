@@ -205,5 +205,4 @@ fn.3dPlot <-
               analyticVars=AnalyticVars,
               colors=Colors)
     out
-
   }

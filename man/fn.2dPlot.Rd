@@ -70,7 +70,7 @@ A list with the following components:
 \item{analyticVars: }{ The value of the argument AnalyticVars}
 \item{colors:}{  A vector with the value of the argument Color}
 \item{data.check: }{ If Identify = T, a data frame with the information on user-identified points of interest}
-\item{location:}{ If folder != " ", the contents of the parameter folder}
+\item{location:}{ The contents of the parameter folder}
  }
 }
 \description{

@@ -45,7 +45,7 @@
 #'   \item{DataPlusPredicted:}{  A data frame with the data used to compute the principal components, plus GroupIndex (as defined
 #'  above) and predicted values for each principal component}
 #'   \item{data.check:}{  If Identify=T, a data frame with the observations in dataUsed identified as of interest}
-#'   \item{files:}{  If folder != " ", a list with path and data set names to the excel files containing weights, importance, and, if Identify=T, data for the points of interest}
+#'   \item{location:}{  The value of the parameter folder}
 #'  }
 #'
 #' @import  MASS ellipse
@@ -184,6 +184,7 @@ fn.pca <-  function(doc = "fn.pca",
           index<-identify(x = Predicted[,"PC1"], y = Predicted[,"PC2"])
           data.check<-data.Used[index,]
         }
+           else  data.check <- NA #  dummy value if no points identified
       }
       if (PlotHull == T) {
         for (i in 1:length(groups)) fn.convexhull(Code = groups[i])
@@ -233,45 +234,7 @@ fn.pca <-  function(doc = "fn.pca",
     if (sum(dataKeep) < nrow(data.Used)) dataNA <- data.Used[!dataKeep]
     else dataNA <- NA
     #
-    if ((substr(folder,1,1) == " ") & (!Identify))
-      out<-list(usage=fcn.date.ver,
-                dataUsed = data.Used,
-                dataNA=dataNA,
-                analyticVars = AnalyticVars,
-                params.logical = params.logical,
-                params.grouping = params.grouping,
-                ellipse.pct = Ellipses,
-                variances = variances,
-                weights = weights,
-                Predicted = Predicted,
-                DataPlusPredicted = DataPlusPredicted)
-    if ((substr(folder,1,1) != " ") & (!Identify))
-      out<-list(usage = fcn.date.ver,
-                dataUsed = data.Used,
-                dataNA=dataNA,
-                analyticVars = AnalyticVars,
-                params.logical = params.logical,
-                params.grouping = params.grouping,
-                ellipse.pct = Ellipses,
-                variances = variances,
-                weights = weights,
-                Predicted = Predicted,
-                DataPlusPredicted = DataPlusPredicted,
-                location=folder)
-    if ((substr(folder,1,1) == " ") & (Identify))
-      out<-list(usage=fcn.date.ver,
-                dataUsed=data.Used,
-                dataNA=dataNA,
-                analyticVars=AnalyticVars,
-                params.grouping=params.grouping,
-                ellipse.pct=Ellipses,
-                variances = variances,
-                weights = weights,
-                Predicted = Predicted,
-                DataPlusPredicted = DataPlusPredicted,
-                data.check=data.check)
-    if ((substr(folder,1,1) != " ") & (Identify))
-      out<-list(usage=fcn.date.ver,
+    out<-list(usage=fcn.date.ver,
                 dataUsed=data.Used,
                 dataNA=dataNA,
                 analyticVars=AnalyticVars,

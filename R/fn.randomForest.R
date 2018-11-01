@@ -44,7 +44,7 @@
 #'   \item{predictedSources:}{  A data frame with prediction information, sample ID (if requested),
 #'      and values of AnalyticVars}
 #'   \item{predictedTotals:}{  A vector with the predicted totals for each group (source)}
-#'   \item{location:}{ If folder != " ", the value of the parameter folder}
+#'   \item{location:}{ The value of the parameter folder}
 #'  }
 #'
 #' @examples
@@ -127,6 +127,11 @@ fn.randomForest <-
       browser()
     }
 #
+    if (predictSources == F) {
+      predictedTotals <- NA
+      predictions <- NA
+    }   # dummy values
+    #
     if (predictSources == T) {
       response <- predict(object=fit.rf, newdata=predictData, type="response")
       probMatrix <- predict(object=fit.rf, newdata=predictData, type="prob")
@@ -184,56 +189,7 @@ fn.randomForest <-
     names(params.logical) <- c("plotErrorRate","plotImportance","plotSourceProbs")
     importance.rf <- round(importance.rf, dig=digitsImportance)
     #
-    if (substr(folder,1,1) == " ") {
-      if (predictSources == F)
-        out<-list(usage=fcn.date.ver,
-                dataUsed=Data.used,
-                analyticVars=AnalyticVars,
-                params.grouping=params.grouping,
-                params.numeric=params.numeric,
-                params.logical=params.logical,
-                formula.rf=formula.rf,
-                forest = fit.rf,
-                importance = importance.rf,
-                confusion = fit.rf$confusion
-      )
-    }
-    if (substr(folder,1,1) != " ") {
-      if (predictSources == F)
-      out<-list(usage=fcn.date.ver,
-                dataUsed=Data.used,
-                analyticVars=AnalyticVars,
-                params.grouping=params.grouping,
-                params.numeric=params.numeric,
-                params.logical=params.logical,
-                formula.rf=formula.rf,
-                forest = fit.rf,
-                importance = importance.rf,
-                confusion = fit.rf$confusion,
-                location=folder
-      )
-    }
-    #
-    if (substr(folder,1,1) == " ") {
-      if (predictSources == T)
-        out<-list(usage=fcn.date.ver,
-                  dataUsed=Data.used,
-                  predictData=predictData,
-                  analyticVars=AnalyticVars,
-                  params.grouping=params.grouping,
-                  params.numeric=params.numeric,
-                  params.logical=params.logical,
-                  formula.rf=formula.rf,
-                  forest = fit.rf,
-                  importance = importance.rf,
-                  confusion = fit.rf$confusion,
-                  predictedSources = predictions,
-                  predictedTotals = predictedTotals
-        )
-    }
-    if (substr(folder,1,1) != " ") {
-      if (predictSources == T)
-        out<-list(usage=fcn.date.ver,
+    out<-list(usage=fcn.date.ver,
                   dataUsed=Data.used,
                   predictData=predictData,
                   analyticVars=AnalyticVars,
@@ -246,8 +202,6 @@ fn.randomForest <-
                   confusion = fit.rf$confusion,
                   predictedSources = predictions,
                   predictedTotals = predictedTotals,
-                  location=folder
-        )
-    }
-    out
+                  location = folder)
+      out
   }
