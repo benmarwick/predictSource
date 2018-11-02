@@ -158,6 +158,9 @@ fn.pca <-  function(doc = "fn.pca",
       }
       Predicted <- data.frame(group = as.character(data.Used[,
                                                              GroupVar]), GroupIndex = GroupIndex, predict(pca))
+      #
+      if (Identify == F) data.check <- NA #  dummy value if no points identified
+      #
       if (BoxPlots == T) {
         par(mfrow = c(1, 2))
         plot(Predicted[, c("group", "PC1")], notch = T, main = "Box plots by group: first PC")
@@ -173,6 +176,7 @@ fn.pca <-  function(doc = "fn.pca",
         plot(x = c(min(Predicted[, "PC1"], na.rm = T) - 1, max(Predicted[, "PC1"], na.rm = T) + 1),
              y = c(min(Predicted[,"PC2"], na.rm = T) - 1, max(Predicted[, "PC2"], na.rm = T) + 1),
              type = "n", xlab = "first PC", ylab = "second PC", main = "Principal components plot")
+      #
       if (PlotPoints == T) {
         if (PlotColors == T)
           points(x = Predicted[, "PC1"], y = Predicted[,
@@ -184,7 +188,6 @@ fn.pca <-  function(doc = "fn.pca",
           index<-identify(x = Predicted[,"PC1"], y = Predicted[,"PC2"])
           data.check<-data.Used[index,]
         }
-           else  data.check <- NA #  dummy value if no points identified
       }
       if (PlotHull == T) {
         for (i in 1:length(groups)) fn.convexhull(Code = groups[i])

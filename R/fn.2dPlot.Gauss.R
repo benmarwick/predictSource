@@ -167,7 +167,7 @@ fn.2dPlot.Gauss <- function (doc = "fn.2dPlot.Gauss",
   else dataNA <- NA
   #
   list(         usage=fcn.date.ver,
-                data.Used=dataUsed,
+                dataUsed=data.Used,
                 dataNA=dataNA,
                 analyticVars=AnalyticVars,
                 parameters=parameters,
