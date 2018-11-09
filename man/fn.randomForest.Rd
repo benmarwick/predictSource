@@ -86,7 +86,7 @@ data(ObsidianSources)
 data(ObsidianArtifacts)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 save.randomForest <- fn.randomForest(data=ObsidianSources, GroupVar="Code",Groups="All",
-AnalyticVars=analyticVars, ID="labID", NvarUsed=3, plotErrorRate=F, plotImportance=F,
+AnalyticVars=analyticVars, ID="ID", NvarUsed=3, plotErrorRate=F, plotImportance=F,
 predictSources=T, predictData=ObsidianArtifacts, plotSourceProbs=T)
 
 }

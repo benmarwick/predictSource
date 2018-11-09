@@ -27,6 +27,8 @@
 #'   \item{location}{  The value of the parameter folder}
 #'   \item{comparison}{  A data frame with the values of new_code1, new_code2, and the variables kept}
 #'
+#' @export
+#'
 comparePredictions <-function(data1,
                               code1,
                               new_code1,
@@ -36,5 +38,6 @@ comparePredictions <-function(data1,
                               newCode2,
                               keepVars2,
                               folder = " ") {
-  invisible()
+  out<-NA
+  out
 }
