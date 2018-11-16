@@ -4,6 +4,7 @@
 #' analytic values, by specified groups.  Observations with missing values
 #' are removed from computations using them.
 #'
+#' @param doc: A character variable with documentation, default if the function name
 #' @param data: R matrix or data frame containing the data to be analyzedfn
 #' @param GroupVar: name for variable defining grouping; if " ", if no grouping
 #' @param Groups: vector of values of group variable for which plots are to be done. if "All" (the default),

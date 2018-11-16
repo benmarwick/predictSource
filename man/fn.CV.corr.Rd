@@ -11,6 +11,8 @@ fn.CV.corr(doc = "fn.CV.corr", data, GroupVar, Groups = "All", ID = " ",
 \arguments{
 \item{folder}{The path to the folder in which data frames will be saved; default is " "}
 
+\item{doc:}{A character variable with documentation, default if the function name}
+
 \item{data:}{R matrix or data frame containing the data to be analyzedfn}
 
 \item{GroupVar:}{name for variable defining grouping; if " ", if no grouping}

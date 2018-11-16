@@ -486,9 +486,9 @@ save.pca <- fn.pca(data=predictedSources, ID="ID", GroupVar="source",Groups="All
 
 ##7  RANDOM FORESTS
 
-Random forests are a method for obtaining a more realistic estimate of classification error from a classification tree and for evaluating the relative importance of predictors for those trees.  The procedure repeats a classification tree analysis a large number of times (by default in this code, 500 times).  For each analysis, the code first selects a bootstrap sample of the observations (a random sample of the same size, chosen with replacement).  Because the sample is chosen with replacement, some observations will be in the sample multiple times, and some will not appear.  It can be shown that approximately 1/3 of the observations will not appear (these are known as the "out of bag" observations).  For each analysis, a classification tree is fit using a random subsample of the predictor variables; the default is to use approximately the square root of the number of predictors (the user can change this with the argument NvarUsed in the function, fn.randomForest()).  The resulting tree is used to predict the source of each of the observations not used in the analysis.  Then the error rate can be computed from the difference between the predicted and known group memberships.
+Random forests are a method for obtaining more a more realistic estimate of classification error from a classification tree and for evaluating the relative importance of predictors for those trees.  The procedure repeats a classification tree analysis a large number of times (by default in this code, 500 times).  For each analysis, the code first selects a bootstrap sample of the observations (a random sample of the same size, chosen with replacement).  Because the sample is chosen with replacement, some observations will be in the sample multiple times, and some will not appear.  It can be shown that approximately 1/3 of the observations will not appear (these are known as the "out of bag" observations).  For each analysis, a classification tree is fit using a random subsample of the predictor variables; the default is to use approximately the square root of the number of predictors (the user can change this with the argument NvarUsed in the function, fn.randomForest()).  The resulting tree is used to predict the source of each of the observations not used in the analysis.  Then the error rate can be computed from the difference between the predicted and known group memberships.
 
-Random forests can also be used to predict group memberships for observations from unknown sources.  Again, a large number of trees are grown using bootstrap data samples and a subsample of the predictors.  The group membership is predicted for each unknown.  After running all the trees, the membership for an unknown observation is defined to be the most commonly group predicted.
+Random forests can also be used to predict group memberships for observations from unknown sources.  Again, a large number of trees are grown using bootstrap data samples and a subsample of the predictors.  The group membership is predicted for each unknown.  After running all the trees, the membership for an unknown observation is defined to be the most commonly group predicted.  These predictions are likely to be better than those from classification a single classification tree.  In a sense, the random forest analysis is averaging the predictions from a large number of tree analyses.  These analyses are not completely independent, as the data used in the analyses will overlap, as may the predictor variables. However, just as averaging observations reduces the variance of an estimated mean, averaging the tree analyses should produce estimates of group membership that is more accurate than the estimates from a single tree analysis. 
 
 The function fn.randomForest() does a random forest analysis on known group membership. The user can changed the number of trees grown using the parameter Ntrees and the number of variables used with the parameter NvarUsed; the default value is NA, in which case the code chooses a value close to the square root of the number of predictor variables.  An analysis is reproducible if the random number generator used to select the bootstrap samples and the variables used has a specified starting value.  It is desirable to specify such a value, which must be a positive integer; the code has a default value of 11111. 
 
@@ -620,4 +620,95 @@ save.randomForest <- fn.randomForest(data=ObsidianSources, GroupVar="Code",Group
     ArtifactData=save.randomForest$predictedSources, SourceGroup= "Code", ArtifactGroup="source",
     known.sources=sources, predicted.sources=sources, AnalyticVars=analyticVars,
     plotAllPoints=T, plotHullsOutsidePoints = T, plotOutsidePoints = T)
+
 ```
+##10  Discussion
+
+Our proposed analysis procedure may be useful for common archaeological sourcing problems, but it does have limitations.  Concerning the use of random forests, the number of samples per source must be large enough, but there seem to be no recognized guidelines for required sample sizes.  It seems likely that the sample sizes required would increase as the separation between sources decreases.  Our results suggest that, if the distribution of the predictors is roughly multivariate Gaussian, 20 samples per source is sufficient with well-separated sources.  Biau and Scornet state that “The approach [random forests], which combines several randomized decision trees and aggregates their predictions by averaging, has shown excellent performance in settings where the number of variables is much larger than the number of observations.”  They provide references to analyses in which random forests were effective.  Several approaches will provide information on the utility of random forests for a particular data set.  One which is obtained directly from the analysis is the out-of-bag error estimate using the source data.  A second possibility is to split the source data into training and evaluation samples, perhaps multiple times, and evaluate how well an analysis of a training sample predicts source membership for the evaluation sample; this approach requires sufficient source sample sizes to make useful splits.
+
+If there are more than two predictor variables, using the first two principal components to evaluate the validity of source predictions requires that there be strong enough correlations between the predictors so that the first two principal components capture most of the variance, and that the predictors be quantitative, not qualitative.  If all predictors are qualitative, this condition likely requires that there be not too many predictors.  If some predictors are qualitative, the principal components analysis could be done using only the quantitative predictors.  This could identify some sources or artifacts that are misclassified.  [what about a matrix with rows and columns for sources and predictions?] 
+
+The analysis of the likely sources of all approximately 450 Pojoaque obsidian artifacts provides useful experience in using these procedures.  That analysis considered 24 possible obsidian sources (21 distinct locations from Shakely’s data, two of which were subdivided into two or three sources) which provided 706 samples, with samples sizes of 15 to 64 per source.  The classification tree analysis separated these sources quite well, with an estimated error rate of about 5%.  That analysis predicted that the artifacts came from eight sources: four Jemez sources, one source in west central New Mexico (Mount Taylor, southwest of the Jemez caldera), and three other sources farther west (two near the New Mexico / Arizona border, and one in Arizona).   Shackley assigned approximately 150 artifacts to one of the Jemez sources; these assignments are known to be correct as result of the appearance of the obsidian from that site.  However, the classification tree analysis predicted that approximately 90% of these artifacts were from one of the sources (call it source F) on the New Mexico / Arizona border.
+
+A second analysis restricting the candidate sources to the eight identified in the first analysis permits using the principal components (PC) plot to evaluate the predictions.  The plot was further improved by eliminating the Mount Taylor source and the artifacts assigned to that source, since the Mount Taylor data are far removed from the other sources on the PC plot.  The PC plot shows that the great majority of the points generated by the approximately 150 artifacts known to be from the Jemez source lie between the convex hulls of the Jemez source and source F.  On an initial PC plot of all 24 sources, plotting only the medians as in Figure x.x, the source data from the Jemez source and source F are quite close.  This fact, and the fact that the artifacts and sources were analyzed using different instruments, explain the misclassification of these artifacts by the classification tree analysis.  This experience emphasized the importance of considering archaeological knowledge in predicting sources of artifacts..
+
+We note that the principal components evaluation plot is useful in verifying the validity of assignments of artifacts to sources.  This evaluation identified two artifacts for which Shakely’s assignment was wrong; one of these is the artifact with ID xxxxx identified in Section x.x.
+
+Also, we observed that these analyses may be useful after an analysis, such as a cluster analysis, used to identify groups of similar artifacts when potential sources are not known.  After artifacts are grouped, those groupings can be used in several ways:
+a principal components plot suggests how well the groups are separated (if the first two components explain sufficient variance);
+a random forests analysis estimates the error in using the data to form groups and evaluates the order in which variables should be used to separate the groups;
+a classification tree analysis using this ordering shows how the variables should be used to group the artifacts.
+
+##11  Code use
+
+To the extent possible, the functions in this package use a standard set of parameter names and return a list whose elements have a standard set of names.  This section describes these conventions and provides other information for using functions in the package.
+
+Function parameters:
+
+The function fn.data() does not use all of these parameters.  The following summary applies to the remaining functions.
+
+doc: A character variable containing documentation of usage, the contents of which are returned in the list element usage.  The default value is the function name; the user can add other information.
+
+data: A data frame containing the data to be analyzed.  The data frame must contain a variable defining the grouping and the variables (which may be both quantitative and qualitative) used to predict group membership.  It is highly desirable to include an ID variable (typically, a lab ID).
+
+GroupVar:  A character variable defining the variable containing grouping information.
+
+Groups: A character variable defining the groups to be used.  If “All”, all groups are used; if c(“A”,”B”,”C”), only groups A, B, and C are used.  If “ “, there is no grouping.
+
+AnalyticVars: A vector with the character names of the variables to be used to predict group membership.
+
+Additional parameters used in many functions are:
+
+ID:   A character variable with the name of the variable containing the sample ID.
+
+Identify:  A logical variable (default is F) in functions that create two-dimensional scatter plots.  If T, the use can identify the data creating points of interest; these data are saved in the data frame dataCheck, which is returned by the function.  Information on using this option is below. 
+
+folder:  A character variable with the path to a folder in which results will be stored, typically as one or more excel files.  The default value is “ “, used when no results will be written externally.
+
+The functions fn.tree() and fn.randomForest() use:
+
+predictData: A data frame with the data used to predict the sources of unknowns (artifacts), including group and analytic variables; most users will also want to include the sample ID.  The default values is NA, in which case no predictions are made.
+
+Seed: An integer used to set the random number generator that the function uses, so that results are reproducible.  The function specifies a default value; changing it will produce a different analysis.  If the value is NA, the random number generator produces an initial value and the analysis cannot be replicated.
+
+Values returned by the function
+
+Each function returns a list documenting its use.  Unless the function only creates plots, the list contains data frames with analysis results.  All functions return the following:
+
+usage:  A character-valued object containing the contents of the parameter doc, the date the code was run, and the version of R used to run the function.
+
+dataUsed:  A data frame containing the data from the parameter data used in the analysis.  If not all groups were used, dataUsed is restricted to the groups actually used.
+
+analyticVars:  A character-valued vector with the value of the parameter AnalyticVars.
+
+params.xx:  One or more vectors or lists containing the values of the arguments of parameters used to define the analysis to be done.  E.g., params.grouping may be a vector with the values of the parameters GroupVar and Groups.  
+
+location:  Unless the function only creates one or more plots, the value of the parameter folder.
+
+data.check:  Returned by functions creating two-dimensional scatter plots.  If Identify is F, the value is NA.  If Identify is true and the user identifies points of interest, dataCheck is a data frame containing the data generating these points.
+
+Using the functions
+
+To execute the example code in the function documentation, the user can highlight that section of the code in the documentation in the window showing the function and use the Run toolbar button.  In windows, the user can also use Control/Enter.
+
+Functions that create more than one plot contain the command browser() after each plot to stop function execution.  If the user is running code using base R, this command allows the user to examine and potentially save the plot to a file.  In Rstudio, this command would not be necessary, as the user can examine a set of plots in the Plot window using the back arrow.  If using Rstudio, a user may wish to define a new function by removing the browser() commands.  To continue execution after browser() is executed, the user should enter c() at the prompt.  If using R studio, be sure to do this in the console window, not in the window showing a function.
+
+If Identify is T, the user must interact with a plot before continuing.  To identify a point of interest, place the cursor as close to the point as possible and left click.  The data creating the point closest to the cursor will be added to the data frame data.check.  Repeat for all points of interest.  After all points are identified (or if no point is identified), the user must end the interaction: in the Windows operating system, right click; in Rstudio, click on Finish in the upper right corner of the plot window.
+
+##12  References
+
+G Biau and E Scornet.  A random forest guided tour.  http://www.normalesup.org/~scornet/paper/test.pdf
+
+JM Chambers, WS Cleveland, B Kleiner, and PA Tukey.  Graphical Methods for Data Analysis.  Duxbury Press, Boston, 1983.
+
+RB D’Agostino and MA Stephens, eds. Goodness-of-Fit Techniques, Marcel Dekker, New York, 1986.
+
+PJ Farrell, M Salibian-Barrera, and K Naczk.  On tests for multivariate normality and associated simulation studies.  J Statistical Computation and Simulation 77, 1065-1080, 2007.  https://doi.org/10.1080/10629360600878449
+
+RA Johnson and DW Wichern.  Applied Multivariate Statistical Analysis.  Prentice-Hall, Englewood Cliffs, NJ, 1982.
+
+C Strobl, J Malley, and G Tutz. An introduction to recursive partitioning: rationale, application, and characteristics of classification and regression trees, bagging, and random forests.  Psychological Mathods 14, 323-348, 2009.  doi: 10.1037/a0016973.  http://www.ncbi.nlm.nih.gov/pubmed/19968396
+
+TM Therneau and E. Atkinson.  An Introduction to Recursive Partitioning Using the RPART Routines.  https://cran.r-project.org/web/packages/rpart/vignettes/longintro.pdf 
+
+RW Oldford.  Self-Calibrating Quantile–Quantile Plots. The American Statistician, vol. 70, 2016, 74-90

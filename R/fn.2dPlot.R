@@ -58,7 +58,7 @@
 #' plot.2d <- fn.2dPlot(data = ObsidianSources, GroupVar = "Code", ID = "ID", Groups = "All",
 #'           AnalyticVars =analyticVars[1:2], PlotByGroup=F, PlotColors=T, namesPlotEllipses=T, LowessLine=T)
 #'
-#' @import MASS
+#' @import MASS  ellipse
 #'
 #' @export
 #'
@@ -269,21 +269,22 @@ fn.2dPlot <- function (doc = "fn.2dPlot",
   #  return documentation and results if identified points
   #
   if (Identify)  {
-    data.check<-data.check[-1,]  #  remove dummy first row
-    if (substr(folder,1,1) != " ")  write.csv(data.check[-1,], paste(folder,ds.identified,sep=""))
+    if (nrow(data.check) == 1)  data.check <- NA
+    if (nrow(data.check) > 1) {
+      data.check<-data.check[-1,]  #  remove dummy first row
     #
     #  remove duplicated observations from data.check
     #
-    if (Identify) {
       if (ID != " ") index<-duplicated(data.check[,ID])
       else  index<-duplicated(data.check[,c(GroupVar,AnalyticVars)])
       if (length(index) > 0)  data.check<-data.check[!index,]
       if (ID != " ") {
         index.ID<-order(data.check[,ID])
         data.check<-data.check[index.ID,]
-      }
-    }
-  }
+        }
+      } # end of code for nrow(data.check) > 1
+    } # end of code for Identify = T
+  #
   fcn.date.ver<-paste(doc,date(),R.Version()$version.string)
   params.numeric<-c(Lowess.f,KernelWidth)
   names(params.numeric)<-c("Lowess.f","KernelWidth")

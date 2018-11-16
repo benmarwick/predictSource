@@ -2,7 +2,6 @@
 #'
 #'   Random forest analysis
 #'
-
 #' @param doc Documentation for the function use, default value is the function name
 #' @param data:  Data frame with the data to be analyzed
 #' @param predictData:  Data frame with data on unknowns, NA if predictions not made (default value)

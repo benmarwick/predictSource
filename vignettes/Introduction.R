@@ -8,6 +8,13 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 
+## ----echo=FALSE, results='hide',message=FALSE----------------------------
+library(karon)
+data(ObsidianSources)
+analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+tree <- fn.tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
+                 Model="Sr"+"Nb"+"Rb"+"Y"+"Zr", plotCp=F)
+
 ## ------------------------------------------------------------------------
 library(karon)
 data(ObsidianSources)
@@ -27,7 +34,7 @@ library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 CheckData<-fn.CheckData(data=ObsidianSources,CheckDupVars=c("Code","ID"),GroupVar="Code",Groups="All",AnalyticVars=analyticVars)
-knitr::kable(CheckData$Summary[1:6,], caption="Table 3.  Sample of the descriptive statistics for the data frame ObsidianSources.")
+knitr::kable(CheckData$statistics[1:6,], caption="Table 3.  Sample of the descriptive statistics for the data frame ObsidianSources.")
 #
 
 ## ----echo=FALSE, results='hide',message=FALSE----------------------------
@@ -63,7 +70,8 @@ library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 CV.corr<-fn.CV.corr(data = ObsidianSources, GroupVar="Code", Groups = "All", AnalyticVars=analyticVars)
-knitr::kable(CV.corr$corr, caption="Table 4a.  Spearman correlations among pairs of elements from the Jemez sources, by group.")
+knitr::kable(CV.corr$corr, caption="Table 4a.  Spearman correlations among pairs of elements from the Jemez sources,
+by group.")
 #
 
 ## ------------------------------------------------------------------------
@@ -86,28 +94,28 @@ knitr::kable(CV.corr$CV, caption="Table 5.  Coefficients of variation of the ele
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-plot.2d <- fn.2dPlot(data = ObsidianSources, GroupVar = "Code", labID = "ID", Groups = c("A","B"),
+plot.2d <- fn.2dPlot(data = ObsidianSources, GroupVar = "Code", ID = "ID", Groups = c("A","B"),
                 AnalyticVars = rbind(analyticVars[c(1,4)],analyticVars[c(1,5)]), PlotEllipses=T, LowessLine=T)
 
 ## ----echo=FALSE, results='hide',message=FALSE----------------------------
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-plot.2d <- fn.2dPlot(data = ObsidianSources, GroupVar = "Code", labID = "ID", Groups = c("A", "B"),
+plot.2d <- fn.2dPlot(data = ObsidianSources, GroupVar = "Code", ID = "ID", Groups = c("A", "B"),
           AnalyticVars = rbind(analyticVars[c(1,4)], analyticVars[c(1,5)]), PlotEllipses=T, KernelSmooth=T)
 
 ## ----echo=FALSE, results='hide',message=FALSE----------------------------
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-plot.2d <- fn.2dPlot(data = ObsidianSources, GroupVar = "Code", labID = "ID", Groups = "All", 
+plot.2d <- fn.2dPlot(data = ObsidianSources, GroupVar = "Code", ID = "ID", Groups = "All", 
           AnalyticVars = analyticVars[1:2], PlotByGroup=F, PlotPoints=F, PlotMedians=T, PlotHulls=T)
 
 ## ----echo=FALSE, results='hide',message=FALSE----------------------------
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-plot.2d <- fn.2dPlot(data = ObsidianSources, GroupVar = "Code", labID = "ID", Groups = "All",
+plot.2d <- fn.2dPlot(data = ObsidianSources, GroupVar = "Code", ID = "ID", Groups = "All",
           AnalyticVars = rbind(analyticVars[c(1,4)], analyticVars[c(1,5)]), PlotByGroup = F, PlotColors=T, PlotEllipses=T, LowessLine=T, Identify=T)
 
 ## ------------------------------------------------------------------------
@@ -126,23 +134,23 @@ plot3d<-fn.3dPlot(data=ObsidianSources, GroupVar="Code", Groups=c("A","B","C"), 
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-plot.2d.Gauss<-fn.2dPlot.Gauss(data=ObsidianSources, GroupVar="Code", labID="ID", Groups="A",
+plot.2d.Gauss<-fn.2dPlot.Gauss(data=ObsidianSources, GroupVar="Code", ID="ID", Groups="A",
     AnalyticVars=c("Rb","Zr"))
-plot.2d.Gauss<-fn.2dPlot.Gauss(data=ObsidianSources, GroupVar="Code", labID="ID", Groups="B",
+plot.2d.Gauss<-fn.2dPlot.Gauss(data=ObsidianSources, GroupVar="Code", ID="ID", Groups="B",
     AnalyticVars=c("Rb","Zr"))
-plot.2d.Gauss<-fn.2dPlot.Gauss(data=ObsidianSources, GroupVar="Code", labID="ID", Groups="A",
+plot.2d.Gauss<-fn.2dPlot.Gauss(data=ObsidianSources, GroupVar="Code", ID="ID", Groups="A",
     AnalyticVars=c("Rb","Nb"))
-plot.2d.Gauss<-fn.2dPlot.Gauss(data=ObsidianSources, GroupVar="Code", labID="ID", Groups="B",
+plot.2d.Gauss<-fn.2dPlot.Gauss(data=ObsidianSources, GroupVar="Code", ID="ID", Groups="B",
     AnalyticVars=c("Rb","Nb"))
 
 ## ------------------------------------------------------------------------
-plot.2d.Gauss<-fn.2dPlot.Gauss(data=ObsidianSources, GroupVar="Code", labID="ID", Groups="All",
+plot.2d.Gauss<-fn.2dPlot.Gauss(data=ObsidianSources, GroupVar="Code", ID="ID", Groups="All",
     AnalyticVars=c("Rb","Zr"),qqPlot=F)
 knitr::kable(plot.2d.Gauss$pvalues,caption="Table 7.a.  P-values from test statistics for a bivariable Rb/Zr distribution.")
 #
 
 ## ------------------------------------------------------------------------
-plot.2d.Gauss<-fn.2dPlot.Gauss(data=ObsidianSources, GroupVar="Code", labID="ID", Groups="All",
+plot.2d.Gauss<-fn.2dPlot.Gauss(data=ObsidianSources, GroupVar="Code", ID="ID", Groups="All",
     AnalyticVars=c("Rb","Nb"),qqPlot=F)
 knitr::kable(plot.2d.Gauss$pvalues,caption="Table 7.b.  Samples sizes and p-values from test statistics for a bivariable Rb/Nb distribution.")
 #
@@ -151,24 +159,24 @@ knitr::kable(plot.2d.Gauss$pvalues,caption="Table 7.b.  Samples sizes and p-valu
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-save.pca <- fn.pca(data=ObsidianSources, labID="ID", GroupVar="Code",Groups="All", AnalyticVars=analyticVars, pcPlot=F, ScreePlot=T)
+save.pca <- fn.pca(data=ObsidianSources, ID="ID", GroupVar="Code",Groups="All", AnalyticVars=analyticVars, pcPlot=F, ScreePlot=T)
 
 ## ----echo=FALSE, results='hide',message=FALSE----------------------------
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-save.pca <- fn.pca(data=ObsidianSources, labID="ID", GroupVar="Code",Groups="All", AnalyticVars=analyticVars, pcPlot=F, BoxPlots=T)
+save.pca <- fn.pca(data=ObsidianSources, ID="ID", GroupVar="Code",Groups="All", AnalyticVars=analyticVars, pcPlot=F, BoxPlots=T)
 
 ## ----echo=FALSE, results='hide',message=FALSE----------------------------
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-save.pca <- fn.pca(data=ObsidianSources, labID="ID", GroupVar="Code",Groups="All", AnalyticVars=analyticVars) 
+save.pca <- fn.pca(data=ObsidianSources, ID="ID", GroupVar="Code",Groups="All", AnalyticVars=analyticVars) 
 
 ## ------------------------------------------------------------------------
-save.pca <- fn.pca(data=ObsidianSources, labID="ID", GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
+save.pca <- fn.pca(data=ObsidianSources, ID="ID", GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
                    pcPlot=F)
-knitr::kable(save.pca$Summary$importance, caption="Table 8.  Proportions of variance explained.")
+knitr::kable(save.pca$variances, caption="Table 8.  Proportions of variance explained.")
 knitr::kable(save.pca$weights, caption="Table 9.  Weights for each principal component.")
 knitr::kable(head(save.pca$DataPlusPredicted), caption="Table 10.  Original data and principal components.")
 #
@@ -202,7 +210,7 @@ tree <- fn.tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars
                  Model="Sr"+"Nb"+"Rb"+"Y"+"Zr", plotCp=F, plotTree=F)
 tree$Tree
 
-## ---- echo=FALSE---------------------------------------------------------
+## ---- echo=FALSE, message=FALSE------------------------------------------
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
@@ -211,14 +219,46 @@ tree <- fn.tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars
 knitr::kable(tree$classification, caption = "Table y.  Classification tree results for the obsidian sources.")
 #
 
-## ---- echo=FALSE---------------------------------------------------------
+## ---- echo=FALSE, message=FALSE------------------------------------------
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
  tree <- fn.tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
                  Model="Sr"+"Nb"+"Rb"+"Y"+"Zr", plotTree=F, plotCp = F)
-knitr::kable(tree$CpTable, caption = "Table z.  Cp table from the classification tree tree for the obsidian sources.")
+knitr::kable(tree$CpTable, caption = "Table z.  Cp table from the classification tree for the obsidian sources.")
 #
+
+## ---- echo=FALSE, message=FALSE------------------------------------------
+library(karon)
+data(ObsidianSources)
+data(ObsidianArtifacts)
+analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+save.tree <- fn.tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
+   Model = "Rb"+"Sr"+"Y"+"Zr"+"Nb", predictSources=T, predictData=ObsidianArtifacts, ID="ID",
+   plotTree=F, plotCp=F)
+knitr::kable(save.tree$predictedSources[1:5,], caption = "Table zz.  An example of the data frame containing predicted sources of obsidian artifacts from the classification tree for the obsidian sources.")
+
+## ---- echo=FALSE, message=FALSE------------------------------------------
+library(karon)
+data(ObsidianSources)
+data(ObsidianArtifacts)
+analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+save.tree <- fn.tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
+   Model = "Rb"+"Sr"+"Y"+"Zr"+"Nb", predictSources=T, predictData=ObsidianArtifacts, ID="ID",
+   plotTree=F, plotCp=F)
+knitr::kable(save.tree$predictedTotals, caption = "Table zz1.  Predicted number of obsidian artifacts
+from each source based on the classification tree for the obsidian sources.")
+
+## ---- echo=FALSE, message=FALSE------------------------------------------
+library(karon)
+data(ObsidianSources)
+data(ObsidianArtifacts)
+analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+tree <- fn.tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
+                ID="ID", Model="Sr"+"Nb"+"Rb"+"Y"+"Zr", plotTree=F, plotCp = F, predictSources=T,
+                predictData=ObsidianArtifacts)
+predictedSources<-tree$predictedSources[tree$predictedSources[,"source"]!="A",]
+save.pca <- fn.pca(data=predictedSources, ID="ID", GroupVar="source",Groups="All", AnalyticVars=analyticVars, PlotEllipses=F)
 
 ## ----echo=FALSE, results='hide',message=FALSE----------------------------
 data(ObsidianSources)
@@ -233,14 +273,80 @@ data(ObsidianSources)
 ## ----echo=FALSE, message=FALSE-------------------------------------------
 data(ObsidianSources)
  analyticVars<-c("Rb","Sr","Y","Zr","Nb")
- save.randomForest <- fn.randomForest(data=ObsidianSources, GroupVar="Code",Groups="All",   AnalyticVars=analyticVars, NvarUsed=3, plotImportance=F, plotErrorRate=F)
+ save.randomForest <- fn.randomForest(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars, NvarUsed=3, plotImportance=F, plotErrorRate=F)
 knitr::kable(save.randomForest$importance, caption="Table z. Relative variable importance in a random forest model for the Jemez obsidian source data.")
 #
 
 ## ----echo=FALSE, message=FALSE-------------------------------------------
 data(ObsidianSources)
  analyticVars<-c("Rb","Sr","Y","Zr","Nb")
- save.randomForest <- fn.randomForest(data=ObsidianSources, GroupVar="Code",Groups="All",   AnalyticVars=analyticVars, NvarUsed=3, plotImportance=F, plotErrorRate=F)
+ save.randomForest <- fn.randomForest(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars, NvarUsed=3, plotImportance=F, plotErrorRate=F)
 knitr::kable(save.randomForest$confusion, caption="Table z. The confusion matrix from a random forest model for the Jemez obsidian source data: accuracy of classification.")
 #
+
+## ----echo=FALSE, message=FALSE-------------------------------------------
+data(ObsidianSources)
+data(ObsidianArtifacts)
+analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+save.randomForest <- fn.randomForest(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars, NvarUsed=3, plotErrorRate=F, plotImportance=F, predictSources=T,predictData=ObsidianArtifacts, plotSourceProbs=F)
+knitr::kable(save.randomForest$predictedSources[1:5,], caption="Table z1. The predicted source and predicted 
+  source probabilities from a random forest model for the Jemez obsidian artifact data.")
+knitr::kable(save.randomForest$predictedTotals, caption="Table z2. The predicted number of artifacts from 
+  each Jemez source from a random forest model for the Jemez obsidian artifact data.")
+#
+
+## ----echo=FALSE, results='hide',message=FALSE----------------------------
+data(ObsidianSources)
+data(ObsidianArtifacts)
+analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+save.randomForest <- fn.randomForest(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars, NvarUsed=3, plotErrorRate=F, plotImportance=F, predictSources=T,predictData=ObsidianArtifacts, plotSourceProbs=T)
+
+## ----echo=FALSE, message=FALSE-------------------------------------------
+data(ObsidianSources)
+data(ObsidianArtifacts)
+analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+save.randomForest <- fn.randomForest(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars, ID="ID", NvarUsed=3, plotErrorRate=F, plotImportance=F, predictSources=T,predictData=ObsidianArtifacts, plotSourceProbs=F)
+check<-save.randomForest$predictedSources
+rows<-((check[,"C"]>0.14)&(check[,"C"]<0.35))
+checkC<-check[rows,]
+orderedRows<-order(checkC[,"C"])
+knitr::kable(checkC[orderedRows,], caption="Table z3.  Rows with relative large probabilities of
+             misclassification to source C.")
+
+## ----echo=FALSE, results='hide', message=FALSE---------------------------
+data(ObsidianSources)
+data(ObsidianArtifacts)
+analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+save.randomForest <- fn.randomForest(data=ObsidianSources, GroupVar="Code",Groups="All", ID="ID", AnalyticVars=analyticVars, NvarUsed=3, plotErrorRate=F, plotImportance=F, predictSources=T,predictData=ObsidianArtifacts, plotSourceProbs=F)
+predictedSources<-save.randomForest$predictedSources[save.randomForest$predictedSources[,"source"]!="A",]
+save.pca <- fn.pca(data=predictedSources, ID="ID", GroupVar="source",Groups="All", AnalyticVars=analyticVars, PlotEllipses=F)
+
+## ----echo=FALSE, results='hide', message=FALSE---------------------------
+data(ObsidianSources)
+data(ObsidianArtifacts)
+analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+sources <- unique(ObsidianSources[,"Code"])
+save.tree <- fn.tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
+  Model = "Rb"+"Sr"+"Y"+"Zr"+"Nb", predictSources=T, predictData=ObsidianArtifacts, ID="ID",
+  plotTree=F, plotCp=F)
+pca.eval <- fn.pca.evaluation(SourceData=ObsidianSources, ArtifactData=save.tree$predictedSources,
+  SourceGroup= "Code", ArtifactGroup="source",known.sources=sources, predicted.sources=sources,
+  AnalyticVars=analyticVars, plotAllPoints=T, plotHullsOutsidePoints=T, plotOutsidePoints=T)
+
+## ----echo=FALSE, message=FALSE-------------------------------------------
+data(tree.data.check)
+knitr::kable(tree.data.check, caption="Table zz. Artifacts which may have misidentified sources identified by using Identify=T in fn.pca.evaluation() after fitting a tree model.")
+
+## ----echo=FALSE, results='hide', message=FALSE---------------------------
+data(ObsidianSources)
+data(ObsidianArtifacts)
+analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+sources <- unique(ObsidianSources[,"Code"])
+save.randomForest <- fn.randomForest(data=ObsidianSources, GroupVar="Code",Groups="All",
+    AnalyticVars=analyticVars, ID="ID", NvarUsed=3, plotErrorRate=F, plotImportance=F,
+    predictSources=T, predictData=ObsidianArtifacts, plotSourceProbs=F)
+  pca.eval <- fn.pca.evaluation(SourceData=ObsidianSources,
+    ArtifactData=save.randomForest$predictedSources, SourceGroup= "Code", ArtifactGroup="source",
+    known.sources=sources, predicted.sources=sources, AnalyticVars=analyticVars,
+    plotAllPoints=T, plotHullsOutsidePoints = T, plotOutsidePoints = T)
 
