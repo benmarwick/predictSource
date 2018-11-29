@@ -77,7 +77,7 @@ fn.2dPlot.Gauss <- function (doc = "fn.2dPlot.Gauss",
   }
   #
   if (Identify) data.check<-data.Used[1,]
-      else  data.check <- NA  # set up data frame to store identified points
+      else  data.check <- c(NA, NA)  # set up data frame to store identified points
   #
   fn.plot <- function() {
     temp <- data.Used[data.Used[, GroupVar] == groups[i.group],AnalyticVars]

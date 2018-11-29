@@ -471,7 +471,7 @@ fn.pca.evaluation <-
     points(x = pts.outside[, "pc1"], y = pts.outside[,"pc2"],
            cex = .5, pch = pts.outside[, "index"])
     #
-    data.check <- NA  # value returned if no points identified
+    data.check <- c(NA, NA)  # value returned if no points identified
     if (Identify == T) {
     # identify points of interest
     index<-identify(pts.outside[,c("pc1","pc2")])

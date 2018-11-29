@@ -115,7 +115,7 @@ fn.2dPlot <- function (doc = "fn.2dPlot",
   else n.pairs<-nrow(AnalyticVars)
   if (Identify)  data.check<-data.Used[1,]  # dummy row to set up information on
      # identified observations
-     else  data.check <- NA
+     else  data.check <- c(NA, NA)
   #
   #   plots by Group
   #

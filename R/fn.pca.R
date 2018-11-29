@@ -159,7 +159,7 @@ fn.pca <-  function(doc = "fn.pca",
       Predicted <- data.frame(group = as.character(data.Used[,
                                                              GroupVar]), GroupIndex = GroupIndex, predict(pca))
       #
-      if (Identify == F) data.check <- NA #  dummy value if no points identified
+      if (Identify == F) data.check <- c(NA, NA) #  dummy value if no points identified
       #
       if (BoxPlots == T) {
         par(mfrow = c(1, 2))
