@@ -54,13 +54,6 @@
 #' @examples
 #'
 #' # Evaluate predicted sources of artifacts from using scatterplots
-#' data(ObsidianSources)
-#' data(ObsidianArtifacts)
-#' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-#' sources <- unique(ObsidianSources[,"Code"])
-#' pca.eval <- fn.pca.evaluation(SourceData=ObsidianSources, ArtifactData=ObsidianArtifacts,
-#' SourceGroup= "Code", ID="ID", ArtifactGroup="Code",known.sources=sources, predicted.sources=sources,
-#' AnalyticVars=analyticVars)
 #'
 #' # evaluate predictions from a tree model: plot only points outside the predicted source hull
 #` data(ObsidianSources)
@@ -72,8 +65,8 @@
 #`   predictSources=T, predictData=ObsidianArtifacts, plotTree=F, plotCp=F)
 #' pca.eval <- fn.pca.evaluation(SourceData=ObsidianSources,
 #'   ArtifactData=save.tree$predictedSources, SourceGroup= "Code", ArtifactGroup="source",
-#'   known.sources=sources, predicted.sources=sources, AnalyticVars=analyticVars,
-#'   plotAllPoints=F, plotHullsOutsidePoints = F, plotOutsidePoints = T)
+#'   known.sources=sources, predicted.sources=sources, AnalyticVars=analyticVars, ID="ID",
+#'   plotAllPoints=T, plotHullsOutsidePoints = T, plotOutsidePoints = T)
 #'
 #' # evaluate predictions from a random forest analysis: plot only points outside the predicted source hull
 #' data(ObsidianSources)
@@ -336,6 +329,8 @@ fn.pca.evaluation <-
     #
     # end of code to create and use indicator for artifact points outside of predicted hulls
     #
+    data.check <- c(NA, NA)  # value returned if no points identified
+    #
     if (plotHullsOutsidePoints == T) {
       #
       #  two panel plot to check whether artifact points are in the predicted convex hulls
@@ -471,7 +466,6 @@ fn.pca.evaluation <-
     points(x = pts.outside[, "pc1"], y = pts.outside[,"pc2"],
            cex = .5, pch = pts.outside[, "index"])
     #
-    data.check <- c(NA, NA)  # value returned if no points identified
     if (Identify == T) {
     # identify points of interest
     index<-identify(pts.outside[,c("pc1","pc2")])
