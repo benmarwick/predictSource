@@ -23,9 +23,9 @@ knitr::opts_chunk$set(
 ##1 INTRODUCTION
 A common problem in archaeology is estimating or predicting the source of the material used to form an artifact.  Archaeologists may use 2- or 3-dimensional scatterplots of artifact chemical composition data to predict the source of an artifact.  This package contains a suite of R functions to apply multivariate statistical methods to this problem, as well as functions to create analysis data sets, carry out some basic data quality checks, and perform some descriptive statistical analyses.  Results are returned as tables or plots.  The user can interact with some plots to identify data observations yielding points suggesting the need for closer identification; the code creates and returns a data frame containing the data of interest.
 
-The package implements three multivariate statistical procedures: principal component analysis (yielding 2-dimensional plots), recursive partitioning (classification trees), and random forests.  It may be of interest that classification trees and random forests can use both quantitative (e.g. chemical composition) and qualitative (e.g. color) data in the same analysis.
+The package implements three multivariate statistical procedures: principal components analysis (yielding 2-dimensional plots), recursive partitioning (classification trees), and random forests.  It may be of interest that classification trees and random forests can use both quantitative (e.g. chemical composition) and qualitative (e.g. color) data in the same analysis.
 
-After creating analysis files and carrying out standard data quality and descriptive analyses, our suggested analysis strategy is the following.  First, do a principal components analysis on the quantitative source data to evaluate whether the first two principal components account for a sufficient proportion of the variance among source samples, and to evaluate the separation among sources.  Second, if it appears that the sources can be separated, use the source data in a random forest analysis of the source data to predict the source of each artifact. This analysis also orders the characteristics (which can include qualitative as well as quantitative characteristics) according to their importance in distinguishing among sources.  Third use the quantitative characteristics to identify artifacts for which the predicted sources are not plausible in two ways: create side-by-side box plots of the distributions of elements in sources and the artifacts predicted to be from those sources (see Figure 4.2 for an example), and plot the artifact points on a 2-dimensional principal component plot, with symbols identifying their predicted sources, with the convex hulls of the source points.  Fourth, use a classification tree analysis to identify the characteristics that are best suited to separating the sources The second last section of this vignette contains a discussion of using this procedure; the ordering of the predictors from the random forest analysis and the weights for the first two principal components may be very useful in specifying the classification tree model.
+After creating analysis files and carrying out standard data quality and descriptive analyses, our suggested analysis strategy is the following.  First, do a principal components analysis on the quantitative source data to evaluate whether the first two principal components account for a sufficient proportion of the variance among source samples, and to evaluate the separation among sources.  Second, if it appears that the sources can be separated, use the source data in a random forest analysis of the source data to predict the source of each artifact. This analysis also orders the characteristics (which can include qualitative as well as quantitative characteristics) according to their importance in distinguishing among sources.  Third use the quantitative characteristics to identify artifacts for which the predicted sources are not plausible in two ways: create side-by-side box plots of the distributions of elements in sources and the artifacts predicted to be from those sources (see Figure 4.2 for an example), and plot the artifact points on a 2-dimensional principal components plot, with symbols identifying their predicted sources, with the convex hulls of the source points.  Fourth, use a classification tree analysis to identify the characteristics that are best suited to separating the sources The second last section of this vignette contains a discussion of using this procedure; the ordering of the predictors from the random forest analysis and the weights for the first two principal components may be very useful in specifying the classification tree model.
 
 The data used to illustrate these procedures are five elements from five obsidian sources in the Jemez caldera in central New Mexico (the sources are coded A through E) and obsidian artifacts from a valley east of that caldera (see the next section).  The classification tree for separating the Jemez obsidian sources is in Figure 1.1.  Of the five candidate elements, only strontium, rubidium, and ytterbium are needed to perfectly predict a source (the two elements not used are niobium and zirconium).  A principal component plot for predicting the source of artifacts using this classification tree (rather than from the random forest analysis) is in Figure 1.2.  It shows that some artifacts predicted to be from source C are likely in fact from source B.  We will see that the corresponding plot of the random forest predictions identifies no likely misclassifications.  
 
@@ -155,9 +155,9 @@ Box plots, created by the function fn.BoxPlots(), are useful for comparing the d
 If the box and the adjacent values are approximately symmetric around the median, then the distribution of the data is approximately symmetric.  Relative variation for values for an element among sources can be evaluated by comparing heights of boxes among sources.  
 the boxes   
 
-Now look at Figure 4.1 below.  We see immediately that there is little variation among the values of an element at a source. There are a few outliers, but they are not far from the range of adjacent values.  
+From Figure 4.1, below, we see immediately that there is little variation among the values of an element at a source. There are a few outliers, but they are not far from the range of adjacent values.  
 
-```{r echo=FALSE, results='hide',message=FALSE} 
+```{r echo=FALSE, results='hide',message=FALSE, fig.cap="Figure 4.1: Box plots for the Jemez obsidian source data."} 
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Nb")
@@ -353,21 +353,21 @@ knitr::kable(plot.2d.Gauss$pvalues,caption="Table 4.6:  Samples sizes and p-valu
 ```
 **************
 
-##5.  PRINCIPAL COMPONENT ANALYSIS
+##5.  PRINCIPAL COMPONENTS ANALYSIS
 
-Principal component analysis is a standard method implementing dimension reduction in order to create one or more two-dimensional plots to evaluate the separation of groups based on quantitative variables.  The function fn.pca() in this package does a principal components analysis after standardizing the data (so that each variable has mean zero and variance 1), plots the first two principal components (with the options in in fn.2dPlot()), and returns a list with the computed values of interest (defined below).  The user can also produce a scree plot, showing the variances for each principal component, and, if the analysis is by group, box plots of the values of the component for each group for the first two components.  An option for the principal components plot is to show confidence ellipses around the points from each group (source).  As in fn.2dPlot.Gauss(), the parameter Identify=T in this function allows the user to identify points of interest.  The function fn.pca.Gauss() provides information to evaluate whether the points from each group have a bivariate Gaussian distribution, with the same information provided by the function fn.2dPlot.Gauss().
+Principal components analysis is a standard method implementing dimension reduction in order to create one or more two-dimensional plots to evaluate the separation of groups based on quantitative variables.  The function fn.pca() in this package does a principal components analysis after standardizing the data (so that each variable has mean zero and variance 1), plots the first two principal components (with the options in in fn.2dPlot()), and returns a list with the computed values of interest (defined below).  The user can also produce a scree plot, showing the variances for each principal component, and, if the analysis is by group, box plots of the values of the component for each group for the first two components.  An option for the principal components plot is to show confidence ellipses around the points from each group (source).  As in fn.2dPlot.Gauss(), the parameter Identify=T in this function allows the user to identify points of interest.  The function fn.pca.Gauss() provides information to evaluate whether the points from each group have a bivariate Gaussian distribution, with the same information provided by the function fn.2dPlot.Gauss().
 
-###5.1  Standard principal component analysis
+###5.1  Standard principal components analysis
 
 The function fn.pca() returns a list with numerical information on the analysis.  The component named variances is a data frame with the standard deviation, proportion of total variance, and cumulative proportion of variance for each component (see Table 5.1).  The component named weights contains, for each component, the weight for each predictor variable (for the obsidian data, each element) used to compute the value of the component for that variable; these weights are standardized so that the sum of the squares of the weights for each component is 1 (see Table 5.2 for the results for this analysis).  The components named Predicted and DataPlusPredicted contain the predicted principal component values and the original data plus the predicted values, respectively, for the data used in the analysis (see Table 5.3 for a partial table for the obsidian source data).  In addition, if the user identifies points of interest, the data generating those points are in the component data.check. 
 
-For the obsidian data, the scree plot (Figure 5.1) shows that, of the five principal components, the first two components explain nearly all the variance in the source data.  Table 5.1 shows that the first two components explain 96% of the total variance.  A common rule of thumb is that the components used should explain at least 90% of the total variance.  Therefore, we should be able to draw valid conclusions using the first two components.
+For the obsidian data, the scree plot (Figure 5.1) shows that, of the five principal components, the first two components explain nearly all the variance in the source data.  Table 5.1 shows that these components explain 96% of the total variance.  A common rule of thumb is that the components used should explain at least 90% of the total variance.  Therefore, we should be able to draw valid conclusions using the first two components.
 
 The box plots (Figure 4.1) show that the first component separates the five Jemez sources, except possibly for sources A and D (their box plots overlap slightly).  The box plots for A and D are widely separated by the second component: we should be able to separate the sources in a principal components analysis.
 
 The table of weights (Table 5.2) shows that the first principal component is essentially strontium minus the average of the other four elements (all weights for a component can be multiplied by -1 without affecting the results).  The second component is harder to describe, but strontium and zirconium have the greatest weights.  If the first two components explain most of the variance and an element has small weights for those components, that element could be ignored in the classification tree and random forest analyses.
 
-Figure 5.2 containts the plot of the first two principal components by group with 95% and 99% confidence ellipses.  The groups are very well separated, so the fact that the confidence ellipses do not overlap is not necessary to conclude that we can separate the sources based on the principal component analysis (we would need to be concerned about the validity of the assumption that the bivariate distribution is Gaussian at each source if we wanted to use the confidence ellipses).  Note that sources A and D do overlap with respect to the first component, as predicted by the box plot, and that A and E nearly overlap, as shown by that plot.
+Figure 5.2 containts the plot of the first two principal components by group with 95% and 99% confidence ellipses.  The groups are very well separated, so the fact that the confidence ellipses do not overlap is not necessary to conclude that we can separate the sources based on the principal components analysis (we would need to be concerned about the validity of the assumption that the bivariate distribution is Gaussian at each source if we wanted to use the confidence ellipses).  Note that sources A and D do overlap with respect to the first component, as predicted by the box plot, and that A and E nearly overlap, as shown by that plot.
 
 ```{r  echo=FALSE, results='hide',message=FALSE, fig.cap="Figure 5.1: The scree plot from the principal components analysis of the Jemez obsidian source data."}
 library(karon)
@@ -394,16 +394,22 @@ save.pca <- fn.pca(data=ObsidianSources, ID="ID", GroupVar="Code",Groups="All", 
 knitr::kable(save.pca$variances, caption="Table 5.1:  Proportions of the variance explained in the principal components analysis of the Jemez obsidian source data.")
 knitr::kable(save.pca$weights, caption="Table 5.2:  Weights for each principal component in the principal components analysis of the Jemez obsidian source data.")
 knitr::kable(head(save.pca$DataPlusPredicted), caption="Table 5,3:  Original data and principal components in the principal components analysis of the Jemez obsidian source data.")
-#
+
 ```
+
 ###5.2  Evaluating the first two components for a bivariate Gaussian distribution
 
-```{r}
+At each source, each principal component is a linear combination of the elements at that source (for the Jemez obsidian source data, the coefficients are in Table 5.2).  If each variable has a Gaussian distribution in a set of variables, a linear combination of these variables has a univariate Gaussian distribution.  Therefore, if each element at a source has a Gaussian distribution, the first two principal components at this source may have a Gaussian distribution.  However, if at least one element does not have a Gaussian distribution, these principal components are unlikely to have a Gaussian distribution.
+
+The function fn.pca.Gauss() computes p-values, by source, for assessing whether the first two principal components have a bivariate Gaussian distribution.  This function uses the function fn.2dPlot.Gauss(), so the discussion of that function applies here.  Table 5.4 contains the p-values from this functions.  It is likely that we have a bivariate Gaussian distribution at sources A and C, but not at sources B, D, and E.
+
+
+```{r echo=FALSE, message=FALSE}
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 pca.Gauss <- fn.pca.Gauss(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars, qqPlot=F)
 knitr::kable(pca.Gauss$p.values, caption="Table 5.4: P-values from test statistics for a bivariate Gaussian distribution of the first two principal components at each Jemez obsidian source.")
-#
+
 ```
 
 *************
@@ -477,7 +483,7 @@ analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 tree <- fn.tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
                  Model="Sr"+"Nb"+"Rb"+"Y"+"Zr", plotTree=F, plotCp = F)
 knitr::kable(tree$classification, caption = "Table 6.2:  Classification tree predictions for the Jemez obsidian sources using five elements as potential predictors.")
-#
+
 ```
 
 Table 6.3 contains the improvement in predicted group purity, as measured by Cp, and the estimated relative error rates and theirstandard errorsobtained from cross-validation from the tree procedure using the Jemez obsidian source data. 
@@ -489,7 +495,7 @@ analyticVars<-c("Rb","Sr","Y","Zr","Nb")
  tree <- fn.tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
                  Model="Sr"+"Nb"+"Rb"+"Y"+"Zr", plotTree=F, plotCp = F)
 knitr::kable(tree$CpTable, caption = "Table 6.3:  Cp table from the classification tree for the Jemez obsidian sources using five elements as potential predictors.")
-#
+
 ```
 
 The fn.tree() function will predict sources of unknowns when the parameter predictSources is T and the parameter predictData specifies the data on the unknowns.  The member of the list produced by the function named predictedSources (a data frame) contains the predicted source for each observation, the analytic variables, and, if specified, a sample ID.  An example using the obsidian artifact data is in Table 6.4.  The member of the list named predictedTotals is a vector with the number of unknowns predicted to be from each source; Table 6.5 contains the results using the obsidian data.
@@ -500,9 +506,10 @@ data(ObsidianSources)
 data(ObsidianArtifacts)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 save.tree <- fn.tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
-   Model = "Rb"+"Sr"+"Y"+"Zr"+"Nb", predictSources=T, predictData=ObsidianArtifacts, ID="ID",
+   Model = "Sr"+"Nb"+"Rb"+"Y"+"Zr", predictSources=T, predictData=ObsidianArtifacts, ID="ID",
    plotTree=F, plotCp=F)
 knitr::kable(save.tree$predictedSources[1:5,], caption = "Table 6.4: An example of the data frame containing predicted sources of obsidian artifacts from the classification tree for the Jemez obsidian sources using five elements as potential predictors.")
+
 ```
 
 ```{r, echo=FALSE, message=FALSE }
@@ -511,10 +518,11 @@ data(ObsidianSources)
 data(ObsidianArtifacts)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 save.tree <- fn.tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
-   Model = "Rb"+"Sr"+"Y"+"Zr"+"Nb", predictSources=T, predictData=ObsidianArtifacts, ID="ID",
+   Model = "Sr"+"Nb"+"Rb"+"Y"+"Zr", predictSources=T, predictData=ObsidianArtifacts, ID="ID",
    plotTree=F, plotCp=F)
 knitr::kable(save.tree$predictedTotals, caption = "Table 6.6:  Predicted number of obsidian artifacts
 from each source based on the classification tree for the Jemez obsidian sources using five elements as potential predictors.")
+
 ```
 
 The locations of the artifact points on a principal components plot with symbols for their their predicted sources may be useful in evaluating the reliability of these predictions.  Figure 6.3 shows this plot for the predictions from the classification tree analysis using the function fn.pca() (the artifact from source A was removed, as it is far from the other artifacts).  The first two principal components explain 91% of the variance.  One artifact that is predicted to be from source B appears to be from source C; eight artifacts predicted to be from source C appear to be from source B.  A data frame containing the data generating these points could be obtained by setting the parameter Identify equal to T in the cal to fn.pca().
@@ -548,6 +556,7 @@ The fn.randomForest() function produces two plots, the estimated error rate as a
 data(ObsidianSources)
  analyticVars<-c("Rb","Sr","Y","Zr","Nb")
  save.randomForest <- fn.randomForest(data=ObsidianSources, GroupVar="Code",Groups="All",   AnalyticVars=analyticVars, NvarUsed=3, plotImportance=F)
+ 
 ```                                      
 
 The variable importance plot is shown in Figure 7.2, and the corresponding table saved in the component named "importance" by the function is in Table 7.1.  The corresponding estimates of variable importance using the summary() function on the Tree component of the list produced by fn.tree() are quite different: in the order of the variables in Table 7.1, those are 24, 21, 16, 17, 23.  Note that these sum to 101, and so are normalized, whereas those estimates in Table 7.1 sum to 86. Although the magnitudes are not necessarily comparable, the ordering is different: random forests estimates strontium to be most important, while it is third most important in the fn.tree() estimate; rubidium is of modest importance using the random forests estimate, while it is most important based on the fn.tree() estimate. 
@@ -556,6 +565,7 @@ The variable importance plot is shown in Figure 7.2, and the corresponding table
 data(ObsidianSources)
  analyticVars<-c("Rb","Sr","Y","Zr","Nb")
  save.randomForest <- fn.randomForest(data=ObsidianSources, GroupVar="Code",Groups="All",   AnalyticVars=analyticVars, NvarUsed=3, plotErrorRate=F)
+ 
 ```
 
 ```{r  echo=FALSE, message=FALSE}
@@ -563,7 +573,7 @@ data(ObsidianSources)
  analyticVars<-c("Rb","Sr","Y","Zr","Nb")
  save.randomForest <- fn.randomForest(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars, NvarUsed=3, plotImportance=F, plotErrorRate=F)
 knitr::kable(save.randomForest$importance, caption="Table 7.1: Relative variable importance in a random forest model for the Jemez obsidian source data.")
-#
+
 ```
 
 The accuracy of classification from the random forest analysis is reported in the component named "confusion" returned by fn.randomForest().  Table 7.2 shows the result for the Jemez obsidian source data.  This is the same matrix as the "classification" object from fn.tree().
@@ -573,7 +583,7 @@ data(ObsidianSources)
  analyticVars<-c("Rb","Sr","Y","Zr","Nb")
  save.randomForest <- fn.randomForest(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars, NvarUsed=3, plotImportance=F, plotErrorRate=F)
 knitr::kable(save.randomForest$confusion, caption="Table 7.2: The confusion matrix from a random forest model for the Jemez obsidian source data: accuracy of classification.")
-#
+
 ```
 
 Setting the parameter predictSources to T and specifying the data frame with information on the unknowns (artifacts) in the parameter predictData yields the predicted sources for the unknowns from a random forest analysis. Detailed information for each unknown is in the member predictedSources of the list returned by the function.  A sample of the information in this data frame is in Table 7.3. The predicted source, in the variable "source", is the source with the greatest origin probability; the data frame also includes the estimated probability of each source as origin.  Each probability is calculated as the number of trees predicting the unknown to be from that source, divided by the number of trees grown (by default, 500).  The data frame predictedTotals in the list returned by the function has two rows (Table 7.4).  The first row tabulates the number of unknowns predicted to be from each source (using the variable "source"); the second row contains the sum of the probabilities for each potential source. Note that the predictions in the first row agree with the estimates from the classification tree model in Table 7.5 for sources A and D but are different for B and C: 23 and 30 for B, from the tree and random forest predictions respectively, and 38 and 31 for C.  Recall that the principal component plot in Figure xxx using the predicted sources obtained from the tree model suggested that one artifact predicted to be from B was in fact from C, and eight artifacts predicted to be from C were in fact from B.  With these changes, the predictions from the tree model would agree with the predictions from the random forest analysis.    
@@ -587,7 +597,7 @@ knitr::kable(save.randomForest$predictedSources[1:5,], caption="Table 7.3: The p
   source probabilities from a random forest model for the Jemez obsidian artifact data.")
 knitr::kable(save.randomForest$predictedTotals, caption="Table 7.4: The predicted number of artifacts from 
   each Jemez source from a random forest model for the Jemez obsidian artifact data.")
-#
+
 ```
 
 With the logical parameter plotSourceProbs set equal to T, the user obtains two box plots, in Figures 7.3 and 7.4.  The figures provide information on the frequency with which the number of analytic variables used in the random forest analysis (in this case, 3) can predict the source of an unknown correctly.
@@ -639,13 +649,9 @@ save.pca <- fn.pca(data=predictedSources, ID="ID", GroupVar="source",Groups="All
 
 ##8  EVALUATION OF THE PREDICTIONS 
 
-The principal component plots of the predictions from the tree and random forest analysis demonstrate the utility of such a plot in evaluating predictions.  The tree analysis gives predictions that appear to be wrong, while all predictions from the random forest analysis appear to be correct.
+We suggest two analyses for evaluating whether predicted sources for artifacts are correct: box plots similar to Figure 4.2 (Figure 8.1), and principal components plots. It is clear from the plots for niobium in Figure 8.1 that some artifacts are improperly assigned to source C, and perhaps one artifact is improperly assigned to source B.  The function generating principal components plots will allow us to identify the data generating these suspect assignments.  
 
-The function fn.pca.evaluation() adds these points (contained in the data frame specified in the parameter ArtifactData) to a principal component plot with the convex hulls of the source data (specified in the parameter SourceData).  The data frame ArtifactData must contain a variable with the predicted source for each point.  The points generated by the unknowns predicted to come from a source should fall within or close to the convex hull of that source if the predictions are correct.  The user specifies the known sources and predicted sources of interest with the parameters known.sources and predicted.sources, respectively.  Defining the parameter Identify to be T allows the user to create a data frame containing data generating points that may represent misclassified unknowns.
-
-The evaluation function can produce three plots, shown in Figures 8.1a, 8.1b, and 8.1c, below (parameters in the call to the function allow the user to specify which plots to produce). The plots in these figures use the predictions from the tree obtained from fn.tree() with the model "Rb"+"Sr"+"Y"+"Zr"+"Nb".   Each plot is the plot of the first two principal components, obtained from a principal component analysis of all sources and all unknowns used in the analysis.  The first plot has two panels: the left panel plots the source points and the convex hulls for the sources; the right panel plots all unknowns with the convex hulls for the sources.  The second plot also has two panels: the left panel plots the source convex hulls labelled with the code for the source located at the median of all the source points; the right panel plots the source hulls and all unknown points that lie outside the predicted source hull.  The third plot is the right panel of the second plot; this plot is useful for identifying points of interest generated by unknowns.  This plot will be produced if Identify = T. The data frame check.data in the list returned by the function contains the data generating points identified to be of interest, as well as the first two principal component values for these points.
-
-```{r echo=FALSE, results='hide',message=FALSE, fig.cap="Figure 8.0: Box plots for rubidium and niobium comparing the Jemez obsidian sources and the obsidian artifacts assigned to those sources by a clasification tree analysis." } 
+```{r echo=FALSE, results='hide',message=FALSE, fig.cap="Figure 8.1: Box plots for rubidium and niobium comparing the Jemez obsidian sources and the obsidian artifacts assigned to those sources by a clasification tree analysis.  The plot for x.a is the artifacts assigned to source x." } 
 library(karon)
 data(ObsidianSources)
 data(ObsidianArtifacts)
@@ -657,20 +663,25 @@ save.tree <- fn.tree(data=ObsidianSources, GroupVar="Code",Groups="All", Analyti
 ObsidianSources<-ObsidianSources[,c("Code",analyticVars)]
 Artifacts <- save.tree$predictedSources[,c("source",analyticVars)]
 SourcesCode <- as.vector(ObsidianSources[,"Code"], mode="character")
-ArtifactsCode <- as.vector(paste(Artifacts[,"source"],"A",sep="."),mode="character")
+ArtifactsCode <- as.vector(paste(Artifacts[,"source"],"a",sep="."),mode="character")
 Sources <- c(SourcesCode, ArtifactsCode)
 SourcesArtifacts <- data.frame(rbind(ObsidianSources[,analyticVars], Artifacts[,analyticVars]),Source = Sources)
 boxPlots<-fn.BoxPlots(data=SourcesArtifacts, GroupVar="Source", Groups="All",AnalyticVars=c("Rb","Nb"),Nrow=2,Ncol=1)
 
 ```
 
-```{r  echo=FALSE, results='hide', message=FALSE, fig.keep='first', fig.cap="Figure 8.1a: Principal components plots of the Jemez obsidian source convex hulls with the source points (left panel) and obsidian artifact points (right panel)."}
+We have already seen that the utility principal component plots of the predictions from the tree and random forest analysis in evaluating predictions.  The tree analysis gives predictions that appear to be wrong, while all predictions from the random forest analysis appear to be correct.  The function fn.pca.evaluation() creates plots that are more informative than those in Figures 6.3 and 7.4 by adding symbols for the artifact points generated by the predictions (contained in the data frame specified in the parameter ArtifactData) to a principal components plot with the convex hulls of the source data (specified in the parameter SourceData).  The data frame ArtifactData must contain a variable with the predicted source for each point.  The points generated by the unknowns predicted to come from a source should fall within or close to the convex hull of that source if the predictions are correct.  The user specifies the known sources and predicted sources of interest with the parameters known.sources and predicted.sources, respectively.  Defining the parameter Identify to be T allows the user to create a data frame containing data generating points that may represent misclassified unknowns.
+
+The evaluation function can produce three plots, shown in Figures 8.2a, 8.2b, and 8.2c, below (parameters in the call to the function allow the user to specify which plots to produce). The plots in these figures use the predictions from the tree obtained from fn.tree() with the model "Sr"+"Nb"+"Rb"+"Y"+"Zr".   Each plot is the plot of the first two principal components, obtained from a principal component analysis of all sources and all unknowns used in the analysis.  The first plot has two panels: the left panel plots the source points and the convex hulls for the sources; the right panel plots all unknowns with the convex hulls for the sources.  The second plot also has two panels: the left panel plots the source convex hulls labelled with the code for the source located at the median of all the source points; the right panel plots the source hulls and all unknown points that lie outside the predicted source hull.  The third plot is the right panel of the second plot; this plot is useful for identifying points of interest generated by unknowns.  This plot will be produced if Identify = T. The data frame check.data in the list returned by the function contains the data generating points identified to be of interest, as well as the first two principal component values for these points.
+
+
+```{r  echo=FALSE, results='hide', message=FALSE, fig.keep='first', fig.cap="Figure 8.2a: Principal components plots of the Jemez obsidian source convex hulls with the source points (left panel) and obsidian artifact points (right panel)."}
 data(ObsidianSources)
 data(ObsidianArtifacts)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 sources <- unique(ObsidianSources[,"Code"])
 save.tree <- fn.tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
-  Model = "Rb"+"Sr"+"Y"+"Zr"+"Nb", predictSources=T, predictData=ObsidianArtifacts, ID="ID",
+  Model = "Sr"+"Nb"+"Rb"+"Y"+"Zr", predictSources=T, predictData=ObsidianArtifacts, ID="ID",
   plotTree=F, plotCp=F)
 pca.eval <- fn.pca.evaluation(SourceData=ObsidianSources, ArtifactData=save.tree$predictedSources,
   SourceGroup= "Code", ArtifactGroup="source",known.sources=sources, predicted.sources=sources,
@@ -678,13 +689,13 @@ pca.eval <- fn.pca.evaluation(SourceData=ObsidianSources, ArtifactData=save.tree
   
 ```
 
-```{r  echo=FALSE, results='hide', message=FALSE, fig.keep='last', fig.cap="Figure 8.1b: Principal components plots of the Jemez obsidian source convex hulls with the source point medians (left panel) and obsidian artifact points outside the predicted source hulls (right panel)."}
+```{r  echo=FALSE, results='hide', message=FALSE, fig.keep='last', fig.cap="Figure 8.2b: Principal components plots of the Jemez obsidian source convex hulls with the source point medians (left panel) and obsidian artifact points outside the predicted source hulls (right panel)."}
 data(ObsidianSources)
 data(ObsidianArtifacts)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 sources <- unique(ObsidianSources[,"Code"])
 save.tree <- fn.tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
-  Model = "Rb"+"Sr"+"Y"+"Zr"+"Nb", predictSources=T, predictData=ObsidianArtifacts, ID="ID",
+  Model = "Sr"+"Nb"+"Rb"+"Y"+"Zr", predictSources=T, predictData=ObsidianArtifacts, ID="ID",
   plotTree=F, plotCp=F)
 pca.eval <- fn.pca.evaluation(SourceData=ObsidianSources, ArtifactData=save.tree$predictedSources,
   SourceGroup= "Code", ArtifactGroup="source",known.sources=sources, predicted.sources=sources,
@@ -692,13 +703,13 @@ pca.eval <- fn.pca.evaluation(SourceData=ObsidianSources, ArtifactData=save.tree
   
 ```
 
-```{r  echo=FALSE, results='hide', message=FALSE, fig.keep='last', fig.cap="Figure 8.1c: Principal components plot with Jemez obsidian source convex hulls and obsidian artifacts with points outside the convex hull predicted from a classification tree model."}
+```{r  echo=FALSE, results='hide', message=FALSE, fig.keep='last', fig.cap="Figure 8.2c: Principal components plot with Jemez obsidian source convex hulls and obsidian artifacts with points outside the convex hull predicted from a classification tree model."}
 data(ObsidianSources)
 data(ObsidianArtifacts)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 sources <- unique(ObsidianSources[,"Code"])
 save.tree <- fn.tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
-  Model = "Rb"+"Sr"+"Y"+"Zr"+"Nb", predictSources=T, predictData=ObsidianArtifacts, ID="ID",
+  Model = "Sr"+"Nb"+"Rb"+"Y"+"Zr", predictSources=T, predictData=ObsidianArtifacts, ID="ID",
   plotTree=F, plotCp=F)
 pca.eval <- fn.pca.evaluation(SourceData=ObsidianSources, ArtifactData=save.tree$predictedSources,
   SourceGroup= "Code", ArtifactGroup="source",known.sources=sources, predicted.sources=sources,
@@ -713,9 +724,9 @@ data(tree.data.check)
 knitr::kable(tree.data.check, caption="Table 8.1: Artifacts which may have misidentified sources identified by using Identify=T in fn.pca.evaluation() after fitting a tree model.")
 ```
 
-In contrast, in the corresponding plot based on the random forest analysis, these artifacts are predicted to come from the sources generating the convex hulls to which they are closest: see Figure 8.2.   
+In contrast, in the corresponding plot based on the random forest analysis, these artifacts are predicted to come from the sources generating the convex hulls to which they are closest: see Figure 8.3.   
 
-```{r  echo=FALSE, results='hide', message=FALSE, fig.keep='last', fig.cap="Figure 8.2: Principal components plot of the Jemez obsidian source convex hulls and obsidian artifacts with points outside the convex hull predicted from a random forests analysis."}
+```{r  echo=FALSE, results='hide', message=FALSE, fig.keep='last', fig.cap="Figure 8.3: Principal components plot of the Jemez obsidian source convex hulls and obsidian artifacts with points outside the convex hull predicted from a random forests analysis."}
 data(ObsidianSources)
 data(ObsidianArtifacts)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
