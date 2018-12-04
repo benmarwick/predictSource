@@ -6,7 +6,10 @@
 #' @param data: R object (data frame) containing analytic data
 #' @param CheckDupVars: vector with names of identifying variables, typically group and lab ID
 #' @param GroupVar: if there are groups, name of variable defining the groups, default value of " ": no grouping
-#' @param Groups: character vector of groups by which numbers of samples and statistics statistics will be tabulated default value of " ": tabulations are done for the entire data set value = "All": tabulation for each distinct code in GroupVar
+#' @param Groups: character vector of groups by which numbers of samples and statistics statistics will be
+#'  tabulated
+#'   default value of " ": tabulations are done for the entire data set
+#'   value = "All": tabulation for each distinct code in GroupVar
 #' @param ID: name of lab ID, default is " " (no lab ID)
 #' @param AnalyticVars: character vector of names of analytic variables for which tabulations are done
 #' @param folder:  the path to a folder in which data frames will be saved; default is " "
@@ -128,11 +131,11 @@ fn.CheckData <-
         statisticsj <- summary(data.Used[, AnalyticVars[j]])
         statistics[j, 1:length(statisticsj)] <- statisticsj
       } # end of loop on j
-      statistics[is.na(statistics[, 7]), 7] <- 0
-      colnames(statistics) <- c("min", "Q1", "median", "mean",
-                             "Q3", "max", "n.missing")
-      statistics <- data.frame(Analysis = AnalyticVars, statistics)
-    } # end of code for GroupVar == " "
+      statistics.values <- round(statistics, dig = 0)
+      colnames(statistics.values) <- c("min", "Q1", "median",
+                                       "mean", "Q3", "max", "n.missing")
+      statistics.values[is.na(statistics.values[, 7]), 7] <- 0
+     } # end of code for GroupVar == " "
     else if (Groups[1] != " ") {
       if (Groups == "All")  groups <- as.character(unique(data.Used[, GroupVar]))
         else  groups <- Groups
@@ -158,14 +161,16 @@ fn.CheckData <-
       colnames(statistics.values) <- c("min", "Q1", "median",
                                     "mean", "Q3", "max", "n.missing")
       statistics.values[is.na(statistics.values[, 7]), 7] <- 0
-      statistics <- data.frame(Analysis = vector.values, Group = vector.groups,
+      if (GroupVar == " ")
+        statistics <- data.frame(Analysis = AnalyticVars, statistics.values)
+      else  statistics <- data.frame(Analysis = vector.values, Group = vector.groups,
                             statistics.values)
       #
     fcn.date.ver<-c(doc,date(),R.Version()$version.string)
     params<-list(CheckDupVars,GroupVar,Groups)
     names(params)<-c("CheckDupVars","GroupVar","Groups")
     statistics[,"mean"] <- round(statistics[,"mean"], dig = 0)
- #
+  #
  list(usage=fcn.date.ver,
                                  dataUsed=data,params=params,
                                  analyticVars=AnalyticVars,
@@ -173,5 +178,5 @@ fn.CheckData <-
                                  NegativeValues = NegativeValues,
                                  Nvalues = Nvalues,
                                  statistics = statistics,
-                                 locaton=folder)
+                                 location=folder)
   }

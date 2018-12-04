@@ -90,7 +90,7 @@ fn.BoxPlots <-
         }
         plot.index <- plot.index + plots.per.page
         n.plots.remaining <- n.plots.remaining - plots.per.page
-        browser()
+        if (n.plots.remaining > 0) browser()
       }
     }
     if (Groups[1] == " ") {
