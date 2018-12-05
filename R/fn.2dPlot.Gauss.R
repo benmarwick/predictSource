@@ -9,6 +9,7 @@
 #' @param Groups  Vector of values of the group variable for which plots are to be done;
 #'    if "All", use all groups; if " ", no grouping
 #' @param AnalyticVars  Names of two analytic variables to be shown in the plots, vector of length 2
+#' @param scatterPlot  Logical (default is T): specify whether to show scatter plots when qqPlot = F
 #' @param qqPlot  Logical (default is T): specify whether to show q-q plots, including plots based on simulation and multivariate plots
 #' @param pvalue.digits  Numeric (default is 3): number of significant digits retained in tests for normality
 #' @param Identify  Logical(default is F): if T, user can identify points of interest in the plots
@@ -21,7 +22,7 @@
 #' \item{dataNA:}{  A data frame with observations containing a least one missing value
 #'   for an analysis variable, NA if no missing values}
 #' \item{analyticVars:}{  The contents of the argument AnalyticVars}
-#' \item{parameters:}{  A vector with argument values for GroupVar, Groups, pvalue.digits, and QQtest}
+#' \item{parameters:}{  A vector with argument values for GroupVar, Groups, pvalue.digits, scatterPlot, qqPlot}
 #' \item{pvalues:}{  A data frame with the p-values for univariate and bivariate tests of normality}
 #' \item{data.check:}{ A data frame with the information on user-identified points of interest;
 #'     NA if no data identified}
@@ -46,6 +47,7 @@ fn.2dPlot.Gauss <- function (doc = "fn.2dPlot.Gauss",
                              ID,
                              Groups,
                              AnalyticVars,
+                             scatterPlot=T,
                              qqPlot = T,
                              pvalue.digits=3,
                              Identify=F,
@@ -88,7 +90,11 @@ fn.2dPlot.Gauss <- function (doc = "fn.2dPlot.Gauss",
              main = paste(AnalyticVars[1],"source", groups[i.group]))
       qqnorm.pts<-qqnorm(temp1, main = paste(AnalyticVars[1],"source", groups[i.group]))
       qqline(temp1)
-      }
+    }
+    else if (scatterPlot) {
+      qqnorm.pts<-qqnorm(temp1, main = paste(AnalyticVars[1],"source", groups[i.group]))
+      qqline(temp1)
+    }
     if (Identify) {
       index<-identify(qqnorm.pts)
       data.grp<-data.Used[data.Used[,GroupVar]==groups[i.group],]
@@ -101,8 +107,11 @@ fn.2dPlot.Gauss <- function (doc = "fn.2dPlot.Gauss",
              main = paste(AnalyticVars[2],"source", groups[i.group]))
       qqnorm.pts<-qqnorm(temp2, main = paste(AnalyticVars[2],"source", groups[i.group]))
       qqline(temp2)
-      browser()
-      }
+    }
+    else if (scatterPlot) {
+      qqnorm.pts<-qqnorm(temp2, main = paste(AnalyticVars[2],"source", groups[i.group]))
+      qqline(temp2)
+    }
     if (Identify) {
       index<-identify(qqnorm.pts)
       data.grp<-data.Used[data.Used[,GroupVar]==groups[i.group],]
@@ -117,11 +126,10 @@ fn.2dPlot.Gauss <- function (doc = "fn.2dPlot.Gauss",
     mardia <- MVN::mvn(data = temp, mvnTest="mardia")
     p.mardia.skew <- as.numeric(as.character(mardia[[1]][[3]][[1]],mode="character"))
     p.mardia.kurtosis <- as.numeric(as.character(mardia[[1]][[3]][[2]],mode="character"))
-    if (qqPlot) {
+    if (qqPlot)
       HZ <- MVN::mvn(data=temp, mvnTest="hz",multivariatePlot="qq")
-      browser()
-      }
       else  HZ <- MVN::mvn(data=temp, mvnTest="hz")
+    if (qqPlot) browser()
     p.HZ <- as.numeric(HZ[[1]][[3]], mode = "numeric")
     royston <- MVN::mvn(data=temp, mvnTest="royston")
     p.Royston <- as.numeric(royston[[1]][[3]], mode = "numeric")
@@ -131,12 +139,11 @@ fn.2dPlot.Gauss <- function (doc = "fn.2dPlot.Gauss",
   } # end of definition of function
   #
   pvalues <- matrix(NA, nrow=length(groups), ncol = 9)
-  par(mfrow = c(2, 2))
+  if (qqPlot)  par(mfrow = c(2,3))
+  else par(mfrow = c(2,2))
   for (i.group in 1:length(groups)) {
     if ((i.group > 1) & (qqPlot==T)) {
-      plot.new()
-      plot.new()
-      plot.new() # three blank plots, so next group starts in new window
+      plot.new() # blank plots so next group starts in new window
       }
     pvalues[i.group, ] <- fn.plot()
     }
@@ -162,7 +169,8 @@ fn.2dPlot.Gauss <- function (doc = "fn.2dPlot.Gauss",
   }
   #
   fcn.date.ver<-c(doc,date(),R.Version()$version.string)
-  parameters<-c(groupVar=GroupVar,groups=Groups,digits.pvalue=pvalue.digits,qqPlot=qqPlot, Identify=Identify)
+  parameters<-c(groupVar=GroupVar,groups=Groups,digits.pvalue=pvalue.digits,
+                scattaerPlot=scatterPlot, qqPlot=qqPlot, Identify=Identify)
   if (sum(dataKeep) < nrow(data.Used)) dataNA <- data.Used[!dataKeep]
   else dataNA <- NA
   #
