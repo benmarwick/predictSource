@@ -123,7 +123,7 @@ The descriptive statistics for the elements in the classification tree in Figure
 ```{r } 
 library(karon)
 data(ObsidianSources)
-CheckData<-fn.CheckData(data=ObsidianSources,CheckDupVars=c("Code","ID"),GroupVar="Code",Groups="All",AnalyticVars=c("Sr","Rb","Y"))
+CheckData<-fn.CheckData(data=ObsidianSources,CheckDupVars=c("Code","ID"),GroupVar="Code",Groups="All",AnalyticVars=c("Sr","Rb","Nb","Y"))
 knitr::kable(CheckData$statistics, caption="Table 3.2: Descriptive statistics for the elements in the Jemez obsidian sources used in the classsification tree in Figure 1.1.")
 
 ```
@@ -165,7 +165,7 @@ boxPlots<-fn.BoxPlots(data=ObsidianSources, GroupVar="Code",                Grou
 
 ```
 
-We can also create side-by-side box plots of the sources and the artifacts assigned to the sources, in order to see how well the distributions of the elements from artifacts correspond to the distributions of the corresponding sources.  The plot below shows this comparison for rubidium and niobium; the code for the artifact is .A added to the code for the assigned source (e.g., the artifacts assigned to source A have the code A.A).  We see that, for the artifacts assigned to sources A and E, the artifact values for rubidium are larger than the corresponding source values and also are more variable.  For one artifact assigned to source D, the niobium value is a clear outlier, suggesting a misclassified artifact.  For the artifacts assigned to source E, the upper quartile for niobium is only slightly larger than the median, resulting in the unusual appearance of the box.
+We can also create side-by-side box plots of the sources and the artifacts assigned to the sources, in order to see how well the distributions of the elements from artifacts correspond to the distributions of the corresponding sources.  The plot below shows this comparison for rubidium and niobium; the code for the artifact is .A added to the code for the assigned source (e.g., the artifacts assigned to source x have the code x.a).  We see that, for the artifacts assigned to sources A and E, the artifact values for rubidium are larger than the corresponding source values and also are more variable.  For one artifact assigned to source D, the niobium value is a clear outlier, suggesting a misclassified artifact.  For the artifacts assigned to source E, the upper quartile for niobium is only slightly larger than the median, resulting in the unusual appearance of the box.
 
 ```{r echo=FALSE, results='hide',message=FALSE, fig.cap="Figure 4.2: Box plots for rubidium and niobium comparing the Jemez obsidian sources and the obsidian artifacts assigned to those sources by Steve Shackley.  x.a labels the artifacts assigned to source x." } 
 library(karon)
@@ -182,7 +182,7 @@ boxPlots<-fn.BoxPlots(data=SourcesArtifacts, GroupVar="Code", Groups="All",Analy
 
 ```
 
-Note that one artifact assigned to source D has values suggesting that it is actually from source C, and that one assigned to source B has values that suggest it is from another source (the rubidium value suggests source D).  These plots are also useful in evaluating the accuracy of source predictions.
+Note that one artifact assigned to source D has values suggesting that it is actually from source C, and that one assigned to source B has values that suggest it is from another source (the rubidium value suggests source D).  These plots may be useful in evaluating the accuracy of source predictions.
 
 ###4.2  Pairs plots
 
@@ -488,6 +488,7 @@ analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 tree <- fn.tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
                  Model="Sr"+"Nb"+"Rb"+"Y"+"Zr", plotCp=F, plotTree=F)
 tree$Tree
+
 ```
 
 The component classification in the list produced by fn.tree() contains a table with the predicted sources for the data used to create the tree.  The results for the Jemez obsidian source data are in Table y.  These results reproduce the information in Figure 6.1.  Note that, in Figure 6.1, the terminal nodes from left to right (1 to 5) contain the observations from sources B, A, D, C, and E, in that order, which is different from the row order in Table 6.2.
@@ -620,7 +621,7 @@ With the logical parameter plotSourceProbs set equal to T, the user obtains two 
 
 The first plot uses only the probability for the predicted source for each unknown; the second uses all other probabilities.  We ignore the single unknown prediced to be from source A.  In the first plot, the median probability is 1 for artifacts from source C and only slightly less than 1 for artifacts from sources B and D. The first quartile of probabilities of unknowns from B is smaller then those from C and D: unknowns from source B are harder to predict than from C and D using three analytic variables. 
 
-The second plot shows that there are a few relatively large probabilities for unknowns incorrectly assigned to sources B and C.  Table 7.3 displays the data from the data frame predictedSources yielding the probabilities between 0.19 and 0.30 (note that a single point on the plot can represent more than one unknown).  The unknown yielding the large probability in Figure z2 for source B was predicted to be from source C; the eight unknowns yielding the large probabilties for source C were predicted to be from source B; these artifacts are likely to correspond to the apparent misclassifications by the tree model (this could be verified by creating a data frame containing the data generating those points by setting Identify equal to T when using fn.pca() to generate Figure xxx).  Figure z3 shows a principal components plot (using fn.pca()) of the artifacts predicted to be from sources B, C, and D (the artifact from A was eliminated, as its point is far from the others).  Comparison with Figure xxx for the analysis of the predictions from the tree model show that the artifacts apparently misclassified by that model are assigned the correct source by the random forest analysis. Since this is the same plot as in Figure xxx, the first two principal components also explain 91% of the variance. 
+The second plot shows that there are a few relatively large probabilities for unknowns incorrectly assigned to sources B and C.  Table 7.3 displays the data from the data frame predictedSources yielding the probabilities between 0.19 and 0.30 (note that a single point on the plot can represent more than one unknown).  The unknown yielding the large probability in Figure z2 for source B was predicted to be from source C; the eight unknowns yielding the large probabilties for source C were predicted to be from source B; these artifacts are likely to correspond to the apparent misclassifications by the tree model (this could be verified by creating a data frame containing the data generating those points by setting Identify equal to T when using fn.pca() to generate Figure 8.2c).  Figure 8.3 shows a principal components plot (using fn.pca()) of the artifacts predicted to be from sources B, C, and D (the artifact from A was eliminated, as its point is far from the others); the first two principal components also explain 91% of the variance in this plot  Comparison with Figure 6.3 for the analysis of the predictions from the tree model show that the artifacts apparently misclassified by that model may be assigned the correct source by the random forest analysis.  
 
 ```{r  echo=FALSE, results='hide',message=FALSE, fig.cap="Figure 7.3a: Box plots of the estimated probabilities for the predicted sources for the obsidian artifacts.", fig.keep='first'}
 data(ObsidianSources)
@@ -688,10 +689,10 @@ boxPlots<-fn.BoxPlots(data=SourcesArtifacts, GroupVar="Source", Groups="All",Ana
 
 We have already seen that the utility principal component plots of the predictions from the tree and random forest analysis in evaluating predictions.  The tree analysis gives predictions that appear to be wrong, while all predictions from the random forest analysis appear to be correct.  The function fn.pca.evaluation() creates plots that are more informative than those in Figures 6.3 and 7.4 by adding symbols for the artifact points generated by the predictions (contained in the data frame specified in the parameter ArtifactData) to a principal components plot with the convex hulls of the source data (specified in the parameter SourceData).  The data frame ArtifactData must contain a variable with the predicted source for each point.  The points generated by the unknowns predicted to come from a source should fall within or close to the convex hull of that source if the predictions are correct.  The user specifies the known sources and predicted sources of interest with the parameters known.sources and predicted.sources, respectively.  Defining the parameter Identify to be T allows the user to create a data frame containing data generating points that may represent misclassified unknowns.
 
-The evaluation function can produce three plots, shown in Figures 8.2a, 8.2b, and 8.2c, below (parameters in the call to the function allow the user to specify which plots to produce). The plots in these figures use the predictions from the tree obtained from fn.tree() with the model "Sr"+"Nb"+"Rb"+"Y"+"Zr".   Each plot is the plot of the first two principal components, obtained from a principal component analysis of all sources and all unknowns used in the analysis.  The first plot has two panels: the left panel plots the source points and the convex hulls for the sources; the right panel plots all unknowns with the convex hulls for the sources.  The second plot also has two panels: the left panel plots the source convex hulls labelled with the code for the source located at the median of all the source points; the right panel plots the source hulls and all unknown points that lie outside the predicted source hull.  The third plot is the right panel of the second plot; this plot is useful for identifying points of interest generated by unknowns.  This plot will be produced if Identify = T. The data frame check.data in the list returned by the function contains the data generating points identified to be of interest, as well as the first two principal component values for these points.
+The evaluation function can produce three plots, shown in Figures 8.2a, 8.2b, and 8.2c, below (parameters in the call to the function allow the user to specify which plots to produce). The plots in these figures use the predictions from the classification tree obtained from fn.tree() with the model "Sr"+"Nb"+"Rb"+"Y"+"Zr".   Each plot is the plot of the first two principal components, obtained from a principal component analysis of all sources and all unknowns used in the analysis.  The first plot has two panels: the left panel plots the source points and the convex hulls for the sources; the right panel plots all unknowns with the convex hulls for the sources.  The second plot also has two panels: the left panel plots the source convex hulls labelled with the code for the source located at the median of all the source points; the right panel plots the source hulls and all unknown points that lie outside the predicted source hull.  The third plot is the right panel of the second plot; this plot is useful for identifying points of interest generated by unknowns.  This plot will be produced if Identify = T. The data frame check.data in the list returned by the function contains the data generating points identified to be of interest, as well as the first two principal component values for these points.
 
 
-```{r  echo=FALSE, results='hide', message=FALSE, fig.keep='first', fig.cap="Figure 8.2a: Principal components plots of the Jemez obsidian source convex hulls with the source points (left panel) and obsidian artifact points (right panel)."}
+```{r  echo=FALSE, results='hide', message=FALSE, fig.keep='first', fig.cap="Figure 8.2a: Principal components plots of the Jemez obsidian source convex hulls with the source points (left panel) and obsidian artifact points (right panel).  The artifacts are labelled with their predicted source from a classification tree analysis."}
 data(ObsidianSources)
 data(ObsidianArtifacts)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
@@ -705,7 +706,7 @@ pca.eval <- fn.pca.evaluation(SourceData=ObsidianSources, ArtifactData=save.tree
   
 ```
 
-```{r  echo=FALSE, results='hide', message=FALSE, fig.keep='last', fig.cap="Figure 8.2b: Principal components plots of the Jemez obsidian source convex hulls with the source point medians (left panel) and obsidian artifact points outside the predicted source hulls (right panel)."}
+```{r  echo=FALSE, results='hide', message=FALSE, fig.keep='last', fig.cap="Figure 8.2b: Principal components plots of the Jemez obsidian source convex hulls with the source point medians (left panel) and obsidian artifact points outside the predicted source hulls (right panel).  The artifacts are labelled with their predicted source from a classification tree analysis."}
 data(ObsidianSources)
 data(ObsidianArtifacts)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
@@ -733,11 +734,12 @@ pca.eval <- fn.pca.evaluation(SourceData=ObsidianSources, ArtifactData=save.tree
   
 ```
 
-Eleven or twelve artifacts predicted to be from source C are close to or closer to the hull from source B in Figure 8.1c (there appears to be one such point at the upper right corner of the hull for source B).  Table 8.1 contains the data generating eleven such points ("Group" is the predicted source group).  [Compare to random forest analysis.]
+Eleven or twelve artifacts predicted to be from source C are close to or closer to the hull from source B in Figure 8.1c (there appears to be one such point at the upper right corner of the hull for source B).  Table 8.1 contains the data generating eleven such points.  
 
 ```{r  echo=FALSE, message=FALSE}
 data(tree.data.check)
-knitr::kable(tree.data.check, caption="Table 8.1: Artifacts which may have misidentified sources identified by using Identify=T in fn.pca.evaluation() after fitting a tree model.")
+knitr::kable(tree.data.check, caption="Table 8.1: Artifacts which may have misidentified sources identified by using Identify=T in fn.pca.evaluation() after fitting a tree model.  The variable group is the predicted source from the model.")
+
 ```
 
 In contrast, in the corresponding plot based on the random forest analysis, these artifacts are predicted to come from the sources generating the convex hulls to which they are closest: see Figure 8.3.   
@@ -757,6 +759,8 @@ save.randomForest <- fn.randomForest(data=ObsidianSources, GroupVar="Code",Group
 
 ```
 
+Table 8.2 contains the source assignment probability estimates from the random forests analysis for the artifacts tabulated in Table 8.1, all of which were assigned to source C by the classification tree analysis.  The first three artifacts are correctly identified as from source C, while the remaining ones should be assigned to source B (this is also clear by comparing the ytterbium values to those for the sources in Table 3.2). 
+
 ```{r  echo=FALSE, message=FALSE}
 data(ObsidianSources)
 data(ObsidianArtifacts)
@@ -768,7 +772,7 @@ save.randomForest <- fn.randomForest(data=ObsidianSources, GroupVar="Code",Group
     predictSources=T, predictData=ObsidianArtifacts, plotSourceProbs=F)
 index<-save.randomForest$predictedSources[,"ID"] %in% tree.data.check[,"ID"]
 obsCheck<-save.randomForest$predictedSources[index,]
-knitr::kable(obsCheck, caption="Table 8.2: Random forest probability estimates for artifacts which may have misidentified sources identified by using Identify=T in fn.pca.evaluation() after fitting a tree model.")
+knitr::kable(obsCheck[,-1], caption="Table 8.2: Random forest probability estimates for artifacts which may have  been misidentified as from source C identified by using Identify=T in fn.pca.evaluation() after fitting a tree model.")
 
 ```
 
@@ -776,15 +780,15 @@ knitr::kable(obsCheck, caption="Table 8.2: Random forest probability estimates f
 
 ##9  Discussion
 
-Our proposed analysis procedure may be useful for common archaeological sourcing problems, but it does have limitations.  Concerning the use of random forests, the number of samples per source must be large enough, but there seem to be no recognized guidelines for required sample sizes.  It seems likely that the sample sizes required would increase as the separation between sources decreases.  Our results suggest that, if the distribution of the predictors is roughly multivariate Gaussian, 20 samples per source is sufficient with well-separated sources.  Biau and Scornet state that “The approach [random forests], which combines several randomized decision trees and aggregates their predictions by averaging, has shown excellent performance in settings where the number of variables is much larger than the number of observations.”  They provide references to analyses in which random forests were effective.  Several approaches will provide information on the utility of random forests for a particular data set.  One which is obtained directly from the analysis is the out-of-bag error estimate using the source data.  A second possibility is to split the source data into training and evaluation samples, perhaps multiple times, and evaluate how well an analysis of a training sample predicts source membership for the evaluation sample; this approach requires sufficient source sample sizes to make useful splits.
+Our proposed analysis procedure has limitations.  The number of samples per source must be large enough for using a random forest analysis, but there seem to be no recognized guidelines for required sample sizes.  It seems likely that the sample sizes required would increase as the separation between sources decreases.  Our results suggest that, if the distribution of the predictors is roughly multivariate Gaussian, 20 samples per source is sufficient with well-separated sources.  Biau and Scornet state that “The approach [random forests], which combines several randomized decision trees and aggregates their predictions by averaging, has shown excellent performance in settings where the number of variables is much larger than the number of observations.”  They provide references to analyses in which random forests were effective.  Several approaches will provide information on the utility of random forests for a particular data set.  One which is obtained directly from the analysis is the out-of-bag error estimate using the source data.  A second possibility is to split the source data into training and evaluation samples, perhaps multiple times, and evaluate how well an analysis of a training sample predicts source membership for the evaluation sample; this approach requires enough samples from unknowns to make useful splits.
 
-If there are more than two predictor variables, using the first two principal components to evaluate the validity of source predictions requires that there be strong enough correlations between the predictors so that the first two principal components capture most of the variance, and that the predictors be quantitative, not qualitative.  If all predictors are qualitative, this condition likely requires that there be not too many predictors.  If some predictors are qualitative, the principal components analysis could be done using only the quantitative predictors.  This could identify some sources or artifacts that are misclassified.  [what about a matrix with rows and columns for sources and predictions?] 
+If there are more than two predictor variables, using the first two principal components to evaluate the validity of source predictions requires that there be strong enough correlations between the predictors so that the first two principal components capture most of the variance, and that the predictors be quantitative, not qualitative. If some predictors are qualitative, the principal components analysis could be done using only the quantitative predictors.  This could identify some sources or artifacts that are misclassified.  The first two principal components are less likely to be adequate if there are a large number of predictors.  
+
+The principal components evaluation plot may be useful in verifying the validity of assignments of artifacts to sources.  This evaluation identified two artifacts for which Shakely’s assignment was wrong; one of these is the artifact with ID xxxxx identified in Section x.x.
 
 The analysis of the likely sources of all approximately 450 Pojoaque obsidian artifacts provides useful experience in using these procedures.  That analysis considered 24 possible obsidian sources (21 distinct locations from Shakely’s data, two of which were subdivided into two or three sources) which provided 706 samples, with samples sizes of 15 to 64 per source.  The classification tree analysis separated these sources quite well, with an estimated error rate of about 5%.  That analysis predicted that the artifacts came from eight sources: four Jemez sources, one source in west central New Mexico (Mount Taylor, southwest of the Jemez caldera), and three other sources farther west (two near the New Mexico / Arizona border, and one in Arizona).   Shackley assigned approximately 150 artifacts to one of the Jemez sources; these assignments are known to be correct as result of the appearance of the obsidian from that site.  However, the classification tree analysis predicted that approximately 90% of these artifacts were from one of the sources (call it source F) on the New Mexico / Arizona border.
 
 A second analysis restricting the candidate sources to the eight identified in the first analysis permits using the principal components (PC) plot to evaluate the predictions.  The plot was further improved by eliminating the Mount Taylor source and the artifacts assigned to that source, since the Mount Taylor data are far removed from the other sources on the PC plot.  The PC plot shows that the great majority of the points generated by the approximately 150 artifacts known to be from the Jemez source lie between the convex hulls of the Jemez source and source F.  On an initial PC plot of all 24 sources, plotting only the medians as in Figure x.x, the source data from the Jemez source and source F are quite close.  This fact, and the fact that the artifacts and sources were analyzed using different instruments, explain the misclassification of these artifacts by the classification tree analysis.  This experience emphasized the importance of considering archaeological knowledge in predicting sources of artifacts..
-
-We note that the principal components evaluation plot is useful in verifying the validity of assignments of artifacts to sources.  This evaluation identified two artifacts for which Shakely’s assignment was wrong; one of these is the artifact with ID xxxxx identified in Section x.x.
 
 Also, we observed that these analyses may be useful after an analysis, such as a cluster analysis, used to identify groups of similar artifacts when potential sources are not known.  After artifacts are grouped, those groupings can be used in several ways:
 a principal components plot suggests how well the groups are separated (if the first two components explain sufficient variance);

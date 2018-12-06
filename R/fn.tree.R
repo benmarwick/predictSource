@@ -12,6 +12,7 @@
 #' @param plotTree If T (true, the default), plot the recursive partitioning tree
 #' @param plotCp  If T (tree, the default), plot the Cp table
 #' @param Model  A character string containing the variables considered separated by + signs
+#' @param ModelTitle  Model as a single character value
 #' @param minSplit  The minimum size of a group for splitting, default is 20 (the default in rpart())
 #' @param cP  The required improvement in Cp for a group to be split, default is .01 (the default in rpart())
 #' @param predictSources  Logical: if T, use the tree to predict sources for observations in predictData; default is F
@@ -29,7 +30,8 @@
 #'   \item{params.grouping:}{ A list with the values of the arguments GroupVar and Groups}
 #'   \item{analyticVars:}{ A vector with the value of the argument AnalyticVars}
 #'   \item{params.logical:}{ The values of plotTree, predictSources}
-#'   \item{model:}{ A character string with the value of the argument Model}
+#'   \item{model:}{ A character string with the value of the argument ModelTitle}
+#'   \item{Tree:}{ A list with details of the tree construction.}
 #'   \item{classification:}  {A data frame showing the crossclassification of sources and predicted sources}
 #'   \item{CpTable:}{  A data frame showing the decrease in Cp with increasing numbers of splits}
 #'   \item{predictedSources:}{  If predictSources = T, a data frame with the predicted sources}
@@ -49,7 +51,8 @@
 #` data(ObsidianArtifacts)
 #` analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 #` save.tree <- fn.tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
-#`      Model = "Sr"+ "Nb" + "Rb" + Y"+"Zr", predictSources=T, predictData=ObsidianArtifacts, ID="labID",
+#`      Model = "Sr"+ "Nb" + "Rb" + "Y"+"Zr", ModelTitle = "Sr + Nb + Rb + Y + Zr",
+#`      predictSources=T, predictData=ObsidianArtifacts, ID="ID",
 #`      plotTree=F, plotCp=F)
 #'
 #' @import rpart partykit Formula
@@ -67,6 +70,7 @@ fn.tree <-
            plotTree = T,
            plotCp = T,
            Model,
+           ModelTitle,
            minSplit = 20,
            cP = 0.01,
            predictSources = F,
@@ -118,7 +122,7 @@ fn.tree <-
             minsplit=minSplit,
             cp=cP)
     if (plotTree == T) {
-      plot(as.party(Tree), tp_args = list(id = FALSE))
+      plot(as.party(Tree), tp_args = list(id = FALSE), main=paste("model:",ModelTitle))
       browser()
       }
     # classification
@@ -181,6 +185,7 @@ fn.tree <-
                 params.grouping=params.grouping,
                 params.logical=params.logical,
                 params.splitting=params.splitting,
+                model=ModelTitle,
                 Tree = Tree,
                 classification = classification,
                 CpTable = CpTable,
@@ -193,6 +198,7 @@ fn.tree <-
                   params.grouping=params.grouping,
                   params.logical=params.logical,
                   params.splitting=params.splitting,
+                  model=ModelTitle,
                   Tree = Tree,
                   classification = classification,
                   CpTable = CpTable,

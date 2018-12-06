@@ -62,7 +62,7 @@
 #` sources <- unique(ObsidianSources[,"Code"])
 #` save.tree <- fn.tree(data=ObsidianSources, GroupVar="Code",Groups="All",
 #`   AnalyticVars=analyticVars, ID="ID", Model = "Rb"+"Sr"+"Y"+"Zr"+"Nb",
-#`   predictSources=T, predictData=ObsidianArtifacts, plotTree=F, plotCp=F)
+#`   predictSources=T, predictData=ObsidianArtifacts, plotTree=T, plotCp=F)
 #' pca.eval <- fn.pca.evaluation(SourceData=ObsidianSources,
 #'   ArtifactData=save.tree$predictedSources, SourceGroup= "Code", ArtifactGroup="source",
 #'   known.sources=sources, predicted.sources=sources, AnalyticVars=analyticVars, ID="ID",
