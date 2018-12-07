@@ -5,7 +5,7 @@
 \title{fn.tree}
 \usage{
 fn.tree(doc = "fn.tree", data, GroupVar, Groups = "All", AnalyticVars,
-  wts = NA, CpDigits = 3, plotTree = T, plotCp = T, Model,
+  wts = NA, CpDigits = 3, plotTree = T, plotCp = T, Model, ModelTitle,
   minSplit = 20, cP = 0.01, predictSources = F, predictData, ID = " ",
   folder = " ")
 }
@@ -30,6 +30,8 @@ fn.tree(doc = "fn.tree", data, GroupVar, Groups = "All", AnalyticVars,
 
 \item{Model}{A character string containing the variables considered separated by + signs}
 
+\item{ModelTitle}{Model as a single character value}
+
 \item{minSplit}{The minimum size of a group for splitting, default is 20 (the default in rpart())}
 
 \item{cP}{The required improvement in Cp for a group to be split, default is .01 (the default in rpart())}
@@ -53,7 +55,8 @@ The function fits a classification tree model.  The variables in AnalyticVars ar
   \item{params.grouping:}{ A list with the values of the arguments GroupVar and Groups}
   \item{analyticVars:}{ A vector with the value of the argument AnalyticVars}
   \item{params.logical:}{ The values of plotTree, predictSources}
-  \item{model:}{ A character string with the value of the argument Model}
+  \item{model:}{ A character string with the value of the argument ModelTitle}
+  \item{Tree:}{ A list with details of the tree construction.}
   \item{classification:}  {A data frame showing the crossclassification of sources and predicted sources}
   \item{CpTable:}{  A data frame showing the decrease in Cp with increasing numbers of splits}
   \item{predictedSources:}{  If predictSources = T, a data frame with the predicted sources}
@@ -68,7 +71,7 @@ Fit a recursive partitioning model (classification tree)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 save.tree <- fn.tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
-  Model = "Rb"+"Sr"+"Y"+"Zr"+"Nb")
+  Model = "Rb"+"Sr"+"Y"+"Zr"+"Nb", ModelTitle = "Sr + Nb + Rb + Y + Zr")
  # variables in the model statement in order of importance from a random forst analysis
  #
  #  predict sources of artifacts

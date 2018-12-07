@@ -26,7 +26,7 @@ fn.pca.evaluation(doc = "fn.pca.evaluation", SourceData, ArtifactData,
 
 \item{known.sources:}{vector of locations to be considered as sources}
 
-\item{predicted.soures:}{vector of predicted sources to be considered, not all must be in known.sources}
+\item{predicted.soures:}{vector of predicted sources to be considered, not all need be in known.sources}
 
 \item{AnalyticVars:}{elements used in the principal component analyses}
 
@@ -69,20 +69,9 @@ Create plots to evaluate the predicted artifact sources using the source data pr
 }
 \examples{
 
-# Evaluate predicted sources of artifacts from using scatterplots
-data(ObsidianSources)
-data(ObsidianArtifacts)
-analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-sources <- unique(ObsidianSources[,"Code"])
-pca.eval <- fn.pca.evaluation(SourceData=ObsidianSources, ArtifactData=ObsidianArtifacts,
-SourceGroup= "Code", ID="ID", ArtifactGroup="Code",known.sources=sources, predicted.sources=sources,
-AnalyticVars=analyticVars)
+# Evaluate predicted sources of artifacts from scatterplots
 
 # evaluate predictions from a tree model: plot only points outside the predicted source hull
-pca.eval <- fn.pca.evaluation(SourceData=ObsidianSources,
-  ArtifactData=save.tree$predictedSources, SourceGroup= "Code", ArtifactGroup="source",
-  known.sources=sources, predicted.sources=sources, AnalyticVars=analyticVars,
-  plotAllPoints=F, plotHullsOutsidePoints = F, plotOutsidePoints = T)
 
 # evaluate predictions from a random forest analysis: plot only points outside the predicted source hull
 data(ObsidianSources)

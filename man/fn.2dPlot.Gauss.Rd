@@ -5,8 +5,8 @@
 \title{fn.2dPlot.Gauss}
 \usage{
 fn.2dPlot.Gauss(doc = "fn.2dPlot.Gauss", data, GroupVar, ID, Groups,
-  AnalyticVars, qqPlot = T, pvalue.digits = 3, Identify = F,
-  folder = " ")
+  AnalyticVars, scatterPlot = T, qqPlot = T, pvalue.digits = 3,
+  Identify = F, folder = " ")
 }
 \arguments{
 \item{doc}{A string documenting use written to the output list; default is the function name}
@@ -21,6 +21,8 @@ fn.2dPlot.Gauss(doc = "fn.2dPlot.Gauss", data, GroupVar, ID, Groups,
 if "All", use all groups; if " ", no grouping}
 
 \item{AnalyticVars}{Names of two analytic variables to be shown in the plots, vector of length 2}
+
+\item{scatterPlot}{Logical (default is T): specify whether to show scatter plots when qqPlot = F}
 
 \item{qqPlot}{Logical (default is T): specify whether to show q-q plots, including plots based on simulation and multivariate plots}
 
@@ -38,7 +40,7 @@ A list with the following components:
 \item{dataNA:}{  A data frame with observations containing a least one missing value
   for an analysis variable, NA if no missing values}
 \item{analyticVars:}{  The contents of the argument AnalyticVars}
-\item{parameters:}{  A vector with argument values for GroupVar, Groups, pvalue.digits, and QQtest}
+\item{parameters:}{  A vector with argument values for GroupVar, Groups, pvalue.digits, scatterPlot, qqPlot}
 \item{pvalues:}{  A data frame with the p-values for univariate and bivariate tests of normality}
 \item{data.check:}{ A data frame with the information on user-identified points of interest;
     NA if no data identified}
