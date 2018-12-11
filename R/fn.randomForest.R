@@ -50,7 +50,7 @@
 #' data(ObsidianSources)
 #' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 #' save.randomForest <- fn.randomForest(data=ObsidianSources, GroupVar="Code",Groups="All",
-#'   ID="labID", AnalyticVars=analyticVars, NvarUsed=3)
+#'   ID="ID", AnalyticVars=analyticVars, NvarUsed=3)
 #' #
 #' # predicted sources for artifacts
 #' data(ObsidianSources)
@@ -187,6 +187,7 @@ fn.randomForest <-
     params.logical<-c(plotErrorRate,plotImportance,predictSources,plotSourceProbs)
     names(params.logical) <- c("plotErrorRate","plotImportance","plotSourceProbs")
     importance.rf <- round(importance.rf, dig=digitsImportance)
+    if (ID != " ")  predictions <- predictions[order(predictions[,"ID"]),]
     #
     out<-list(usage=fcn.date.ver,
                   dataUsed=Data.used,

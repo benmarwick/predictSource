@@ -16,7 +16,10 @@ fn.CheckData(doc = "fn.CheckData", data, CheckDupVars, GroupVar = " ",
 
 \item{GroupVar:}{if there are groups, name of variable defining the groups, default value of " ": no grouping}
 
-\item{Groups:}{character vector of groups by which numbers of samples and statistics statistics will be tabulated default value of " ": tabulations are done for the entire data set value = "All": tabulation for each distinct code in GroupVar}
+\item{Groups:}{character vector of groups by which numbers of samples and statistics statistics will be
+tabulated
+ default value of " ": tabulations are done for the entire data set
+ value = "All": tabulation for each distinct code in GroupVar}
 
 \item{ID:}{name of lab ID, default is " " (no lab ID)}
 

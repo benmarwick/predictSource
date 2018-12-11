@@ -92,11 +92,9 @@ fn.tree <-
     #
     #  if predictions to be made and ID used, sort on ID
     #
-    if ((predictSources == T) & (ID[1] != " ")) {
-      rowsSort <- order(predictData[,ID])
-      predictData <- predictData[rowsSort,]
-    }
-    #
+    if ((predictSources == T) & (ID[1] != " "))
+      predictData <- predictData[order(predictData[,"ID"]),]
+      #
     # define variable groups as groups used in analysis
     if ((GroupVar[1] != " ") & (Groups[1] == "All"))
       groups <-
@@ -155,12 +153,13 @@ fn.tree <-
     #
     if (predictSources == T) {
       predictedSources <- predict(object = Tree, newdata = predictData)
-      if (substr(ID,1,1) != " ")  predictData <- data.frame(ID = ObsidianArtifacts[,ID], predictData)
       predictedTotals <- apply(predictedSources,2,sum)
+      #
       #  create vector with predicted source for each observation
       source <- rep(" ",nrow(predictedSources))
       for (i in 1:ncol(predictedSources))
         source[predictedSources[,i]==1] <- colnames(predictedSources)[i]
+      #
       if (substr(ID,1,1) == " ")  predictedResults<-data.frame(source,predictData[,AnalyticVars])
       if (substr(ID,1,1) != " ")  predictedResults<-data.frame(source, predictData[,c(ID, AnalyticVars)])
       #

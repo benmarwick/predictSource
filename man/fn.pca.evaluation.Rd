@@ -14,9 +14,9 @@ fn.pca.evaluation(doc = "fn.pca.evaluation", SourceData, ArtifactData,
 
 \item{doc:}{documentation in list returned by function}
 
-\item{sourceData:}{data from known sources, including code for location and element analyses, restricted to specified sources}
+\item{SourceData:}{data from known sources, including code for location and element analyses}
 
-\item{artifactData:}{corresponding data from artifacts}
+\item{ArtifactData:}{corresponding data from artifacts}
 
 \item{ID:}{ID for sample, " " if none (default value)}
 
@@ -54,7 +54,8 @@ The function produces two plots: the convex hulls of the first two principal com
 
 \itemize{
   \item{usage:}{  A vector with the contents of the argument doc, the date run, the version of R used}
-  \item{dataUsed:}{  The contents of the argument data restricted to the groups used}
+  \item{sourceData:}{  The contents of the argument SourceData restricted to knownSources}
+  \item{artifactData:}{  The contents of the argument ArtifactData restricted to predictedSources}
   \item{params:}{  A list with the values of the arguments GroupVar and Groups}
   \item{analyticVars:}{  A vector with the value of the argument AnalyticVars}
   \item{table.in.out:} {  A data frame with counts of the numbers of artifacts inside and outside of each
@@ -72,6 +73,11 @@ Create plots to evaluate the predicted artifact sources using the source data pr
 # Evaluate predicted sources of artifacts from scatterplots
 
 # evaluate predictions from a tree model: plot only points outside the predicted source hull
+data(ObsidianSources)
+pca.eval <- fn.pca.evaluation(SourceData=ObsidianSources,
+  ArtifactData=save.tree$predictedSources, SourceGroup= "Code", ArtifactGroup="source",
+  known.sources=sources, predicted.sources=sources, AnalyticVars=analyticVars, ID="ID",
+  plotAllPoints=F, plotHullsOutsidePoints = F, plotOutsidePoints = T)
 
 # evaluate predictions from a random forest analysis: plot only points outside the predicted source hull
 data(ObsidianSources)

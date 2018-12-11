@@ -3,8 +3,8 @@
 #'  Create plots to evaluate the predicted artifact sources using the source data principal component loadings
 #'
 #' @param doc: documentation in list returned by function
-#' @param sourceData: data from known sources, including code for location and element analyses, restricted to specified sources
-#' @param artifactData: corresponding data from artifacts
+#' @param SourceData: data from known sources, including code for location and element analyses
+#' @param ArtifactData: corresponding data from artifacts
 #' @param ID: ID for sample, " " if none (default value)
 #' @param SourceGroup: name of variable with code for location
 #' @param ArtifactGroup: name of variable with code for predicted source
@@ -34,7 +34,8 @@
 #'
 #' \itemize{
 #'   \item{usage:}{  A vector with the contents of the argument doc, the date run, the version of R used}
-#'   \item{dataUsed:}{  The contents of the argument data restricted to the groups used}
+#'   \item{sourceData:}{  The contents of the argument SourceData restricted to knownSources}
+#'   \item{artifactData:}{  The contents of the argument ArtifactData restricted to predictedSources}
 #'   \item{params:}{  A list with the values of the arguments GroupVar and Groups}
 #'   \item{analyticVars:}{  A vector with the value of the argument AnalyticVars}
 #'   \item{table.in.out:} {  A data frame with counts of the numbers of artifacts inside and outside of each
@@ -56,7 +57,7 @@
 #' # Evaluate predicted sources of artifacts from scatterplots
 #'
 #' # evaluate predictions from a tree model: plot only points outside the predicted source hull
-#` data(ObsidianSources)
+#' data(ObsidianSources)
 #` data(ObsidianArtifacts)
 #` analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 #` sources <- unique(ObsidianSources[,"Code"])
@@ -64,6 +65,10 @@
 #`   AnalyticVars=analyticVars, ID="ID", Model = "Rb"+"Sr"+"Y"+"Zr"+"Nb",
 #`   ModelTitle="Rb + Sr + Y + Zr + Nb", predictSources=T, predictData=ObsidianArtifacts,
 #`   plotTree=T, plotCp=F)
+#' pca.eval <- fn.pca.evaluation(SourceData=ObsidianSources,
+#'   ArtifactData=save.tree$predictedSources, SourceGroup= "Code", ArtifactGroup="source",
+#'   known.sources=sources, predicted.sources=sources, AnalyticVars=analyticVars, ID="ID",
+#'   plotAllPoints=F, plotHullsOutsidePoints = F, plotOutsidePoints = T)
 #'
 #' # evaluate predictions from a random forest analysis: plot only points outside the predicted source hull
 #' data(ObsidianSources)
@@ -124,12 +129,15 @@ fn.pca.evaluation <-
     #
     artifactRows <- ArtifactData[, ArtifactGroup] %in% predicted.sources
     artifactData <- ArtifactData[artifactRows,]
+    browser()
     if (ID == " ")  {
       ID = rep(" ", nrow(artifactData))
       artifactData <- cbind(artifactData[, c(ArtifactGroup, AnalyticVars)], ID = ID)
     }
-    else  artifactData <- cbind(artifactData[, c(ArtifactGroup, AnalyticVars)],
-                                           ID = artifactData[artifactRows,ID])
+    else  {artifactData <- artifactData[, c(ArtifactGroup, AnalyticVars, ID)]
+           artifactData <- artifactData[order(artifactData[,"ID"]),]  # sort on ID
+    }
+    browser()
     #
     #  sort on ArtifactGroup and ID
     #
@@ -152,8 +160,9 @@ fn.pca.evaluation <-
     }  # end of loop on i
     data.Source <- rep(F,nrow(artifactData))
     artifactData <- cbind(artifactData[,c(ArtifactGroup,AnalyticVars)], ArtifactIndex, data.Source,
-                          artifactData[,"ID"])
+                          artifactData[,"ID"])  # needed if no ID provided
     colnames(artifactData) <- c("group", AnalyticVars, "index", "data.source", "ID")
+    if (ID != " ")  artifactData <- artifactData[order(artifactData[,"ID"]),]
     #
     #  combine data sets for principal components analysis
     #
@@ -175,6 +184,7 @@ fn.pca.evaluation <-
       else
       pcaLocations <- cbind(analysisData[, c("group", AnalyticVars, "index","data.source", "ID")], pc1 = predict(pca)[, 1],
          pc2 = predict(pca)[, 2])
+    browser()
     #
     #  create separate principal component location data sets for sources and artifacts
     #
@@ -292,7 +302,7 @@ fn.pca.evaluation <-
       hull.pts
     }  # end of fn.convex.hull
     #
-        for (i in 1:length(known.sources)) {
+    for (i in 1:length(known.sources)) {
       plot.data[[i]] <- fn.convex.hull(hull.group = known.sources[i])
       index.i <- (known.sources[pcaLocationsArtifacts[, "index"]] == known.sources[i]) # rows with data prediced from this source
       if (sum(index.i) > 0) {
@@ -472,7 +482,6 @@ fn.pca.evaluation <-
     data.check[,c("pc1","pc2")] <- round(as.matrix(data.check[,c("pc1","pc2")],mode="numeric"),dig=2)
     }
     #
-    browser()
     }   #  end of code for one-panel evaluation plot
     #
     #  return information to an R object
@@ -485,20 +494,21 @@ fn.pca.evaluation <-
                      "logicalParams")
     colnames(n.in.out) <- c("outside","inside")
     #
-    if (ID == " ")  keepVars <- c("group", AnalyticVars, "pc1", "pc2")
-      else  keepVars <- c("group", "ID", AnalyticVars, "pc1", "pc2")
-    pts.outside <- pts.outside[,keepVars]
-    if (Identify == T) data.check <- data.check[,keepVars]
+    if (ID == " ")  keepVars <- c("group", AnalyticVars)
+      else          keepVars <- c("group", "ID", AnalyticVars)
+    artifactData <- artifactData[,keepVars]
+    pts.outside <- pts.outside[,c(keepVars, "pc1", "pc2")]
+    if (Identify == T) data.check <- data.check[,c(keepVars, "pc1", "pc2")]
     #
-    if ((substr(folder,1,1) != " ") & (Identify == F)) {
-      files=list(paste(folder,ds.importance,sep=""),paste(folder,ds.pts.outside,sep=""),
-                 paste(folder,ds.in.out,sep=""))
-      names(files) <- c("ds.importance", "ds.pts.outside", "ds.in.out")
+    if (ID != " ") {
+       artifactData <- artifactData[order(artifactData[, "ID"]),]
+       pts.outside <- pts.outside[order(pts.outside[, "ID"]),]
+       if (Identify == T)  data.check <- data.check[order(data.check[, "ID"]),]
     }
- #
+  #
   out<-list(usage=fcn.date.ver,
                 sourceData = sourceData,
-                artifactData = ArtifactData,
+                artifactData = artifactData,
                 analyticVars = AnalyticVars,
                 params = params,
                 table.in.out = n.in.out,
