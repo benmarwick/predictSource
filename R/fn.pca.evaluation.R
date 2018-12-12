@@ -129,7 +129,7 @@ fn.pca.evaluation <-
     #
     artifactRows <- ArtifactData[, ArtifactGroup] %in% predicted.sources
     artifactData <- ArtifactData[artifactRows,]
-    browser()
+    #
     if (ID == " ")  {
       ID = rep(" ", nrow(artifactData))
       artifactData <- cbind(artifactData[, c(ArtifactGroup, AnalyticVars)], ID = ID)
@@ -137,7 +137,6 @@ fn.pca.evaluation <-
     else  {artifactData <- artifactData[, c(ArtifactGroup, AnalyticVars, ID)]
            artifactData <- artifactData[order(artifactData[,"ID"]),]  # sort on ID
     }
-    browser()
     #
     #  sort on ArtifactGroup and ID
     #
@@ -184,7 +183,6 @@ fn.pca.evaluation <-
       else
       pcaLocations <- cbind(analysisData[, c("group", AnalyticVars, "index","data.source", "ID")], pc1 = predict(pca)[, 1],
          pc2 = predict(pca)[, 2])
-    browser()
     #
     #  create separate principal component location data sets for sources and artifacts
     #

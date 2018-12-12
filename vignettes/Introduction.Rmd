@@ -728,7 +728,7 @@ pca.eval <- fn.pca.evaluation(SourceData=ObsidianSources, ArtifactData=save.tree
 
 ```
 
-Eleven or twelve artifacts predicted to be from source C are close to or closer to the hull from source B in Figure 8.1c (there appears to be one such point at the upper right corner of the hull for source B).  Table 8.1 contains the data generating eleven such points.  
+Eleven artifacts predicted to be from source C are close to or closer to the hull from source B in Figure 8.1c, as well as one such point near the right corner of the hull for source D. Table 8.1 contains the data generating eleven such points.  Since two pairs of these points are very close to each other, it is difficult to identify all of them.   
 
 ```{r  echo=FALSE, message=FALSE}
 data(tree.data.check)
@@ -753,7 +753,7 @@ save.randomForest <- fn.randomForest(data=ObsidianSources, GroupVar="Code",Group
 
 ```
 
-Table 8.2 contains the source assignment probability estimates from the random forests analysis for the artifacts tabulated in Table 8.1, all of which were assigned to source C by the classification tree analysis.  The first three artifacts are correctly identified as from source C, while the remaining ones should be assigned to source B (this is also clear by comparing the ytterbium and niobium values to those for the sources in Table 3.2). 
+Table 8.2 contains the source assignment probability estimates from the random forests analysis for the artifacts tabulated in Table 8.1, all of which were assigned to source C by the classification tree analysis.  As we can see from the value of pc2, artifact A22 is close to the hull for source D; the remaining artifacts are close to the hull for source B.  All of these artifacts have probabilities of arising from source C of 0.21 to 0.29; their probabilities of arising from the "correct"" source are 0.71 to 0.79. We can use the descriptive statistics in Table 3.2 to verify that the random forest assignments for these artifacts are correct.  Based on the niobium values, these artifacts clearly are not from source C.  The ytterbium value for A22 agrees with those from source D, and the values for the remaining artifacts match the ytterbium values from source B.  Thus, the random forest source assignments appear to be correct, and a relatively large probability of assignment to a source other than the source with the greatest probability identifies an artifact that may warrant a more careful evaluation of source assignment.  
 
 ```{r  echo=FALSE, message=FALSE}
 data(ObsidianSources)
@@ -766,8 +766,9 @@ save.randomForest <- fn.randomForest(data=ObsidianSources, GroupVar="Code",Group
     predictSources=T, predictData=ObsidianArtifacts, plotSourceProbs=F)
 tree.data.check <- tree.data.check[order(tree.data.check[,"ID"]),]
 save.rF<-save.randomForest$predictedSources[order(save.randomForest$predictedSources[,"ID"]),]
-obsCheck<-merge(x=save.rF, y = tree.data.check, by = "ID", x.all=F, y.all=F)
-knitr::kable(obsCheck, caption="Table 8.2: Random forest probability estimates for artifacts which may have  been misidentified as from source C identified by using Identify=T in fn.pca.evaluation() after fitting a tree model.")
+obsCheck<-merge(x=save.rF, y = tree.data.check[,c("ID","pc1","pc2")],
+                by = "ID", x.all=F, y.all=F)
+knitr::kable(obsCheck, caption="Table 8.2: Random forest probability estimates for artifacts which may have  been misidentified as from source C using the tree model identified by using Identify=T in fn.pca.evaluation().  source is the predicted source from the random forest procedure.")
 
 ```
 

@@ -107,7 +107,7 @@ plot.2d <- fn.2dPlot(data = ObsidianSources, GroupVar = "Code", ID = "ID", Group
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-plot.2d <- fn.2dPlot(data = ObsidianSources, GroupVar = "Code", ID = "ID", Groups = "All", 
+plot.2d <- fn.2dPlot(data = ObsidianSources, GroupVar = "Code", ID = "ID", Groups = "All",
           AnalyticVars = analyticVars[1:2], PlotByGroup=F, PlotPoints=F, PlotMedians=T, PlotHulls=T)
 
 ## ----echo=FALSE, results='hide',message=FALSE, fig.cap="Figure 4.7: Example of a scatterplot for obsidian Jemez source data with data for all sources combined, confidence ellipses, and robust lowess smoothing lines."----
@@ -170,7 +170,7 @@ save.pca <- fn.pca(data=ObsidianSources, ID="ID", GroupVar="Code",Groups="All", 
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-save.pca <- fn.pca(data=ObsidianSources, ID="ID", GroupVar="Code",Groups="All", AnalyticVars=analyticVars) 
+save.pca <- fn.pca(data=ObsidianSources, ID="ID", GroupVar="Code",Groups="All", AnalyticVars=analyticVars)
 
 ## ------------------------------------------------------------------------
 save.pca <- fn.pca(data=ObsidianSources, ID="ID", GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
@@ -289,9 +289,9 @@ data(ObsidianSources)
 data(ObsidianArtifacts)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 save.randomForest <- fn.randomForest(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars, NvarUsed=3, plotErrorRate=F, plotImportance=F, predictSources=T,predictData=ObsidianArtifacts, plotSourceProbs=F)
-knitr::kable(save.randomForest$predictedSources[1:5,], caption="Table 7.3: The predicted source and predicted 
+knitr::kable(save.randomForest$predictedSources[1:5,], caption="Table 7.3: The predicted source and predicted
   source probabilities from a random forest model for the Jemez obsidian artifact data.")
-knitr::kable(save.randomForest$predictedTotals, caption="Table 7.4: The predicted number of artifacts from 
+knitr::kable(save.randomForest$predictedTotals, caption="Table 7.4: The predicted number of artifacts from
   each Jemez source from a random forest model for the Jemez obsidian artifact data.")
 #
 
@@ -328,11 +328,11 @@ data(ObsidianArtifacts)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 sources <- unique(ObsidianSources[,"Code"])
 save.tree <- fn.tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
-  Model = "Rb"+"Sr"+"Y"+"Zr"+"Nb", predictSources=T, predictData=ObsidianArtifacts, ID="ID",
+  Model = "Rb"+"Sr"+"Y"+"Zr"+"Nb", ModelTitle = "Rb + Sr + Y + Zr + Nb",  predictSources=T, predictData=ObsidianArtifacts, ID="ID",
   plotTree=F, plotCp=F)
 pca.eval <- fn.pca.evaluation(SourceData=ObsidianSources, ArtifactData=save.tree$predictedSources,
   SourceGroup= "Code", ArtifactGroup="source",known.sources=sources, predicted.sources=sources,
-  AnalyticVars=analyticVars, plotAllPoints=T, plotHullsOutsidePoints=T, plotOutsidePoints=T)
+  AnalyticVars=analyticVars, ID="ID", plotAllPoints=T, plotHullsOutsidePoints=T, plotOutsidePoints=T)
 
 ## ----echo=FALSE, message=FALSE-------------------------------------------
 data(tree.data.check)
