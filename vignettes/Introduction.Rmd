@@ -465,7 +465,7 @@ tree <- fn.tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars
                  Model="Sr"+"Nb"+"Rb"+"Y"+"Zr", ModelTitle="Sr + Nb + Rb + Y + Zr", plotCp=F)
 ```
 
-To understand the structure of the tree and the decision splits, compare this tree with the descriptive statistics for the sources in Table 3.2 and the box plots for the sources in Figure 4.1.  Both the table and the figure show that the strontium values in source E are much larger than those values in the other four sources.  The minimum value in E is 72; the maximum in the other sources is 54; the value defining the tree branches at this first node is 54, the average of these two values.  For the next node, the minimum value at source C is 179; the maximum value at other sources is 178; the cutpoint is the average of these values.  Such a small difference implies that we expect misclassification of artifacts using this tree.  From Figure 4.1, it would be much better to use niobium of ytterbium to assign a sample to source C.  It is not clear why the algorithm makes this choice, but it is clear that the algorithm does not use the differences between extreme values in candidate groups in creating the tree. 
+To understand the structure of the tree and the decision splits, compare this tree with the descriptive statistics for the sources in Table 3.2 and the box plots for the sources in Figure 4.1.  Both the table and the figure show that the strontium values in source E are much larger than those values in the other four sources.  The minimum value in E is 72; the maximum in the other sources is 54; the value defining the tree branches at this first node is 54, the average of these two values.  For the next node, the minimum value at source C is 179; the maximum value at other sources is 178; the cutpoint is the average of these values.  Such a small difference implies that we expect misclassification of artifacts using this tree.  From Figure 4.1, it would be much better to use niobium or ytterbium to assign a sample to source C.  Rerunning the analysis with niobium as the first element in the model statement yields the same tree.   It is not clear why the algorithm makes this choice, but it is clear that the algorithm does not use the differences between extreme values in candidate groups in creating the tree.  
 
 Figure 6.2 shows the reduction in the crossvalidation error estimate with an increasing number of nodes.  If there are a large number of splits, the plot may show an horizontal asymptote with an increasing number of splits; this can be useful in deciding to reduce the number of splits.  By default, a decrease of 0.01 in Cp is required for a node to be split; the user can change this using the argument cP.  It is not clear why the error reduction with three splits is not shown in the plot.   
 
@@ -539,7 +539,7 @@ from each source based on the classification tree for the Jemez obsidian sources
 
 ```
 
-The locations of the artifact points on a principal components plot with symbols for their their predicted sources may be useful in evaluating the reliability of these predictions.  Figure 6.3 shows this plot for the predictions from the classification tree analysis using the function fn.pca() (the artifact from source A was removed, as it is far from the other artifacts).  The first two principal components explain 91% of the variance.  One artifact that is predicted to be from source B appears to be from source C; eight artifacts predicted to be from source C appear to be from source B.  A data frame containing the data generating these points could be obtained by setting the parameter Identify equal to T in the cal to fn.pca().
+The locations of the artifact points on a principal components plot with symbols for their their predicted sources may be useful in evaluating the reliability of these predictions.  Figure 6.3 shows this plot for the predictions from the classification tree analysis using the function fn.pca() (the artifact from source A was removed, as it is far from the other artifacts).  The first two principal components explain 91% of the variance.  One artifact that is predicted to be from source C appears to be from source D; twelve artifacts predicted to be from source C appear to be from source B.  A data frame containing the data generating these points could be obtained by setting the parameter Identify equal to T in the call to fn.pca().
 
 ```{r, echo=FALSE, message=FALSE, fig.cap="Figure 6.3: Principal components plot of the locations of artifact sources from classification tree model predictions."  }
 library(karon)
@@ -663,9 +663,9 @@ save.pca <- fn.pca(data=predictedSources, ID="ID", GroupVar="source",Groups="All
 
 ##8  EVALUATION OF THE PREDICTIONS 
 
-We suggest two analyses for evaluating whether predicted sources for artifacts are correct: box plots similar to Figure 4.2 (Figure 8.1), and principal components plots. It is clear from the plots for niobium in Figure 8.1 that some artifacts are improperly assigned to source C, and perhaps one artifact is improperly assigned to source B.  The function generating principal components plots will allow us to identify the data generating these suspect assignments.  
+We suggest two analyses for evaluating whether predicted sources for artifacts are correct: box plots similar to Figure 4.2 (Figure 8.1), and principal components plots. It is clear from the plots for ytterbium and niobium in Figure 8.1 that the tree analysis improperly assigned some artifacts to source C (one of which seems likely to be from source D), and perhaps one artifact is improperly assigned to source B.  The function generating principal components plots will allow us to identify the data generating these suspect assignments.  
 
-```{r echo=FALSE, results='hide',message=FALSE, fig.cap="Figure 8.1: Box plots for rubidium and niobium comparing the Jemez obsidian sources and the obsidian artifacts assigned to those sources by a clasification tree analysis.  The plot for x.a is the artifacts assigned to source x." } 
+```{r echo=FALSE, results='hide',message=FALSE, fig.cap="Figure 8.1: Box plots for ytterbium and niobium comparing the Jemez obsidian sources and the obsidian artifacts assigned to those sources by a clasification tree analysis.  The plot for x.a is the artifacts assigned to source x." } 
 library(karon)
 data(ObsidianSources)
 data(ObsidianArtifacts)
@@ -679,7 +679,7 @@ SourcesCode <- as.vector(ObsidianSources[,"Code"], mode="character")
 ArtifactsCode <- as.vector(paste(Artifacts[,"source"],"a",sep="."),mode="character")
 Sources <- c(SourcesCode, ArtifactsCode)
 SourcesArtifacts <- data.frame(rbind(ObsidianSources[,analyticVars], Artifacts[,analyticVars]),Source = Sources)
-boxPlots<-fn.BoxPlots(data=SourcesArtifacts, GroupVar="Source", Groups="All",AnalyticVars=c("Rb","Nb"),Nrow=2,Ncol=1)
+boxPlots<-fn.BoxPlots(data=SourcesArtifacts, GroupVar="Source", Groups="All",AnalyticVars=c("Y","Nb"),Nrow=2,Ncol=1)
 
 ```
 
@@ -721,7 +721,7 @@ data(ObsidianArtifacts)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 sources <- unique(ObsidianSources[,"Code"])
   save.tree <- fn.tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
-  Model = "Sr"+"Nb"+"Rb"+"Y"+"Zr", ModelTitle="Sr + Nb + Rb + Y + Zr", predictSources=T, predictData=ObsidianArtifacts, ID="ID", plotTree=F, plotCp=F)
+  Model = "Sr"+"Nb"+"Rb"+"Y"+"Zr", ModelTitle="Sr + Nb + Rb + Y + Zr", predictSources=T,   predictData=ObsidianArtifacts, ID="ID", plotTree=F, plotCp=F)
 pca.eval <- fn.pca.evaluation(SourceData=ObsidianSources, ArtifactData=save.tree$predictedSources,
   SourceGroup= "Code", ArtifactGroup="source",known.sources=sources, predicted.sources=sources,
   AnalyticVars=analyticVars, ID="ID", plotAllPoints=T, plotHullsOutsidePoints=T, plotOutsidePoints=T)
@@ -750,6 +750,19 @@ save.randomForest <- fn.randomForest(data=ObsidianSources, GroupVar="Code",Group
     ArtifactData=save.randomForest$predictedSources, SourceGroup= "Code", ArtifactGroup="source",
     known.sources=sources, predicted.sources=sources, AnalyticVars=analyticVars,
     plotAllPoints=T, plotHullsOutsidePoints = T, plotOutsidePoints = T)
+
+```
+
+Finally, to demonstrate the utility of using a principal component plot to verify source predictions made using 2- and 3-dimensional scatterplots, Figure 8.4 performs this evaluation using Steve Shackley's artifact source predictions.  We see one artifact predicted to be from source D that falls inside the convex hull for source C.  Using Identify=T in the call to fn.pca.evaluation(), we find that this is artifact A17; its values of rubidium (225), ytterbium (65), and niobium (96) all clearly agree with the corresponding values from source C rather than source D in Table 3.2.
+
+```{r  echo=FALSE, results='hide', message=FALSE, fig.keep='last', fig.cap="Figure 8.4: Principal components plot with Jemez obsidian source convex hulls and obsidian artifacts with points outside the convex hull labelled with Steve Shackley's source predictions."}
+data(ObsidianSources)
+data(ObsidianArtifacts)
+analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+sources <- unique(ObsidianSources[,"Code"])
+pca.eval <- fn.pca.evaluation(SourceData=ObsidianSources, ArtifactData=ObsidianArtifacts,
+  SourceGroup= "Code", ArtifactGroup="Code",known.sources=sources, predicted.sources=sources,
+  AnalyticVars=analyticVars, ID="ID", plotAllPoints=T, plotHullsOutsidePoints=T, plotOutsidePoints=T)
 
 ```
 

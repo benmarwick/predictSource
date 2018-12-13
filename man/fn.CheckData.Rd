@@ -43,15 +43,16 @@ Four data frames with duplicate observations, observations with negative
 \item{NegativeValues:}{  A data frame containing the observations with at least one negative value for a variable in AnalyticVars}
 \item{Nvalues:}{  A data frame contain the number of observations with a value for each analytic variable}
 \item{statistics:}{  A data frame containing the statistics statistics (by group, if Group is specified)}
-\item{location:}{  If folder != " ", the parth to the folder in which data frames will be saved}
-        }
+\item{location:}{  If folder != " ", the path to the folder in which data frames will be saved}
+  }
 }
 \description{
 Data checks and summaries: duplicate records, negative analytic values, numbers of analytic results, percentiles of results
 }
 \section{Detail}{
 
-AnalyticVars must be a vector of length at least 2.
+AnalyticVars must be a vector of length at least 2.  If Groups specifies selected groups (is
+not equal to "All" or " "), if must be a vector of length at least 2.
 }
 
 \examples{

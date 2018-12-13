@@ -12,7 +12,7 @@ fn.BoxPlots(doc = "fn.BoxPlots", data, GroupVar, Groups, AnalyticVars, Nrow,
 
 \item{data:}{data frame or matrix with data to be analyzed}
 
-\item{GroupVar:}{name for variable defining grouping, ' ' if no grouping}
+\item{GroupVar:}{name for variable defining grouping (required)}
 
 \item{Groups:}{vector of values of group variable for which plots are to be done; if 'All', use all groups:
 if ' ', no grouping}
@@ -43,14 +43,15 @@ Box plots of specified analytic values, by specified groups.  Missing values are
 }
 \section{DETAILS}{
 
-Only the last plot is displayed in the plot window when the function is run.  Use the back arrow
-to display previous plots; click on the zoom button to create a new window with an enlarged version of the plot window.
+If the function creates more than one plot, the code stops after each is displayed; enter c
+(continue) at the prompt to display the next plot.  If Groups specifies only one group, the code
+for that group is not displayed under a plot.
 }
 
 \examples{
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-boxPlots<-fn.BoxPlots(data=ObsidianSources, GroupVar="Code", Groups=c("All"),AnalyticVars=analyticVars,Nrow=2,Ncol=2)
+boxPlots<-fn.BoxPlots(data=ObsidianSources, GroupVar="Code", Groups="All",AnalyticVars=analyticVars,Nrow=2,Ncol=2)
 
 # side-by-side box plots of each source and artifacts assigned to that source
 data(ObsidianSources)

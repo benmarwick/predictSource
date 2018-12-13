@@ -29,11 +29,12 @@
 #' \item{NegativeValues:}{  A data frame containing the observations with at least one negative value for a variable in AnalyticVars}
 #' \item{Nvalues:}{  A data frame contain the number of observations with a value for each analytic variable}
 #' \item{statistics:}{  A data frame containing the statistics statistics (by group, if Group is specified)}
-#' \item{location:}{  If folder != " ", the parth to the folder in which data frames will be saved}
-#'         }
+#' \item{location:}{  If folder != " ", the path to the folder in which data frames will be saved}
+#'   }
 #'
 #' @section Detail:
-#' AnalyticVars must be a vector of length at least 2.
+#' AnalyticVars must be a vector of length at least 2.  If Groups specifies selected groups (is
+#' not equal to "All" or " "), if must be a vector of length at least 2.
 #'
 #' @examples
 #' data(ObsidianSources)
@@ -94,7 +95,7 @@ fn.CheckData <-
         Nvalues[i] <- sum(!is.na(data[, AnalyticVars[i]]))
       }
     #
-    if (Groups == "All") {
+    if (Groups[1] == "All") {
       groups <- as.character(unique(data.Used[, GroupVar]))
       n.groups <- length(groups)
       nvalues <- matrix(0, nrow = n.groups + 1, ncol = length(AnalyticVars))
@@ -110,7 +111,7 @@ fn.CheckData <-
       Nvalues <- data.frame(Group = c(groups, "Total"), nvalues)
     } # end of code for Groups == "All"
     #
-    if ((Groups[1] != " ") & (Groups != "All")) {
+    if ((Groups[1] != " ") & (Groups[1] != "All")) {
       n.groups <- length(Groups)
       nvalues <- matrix(0, nrow = n.groups + 1, ncol = length(AnalyticVars))
       for (i in 1:n.groups) {
@@ -137,7 +138,7 @@ fn.CheckData <-
       statistics.values[is.na(statistics.values[, 7]), 7] <- 0
      } # end of code for GroupVar == " "
     else if (Groups[1] != " ") {
-      if (Groups == "All")  groups <- as.character(unique(data.Used[, GroupVar]))
+      if (Groups[1] == "All")  groups <- as.character(unique(data.Used[, GroupVar]))
         else  groups <- Groups
       n.groups <- length(groups)
       n.vars <- length(AnalyticVars)
