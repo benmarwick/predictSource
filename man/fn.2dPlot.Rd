@@ -21,10 +21,10 @@ fn.2dPlot(doc = "fn.2dPlot", data, GroupVar, ID, Groups, AnalyticVars,
 \item{ID}{name for the variable with a lab ID, " " if no lab ID is used}
 
 \item{Groups}{vector of values of the group variable for which plots are to be done;
-if "All", use all groups; if " ", no grouping}
+if "All", use all groups; grouping is required (cannot be " ").}
 
-\item{AnalyticVars}{names of two analytic variables to be shown in the plots, vector of length 2 or matrix with 2 columns;
-if a matrix, the set of plots is produced for each row}
+\item{AnalyticVars}{names of two analytic variables to be shown in the plots, vector of length 2
+or matrix with 2 columns; if a matrix, the set of plots is produced for each row.}
 
 \item{PlotByGroup}{default is T; if F, all groups are on each plot for a pair of variables}
 
@@ -74,11 +74,15 @@ A list with the following components:
  }
 }
 \description{
-Create 2-dimensional data plot or plots. The function stops after producing each plot.  Enter c ("continue") at the prompt to get the next plot.  If this function is run using Rstudio, each plot appears in a separate window, not in the Rstudio plot pane.
+Create 2-dimensional data plot or plots.  By default, a page has panes in two rows and
+two columns (but there is a new page for successive groups). The function stops after producing
+each row of each plot.  Enter c ("continue") at the prompt to get the next plot.
 }
 \section{Details}{
 
- See the vignette for more information: visualizing each plot, use of colors, and identifying points of interest.
+ See the vignette for more information: visualizing each plot, use of colors, and
+  identifying points of interest.  If Identify=T, execution stops after creating each
+  bivariate plot for the user to identify any points of interest.
 }
 
 \examples{

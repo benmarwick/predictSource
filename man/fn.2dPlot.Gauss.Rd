@@ -48,7 +48,10 @@ A list with the following components:
 }
 }
 \description{
-Plot and check specified pairs of analysis variables for bivariate normality. The function stops after producing each plot.  Enter c ("continue") at the prompt to get the next plot.
+Plot and check specified pairs of analysis variables for bivariate normality.
+By default, a page has panes in two rows and three columns (but there is a new page
+for successive groups). The function stops after producing each row of each plot.
+Enter c ("continue") at the prompt to get the next plot.
 }
 \section{Details}{
 

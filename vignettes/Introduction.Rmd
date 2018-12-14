@@ -122,20 +122,20 @@ The descriptive statistics for the elements in the classification tree in Figure
 ```{r } 
 library(karon)
 data(ObsidianSources)
-CheckData<-fn.CheckData(data=ObsidianSources,CheckDupVars=c("Code","ID"),GroupVar="Code",Groups="All",AnalyticVars=c("Sr","Rb","Nb","Y"))
-knitr::kable(CheckData$statistics, caption="Table 3.2: Descriptive statistics for the elements in the Jemez obsidian sources used in the classsification tree in Figure 1.1.")
+checkData<-fn.CheckData(data=ObsidianSources,CheckDupVars=c("Code","ID"),GroupVar="Code",Groups="All",AnalyticVars=c("Sr","Rb","Nb","Y"))
+knitr::kable(checkData$statistics, caption="Table 3.2: Descriptive statistics for the elements in the Jemez obsidian sources used in the classsification tree in Figure 1.1.")
 
 ```
 
-The example table shows that, in the descriptive statistics data frame (Robject$Summary), there is a row for each element and each source, with a row containing missing values (NAs) between elements.  If this data frame is written to an excel file, those rows between elements can be converted to blank rows, to make the resulting table easier to read.
+The example table shows that, in the descriptive statistics data frame (Robject$statistiacs), there is a row for each element and each source, with a row containing missing values (NAs) between elements.  If this data frame is written to an excel file, those rows between elements can be converted to blank rows, to make the resulting table easier to read.
 
-For understanding later results, it is essential to have the corresponding descriptive statistics for the obsidian artifacts.
+For understanding later results, we need the corresponding descriptive statistics for the artifacts.
 
 ```{r } 
 library(karon)
 data(ObsidianArtifacts)
-CheckData<-fn.CheckData(data=ObsidianArtifacts,CheckDupVars=c("Code","ID"), GroupVar=" ", Groups=" ", AnalyticVars=c("Sr","Rb","Y"))
-knitr::kable(CheckData$statistics, caption="Table 3.3: Descriptive statistics for the elements in the obsidian artifacts used in the classsification tree in Figure 1.1.")
+checkData<-fn.CheckData(data=ObsidianArtifacts,CheckDupVars=c("Code","ID"), GroupVar=" ", Groups=" ", AnalyticVars=c("Sr","Rb","Y"))
+knitr::kable(checkData$statistics, caption="Table 3.3: Descriptive statistics for the elements in the obsidian artifacts used in the classsification tree in Figure 1.1.")
 
 ```
 
@@ -194,7 +194,7 @@ The plot below of the relations between elements at source A shows that the rela
 ```{r echo=FALSE, results='hide',message=FALSE, fig.cap="FIgure 4.3: Pairs plots of the Jemez obsidian source data." } 
 library(karon)
 data(ObsidianSources)
-analyticVars<-c("Rb","Sr","Y","Zr")
+analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 pairsPlot <- fn.PairsPlot(data=ObsidianSources, GroupVar="Code", Groups="A", AnalyticVars=analyticVars)
 
 ```

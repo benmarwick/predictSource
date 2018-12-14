@@ -1,15 +1,17 @@
 #' fn.2dPlot
 #'
-#' Create 2-dimensional data plot or plots. The function stops after producing each plot.  Enter c ("continue") at the prompt to get the next plot.  If this function is run using Rstudio, each plot appears in a separate window, not in the Rstudio plot pane.
+#' Create 2-dimensional data plot or plots.  By default, a page has panes in two rows and
+#' two columns (but there is a new page for successive groups). The function stops after producing
+#' each row of each plot.  Enter c ("continue") at the prompt to get the next plot.
 #'
 #' @param doc A string documenting use written to the output list; default is the function name
 #' @param data R matrix or data frame containing the data to be analyzed
 #' @param GroupVar name for the variable defining grouping, " " if no grouping
 #' @param ID name for the variable with a lab ID, " " if no lab ID is used
 #' @param Groups vector of values of the group variable for which plots are to be done;
-#'    if "All", use all groups; if " ", no grouping
-#' @param AnalyticVars names of two analytic variables to be shown in the plots, vector of length 2 or matrix with 2 columns;
-#'     if a matrix, the set of plots is produced for each row
+#'    if "All", use all groups; grouping is required (cannot be " ").
+#' @param AnalyticVars names of two analytic variables to be shown in the plots, vector of length 2
+#'  or matrix with 2 columns; if a matrix, the set of plots is produced for each row.
 #' @param PlotByGroup default is T; if F, all groups are on each plot for a pair of variables
 #' @param PlotPoints if T (the default), all points are plotted; if F, no points are plotted
 #' @param LowessLine if T, a lowess line is plotted for each group; if F, no line is plotted
@@ -43,7 +45,9 @@
 #'  }
 #'
 #' @section Details:
-#'  See the vignette for more information: visualizing each plot, use of colors, and identifying points of interest.
+#'  See the vignette for more information: visualizing each plot, use of colors, and
+#'   identifying points of interest.  If Identify=T, execution stops after creating each
+#'   bivariate plot for the user to identify any points of interest.
 #'
 #' @examples
 #' data(ObsidianSources)
@@ -90,8 +94,8 @@ fn.2dPlot <- function (doc = "fn.2dPlot",
   }
   else data.Used <- data
   #
-  dataKeep <- rep(T, nrow(data.Used)) # will contain indices for observations with
-  # no missing values
+  # matrix to contain indices for observations with no missing values
+  dataKeep <- rep(T, nrow(data.Used))
   for (i in 1:length(AnalyticVars))
     dataKeep[is.na(data.Used[,AnalyticVars[i]])] <- F
   #
@@ -99,13 +103,13 @@ fn.2dPlot <- function (doc = "fn.2dPlot",
     groups <- as.character(unique(data.Used[, GroupVar]))
   else groups <- as.character(Groups)
   #
+  #  vector to contain indices of groups, used in plotting
   GroupIndex <- rep(NA, nrow(data.Used))
   for (i in 1:nrow(data.Used)) {
     for (j in 1:length(groups)) if (data.Used[i, GroupVar] == groups[j])
       GroupIndex[i] <- j
   }
   #
-  #   if only one specified pair of variables, create matrix or data frame to use later code
   #   define number of pairs of variables to analyze
   #
   if (is.vector(AnalyticVars)) {  # create AnalyticVars as a matrix or data frame to use default code
@@ -113,6 +117,9 @@ fn.2dPlot <- function (doc = "fn.2dPlot",
     n.pairs<-1
   }
   else n.pairs<-nrow(AnalyticVars)
+  #
+  #  set up matrix to store information on points identified as of interest
+  #
   if (Identify)  data.check<-data.Used[1,]  # dummy row to set up information on
      # identified observations
      else  data.check <- c(NA, NA)
@@ -130,24 +137,35 @@ fn.2dPlot <- function (doc = "fn.2dPlot",
       # set up plot
       rangeX<-range(temp[,AnalyticVars[group.j,1]])
       rangeY<-range(temp[,AnalyticVars[group.j,2]])
+      #
+      #  modify ranges if necessary to account for plotting of confidence ellipses
+      #
       if (PlotEllipses) {
         for (j in 1:length(Ellipses)) {
           Covar <- var(temp[,AnalyticVars[group.j,]])
           Ellipse <- ellipse(x = Covar, centre = apply(temp[,AnalyticVars[group.j,]],
-                                                       2, mean, na.rm = T), level = Ellipses[j], npoints = 200)
+                             2, mean, na.rm = T), level = Ellipses[j], npoints = 200)
           rangeX<-range(rangeX,Ellipse[,1])
           rangeY<-range(rangeY,Ellipse[,2])
         }
-      }
-      plot(type="n", x=rangeX, y=rangeY,xlab=AnalyticVars[group.j,1],ylab=AnalyticVars[group.j,2], main=paste("group",groupName))
+      } # end of code for PlotEllipses=T
+      #
+      #  set up plot for specified pair of variables and group
+      #
+      plot(type="n", x=rangeX, y=rangeY,xlab=AnalyticVars[group.j,1],
+           ylab=AnalyticVars[group.j,2], main=paste("group",groupName))
+      #
+      #  if specified, plot confidence ellipses
+      #
       if (PlotEllipses) {
         Covar <- var(temp[,AnalyticVars[group.j,]])
         for (j in 1:length(Ellipses)) {
           Ellipse <- ellipse(x = Covar, centre = apply(temp[,AnalyticVars[group.j,]],
-                                                       2, mean, na.rm = T), level = Ellipses[j], npoints = 200)
+                                                       2, mean, na.rm = T), level = Ellipses[j],
+                             npoints = 200)
           lines(Ellipse, lty=1)
         }
-      }
+      }  # end of code for PlotEllipses=T
       #
       if (PlotPoints) {
         points(temp[,AnalyticVars[group.j,]])
@@ -171,20 +189,18 @@ fn.2dPlot <- function (doc = "fn.2dPlot",
         hull.pts <- c(hull.pts, hull.pts[1])
         lines(temp[hull.pts,])
       }
-      if (Identify)  data.check
+      if (Identify)  data.check  # return data frame data.check with identified points
     }
     par(mfrow = c(2, 2))
-    i.plot<-0
     for (i.group in 1:length(groups)) {
+      i.plot<-0  # initialize counter for number of plot panes
        for (k in 1:n.pairs) {
         if (!Identify)  fn.plot(group=i.group,group.j=k,groupName=groups[i.group])
         if ( Identify)  data.check<-fn.plot(group=i.group,group.j=k,groupName=groups[i.group])
         i.plot <- i.plot + 1
-        if ((i.plot == 4) | (i.plot == nrow(AnalyticVars))) {
-        i.plot <- 0
-        browser()
-          }
+       if ((i.plot == 4) | (i.plot == nrow(AnalyticVars))) browser()  # allow user to look at page
        } # end of loop on k
+      if (nrow(AnalyticVars) != 2) plot.new() # new page for next group
     }  # end of loop on i.group
   }  # end of code for plotting by group
   #

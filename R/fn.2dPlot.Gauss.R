@@ -1,6 +1,9 @@
 #' fn.2dPlot.Gauss
 #'
-#' Plot and check specified pairs of analysis variables for bivariate normality. The function stops after producing each plot.  Enter c ("continue") at the prompt to get the next plot.
+#' Plot and check specified pairs of analysis variables for bivariate normality.
+#' By default, a page has panes in two rows and three columns (but there is a new page
+#' for successive groups). The function stops after producing each row of each plot.
+#' Enter c ("continue") at the prompt to get the next plot.
 #'
 #' @param doc  A string documenting use written to the output list; default is the function name
 #' @param data  R matrix or data frame containing the data to be analyzed
