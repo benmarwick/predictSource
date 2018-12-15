@@ -13,7 +13,7 @@ fn.3dPlot(doc = "fn.3dPlot version 0.1", data, GroupVar, Groups, AnalyticVars,
 
 \item{data}{R matrix or data frame containing the data to be analyzed}
 
-\item{GroupVar}{name for variable defining grouping, " " if no grouping}
+\item{GroupVar}{name for variable defining grouping; can be " " if no grouping.}
 
 \item{Groups}{vector of values of group variable for which plots are to be done;
 if "All", use all groups; if " ", no grouping}
@@ -24,13 +24,14 @@ if "All", use all groups; if " ", no grouping}
 
 \item{ByGroup}{if T, show scatterplot for each group for each selection of 3 variables}
 
-\item{PlotMedians}{If T, plot the medians}
+\item{PlotMedians}{If T, plot only the medians in each group (the points are not plotted)}
 
 \item{Colors}{colors of plotted points, default is a vector for showing several groups on one plot}
 
-\item{SymbolSize}{value at most 1, smaller value gives smaller diameter points
-
-#' @return   A list with the following components:
+\item{SymbolSize}{value at most 1, smaller value gives smaller diameter points}
+}
+\value{
+A list with the following components:
  \itemize{
 \item{usage:}{  A vector with the contents of the argument doc, the date run, the version of R used}
 \item{dataUsed:}{  The contents of the argument data restricted to the groups used}
@@ -40,15 +41,17 @@ if "All", use all groups; if " ", no grouping}
 \item{groups:}{  A vector (may be of length 1) with the value of the argument Groups}
 \item{analyticVars:}{  A vector with the value of the argument AnalyticVars}
 \item{colors:}{  A vector with the value of the argument Color}
-}}
+}
 }
 \description{
 Create 3-dimensional data plot. The function stops after producing each plot.  Enter c ("continue") at the prompt to get the next plot.  If this function is run using Rstudio, each plot appears in a separate window, not in the Rstudio plot pane.
 }
 \section{Details}{
 
- See the vignette for more information: visualizing each plot, specification of the argument Selections
-as a matrix or data frame, and use of colors.
+ See the vignette for more information: visualizing each plot, specification of the argument
+ Selections as a matrix or data frame, and use of colors.  If the plot or plots are not by group,
+  all points have the color of the first element in Colors.
+  If PlotMedians = T, the value of ByGroup is not used.
 }
 
 \examples{

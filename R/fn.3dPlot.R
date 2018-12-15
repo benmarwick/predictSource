@@ -4,17 +4,17 @@
 #'
 #' @param doc A string documenting use written to the output list; default is the function name
 #' @param data R matrix or data frame containing the data to be analyzed
-#' @param GroupVar name for variable defining grouping, " " if no grouping
+#' @param GroupVar name for variable defining grouping; can be " " if no grouping.
 #' @param Groups vector of values of group variable for which plots are to be done;
 #'    if "All", use all groups; if " ", no grouping
 #' @param AnalyticVars vector of names (character values) of analytic results
 #' @param Selections vector of length 3, or data frame with 3 columns, with combinations to be plotted
 #' @param ByGroup if T, show scatterplot for each group for each selection of 3 variables
-#' @param PlotMedians  If T, plot the medians
+#' @param PlotMedians  If T, plot only the medians in each group (the points are not plotted)
 #' @param Colors colors of plotted points, default is a vector for showing several groups on one plot
 #' @param SymbolSize value at most 1, smaller value gives smaller diameter points
 #'
-#'#' @return   A list with the following components:
+#' @return   A list with the following components:
 #'  \itemize{
 #' \item{usage:}{  A vector with the contents of the argument doc, the date run, the version of R used}
 #' \item{dataUsed:}{  The contents of the argument data restricted to the groups used}
@@ -27,8 +27,10 @@
 #' }
 #'
 #' @section Details:
-#'  See the vignette for more information: visualizing each plot, specification of the argument Selections
-#' as a matrix or data frame, and use of colors.
+#'  See the vignette for more information: visualizing each plot, specification of the argument
+#'  Selections as a matrix or data frame, and use of colors.  If the plot or plots are not by group,
+#'   all points have the color of the first element in Colors.
+#'   If PlotMedians = T, the value of ByGroup is not used.
 #'
 #' @import MASS scatterplot3d
 #'
@@ -63,8 +65,9 @@ fn.3dPlot <-
       data.Used <- data[, AnalyticVars]
     else data.Used <- data[, c(GroupVar, AnalyticVars)]
     #
-    dataKeep <- rep(T, nrow(data.Used)) # will contain indices for observations with
-    # no missing values
+    #  matrix to contain indices for observations with no missing values
+    #
+    dataKeep <- rep(T, nrow(data.Used))
     for (i in 1:length(AnalyticVars))
       dataKeep[is.na(data.Used[,AnalyticVars[i]])] <- F
     data.Used <- data.Used[dataKeep,]  # remove observations with any analysis variable with missing data
@@ -81,14 +84,11 @@ fn.3dPlot <-
     #
     #  sort data.Used on grouping variable to assign colors to points
     #
-    if (GroupVar[1] != " ") {
-      index<-order(data.Used[,GroupVar])
-      data.Used<-data.Used[index,]
-    }
+    if (GroupVar[1] != " ") data.Used<-data.Used[order(data.Used[,GroupVar]),]
     #
     #  add index to data.Used to specific color for plotting points in groups
     #
-    if (!ByGroup)  {
+    if ((!ByGroup) & (Groups[1] != " ")) {
       n.group<-rep(0,length(groups))
       for (i in 1:length(groups))  {
         n.group<-nrow(data.Used[data.Used[,GroupVar]==groups[i],])
@@ -97,19 +97,18 @@ fn.3dPlot <-
       }
       data.Used<-cbind(data.Used,group.index=group.index)
     }
+    #
     if (!PlotMedians) {
       #  plot points
-      if ((GroupVar[1] == " ") | (ByGroup != T)) {
+      if ((GroupVar[1] == " ") | (ByGroup == F)) {
         if (is.vector(Selections)) {
           index <- is.na(data.Used[, Selections[1]]) | is.na(data.Used[,Selections[2]]) |
                       is.na(data.Used[, Selections[3]])
           scatterplot3d(data.Used[!index, Selections[1]], data.Used[!index, Selections[2]],
                         data.Used[!index, Selections[3]], xlab = Selections[1],
-                        ylab = Selections[2], zlab = Selections[3], color = Colors[data.Used[,"group.index"]],
-                        pch = 16, cex.symbols = SymbolSize, main = paste(Selections[1],
-                                                                         ",", Selections[2], ",", Selections[3]))
-          legend("topright",legend=groups,pch=16,col=Colors[1:length(groups)])
-          browser()
+                        ylab = Selections[2], zlab = Selections[3],
+                        pch = 16, cex.symbols = SymbolSize,
+                        main = paste(Selections[1], ",", Selections[2], ",", Selections[3]))
         }
         if (is.matrix(Selections)) {
           for (i in 1:nrow(Selections)) {
@@ -119,9 +118,8 @@ fn.3dPlot <-
             scatterplot3d(data.Used[!index, Selections[i, 1]],data.Used[!index, Selections[i, 2]],
                            data.Used[!index, Selections[i, 3]], xlab = Selections[i, 1],
                           ylab = Selections[i, 2], zlab = Selections[i, 3],
-                          color = Colors[data.Used[,"group.index"]], pch = 16, cex.symbols = SymbolSize,
+                          color = Colors[1], pch = 16, cex.symbols = SymbolSize,
                           main = paste(Selections[i, 1], ",", Selections[i,2], ",", Selections[i, 3]))
-            legend("topright",legend=groups,pch=16,col=Colors[1:length(groups)])
             browser()
           }
         }
@@ -150,7 +148,7 @@ fn.3dPlot <-
               scatterplot3d(data.j[!index,], xlab = Selections[i, 1], ylab = Selections[i, 2],
                             zlab = Selections[i,3], color = Colors[1], pch = 16, cex.symbols = SymbolSize,
                             main = paste(groups[i],": ",Selections[i, 1], ",", Selections[i,2], ",",
-                                         Selections[i, 3]))
+                                         Selections[i, 3]), color = Colors[1])
               browser()
             }
           }
