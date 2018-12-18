@@ -5,13 +5,11 @@
 \title{fn.3dPlot.rotate}
 \usage{
 fn.3dPlot.rotate(doc = "fn.3dPlot.rotate", data, GroupVar, Groups,
-  AnalyticVars, Selections, ByGroup = F, SymbolSize = 1, Colors = c("red",
-  "black", "blue", "green", "purple"), folder = " ")
+  AnalyticVars, Selections, ByGroup = F, ptSize = 5, Colors = c("red",
+  "black", "blue", "green", "purple"), folder = " ", dsFile)
 }
 \arguments{
 \item{doc}{A string documenting usage written to the list return, default is the function name}
-
-\item{folder}{The path to the folder in which a rotated 3-d plot will be saved; default is " "}
 
 \item{data:}{R matrix or data frame containing the data to be analyzed}
 
@@ -24,9 +22,19 @@ fn.3dPlot.rotate(doc = "fn.3dPlot.rotate", data, GroupVar, Groups,
 
 \item{Selections:}{vector of length 3, or data frame with 3 columns, with combinations to be plotted}
 
-\item{ByGroup:}{if T, show scatterplot for each group for each selection of 3 variables}
+\item{ByGroup:}{if T, show scatterplot for each group for each selection of 3 variables
+default is F}
 
-\item{Color:}{color of plotted points}
+\item{ptSize:}{size of plotted points, default is 5 (a larger value gives larger points)}
+
+\item{Color:}{color(s) of plotted points; default is a vector
+red, black, blue, green, purple}
+
+\item{folder:}{the folder to which one or more files with images will be saved;
+default is " " (no files saved)}
+
+\item{dsFile:}{the complete path to a file in folder to which each image will be saved;
+if folder is not " ", this must be a valid path and file name (ends in .pdf for current function)}
 }
 \value{
 A list with the following components:
@@ -35,7 +43,7 @@ A list with the following components:
 \item{dataUsed}{  The contents of the argument data restricted to the groups used}
 \item{dataNA:}{  A data frame with observations containing a least one missing value
   for an analysis variable, NA if no missing values}
-\item{params}{  A vector with the values of the arguments ByGroup and SymbolSize}
+\item{params}{  A vector with the values of the arguments ByGroup and ptRadius}
 \item{groups}{  A vector (may be of length 1) with the value of the argument Groups}
 \item{analyticVars}{  A vector with the value of the argument AnalyticVars}
 \item{selections}{  A vector or matrix with the value of the argument Selections}
@@ -48,7 +56,9 @@ Create 3-dimensional data plot(s) that can be rotated
 }
 \section{}{
  Details
-See the vignette for details on viewing each plot, saving plots to a file, and use of colors.
+See the vignette for details on the use of colors.  The rotated 3d plot can be saved to a file
+located at dsFile.  The code saves a file as a pdf; see the documentation for the function
+rgl.postscript() for changing the format to postscript, eps, tex, or others.
 }
 
 \examples{
@@ -57,6 +67,8 @@ analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 plot.3d.rotate<-fn.3dPlot.rotate(data=ObsidianSources, GroupVar="Code", Groups=c("A","B"),
                                 AnalyticVars = analyticVars, Selections=analyticVars[1:3],ByGroup=T)
 # two plots
+data(ObsidianSources)
+analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 plot.3d.rotate<-fn.3dPlot.rotate(data=ObsidianSources, GroupVar="Code", Groups=c("A","B"),
                                 AnalyticVars = analyticVars,
                                 Selections=rbind(analyticVars[1:3],analyticVars[2:4]))
