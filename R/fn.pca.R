@@ -5,8 +5,9 @@
 #' @param doc: documentation in the list returned, default is the function name
 #' @param data: R matrix or data frame containing the data to be analyzed
 #' @param ID: optional name for an ID, default is " " if no ID
-#' @param GroupVar: name for variable defining grouping; if " ", no grouping
-#' @param Groups: vector of values of group variable for which plots are to be done. if "All": use all groups; if " ": no grouping
+#' @param GroupVar: name for variable defining grouping; a variable name is required
+#' @param Groups: vector of values of group variable for which plots are to be done.
+#' If "All": use all groups.  "All" or a vector with group names is required
 #' @param AnalyticVars: vector of names (character values) of analytic results
 #' @param ScreePlot:  logical, if T create a scree plot, default is F
 #' @param BoxPlots:  logical, if T, create box plots of the first two components, default is F
@@ -61,16 +62,18 @@ fn.pca <-  function(doc = "fn.pca",
                     data,
                     ID=" ",
                     GroupVar,
-                    Groups, AnalyticVars,
+                    Groups,
+                    AnalyticVars,
                     ScreePlot = F,
                     BoxPlots = F,
                     pcPlot = T,
                     PlotPoints = T,
                     PlotEllipses = T,
-                    legendLoc="topright",
-                    PlotHull = F, PlotMedians = F,
+                    PlotHull = F,
+                    PlotMedians = F,
                     Ellipses = c(.95, .99),
                     PlotColors = T,
+                    legendLoc="topright",
                     Colors = c("red","black","blue","green","purple"),
                     Identify = F,
                     digits=3,
@@ -85,6 +88,7 @@ fn.pca <-  function(doc = "fn.pca",
       hull.pts <- c(hull.pts, hull.pts[1])
       lines(temp[hull.pts, c("PC1", "PC2")])
     }
+    #
     fn.ellipses <- function() {
       for (i in 1:length(groups)) {
         temp <- Predicted[Predicted[, "group"] == groups[i],
@@ -100,32 +104,34 @@ fn.pca <-  function(doc = "fn.pca",
     #
     #  restrict data if specified
     #
-    if ((Groups[1] != " ") & (Groups[1] != "All")) {
+    if (Groups[1] != "All") {
       Use.rows <- (data[, GroupVar] %in% Groups)
       data.Used <- data[Use.rows,]
     }
     else  data.Used <- data[, ]
     #
-    dataKeep <- rep(T, nrow(data.Used)) # will contain indices for observations with
+    dataKeep <- rep(T, nrow(data.Used)) # will contain indices for observations with no missing data
+    for (i in 1:nrow(data.Used)) {
+      for (j in 1:length(AnalyticVars))
+        if (is.na(data.Used[,AnalyticVars][i,j]))  dataKeep[i] <- F
+    }
     data.Used <- data.Used[dataKeep,]
     #
-    #  sort on GroupVar and ID if specified
+    #  sort on GroupVar and ID within GroupVar if specified
     #
-    if (GroupVar[1] != " ") {
-      rowsSort <- order(data.Used[,GroupVar])
-      data.Used <- data.Used[rowsSort,]
-    }
-    if (ID[1] != " ") {
-      rowsSort <- order(data.Used[,ID])
-      data.Used <- data.Used[rowsSort,]
-    }
-     #
-    if ((GroupVar[1] != " ") & (Groups[1] == "All"))
+    data.Used <- data.Used[order(data.Used[,GroupVar]),]
+    if (ID[1] != " ")
+      data.Used <- data.Used[order(data.Used[,GroupVar],data.Used[,ID]),]
+    #
+    #  define vector with unique group IDs
+    #
+    if (Groups[1] == "All")
       groups <- as.character(unique(data.Used[, GroupVar]))
-    else if (GroupVar[1] != " ")
-      groups <- as.character(Groups)
+    else   groups <- as.character(Groups)
     #
     if ((PlotColors) & (length(groups)>length(Colors)))  stop("number of colors smaller than number of groups")
+    #
+    #  principal components analysis
     #
     pca <- prcomp(data.Used[, AnalyticVars], scale = TRUE)
     if (ScreePlot == T) {
@@ -149,15 +155,18 @@ fn.pca <-  function(doc = "fn.pca",
       Predicted <- predict(pca)
       browser()
     }
-    if (GroupVar[1] != " ") {
-      GroupIndex <- rep(NA, nrow(data.Used))
+    #
+    #  define group index for plotting symbols and colors
+    #
+    GroupIndex <- rep(NA, nrow(data.Used))
       for (i in 1:nrow(data.Used)) {
         for (j in 1:length(groups)) if (data.Used[i, GroupVar] ==
                                         groups[j])
           GroupIndex[i] <- j
       }
-      Predicted <- data.frame(group = as.character(data.Used[,
-                                                             GroupVar]), GroupIndex = GroupIndex, predict(pca))
+    #
+    Predicted <- data.frame(group = as.character(data.Used[,
+                                 GroupVar]), GroupIndex = GroupIndex, predict(pca))
       #
       if (Identify == F) data.check <- c(NA, NA) #  dummy value if no points identified
       #
@@ -169,13 +178,21 @@ fn.pca <-  function(doc = "fn.pca",
       }
       if (pcPlot == T) {
       par(mfrow=c(1,1))
+      #  set up plot with axis ranges
       if (PlotEllipses == F)
         plot(x = range(Predicted[, "PC1"]), y = range(Predicted[,"PC2"]), type = "n", xlab = "first PC",
              ylab = "second PC", main = "Principal components plot")
-      if (PlotEllipses == T)
+      if (PlotEllipses == T) {
+        subtext <- paste("Ellipsoid content:", Ellipses[1])
+        if (length(Ellipses) > 1) {
+          for (i in 2:length(Ellipses))
+            subtext<-paste(subtext,"; ",Ellipses[i],sep="")
+        }
         plot(x = c(min(Predicted[, "PC1"], na.rm = T) - 1, max(Predicted[, "PC1"], na.rm = T) + 1),
              y = c(min(Predicted[,"PC2"], na.rm = T) - 1, max(Predicted[, "PC2"], na.rm = T) + 1),
-             type = "n", xlab = "first PC", ylab = "second PC", main = "Principal components plot")
+             type = "n", xlab = "first PC", ylab = "second PC", main = "Principal components plot",
+             sub=subtext)
+      }  # end of code for PlotEllipses=T
       #
       if (PlotPoints == T) {
         if (PlotColors == T)
@@ -183,12 +200,8 @@ fn.pca <-  function(doc = "fn.pca",
                                                        "PC2"], pch = (Predicted[, "GroupIndex"] -
                                                                         1), col = Colors[Predicted[, "GroupIndex"]])
         else points(x = Predicted[, "PC1"], y = Predicted[,
-                                                          "PC2"], pch = (Predicted[, "GroupIndex"] - 1))
-        if (Identify==T)  {
-          index<-identify(x = Predicted[,"PC1"], y = Predicted[,"PC2"])
-          data.check<-data.Used[index,]
-        }
-      }
+                                            "PC2"], pch = (Predicted[, "GroupIndex"] - 1))
+        }  # end of code for PlotPoints=T
       if (PlotHull == T) {
         for (i in 1:length(groups)) fn.convexhull(Code = groups[i])
       }
@@ -200,7 +213,7 @@ fn.pca <-  function(doc = "fn.pca",
                                                             1), col = Colors, bty = "n")
         else legend(x = legendLoc, legend = groups, pch = 0:(length(groups) -
                                                                1), bty = "n")
-      }
+      }  # end of code for PlotMedians=F
       if (PlotMedians == T) {
         medians <- matrix(NA, nrow = length(groups), ncol = 2)
         for (i in 1:length(groups)) {
@@ -213,12 +226,13 @@ fn.pca <-  function(doc = "fn.pca",
         colnames(medians) <- c("group", "PC1", "PC2")
         text(x = medians[, "PC1"], y = medians[, "PC2"],
              labels = groups, cex = 0.75, adj = 0.5)
-      }
-      }
+      } # end of code for PlotMedians=T
+        if ((Identify==T) & ((PlotPoints==T) | (PlotMedians==T)))  {
+          index<-identify(x = Predicted[,"PC1"], y = Predicted[,"PC2"])
+          data.check<-data.Used[index,]
+        }
     }
-    if (GroupVar[1] == " ")
-      DataPlusPredicted <- data.frame(data.Used, Predicted)
-    else DataPlusPredicted <- data.frame(data.Used, Predicted[,-1])
+    DataPlusPredicted <- data.frame(data.Used, Predicted[,-1])
     #
     fcn.date.ver<-paste(doc,date(),R.Version()$version.string)
     params.grouping<-list(GroupVar,Groups)
@@ -232,10 +246,17 @@ fn.pca <-  function(doc = "fn.pca",
     pcNames <- colnames(Predicted)[-1]
     Predicted[,pcNames] <- round(Predicted[,pcNames], dig = digits)
     DataPlusPredicted[,pcNames] <- round(DataPlusPredicted[,pcNames], dig = digits)
+    #
     weights <- round(weights,dig = digits)
     variances <- round(importance.pca, dig = digits)
+    #
     if (sum(dataKeep) < nrow(data.Used)) dataNA <- data.Used[!dataKeep]
     else dataNA <- NA
+    #
+    if (Identify==T) {
+      if (ID != " ") data.check<-data.check[order(data.check[,"Code"],data.check[,"ID"]),]
+      else  data.check<-data.check[order(data.check[,"Code"]),][,c("Code",AnalyticVars)]
+    }
     #
     out<-list(usage=fcn.date.ver,
                 dataUsed=data.Used,

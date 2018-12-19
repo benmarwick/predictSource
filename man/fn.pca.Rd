@@ -6,10 +6,10 @@
 \usage{
 fn.pca(doc = "fn.pca", data, ID = " ", GroupVar, Groups, AnalyticVars,
   ScreePlot = F, BoxPlots = F, pcPlot = T, PlotPoints = T,
-  PlotEllipses = T, legendLoc = "topright", PlotHull = F,
-  PlotMedians = F, Ellipses = c(0.95, 0.99), PlotColors = T,
-  Colors = c("red", "black", "blue", "green", "purple"), Identify = F,
-  digits = 3, folder = " ")
+  PlotEllipses = T, PlotHull = F, PlotMedians = F, Ellipses = c(0.95,
+  0.99), PlotColors = T, legendLoc = "topright", Colors = c("red",
+  "black", "blue", "green", "purple"), Identify = F, digits = 3,
+  folder = " ")
 }
 \arguments{
 \item{folder}{The path to the folder in which data frames will be saved; default is " "}
@@ -20,9 +20,10 @@ fn.pca(doc = "fn.pca", data, ID = " ", GroupVar, Groups, AnalyticVars,
 
 \item{ID:}{optional name for an ID, default is " " if no ID}
 
-\item{GroupVar:}{name for variable defining grouping; if " ", no grouping}
+\item{GroupVar:}{name for variable defining grouping; a variable name is required}
 
-\item{Groups:}{vector of values of group variable for which plots are to be done. if "All": use all groups; if " ": no grouping}
+\item{Groups:}{vector of values of group variable for which plots are to be done.
+If "All": use all groups.  "All" or a vector with group names is required}
 
 \item{AnalyticVars:}{vector of names (character values) of analytic results}
 

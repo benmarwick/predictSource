@@ -5,7 +5,7 @@
 #'
 #' @param doc A string documenting usage written to the list return, default is the function name
 #' @param data: R matrix or data frame containing the data to be analyzed
-#' @param GroupVar: name for variable defining grouping, " " if no grouping
+#' @param GroupVar: name for variable defining grouping; a group variable must be specified
 #' @param Groups: vector of values of group variable for which plots are to be done;
 #'    "All": use all groups;" ": no grouping
 #' @param AnalyticVars: vector of names (character values) of analytic results
@@ -25,7 +25,8 @@
 #' @section: Details
 #' See the vignette for details on the use of colors.  The rotated 3d plot can be saved to a file
 #' located at dsFile.  The code saves a file as a pdf; see the documentation for the function
-#' rgl.postscript() for changing the format to postscript, eps, tex, or others.
+#' rgl.postscript() for changing the format to postscript, eps, tex, or others.  Point sizes may
+#' appear much larger in a saved file than on the monitor.
 #'
 #' @return A list with the following components:
 #' \itemize{
