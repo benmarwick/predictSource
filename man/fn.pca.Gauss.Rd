@@ -5,23 +5,23 @@
 \title{fn.pca.Gauss}
 \usage{
 fn.pca.Gauss(doc = "fn.pca.Gauss", data, GroupVar, Groups, ID = " ",
-  AnalyticVars, qqPlot = T, Identify = F, folder = " ")
+  AnalyticVars, qqPlot = T, gaussIdentify = F, folder = " ")
 }
 \arguments{
 \item{doc}{documentation for the analysis, default if the function name}
 
 \item{data}{R matrix or data frame containing the data to be analyzed}
 
-\item{GroupVar}{name for variable defining grouping, " " if no grouping}
+\item{GroupVar}{name for variable defining grouping; a group variable is required}
 
-\item{Groups}{vector of values of group variable for which
-plots are to be done; if "All"', use all groups}
+\item{Groups}{vector of values of group variable for which plots are to be done;
+if "All"', use all groups}
 
 \item{AnalyticVars}{vector of names (character values) of analytic results}
 
 \item{qqPlot}{Logical, should Q-Q plots (univariate, multivariate) be shown, default is T}
 
-\item{Identify}{Logical, should user identify points of interest, default is F}
+\item{gaussIdentify}{Logical, should user identify points of interest, default is F}
 
 \item{folder}{The path to the folder in which data frames will be saved; default is " "}
 
@@ -49,6 +49,6 @@ Check whether first two principal components are Gaussian
 \examples{
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-pca.Gauss <- fn.pca.Gauss(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars)
+pca.Gauss <- fn.pca.Gauss(data=ObsidianSources, GroupVar="Code",Groups=c("A","B"), AnalyticVars=analyticVars)
 
 }

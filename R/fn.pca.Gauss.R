@@ -4,13 +4,13 @@
 #'
 #' @param doc  documentation for the analysis, default if the function name
 #' @param data  R matrix or data frame containing the data to be analyzed
-#' @param GroupVar  name for variable defining grouping, " " if no grouping
-#' @param Groups  vector of values of group variable for which
-#' plots are to be done; if "All"', use all groups
-#' @param ID: optional name for an ID, default is " " if no ID
+#' @param GroupVar  name for variable defining grouping; a group variable is required
+#' @param Groups  vector of values of group variable for which plots are to be done;
+#' if "All"', use all groups
+#' @param gaussID: optional name for an ID, default is " " if no ID
 #' @param AnalyticVars  vector of names (character values) of analytic results
 #' @param qqPlot  Logical, should Q-Q plots (univariate, multivariate) be shown, default is T
-#' @param Identify  Logical, should user identify points of interest, default is F
+#' @param gaussIdentify  Logical, should user identify points of interest, default is F
 #' @param folder  The path to the folder in which data frames will be saved; default is " "
 #'
 #' @return The function produces Q-Q plots (univariate and multivariate) of the first two principal components for each group if qqPlot=T.
@@ -37,7 +37,7 @@
 #' @examples
 #' data(ObsidianSources)
 #' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-#' pca.Gauss <- fn.pca.Gauss(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars)
+#' pca.Gauss <- fn.pca.Gauss(data=ObsidianSources, GroupVar="Code",Groups=c("A","B"), AnalyticVars=analyticVars)
 #'
 #' @export
 #'
@@ -47,10 +47,10 @@ fn.pca.Gauss <-
            data,
            GroupVar,
            Groups,
-           ID = " ",
+           gaussID = " ",
            AnalyticVars,
            qqPlot = T,
-           Identify = F,
+           gaussIdentify = F,
            folder = " ")
     {
     # restrict to desired set of groups
@@ -69,8 +69,8 @@ fn.pca.Gauss <-
       rowsSort <- order(data.Used[,GroupVar])
       data.Used <- data.Used[rowsSort,]
     }
-    if (ID[1] != " ") {
-      rowsSort <- order(data.Used[,ID])
+    if (gaussID[1] != " ") {
+      rowsSort <- order(data.Used[,gaussID])
       data.Used <- data.Used[rowsSort,]
     }
     #
@@ -114,19 +114,21 @@ fn.pca.Gauss <-
     pc.qqPlot <- qqPlot
     pc.digits <- 3
     #
-    out <- fn.2dPlot.Gauss(data=DataPlusPredicted, GroupVar=pc.GroupVar, Groups=pc.Groups,
-                           AnalyticVars=c("PC1", "PC2"), qqPlot=pc.qqPlot, pvalue.digits=pc.digits,
-                           Identify=F)
-    pvalues <- out$pvalues
+    outGauss <- fn.2dPlot.Gauss(data=DataPlusPredicted, GroupVar=pc.GroupVar, Groups=pc.Groups,
+                           AnalyticVars=c("PC1", "PC2"), ID=gaussID, qqPlot=pc.qqPlot, pvalue.digits=pc.digits,
+                           Identify=gaussIdentify)
     browser()
     #
     fcn.date.ver<-paste(doc,date(),R.Version()$version.string)
     params.grouping<-list(GroupVar,Groups)
     names(params.grouping)<-c("GroupVar","Groups")
-    params.logical<-qqPlot
-    names(params.logical)<-"qqPlot"
+    params.logical<-c(qqPlot, gaussIdentify)
+    names(params.logical)<-c("qqPlot","gaussIdentify")
     if (sum(dataKeep) < nrow(data.Used)) dataNA <- data.Used[!dataKeep]
     else dataNA <- NA
+    #
+    if (gaussID == " ") data.check<-outGauss$data.check[,c(GroupVar, AnalyticVars)]
+    else  data.check<-outGauss$data.check[,c(GroupVar, gaussID, AnalyticVars)]
     #
     out<-list(usage=fcn.date.ver,
                 dataUsed=data.Used,
@@ -134,7 +136,8 @@ fn.pca.Gauss <-
                 analyticVars=AnalyticVars,
                 params.grouping=params.grouping,
                 params.logical=params.logical,
-                p.values = pvalues,
+                p.values = outGauss$pvalues,
+                data.check = data.check,
                 location=folder)
     out
   }
