@@ -8,7 +8,7 @@ fn.randomForest(doc = "fn.randomForest", data, GroupVar, Groups = "All",
   AnalyticVars, ID = " ", Ntrees = 500, NvarUsed = NA, Seed = 11111,
   digitsImportance = 1, plotErrorRate = T, plotImportance = T,
   predictSources = F, predictData = NA, plotSourceProbs = T,
-  folder = " ", ds.importance, ds.confusion)
+  folder = " ")
 }
 \arguments{
 \item{doc}{Documentation for the function use, default value is the function name}

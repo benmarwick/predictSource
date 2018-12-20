@@ -10,13 +10,15 @@
 #' @param wts Option to weight the observations, if used, vector with length nrow(data); if NA (the default), assume equal weights
 #' @param CpDigits  Number of significant digits to display in the Cp table, default is value is 3
 #' @param plotTree If T (true, the default), plot the recursive partitioning tree
-#' @param plotCp  If T (tree, the default), plot the Cp table
+#' @param plotCp  If T (tree, the default), plot the Cp table values
 #' @param Model  A character string containing the variables considered separated by + signs
 #' @param ModelTitle  Model as a single character value
 #' @param minSplit  The minimum size of a group for splitting, default is 20 (the default in rpart())
 #' @param cP  The required improvement in Cp for a group to be split, default is .01 (the default in rpart())
-#' @param predictSources  Logical: if T, use the tree to predict sources for observations in predictData; default is F
-#' @param predictData  Data frame with data used to predict sources, must contain all variables in AnalyticVars
+#' @param predictSources  Logical: if T, use the tree to predict sources for observations
+#'  in predictData; default is F
+#' @param predictData  Data frame with data used to predict sources, must contain all variables
+#'  in AnalyticVars
 #' @param ID  If not " " (the default), name of a variable identifying a sample in predictData
 #' @param folder  The path to the folder in which data frames will be saved; default is " "
 #'
@@ -139,7 +141,6 @@ fn.tree <-
              )
       lines(x = CpTable[, "nsplit"], y = CpTable[, "xerror"], lty = 1)
       legend(x = "bottomleft", legend = formula.rhs, bty = "n")
-      browser()
      } # end of code for plotCp
     # optimal number of splits
     nsplitopt <- vector(mode = "integer", length = 25)

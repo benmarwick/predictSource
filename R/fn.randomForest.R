@@ -80,10 +80,9 @@ fn.randomForest <-
            predictSources = F,
            predictData = NA,
            plotSourceProbs=T,
-           folder = " ",
-           ds.importance ,
-           ds.confusion ) {
-
+           folder = " "
+           )
+{
     # create dataset Data based on grouping restrict to desired set of groups
     if (Groups[1] != "All") {
       Use.rows <- (data[, GroupVar] %in% Groups)
@@ -126,12 +125,12 @@ fn.randomForest <-
       browser()
     }
 #
-    if (predictSources == F) {
+    if ((predictSources == F) | (is.na(predictData))) {
       predictedTotals <- NA
       predictions <- NA
     }   # dummy values
     #
-    if (predictSources == T) {
+    if ((predictSources == T) & !is.na(predictData)) {
       response <- predict(object=fit.rf, newdata=predictData, type="response")
       probMatrix <- predict(object=fit.rf, newdata=predictData, type="prob")
       pred.source <- table(response)
@@ -144,6 +143,7 @@ fn.randomForest <-
       if (ID != " ")
         predictions <- data.frame(source=as.character(response), as.matrix(probMatrix),
                                 predictData[,c(ID,AnalyticVars)])
+      browser()
       #
       #  box plots of source probabilities
       # probFrame <- data.frame(source=response, probMatrix)
@@ -187,7 +187,8 @@ fn.randomForest <-
     params.logical<-c(plotErrorRate,plotImportance,predictSources,plotSourceProbs)
     names(params.logical) <- c("plotErrorRate","plotImportance","plotSourceProbs")
     importance.rf <- round(importance.rf, dig=digitsImportance)
-    if (ID != " ")  predictions <- predictions[order(predictions[,"ID"]),]
+    if ((ID != " ") & (predictSources == T) & !is.na(predictData))
+      predictions <- predictions[order(predictions[,"ID"]),]
     #
     out<-list(usage=fcn.date.ver,
                   dataUsed=Data.used,

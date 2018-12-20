@@ -26,7 +26,7 @@ fn.tree(doc = "fn.tree", data, GroupVar, Groups = "All", AnalyticVars,
 
 \item{plotTree}{If T (true, the default), plot the recursive partitioning tree}
 
-\item{plotCp}{If T (tree, the default), plot the Cp table}
+\item{plotCp}{If T (tree, the default), plot the Cp table values}
 
 \item{Model}{A character string containing the variables considered separated by + signs}
 
@@ -36,9 +36,11 @@ fn.tree(doc = "fn.tree", data, GroupVar, Groups = "All", AnalyticVars,
 
 \item{cP}{The required improvement in Cp for a group to be split, default is .01 (the default in rpart())}
 
-\item{predictSources}{Logical: if T, use the tree to predict sources for observations in predictData; default is F}
+\item{predictSources}{Logical: if T, use the tree to predict sources for observations
+in predictData; default is F}
 
-\item{predictData}{Data frame with data used to predict sources, must contain all variables in AnalyticVars}
+\item{predictData}{Data frame with data used to predict sources, must contain all variables
+in AnalyticVars}
 
 \item{ID}{If not " " (the default), name of a variable identifying a sample in predictData}
 

@@ -4,7 +4,7 @@
 \alias{fn.pca.Gauss}
 \title{fn.pca.Gauss}
 \usage{
-fn.pca.Gauss(doc = "fn.pca.Gauss", data, GroupVar, Groups, ID = " ",
+fn.pca.Gauss(doc = "fn.pca.Gauss", data, GroupVar, Groups, gaussID = " ",
   AnalyticVars, qqPlot = T, gaussIdentify = F, folder = " ")
 }
 \arguments{
@@ -25,7 +25,7 @@ if "All"', use all groups}
 
 \item{folder}{The path to the folder in which data frames will be saved; default is " "}
 
-\item{ID:}{optional name for an ID, default is " " if no ID}
+\item{gaussID:}{optional name for an ID, default is " " if no ID}
 }
 \value{
 The function produces Q-Q plots (univariate and multivariate) of the first two principal components for each group if qqPlot=T.
