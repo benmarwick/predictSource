@@ -80,6 +80,7 @@ fn.pca.Gauss <-
         as.character(unique(data.Used[, GroupVar]))
     else
       groups <- as.character(Groups)
+    #
     pca <- prcomp(data.Used[, AnalyticVars], scale = TRUE)
     # predicted values for first two components
     predict.pc1 <- predict(pca)[, 1]
@@ -127,8 +128,11 @@ fn.pca.Gauss <-
     if (sum(dataKeep) < nrow(data.Used)) dataNA <- data.Used[!dataKeep]
     else dataNA <- NA
     #
+    if (gaussIdentify == T) {
     if (gaussID == " ") data.check<-outGauss$data.check[,c(GroupVar, AnalyticVars)]
     else  data.check<-outGauss$data.check[,c(GroupVar, gaussID, AnalyticVars)]
+    }
+    else  data.check <- NA
     #
     out<-list(usage=fcn.date.ver,
                 dataUsed=data.Used,
