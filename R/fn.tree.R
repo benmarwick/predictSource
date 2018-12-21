@@ -22,9 +22,10 @@
 #' @param ID  If not " " (the default), name of a variable identifying a sample in predictData
 #' @param folder  The path to the folder in which data frames will be saved; default is " "
 #'
-#' @return The function fits a classification tree model.  The variables in AnalyticVars are considered in the order
+#' @details The function fits a classification tree model.  The variables in AnalyticVars are considered in the order
 #'        they appear in the Model argument (from left to right).  See the vignette for more details.
-#'        The function returns a list with the following components:
+#'
+#' @return The function returns a list with the following components:
 #'
 #' \itemize{
 #'   \item{usage:}{ A vector with the contents of the argument doc, the date run, the version of R used}

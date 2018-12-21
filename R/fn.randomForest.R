@@ -3,7 +3,7 @@
 #'   Random forest analysis
 #'
 #' @param doc Documentation for the function use, default value is the function name
-#' @param data:  Data frame with the data to be analyzed
+#' @param data:  Data frame with the data used to grow trees (source data if predictions are made)
 #' @param predictData:  Data frame with data on unknowns, NA if predictions not made (default value)
 #' @param GroupVar: Name of variable defining groups, grouping is required
 #' @param Groups: Vector of codes for groups to be used, 'All' if use all groups
@@ -12,7 +12,8 @@
 #' @param Ntrees: Number of trees grown, default value of 500 is that for the randomForest function
 #' @param NvarUsed: If not NA, number of variables to use in each random forest call to rpart;
 #'                  if NA, rpart uses the default (the square root of the number of candidate variables)
-#' @param Seed: If not NA, a random number generator seed to produce reproducible results
+#' @param Seed: If not NA, a random number generator seed to produce reproducible results;
+#' default value is 11111
 #' @param digitsImportance:  Significant digits for the importance measure, default is 1
 #' @param plotErrorRate: Logical, whether to show the error rate plot, default is T
 #' @param plotImportance: Logical, whether to show the plot of variable importance, default is T
@@ -23,10 +24,16 @@
 #'    probabilities
 #' @param folder  The path to the folder in which data frames will be saved; default is " "
 #'
-#' @return The function implements a random forest analysis.  For each analysis, the variables used in the
-#'           analysis are considered in the order in which they appear in AnalyticVars (from left to right);
-#'           See the vignette for more details.
-#'           The function returns a list with the following components:
+#' @details The function implements a random forest analysis.  If predictSources = T and
+#'  plotSourceProbs is T, the function creates two box plots.  The first plot shows, for each source,
+#'   the set of probabilities of assignment to that source for the observations assigned to
+#'   that source (all of these probabilities should be large).  The second plot shows, for each
+#'   source, the set of probabilities of assignment that source for the observations not assigned
+#'   to that source (for each source, there is one such probability for observation); these
+#'   probabilities should be relatively small, and some should be zero.  See the vignette for
+#'   more details and examples of these plots.
+#'
+#' @return The function returns a list with the following components:
 #'
 #' \itemize{
 #'   \item{usage:}{ A vector with the contents of the argument doc, the date run, the version of R used}
@@ -38,7 +45,8 @@
 #'   \item{formula.rf:}  {The formula used in the analysis (the variables specified in the argument AnalyticVars
 #'                        separated by + signs)}
 #'   \item{forest:}{  The random forest}
-#'   \item{importance:}{  A data frame with information on the importance of each variable in AnalyticVars}
+#'   \item{importance:}{  A data frame with information on the importance of each variable
+#'    in AnalyticVars}
 #'   \item{confusion:}{  A data frame with the estimate of the confusion matrix}
 #'   \item{predictedSources:}{  A data frame with prediction information, sample ID (if requested),
 #'      and values of AnalyticVars}
@@ -125,7 +133,7 @@ fn.randomForest <-
       browser()
     }
 #
-    if ((predictSources == F) | (is.na(predictData))) {
+    if (predictSources == F) {
       predictedTotals <- NA
       predictions <- NA
     }   # dummy values
@@ -143,7 +151,6 @@ fn.randomForest <-
       if (ID != " ")
         predictions <- data.frame(source=as.character(response), as.matrix(probMatrix),
                                 predictData[,c(ID,AnalyticVars)])
-      browser()
       #
       #  box plots of source probabilities
       # probFrame <- data.frame(source=response, probMatrix)
@@ -187,7 +194,7 @@ fn.randomForest <-
     params.logical<-c(plotErrorRate,plotImportance,predictSources,plotSourceProbs)
     names(params.logical) <- c("plotErrorRate","plotImportance","plotSourceProbs")
     importance.rf <- round(importance.rf, dig=digitsImportance)
-    if ((ID != " ") & (predictSources == T) & !is.na(predictData))
+    if ((ID != " ") & (predictSources == T))
       predictions <- predictions[order(predictions[,"ID"]),]
     #
     out<-list(usage=fcn.date.ver,

@@ -15,7 +15,7 @@ fn.randomForest(doc = "fn.randomForest", data, GroupVar, Groups = "All",
 
 \item{folder}{The path to the folder in which data frames will be saved; default is " "}
 
-\item{data:}{Data frame with the data to be analyzed}
+\item{data:}{Data frame with the data used to grow trees (source data if predictions are made)}
 
 \item{predictData:}{Data frame with data on unknowns, NA if predictions not made (default value)}
 
@@ -32,7 +32,8 @@ fn.randomForest(doc = "fn.randomForest", data, GroupVar, Groups = "All",
 \item{NvarUsed:}{If not NA, number of variables to use in each random forest call to rpart;
 if NA, rpart uses the default (the square root of the number of candidate variables)}
 
-\item{Seed:}{If not NA, a random number generator seed to produce reproducible results}
+\item{Seed:}{If not NA, a random number generator seed to produce reproducible results;
+default value is 11111}
 
 \item{digitsImportance:}{Significant digits for the importance measure, default is 1}
 
@@ -49,10 +50,7 @@ must contain all variables in AnalyticVars}
 probabilities}
 }
 \value{
-The function implements a random forest analysis.  For each analysis, the variables used in the
-          analysis are considered in the order in which they appear in AnalyticVars (from left to right);
-          See the vignette for more details.
-          The function returns a list with the following components:
+The function returns a list with the following components:
 
 \itemize{
   \item{usage:}{ A vector with the contents of the argument doc, the date run, the version of R used}
@@ -64,7 +62,8 @@ The function implements a random forest analysis.  For each analysis, the variab
   \item{formula.rf:}  {The formula used in the analysis (the variables specified in the argument AnalyticVars
                        separated by + signs)}
   \item{forest:}{  The random forest}
-  \item{importance:}{  A data frame with information on the importance of each variable in AnalyticVars}
+  \item{importance:}{  A data frame with information on the importance of each variable
+   in AnalyticVars}
   \item{confusion:}{  A data frame with the estimate of the confusion matrix}
   \item{predictedSources:}{  A data frame with prediction information, sample ID (if requested),
      and values of AnalyticVars}
@@ -74,6 +73,16 @@ The function implements a random forest analysis.  For each analysis, the variab
 }
 \description{
 Random forest analysis
+}
+\details{
+The function implements a random forest analysis.  If predictSources = T and
+ plotSourceProbs is T, the function creates two box plots.  The first plot shows, for each source,
+  the set of probabilities of assignment to that source for the observations assigned to
+  that source (all of these probabilities should be large).  The second plot shows, for each
+  source, the set of probabilities of assignment that source for the observations not assigned
+  to that source (for each source, there is one such probability for observation); these
+  probabilities should be relatively small, and some should be zero.  See the vignette for
+  more details and examples of these plots.
 }
 \examples{
 data(ObsidianSources)
