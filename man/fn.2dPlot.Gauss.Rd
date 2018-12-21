@@ -24,7 +24,8 @@ if "All", use all groups; if " ", no grouping}
 
 \item{scatterPlot}{Logical (default is T): specify whether to show scatter plots when qqPlot = F}
 
-\item{qqPlot}{Logical (default is T): specify whether to show q-q plots, including plots based on simulation and multivariate plots}
+\item{qqPlot}{Logical (default is T): specify whether to show q-q plots the bootstrap
+envelopes and multivariate plots}
 
 \item{pvalue.digits}{Numeric (default is 3): number of significant digits retained in tests for normality}
 
@@ -43,20 +44,20 @@ A list with the following components:
 \item{parameters:}{  A vector with argument values for GroupVar, Groups, pvalue.digits, scatterPlot, qqPlot}
 \item{pvalues:}{  A data frame with the p-values for univariate and bivariate tests of normality}
 \item{data.check:}{ A data frame with the information on user-identified points of interest;
-    NA if no data identified}
+    value is c(NA, NA) if no data identified}
 \item{location:}{ The contents of the parameter folder}
 }
 }
 \description{
 Plot and check specified pairs of analysis variables for bivariate normality.
-By default, a page has panes in two rows and three columns (but there is a new page
-for successive groups). The function stops after producing each row of each plot.
-Enter c ("continue") at the prompt to get the next plot.
 }
 \section{Details}{
 
- See the vignette for more information: visualizing each plot, the information obtained by using the package qqtest,
-  the tests for bivariate normality, and identifying points of interest.
+ If qqPlot = T, by default each page has panes in two rows and three columns
+ (but there is a new page for successive groups). The function stops after producing each row
+  of each plot.  Enter c ("continue") at the prompt to get the next plot.
+  See the vignette for more information: visualizing each plot, the information obtained
+   by using the package qqtest, the tests for bivariate normality, and identifying points of interest.
 }
 
 \examples{

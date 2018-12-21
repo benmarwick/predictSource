@@ -26,29 +26,33 @@
 #' @param folder  The path to the folder in which data frames will be saved; default is " "
 #'
 #' @section Details
-#' See the vignette for instructions for identifying points of interest using the paramter Identify = T.
+#' See the vignette for instructions for identifying points of interest using the paramter
+#' Identify = T.
 #'
-#'@return The function produces two plots: the convex hulls of the first two principal components of the source data,
-#'  and a plot with those convex hulls and the artifact data (using the weights obtained from the source data).
-#'  The function returns a list with the following components:
+#'@return The function produces two plots: the convex hulls of the first two principal components
+#' of the source data, and a plot with those convex hulls and the artifact data (using the weights
+#'  obtained from the source data).  The function returns a list with the following components:
 #'
 #' \itemize{
-#'   \item{usage:}{  A vector with the contents of the argument doc, the date run, the version of R used}
+#'   \item{usage:}{  A vector with the contents of the argument doc, the date run,
+#'   the version of R used}
 #'   \item{sourceData:}{  The contents of the argument SourceData restricted to knownSources}
 #'   \item{artifactData:}{  The contents of the argument ArtifactData restricted to predictedSources}
 #'   \item{params:}{  A list with the values of the arguments GroupVar and Groups}
 #'   \item{analyticVars:}{  A vector with the value of the argument AnalyticVars}
-#'   \item{table.in.out:} {  A data frame with counts of the numbers of artifacts inside and outside of each
-#'    predicted source location}
-#'   \item{pts.outside:}  {  A data frame with the data for artifact points located outside of the predicted source}
-#'   \item{data.check:}{  If Identify=T, a data frame with the observations in dataUsed identified as of interest}
+#'   \item{table.in.out:} {  A data frame with counts of the numbers of artifacts inside and
+#'   outside of each predicted source location}
+#'   \item{pts.outside:}  {  A data frame with the data for artifact points located outside of the
+#'    predicted source}
+#'   \item{data.check:}{  If Identify=T, a data frame with the observations in dataUsed identified
+#'    as of interest; value is c(NA,NA) if no points are identified}
 #'   \item{location:}{  The values of the parameter folder}
 #'    }
 #'
 #' @section  Details
 #'
-#' If using Rstudio, the plot created when Identify = T must be expanded by increasing the size of the plot pane
-#'  (the view tab is not available).
+#' If using Rstudio, the plot created when Identify = T must be expanded by increasing the
+#'  size of the plot pane (the view tab is not available).
 #'
 #' @import mgcv
 #'
@@ -80,7 +84,7 @@
 #`   predictSources=T, predictData=ObsidianArtifacts, plotSourceProbs=F)
 #' pca.eval <- fn.pca.evaluation(SourceData=ObsidianSources,
 #'   ArtifactData=save.randomForest$predictedSources, SourceGroup= "Code", ArtifactGroup="source",
-#'   known.sources=sources, predicted.sources=sources, AnalyticVars=analyticVars,
+#'   known.sources=sources, predicted.sources=sources, AnalyticVars=analyticVars, ID="ID",
 #'   plotAllPoints=F, plotHullsOutsidePoints = F, plotOutsidePoints = T)
 #'
 #' @export
@@ -130,7 +134,7 @@ fn.pca.evaluation <-
     artifactRows <- ArtifactData[, ArtifactGroup] %in% predicted.sources
     artifactData <- ArtifactData[artifactRows,]
     #
-    if (ID == " ")  {
+    if (ID[1] == " ")  {
       ID = rep(" ", nrow(artifactData))
       artifactData <- cbind(artifactData[, c(ArtifactGroup, AnalyticVars)], ID = ID)
     }
@@ -161,7 +165,7 @@ fn.pca.evaluation <-
     artifactData <- cbind(artifactData[,c(ArtifactGroup,AnalyticVars)], ArtifactIndex, data.Source,
                           artifactData[,"ID"])  # needed if no ID provided
     colnames(artifactData) <- c("group", AnalyticVars, "index", "data.source", "ID")
-    if (ID != " ")  artifactData <- artifactData[order(artifactData[,"ID"]),]
+    if (ID[1] != " ")  artifactData <- artifactData[order(artifactData[,"ID"]),]
     #
     #  combine data sets for principal components analysis
     #
@@ -177,7 +181,7 @@ fn.pca.evaluation <-
     #
     #  compute locations of points on principal component plot
     #
-    if (ID == " ")
+    if (ID[1] == " ")
       pcaLocations <- cbind(analysisData[, c("group", AnalyticVars, "index","data.source")], pc1 = predict(pca)[, 1],
         pc2 = predict(pca)[, 2])
       else
@@ -492,13 +496,13 @@ fn.pca.evaluation <-
                      "logicalParams")
     colnames(n.in.out) <- c("outside","inside")
     #
-    if (ID == " ")  keepVars <- c("group", AnalyticVars)
+    if (ID[1] == " ")  keepVars <- c("group", AnalyticVars)
       else          keepVars <- c("group", "ID", AnalyticVars)
     artifactData <- artifactData[,keepVars]
     pts.outside <- pts.outside[,c(keepVars, "pc1", "pc2")]
     if (Identify == T) data.check <- data.check[,c(keepVars, "pc1", "pc2")]
     #
-    if (ID != " ") {
+    if (ID[1] != " ") {
        artifactData <- artifactData[order(artifactData[, "ID"]),]
        pts.outside <- pts.outside[order(pts.outside[, "ID"]),]
        if (Identify == T)  data.check <- data.check[order(data.check[, "ID"]),]

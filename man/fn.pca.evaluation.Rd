@@ -48,20 +48,23 @@ outside of their predicted source convex hulls and these hulls (the second pane 
 plotHullsOutsidePoints)}
 }
 \value{
-The function produces two plots: the convex hulls of the first two principal components of the source data,
- and a plot with those convex hulls and the artifact data (using the weights obtained from the source data).
- The function returns a list with the following components:
+The function produces two plots: the convex hulls of the first two principal components
+of the source data, and a plot with those convex hulls and the artifact data (using the weights
+ obtained from the source data).  The function returns a list with the following components:
 
 \itemize{
-  \item{usage:}{  A vector with the contents of the argument doc, the date run, the version of R used}
+  \item{usage:}{  A vector with the contents of the argument doc, the date run,
+  the version of R used}
   \item{sourceData:}{  The contents of the argument SourceData restricted to knownSources}
   \item{artifactData:}{  The contents of the argument ArtifactData restricted to predictedSources}
   \item{params:}{  A list with the values of the arguments GroupVar and Groups}
   \item{analyticVars:}{  A vector with the value of the argument AnalyticVars}
-  \item{table.in.out:} {  A data frame with counts of the numbers of artifacts inside and outside of each
-   predicted source location}
-  \item{pts.outside:}  {  A data frame with the data for artifact points located outside of the predicted source}
-  \item{data.check:}{  If Identify=T, a data frame with the observations in dataUsed identified as of interest}
+  \item{table.in.out:} {  A data frame with counts of the numbers of artifacts inside and
+  outside of each predicted source location}
+  \item{pts.outside:}  {  A data frame with the data for artifact points located outside of the
+   predicted source}
+  \item{data.check:}{  If Identify=T, a data frame with the observations in dataUsed identified
+   as of interest; value is c(NA,NA) if no points are identified}
   \item{location:}{  The values of the parameter folder}
    }
 }
@@ -83,7 +86,7 @@ pca.eval <- fn.pca.evaluation(SourceData=ObsidianSources,
 data(ObsidianSources)
 pca.eval <- fn.pca.evaluation(SourceData=ObsidianSources,
   ArtifactData=save.randomForest$predictedSources, SourceGroup= "Code", ArtifactGroup="source",
-  known.sources=sources, predicted.sources=sources, AnalyticVars=analyticVars,
+  known.sources=sources, predicted.sources=sources, AnalyticVars=analyticVars, ID="ID",
   plotAllPoints=F, plotHullsOutsidePoints = F, plotOutsidePoints = T)
 
 }

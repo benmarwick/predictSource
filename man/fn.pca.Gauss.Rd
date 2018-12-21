@@ -19,7 +19,8 @@ if "All"', use all groups}
 
 \item{AnalyticVars}{vector of names (character values) of analytic results}
 
-\item{qqPlot}{Logical, should Q-Q plots (univariate, multivariate) be shown, default is T}
+\item{qqPlot}{Logical, should Q-Q plots (univariate with the bootstrap envelope, multivariate)
+be shown; default is T}
 
 \item{gaussIdentify}{Logical, should user identify points of interest, default is F}
 
@@ -28,9 +29,8 @@ if "All"', use all groups}
 \item{gaussID:}{optional name for an ID, default is " " if no ID}
 }
 \value{
-The function produces Q-Q plots (univariate and multivariate) of the first two principal components for each group if qqPlot=T.
-   The function produces p-values from univariate and multivariate tests of normality.  The function returns a list with the
-   following components:
+The function returns a list with the following components:
+
 \itemize{
   \item{usage:}{ A vector with the contents of the argument doc, the date run, the version of R used}
   \item{dataUsed:}{ The contents of the argument data restricted to the groups used}
@@ -39,16 +39,28 @@ The function produces Q-Q plots (univariate and multivariate) of the first two p
   \item{params.grouping:}{ A list with the values of the arguments GroupVar and Groups}
   \item{analyticVars:}{ A vector with the value of the argument AnalyticVars}
   \item{params.logical:}{ The value of QQtest}
-  \item{p.values:}{ T data frame with the p-values for the Gaussian assumptions for each group specified}
+  \item{p.values:}{ A data frame with the p-values for the Gaussian assumptions for each
+   group specified}
+ \item{data.check:}{  A data frame with data identified as generating points of interest;
+ value is NA if no points are identified}
   \item{location:}{ The value of the parameter folder}
  }
 }
 \description{
 Check whether first two principal components are Gaussian
 }
+\section{Details}{
+
+This function uses the function fn.2dPlot.Gauss().  The function produces p-values
+ from univariate and multivariate tests of normality.  It produces Q-Q plots
+ of the first two principal components for each group, as well as those plots with bootstrap
+ envelopes and the bivariate Q-Q plot if qqPlot=T.
+}
+
 \examples{
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-pca.Gauss <- fn.pca.Gauss(data=ObsidianSources, GroupVar="Code",Groups=c("A","B"), AnalyticVars=analyticVars)
+pca.Gauss <- fn.pca.Gauss(data=ObsidianSources, GroupVar="Code",Groups=c("A","B"),
+  AnalyticVars=analyticVars)
 
 }

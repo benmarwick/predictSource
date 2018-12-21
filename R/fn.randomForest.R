@@ -91,7 +91,7 @@ fn.randomForest <-
            folder = " "
            )
 {
-    # create dataset Data based on grouping restrict to desired set of groups
+    # create dataset Data.used based on grouping: restrict to desired set of groups
     if (Groups[1] != "All") {
       Use.rows <- (data[, GroupVar] %in% Groups)
       Data.used <- data[Use.rows, c(GroupVar, AnalyticVars)]
@@ -138,7 +138,7 @@ fn.randomForest <-
       predictions <- NA
     }   # dummy values
     #
-    if ((predictSources == T) & !is.na(predictData)) {
+    if (predictSources == T)  {
       response <- predict(object=fit.rf, newdata=predictData, type="response")
       probMatrix <- predict(object=fit.rf, newdata=predictData, type="prob")
       pred.source <- table(response)

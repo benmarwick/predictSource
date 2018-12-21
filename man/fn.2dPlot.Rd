@@ -69,7 +69,8 @@ A list with the following components:
 \item{ellipse.pct: }{ The value of the argument Ellipses}
 \item{analyticVars: }{ The value of the argument AnalyticVars}
 \item{colors:}{  A vector with the value of the argument Color}
-\item{data.check: }{ If Identify = T, a data frame with the information on user-identified points of interest}
+\item{data.check: }{ If Identify = T, a data frame with the information on user-identified points
+ of interest; value is c(NA,NA) if no points are identified}
 \item{location:}{ The contents of the parameter folder}
  }
 }
