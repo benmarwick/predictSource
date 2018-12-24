@@ -2,11 +2,13 @@
 title: "Introduction to the karon package"
 author: "John Karon & Ben Marwick"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteIndexEntry{Vignette Title}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
+output:
+  html_document:
+    df_print: paged
+  pdf_document: default
+  word_document: default
+vignette: |
+  %\VignetteIndexEntry{Vignette Title} %\VignetteEngine{knitr::rmarkdown} %\VignetteEncoding{UTF-8}
 ---
 
 ```{r setup, include = FALSE}
@@ -862,7 +864,7 @@ data.check:  Returned by functions creating two-dimensional scatter plots.  If I
 
 Using the functions
 
-To execute the example code in the function documentation, the user can highlight that section of the code in the documentation in the window showing the function and use the Run toolbar button.  In windows, the user can also use Control/Enter.
+To execute the example code in the function documentation, the user should highlight that section of the code in the documentation in the window showing the function and, in the windows operating system, use Control+Enter; in the macOS, use Cmd+Enter.
 
 Functions that create more than one plot contain the command browser() after each plot to stop function execution.  If the user is running code using base R, this command allows the user to examine and potentially save the plot to a file.  In Rstudio, this command would not be necessary, as the user can examine a set of plots in the Plot window using the back arrow.  If using Rstudio, a user may wish to define a new function by removing the browser() commands.  To continue execution after browser() is executed, the user should enter c() at the prompt.  If using R studio, be sure to do this in the console window, not in the window showing a function.
 
