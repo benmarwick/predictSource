@@ -53,6 +53,7 @@ As coded, in RStudio all plots are produced without a pause; use the back arrow 
 
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-pairsPlot <- fn.PairsPlot(data=ObsidianSources, GroupVar="Code", Groups="All", AnalyticVars=analyticVars)
+pairsPlot <- fn.PairsPlot(data=ObsidianSources, GroupVar="Code", Groups="All",
+AnalyticVars=analyticVars)
 
 }

@@ -36,7 +36,8 @@
 #'
 #' data(ObsidianSources)
 #' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-#' pairsPlot <- fn.PairsPlot(data=ObsidianSources, GroupVar="Code", Groups="All", AnalyticVars=analyticVars)
+#' pairsPlot <- fn.PairsPlot(data=ObsidianSources, GroupVar="Code", Groups="All",
+#' AnalyticVars=analyticVars)
 #'
 #' @export
 
@@ -83,7 +84,7 @@ fn.PairsPlot <-
     names(params.numeric)<-"Span"
     params.grouping<-list(GroupVar,Groups)
     names(params.grouping)<-c("GroupVar","Groups")
-    if (sum(dataKeep) < nrow(data.Plot)) dataNA <- data.Plot[!dataKeep]
+    if (sum(dataKeep) < nrow(data.Plot)) dataNA <- data.Plot[!dataKeep,]
     else dataNA <- NA
     #
     list(usage=fcn.date.ver,

@@ -38,7 +38,8 @@
 #' @examples
 #' data(ObsidianSources)
 #' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-#' CV.corr<-fn.CV.corr(data = ObsidianSources, GroupVar="Code", Groups = "All", AnalyticVars=analyticVars)
+#' CV.corr<-fn.CV.corr(data = ObsidianSources, GroupVar="Code", Groups = "All",
+#'  AnalyticVars=analyticVars)
 #'
 #' @export
 
@@ -179,7 +180,7 @@ fn.CV.corr <-
     names(params.numeric)<-c("CV.digits","corr.digits")
     params.grouping<-list(GroupVar,Groups)
     names(params.grouping)<-c("GroupVar","Groups")
-    if (sum(dataKeep) < nrow(data.Used)) dataNA <- data.Used[!dataKeep]
+    if (sum(dataKeep) < nrow(data.Used)) dataNA <- data.Used[!dataKeep,]
       else dataNA <- NA
     #
     list(usage=fcn.date.ver,

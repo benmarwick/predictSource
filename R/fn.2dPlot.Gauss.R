@@ -23,7 +23,7 @@
 #' \item{dataNA:}{  A data frame with observations containing a least one missing value
 #'   for an analysis variable, NA if no missing values}
 #' \item{analyticVars:}{  The contents of the argument AnalyticVars}
-#' \item{parameters:}{  A vector with argument values for GroupVar, Groups, pvalue.digits, scatterPlot, qqPlot}
+#' \item{params:}{  A vector with argument values for GroupVar, Groups, pvalue.digits, scatterPlot, qqPlot}
 #' \item{pvalues:}{  A data frame with the p-values for univariate and bivariate tests of normality}
 #' \item{data.check:}{ A data frame with the information on user-identified points of interest;
 #'     value is c(NA, NA) if no data identified}
@@ -175,14 +175,14 @@ fn.2dPlot.Gauss <- function (doc = "fn.2dPlot.Gauss",
   fcn.date.ver<-c(doc,date(),R.Version()$version.string)
   parameters<-c(groupVar=GroupVar,groups=Groups,digits.pvalue=pvalue.digits,
                 scattaerPlot=scatterPlot, qqPlot=qqPlot, Identify=Identify)
-  if (sum(dataKeep) < nrow(data.Used)) dataNA <- data.Used[!dataKeep]
+  if (sum(dataKeep) < nrow(data.Used)) dataNA <- data.Used[!dataKeep,]
   else dataNA <- NA
   #
   list(         usage=fcn.date.ver,
                 dataUsed=data.Used,
                 dataNA=dataNA,
                 analyticVars=AnalyticVars,
-                parameters=parameters,
+                params=params,
                 pvalues=return.pvalues,
                 data.check=data.check,
                 location=folder)

@@ -307,7 +307,7 @@ fn.2dPlot <- function (doc = "fn.2dPlot",
   names(params.numeric)<-c("Lowess.f","KernelWidth")
   params.grouping<-list(GroupVar,Groups)
   names(params.grouping)<-c("GroupVar","Groups")
-  if (sum(dataKeep) < nrow(data.Used)) dataNA <- data.Used[!dataKeep]
+  if (sum(dataKeep) < nrow(data.Used)) dataNA <- data.Used[!dataKeep,]
   else dataNA <- NA
   #
   list(       usage=fcn.date.ver,
