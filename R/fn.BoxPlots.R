@@ -1,6 +1,6 @@
 #' fn.BoxPlots
 #'
-#' Box plots of specified analytic values, by specified groups.  Missing values are not shown.
+#' Box plots of specified analytic values, by specified groups.
 #'
 #' @param doc: string documenting use, included in list returned
 #' @param data: data frame or matrix with data to be analyzed
@@ -21,19 +21,17 @@
 #' \item{params.numeric:}{  A vector with the values of the arguments Nrow and Ncol}
 #' \item{params.grouping:}{  A vector with the values of the arguments GroupVar and Groups}
 #' \item{analyticVars:}{  A vector with the value of the argument AnalyticVars}
-#' \item{dataNA:}{  A data frame with observations containing a least one missing value
-#'   for an analysis variable, NA if no missing values}
 #'}
 #'
 #' @section  DETAILS:
 #' If the function creates more than one plot, the code stops after each is displayed; enter c
 #' (continue) at the prompt to display the next plot.  If Groups specifies only one group, the code
-#' for that group is not displayed under a plot.
+#' for that group is not displayed under a plot.  If an observation has a variable value that is
+#'  missing, the variables without missing values are used in the corresponding box plots.
 #'
 #' @examples
 #' data(ObsidianSources)
 #' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-#' boxPlots<-fn.BoxPlots(data=ObsidianSources, GroupVar="Code", Groups="All",AnalyticVars=analyticVars,Nrow=2,Ncol=2)
 #'
 #' # side-by-side box plots of each source and artifacts assigned to that source
 #' data(ObsidianSources)
@@ -48,7 +46,7 @@
 #' boxPlots<-fn.BoxPlots(data=SourcesArtifacts, GroupVar="Code", Groups="All",AnalyticVars=c("Rb","Nb"),Nrow=2,Ncol=1)
 #'
 #' @export
-
+#'
 fn.BoxPlots <-
   function(doc = "fn.BoxPlots",
            data,
@@ -103,7 +101,7 @@ fn.BoxPlots <-
     names(params.numeric)<-c("Nrow","Ncol")
     params.grouping<-list(GroupVar,Groups)
     names(params.grouping)<-c("GroupVar","Groups")
-    if (sum(dataKeep) < nrow(data.BP)) dataNA <- data.BP[!dataKeep]
+    if (sum(dataKeep) < nrow(data.BP)) dataNA <- data.BP[!dataKeep,]
     else dataNA <- NA
     #
    list(usage=fcn.date.ver,
