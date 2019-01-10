@@ -17,7 +17,6 @@
 #' \item{dataUsed:}{  A data frame with data restricted to data used for the box plots}
 #' \item{dataNA:}{  A data frame with observations containing a least one missing value
 #'   for an analysis variable, NA if no missing values}
-#' \item{analyticVars:}{  The vector specified by the parameter AnalyticVars}
 #' \item{params.numeric:}{  A vector with the values of the arguments Nrow and Ncol}
 #' \item{params.grouping:}{  A vector with the values of the arguments GroupVar and Groups}
 #' \item{analyticVars:}{  A vector with the value of the argument AnalyticVars}
