@@ -70,9 +70,6 @@ fn.pca.Gauss <-
     } else
       data.Used <- data[, ]
     #
-    dataKeep <- rep(T, nrow(data.Used)) # will contain indices for observations with data kept
-    data.Used <- data.Used[dataKeep,]
-    #
     #  sort on GroupVar and ID if specified
     #
     if (GroupVar[1] != " ") {
@@ -83,6 +80,18 @@ fn.pca.Gauss <-
       rowsSort <- order(data.Used[,gaussID])
       data.Used <- data.Used[rowsSort,]
     }
+    dataKeep <- rep(T, nrow(data.Used)) # will contain indices for observations with no missing data
+    for (i in 1:nrow(data.Used)) {
+      for (j in 1:length(AnalyticVars))
+        if (is.na(data.Used[,AnalyticVars][i,j]))  dataKeep[i] <- F
+    }
+    if (sum(dataKeep) < nrow(data.Used))  dataNA<-data.Used[!dataKeep,]
+      else  dataNA<-NA
+    #
+    data.Used <- data.Used[dataKeep,]
+    #
+
+
     #
     # define variable groups as groups used in analysis
     if (Groups[1] == "All")
@@ -135,8 +144,6 @@ fn.pca.Gauss <-
     names(params.grouping)<-c("GroupVar","Groups")
     params.logical<-c(qqPlot, gaussIdentify)
     names(params.logical)<-c("qqPlot","gaussIdentify")
-    if (sum(dataKeep) < nrow(data.Used)) dataNA <- data.Used[!dataKeep]
-    else dataNA <- NA
     #
     if (gaussIdentify == T) {
     if (gaussID == " ") data.check<-outGauss$data.check[,c(GroupVar, AnalyticVars)]

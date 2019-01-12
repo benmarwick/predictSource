@@ -48,7 +48,7 @@ for that group is not displayed under a plot.  If an observation has a variable 
 
 \examples{
 data(ObsidianSources)
-analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+
 
 # side-by-side box plots of each source and artifacts assigned to that source
 data(ObsidianSources)

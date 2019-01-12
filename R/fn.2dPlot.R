@@ -51,15 +51,13 @@
 #'   bivariate plot for the user to identify any points of interest.
 #'
 #' @examples
-#' data(ObsidianSources)
-#' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+
 #' #
 #' #  plot four pairs of variables by source (default has four plots on a page)
-#' plot.2d <- fn.2dPlot(data = ObsidianSources, GroupVar = "Code", ID = "ID", Groups = c("A","B"),
-#'           AnalyticVars = rbind(analyticVars[1:2],analyticVars[c(1,3)], analyticVars[c(1,4)],
-#'           analyticVars[2:3]), PlotEllipses=T, LowessLine=T)
 #' #
 #' #  plot one pair of variables with all sources on one plot
+#' data(ObsidianSources)
+#' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 #' plot.2d <- fn.2dPlot(data = ObsidianSources, GroupVar = "Code", ID = "ID", Groups = "All",
 #'           AnalyticVars =analyticVars[1:2], PlotByGroup=F, PlotColors=T, namesPlotEllipses=T, LowessLine=T)
 #'
@@ -315,6 +313,7 @@ fn.2dPlot <- function (doc = "fn.2dPlot",
               dataNA=dataNA,
               params.numeric=params.numeric,
               params.grouping=params.grouping,
+              analyticVars=AnalyticVars,
               ellipse.pct=Ellipses,
               data.check=data.check,
               location=folder)

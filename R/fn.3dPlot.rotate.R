@@ -190,7 +190,7 @@ fn.3dPlot.rotate <-
     fcn.date.ver<-c(doc,date(),R.Version()$version.string)
     params<-list(ByGroup,ptSize)
     names(params)<-c("ByGroup","ptSize")
-    if (sum(dataKeep) < nrow(data.Used)) dataNA <- data.Used[!dataKeep]
+    if (sum(dataKeep) < nrow(data.Used)) dataNA <- data.Used[!dataKeep,]
     else dataNA <- NA
     #
     out<-list(usage=fcn.date.ver,

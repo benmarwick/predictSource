@@ -36,7 +36,9 @@
 #'   \item{dataNA:}{  A data frame with observations containing a least one missing value
 #'   for an analysis variable, NA if no missing values}
 #'   \item{params.grouping:}{  A list with the values of the arguments GroupVar and Groups}
-#'   \item{params.logical:}  {A vector with the values of the arguments ScreePlot,BoxPlots,PlotPoints,PlotEllipses,PlotHull,PlotMedians,PlotColors}
+#'   \item{params.logical:}  {A vector with the values of the arguments ScreePlot,BoxPlots,
+#'   PlotPoints,PlotEllipses,PlotHull,PlotMedians,PlotColors}
+#'   \item{colors:}{  The value of the argument Colors}
 #'   \item{analyticVars:}{  A vector with the value of the argument AnalyticVars}
 #'   \item{ellipse.pct:}{  The value of the argument Ellipses}
 #'   \item{variances:}{  A data frame including the percent of variation explained by each principal component and the cumulative percent explained}
@@ -250,7 +252,7 @@ fn.pca <-  function(doc = "fn.pca",
     weights <- round(weights,dig = digits)
     variances <- round(importance.pca, dig = digits)
     #
-    if (sum(dataKeep) < nrow(data.Used)) dataNA <- data.Used[!dataKeep]
+    if (sum(dataKeep) < nrow(data.Used)) dataNA <- data.Used[!dataKeep,]
     else dataNA <- NA
     #
     if (Identify==T) {
@@ -262,7 +264,9 @@ fn.pca <-  function(doc = "fn.pca",
                 dataUsed=data.Used,
                 dataNA=dataNA,
                 analyticVars=AnalyticVars,
+                params.logical=params.logical,
                 params.grouping=params.grouping,
+                colors=Colors,
                 ellipse.pct=Ellipses,
                 variances = variances,
                 weights = weights,

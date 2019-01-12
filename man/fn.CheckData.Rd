@@ -58,7 +58,6 @@ not equal to "All" or " "), if must be a vector of length at least 2.
 \examples{
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-CheckData<-fn.CheckData(data=ObsidianSources,CheckDupVars=c("Code","ID"),GroupVar="Code",Groups="All",
-  ID = "ID", AnalyticVars=analyticVars)
+
 
 }

@@ -30,7 +30,7 @@
 #'
 #' @examples
 #' data(ObsidianSources)
-#' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+#'
 #'
 #' # side-by-side box plots of each source and artifacts assigned to that source
 #' data(ObsidianSources)

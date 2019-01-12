@@ -173,7 +173,7 @@ fn.2dPlot.Gauss <- function (doc = "fn.2dPlot.Gauss",
   }
   #
   fcn.date.ver<-c(doc,date(),R.Version()$version.string)
-  parameters<-c(groupVar=GroupVar,groups=Groups,digits.pvalue=pvalue.digits,
+  params<-c(groupVar=GroupVar,groups=Groups,digits.pvalue=pvalue.digits,
                 scattaerPlot=scatterPlot, qqPlot=qqPlot, Identify=Identify)
   if (sum(dataKeep) < nrow(data.Used)) dataNA <- data.Used[!dataKeep,]
   else dataNA <- NA
