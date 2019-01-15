@@ -19,7 +19,7 @@
 #' @param plotImportance: Logical, whether to show the plot of variable importance, default is T
 #' @param predictSources: Logical; if T, predict sources for the data in predictData; default is F
 #' @param predictData: data frame or matrix with data used to predict sources for observations,
-#'    must contain all variables in AnalyticVars
+#'    must contain all variables in AnalyticVars.  Missing values are not allowed.
 #' @param plotSourceProbs: Logical, if T (the default) and predictSources=T, show box plots of source
 #'    probabilities
 #' @param folder  The path to the folder in which data frames will be saved; default is " "
@@ -38,6 +38,7 @@
 #' \itemize{
 #'   \item{usage:}{ A vector with the contents of the argument doc, the date run, the version of R used}
 #'   \item{dataUsed:}{ The contents of the argument data restricted to the groups used}
+#'   \item{dataNA:}{  A data frame with data with missing values, NÁ if no missing values}
 #'   \item{predictData:}{  The data frame in the argument predictData}
 #'   \item{params.grouping:}{ A list with the values of the arguments GroupVar and Groups}
 #'   \item{analyticVars:}{ A vector with the value of the argument AnalyticVars}
@@ -68,7 +69,7 @@
 #' AnalyticVars=analyticVars, ID="ID", NvarUsed=3, plotErrorRate=F, plotImportance=F,
 #' predictSources=T, predictData=ObsidianArtifacts, plotSourceProbs=T)
 #'
-#' @import  MASS randomForest rpart
+#' @import  MASS randomForest  missForest rpart
 #'
 #' @export
 
@@ -94,9 +95,13 @@ fn.randomForest <-
     # create dataset Data.used based on grouping: restrict to desired set of groups
     if (Groups[1] != "All") {
       Use.rows <- (data[, GroupVar] %in% Groups)
-      Data.used <- data[Use.rows, c(GroupVar, AnalyticVars)]
-    } else
+      if (ID != " ") {
+        Data.used <- data[Use.rows, c(GroupVar, AnalyticVars)]
+        dataID <- data[Use.rows, ID]
+      }
+      } else
       Data.used <- data[, c(GroupVar, AnalyticVars)]
+    #
     # define variable groups as groups used in analysis
     if ((GroupVar[1] != " ") & (Groups[1] == "All"))
       groups <-
@@ -106,6 +111,21 @@ fn.randomForest <-
     #
     if (!is.na(Seed))
       set.seed(Seed)  # create reproducible analysis
+    #
+    # matrix to contain indices for observations with no missing values
+    #
+    dataKeep <- rep(T, nrow(Data.used))
+    for (i in 1:length(AnalyticVars))
+      dataKeep[is.na(Data.used[,AnalyticVars[i]])] <- F
+    #
+    #  redefine Data.used if some analysis variables are missing by imputing missing values
+    #
+    if (sum(dataKeep) < nrow(Data.used)) {
+      temp<-rfImpute(Data.used[,GroupVar] ~ ., Data.used)
+      Data.used <- temp[,c(GroupVar,AnalyticVars)]
+      dataNA <- data[!dataKeep,]
+    }
+      else dataNA <- NA
     #
     Sources <- factor(Data.used[, GroupVar])
     formula.rhs <-
@@ -122,6 +142,11 @@ fn.randomForest <-
                    mtry = NvarUsed,
                    ntree = Ntrees)
     # specify number of variables in each call to rpart
+    #
+    #  specify one plot per page
+    #
+    par(mfrow=c(1,1))
+    #
     if (plotErrorRate) {
       plot(fit.rf, main = "Estimated error rate by number of trees")
       browser()
@@ -199,6 +224,7 @@ fn.randomForest <-
     #
     out<-list(usage=fcn.date.ver,
                   dataUsed=Data.used,
+                  dataNA=dataNA,
                   predictData=predictData,
                   analyticVars=AnalyticVars,
                   params.grouping=params.grouping,

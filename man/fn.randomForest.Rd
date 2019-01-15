@@ -44,7 +44,7 @@ default value is 11111}
 \item{predictSources:}{Logical; if T, predict sources for the data in predictData; default is F}
 
 \item{predictData:}{data frame or matrix with data used to predict sources for observations,
-must contain all variables in AnalyticVars}
+must contain all variables in AnalyticVars.  Missing values are not allowed.}
 
 \item{plotSourceProbs:}{Logical, if T (the default) and predictSources=T, show box plots of source
 probabilities}
@@ -55,6 +55,7 @@ The function returns a list with the following components:
 \itemize{
   \item{usage:}{ A vector with the contents of the argument doc, the date run, the version of R used}
   \item{dataUsed:}{ The contents of the argument data restricted to the groups used}
+  \item{dataNA:}{  A data frame with data with missing values, NÁ if no missing values}
   \item{predictData:}{  The data frame in the argument predictData}
   \item{params.grouping:}{ A list with the values of the arguments GroupVar and Groups}
   \item{analyticVars:}{ A vector with the value of the argument AnalyticVars}
