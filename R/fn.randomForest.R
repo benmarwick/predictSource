@@ -182,10 +182,9 @@ fn.randomForest <-
       #
       #  redefine predictData if some analysis variables are missing by imputing missing values
       #
-      browser()
       if (sum(predictKeep) < nrow(predictData)) {
         predictNA <- predictData[!predictKeep,]
-        temp<-missForest(xmis=predictData[,AnalyticVars])
+        temp<-missForest(xmis=predictData[,AnalyticVars],variablewise=F)
         impError <- temp$OOBerror
         if (artifactID == " ") predictData <- data.frame(predictData[,GroupVar],temp$ximp)
         else  predictData <- data.frame(predictData[,c(GroupVar, artifactID)],temp$ximp)

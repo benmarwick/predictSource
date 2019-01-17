@@ -51,7 +51,7 @@
 #'   \item{location:}{  The value of the parameter folder}
 #'  }
 #'
-#' @import  MASS ellipse
+#' @import  MASS ellipse  randomForest
 #'
 #' @examples
 #' data(ObsidianSources)
@@ -117,7 +117,16 @@ fn.pca <-  function(doc = "fn.pca",
       for (j in 1:length(AnalyticVars))
         if (is.na(data.Used[,AnalyticVars][i,j]))  dataKeep[i] <- F
     }
-    data.Used <- data.Used[dataKeep,]
+    #
+    #  redefine data.Keep if some analysis variables are missing by imputing missing values
+    #
+    if (sum(dataKeep) < nrow(data.Used)) {
+      dataNA <- data.Used[!dataKeep,]
+      temp<-rfImpute(data.Used[,GroupVar] ~ ., data.Used[,AnalyticVars])
+      if (ID == " ") data.Used <- data.frame(data.Used[,GroupVar],temp)
+      else  data.Used <- data.frame(data.Used[,c(GroupVar, ID)],temp)
+    }
+    else dataNA <- NA
     #
     #  sort on GroupVar and ID within GroupVar if specified
     #
