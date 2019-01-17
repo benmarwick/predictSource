@@ -5,10 +5,10 @@
 \title{fn.randomForest}
 \usage{
 fn.randomForest(doc = "fn.randomForest", data, GroupVar, Groups = "All",
-  AnalyticVars, ID = " ", Ntrees = 500, NvarUsed = NA, Seed = 11111,
-  digitsImportance = 1, plotErrorRate = T, plotImportance = T,
-  predictSources = F, predictData = NA, plotSourceProbs = T,
-  folder = " ")
+  AnalyticVars, sourceID = " ", Ntrees = 500, NvarUsed = NA,
+  Seed = 11111, digitsImportance = 1, plotErrorRate = T,
+  plotImportance = T, predictSources = F, predictData = NA,
+  artifactID = " ", plotSourceProbs = T, folder = " ")
 }
 \arguments{
 \item{doc}{Documentation for the function use, default value is the function name}
@@ -23,7 +23,7 @@ fn.randomForest(doc = "fn.randomForest", data, GroupVar, Groups = "All",
 
 \item{Groups:}{Vector of codes for groups to be used, 'All' if use all groups}
 
-\item{ID:}{if not " " (the default), the name of the variable with sample ID}
+\item{sourceID:}{if not " " (the default), the name of the variable with sample ID for source data}
 
 \item{AnalyticVars:}{Vector with names of analytic variables}
 
@@ -43,6 +43,9 @@ default value is 11111}
 
 \item{predictSources:}{Logical; if T, predict sources for the data in predictData; default is F}
 
+\item{artifactID:}{if not " " (the default), the name of the variable with sample ID for
+artifact data}
+
 \item{predictData:}{data frame or matrix with data used to predict sources for observations,
 must contain all variables in AnalyticVars.  Missing values are not allowed.}
 
@@ -55,7 +58,8 @@ The function returns a list with the following components:
 \itemize{
   \item{usage:}{ A vector with the contents of the argument doc, the date run, the version of R used}
   \item{dataUsed:}{ The contents of the argument data restricted to the groups used}
-  \item{dataNA:}{  A data frame with data with missing values, NÁ if no missing values}
+  \item{sourcesNA:}{  A data frame with data from the data frame data with missing values,
+   NÁ if no missing values}
   \item{predictData:}{  The data frame in the argument predictData}
   \item{params.grouping:}{ A list with the values of the arguments GroupVar and Groups}
   \item{analyticVars:}{ A vector with the value of the argument AnalyticVars}
@@ -65,10 +69,16 @@ The function returns a list with the following components:
   \item{forest:}{  The random forest}
   \item{importance:}{  A data frame with information on the importance of each variable
    in AnalyticVars}
+  \item{predictedData:} {  A data frame with the artifact data used for predictions; if there
+  is missing data, after imputation of the missing data}
+  \item{predictedNA:}{ A data frame with the observations for which missing data were imputed;
+  NA if there are no missing data}
   \item{confusion:}{  A data frame with the estimate of the confusion matrix}
   \item{predictedSources:}{  A data frame with prediction information, sample ID (if requested),
      and values of AnalyticVars}
   \item{predictedTotals:}{  A vector with the predicted totals for each group (source)}
+  \item{impError:}{ The estimated OOB (out of bag) error for imputed predictor data;
+  NA if no imputed data}
   \item{location:}{ The value of the parameter folder}
  }
 }
@@ -89,14 +99,14 @@ The function implements a random forest analysis.  If predictSources = T and
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 save.randomForest <- fn.randomForest(data=ObsidianSources, GroupVar="Code",Groups="All",
-  ID="ID", AnalyticVars=analyticVars, NvarUsed=3)
+  sourceID="ID", AnalyticVars=analyticVars, NvarUsed=3)
 #
 # predicted sources for artifacts
 data(ObsidianSources)
 data(ObsidianArtifacts)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 save.randomForest <- fn.randomForest(data=ObsidianSources, GroupVar="Code",Groups="All",
-AnalyticVars=analyticVars, ID="ID", NvarUsed=3, plotErrorRate=F, plotImportance=F,
-predictSources=T, predictData=ObsidianArtifacts, plotSourceProbs=T)
+AnalyticVars=analyticVars, sourceID="ID", NvarUsed=3, plotErrorRate=F, plotImportance=F,
+predictSources=T, predictData=ObsidianArtifacts, artifactID="ID", plotSourceProbs=T)
 
 }
