@@ -18,7 +18,7 @@ fn.pca.evaluation(doc = "fn.pca.evaluation", SourceData, ArtifactData,
 
 \item{ArtifactData:}{corresponding data from artifacts}
 
-\item{ID:}{ID for sample, " " if none (default value)}
+\item{ID:}{ID for samples (artifacts), " " if none (default value)}
 
 \item{SourceGroup:}{name of variable with code for location}
 
@@ -56,7 +56,13 @@ of the source data, and a plot with those convex hulls and the artifact data (us
   \item{usage:}{  A vector with the contents of the argument doc, the date run,
   the version of R used}
   \item{sourceData:}{  The contents of the argument SourceData restricted to knownSources}
+  \item{sourcesNA:}{ A data frame with source observations with missing data for analytic
+  variables; NA if no missing data}
   \item{artifactData:}{  The contents of the argument ArtifactData restricted to predictedSources}
+  \item{artifactsNA:}{ A data frame with artifact observations with missing data for analytic
+  variables; NA if no missing data}
+  \item{impError}{  Normalized root mean square error estimate for imputed data;
+  NA if no missing data}
   \item{params:}{  A list with the values of the arguments GroupVar and Groups}
   \item{analyticVars:}{  A vector with the value of the argument AnalyticVars}
   \item{table.in.out:} {  A data frame with counts of the numbers of artifacts inside and
@@ -75,12 +81,12 @@ Create plots to evaluate the predicted artifact sources using the source data pr
 
 # Evaluate predicted sources of artifacts from scatterplots
 
-# evaluate predictions from a tree model: plot only points outside the predicted source hull
+# evaluate predictions from a tree model
 data(ObsidianSources)
 pca.eval <- fn.pca.evaluation(SourceData=ObsidianSources,
   ArtifactData=save.tree$predictedSources, SourceGroup= "Code", ArtifactGroup="source",
   known.sources=sources, predicted.sources=sources, AnalyticVars=analyticVars, ID="ID",
-  plotAllPoints=F, plotHullsOutsidePoints = F, plotOutsidePoints = T)
+  plotAllPoints=T, plotHullsOutsidePoints = T, plotOutsidePoints = T)
 
 # evaluate predictions from a random forest analysis: plot only points outside the predicted source hull
 data(ObsidianSources)

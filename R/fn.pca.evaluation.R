@@ -5,7 +5,7 @@
 #' @param doc: documentation in list returned by function
 #' @param SourceData: data from known sources, including code for location and element analyses
 #' @param ArtifactData: corresponding data from artifacts
-#' @param ID: ID for sample, " " if none (default value)
+#' @param ID: ID for samples (artifacts), " " if none (default value)
 #' @param SourceGroup: name of variable with code for location
 #' @param ArtifactGroup: name of variable with code for predicted source
 #' @param known.sources: vector of locations to be considered as sources
@@ -37,7 +37,13 @@
 #'   \item{usage:}{  A vector with the contents of the argument doc, the date run,
 #'   the version of R used}
 #'   \item{sourceData:}{  The contents of the argument SourceData restricted to knownSources}
+#'   \item{sourcesNA:}{ A data frame with source observations with missing data for analytic
+#'   variables; NA if no missing data}
 #'   \item{artifactData:}{  The contents of the argument ArtifactData restricted to predictedSources}
+#'   \item{artifactsNA:}{ A data frame with artifact observations with missing data for analytic
+#'   variables; NA if no missing data}
+#'   \item{impError}{  Normalized root mean square error estimate for imputed data;
+#'   NA if no missing data}
 #'   \item{params:}{  A list with the values of the arguments GroupVar and Groups}
 #'   \item{analyticVars:}{  A vector with the value of the argument AnalyticVars}
 #'   \item{table.in.out:} {  A data frame with counts of the numbers of artifacts inside and
@@ -60,7 +66,7 @@
 #'
 #' # Evaluate predicted sources of artifacts from scatterplots
 #'
-#' # evaluate predictions from a tree model: plot only points outside the predicted source hull
+#' # evaluate predictions from a tree model
 #' data(ObsidianSources)
 #` data(ObsidianArtifacts)
 #` analyticVars<-c("Rb","Sr","Y","Zr","Nb")
@@ -72,7 +78,7 @@
 #' pca.eval <- fn.pca.evaluation(SourceData=ObsidianSources,
 #'   ArtifactData=save.tree$predictedSources, SourceGroup= "Code", ArtifactGroup="source",
 #'   known.sources=sources, predicted.sources=sources, AnalyticVars=analyticVars, ID="ID",
-#'   plotAllPoints=F, plotHullsOutsidePoints = F, plotOutsidePoints = T)
+#'   plotAllPoints=T, plotHullsOutsidePoints = T, plotOutsidePoints = T)
 #'
 #' # evaluate predictions from a random forest analysis: plot only points outside the predicted source hull
 #' data(ObsidianSources)
@@ -112,6 +118,22 @@ fn.pca.evaluation <-
     SourceRows <- SourceData[, SourceGroup] %in% known.sources
     sourceData <- SourceData[SourceRows, c(SourceGroup, AnalyticVars)]
     #
+    # matrix to contain indices for observations with no missing values
+    #
+    sourceKeep <- rep(T, nrow(sourceData))
+    for (i in 1:length(AnalyticVars))
+      sourceKeep[is.na(sourceData[,AnalyticVars[i]])] <- F
+    #
+    #  redefine sourceData if some analysis variables are missing by imputing missing values
+    #
+    if (sum(sourceKeep) < nrow(sourceData)) {
+      temp<-rfImpute(sourceData[,SourceGroup] ~ ., sourceData[,AnalyticVars])
+      colnames(temp) <- c(SourceGroup,AnalyticVars)
+      sourceData <- temp[,c(SourceGroup,AnalyticVars)]
+      sourcesNA <- sourceData[!sourceKeep,]
+    }
+    else sourcesNA <- NA
+    #
     #  add numeric code for source to data set
     #
     SourceIndex <- rep(NA, nrow(sourceData))
@@ -124,15 +146,36 @@ fn.pca.evaluation <-
     sourceData <- data.frame(sourceData[,c(SourceGroup,AnalyticVars)], SourceIndex, data.Source)
     colnames(sourceData) <- c("group",AnalyticVars,"index", "data.source")
     #
-    #  create dummy lab ID for adding ArtifactData to sourceData
+    #  create dummy lab ID for combining artifactData and sourceData
     #
     dummyID = rep(" ", nrow(sourceData))
     sourceData <- data.frame(sourceData[,c("group",AnalyticVars,"index", "data.source")], ID = dummyID)
+
     #
     #  create artifact data with group code and elements, restricted to potential sources of interest
     #
     artifactRows <- ArtifactData[, ArtifactGroup] %in% predicted.sources
     artifactData <- ArtifactData[artifactRows,]
+    #
+    #  vector with F if row contains missing analytic variable
+    #
+    artifactKeep <- rep(T, nrow(artifactData))
+    for (i in 1:length(AnalyticVars))
+      artifactKeep[is.na(artifactData[,AnalyticVars[i]])] <- F
+    #
+    #  redefine predictData if some analysis variables are missing by imputing missing values
+    #
+    if (sum(artifactKeep) < nrow(artifactData)) {
+      artifactsNA <- artifactData[!artifactKeep,]
+      temp<-missForest(xmis=artifactData[,AnalyticVars],variablewise=F)
+      impError <- temp$OOBerror
+      if (ID == " ") artifactData <- data.frame(artifactData[,ArtifactGroup],temp$ximp)
+      else  artifactData <- data.frame(artifactData[,c(ArtifactGroup, ID)],temp$ximp)
+    }
+    else {
+      artifactsNA <- NA
+      impError <- NA
+    }
     #
     if (ID[1] == " ")  {
       ID = rep(" ", nrow(artifactData))
@@ -510,8 +553,11 @@ fn.pca.evaluation <-
   #
   out<-list(usage=fcn.date.ver,
                 sourceData = sourceData,
+                sourcesNA = sourcesNA,
                 artifactData = artifactData,
+                artifactsNA = artifactsNA,
                 analyticVars = AnalyticVars,
+                impError = impError,
                 params = params,
                 table.in.out = n.in.out,
                 points.outside = pts.outside,

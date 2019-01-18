@@ -176,6 +176,9 @@ fn.randomForest <-
     }   # dummy values
     #
     if (predictSources == T)  {
+      #
+      #  vector with F if row contains missing analytic variable
+      #
       predictKeep <- rep(T, nrow(predictData))
       for (i in 1:length(AnalyticVars))
         predictKeep[is.na(predictData[,AnalyticVars[i]])] <- F
