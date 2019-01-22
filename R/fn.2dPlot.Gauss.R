@@ -8,9 +8,10 @@
 #' @param ID  Name for the variable with a lab ID, " " if no lab ID is used
 #' @param Groups  Vector of values of the group variable for which plots are to be done;
 #'    if "All", use all groups; if " ", no grouping
-#' @param AnalyticVars  Names of two analytic variables to be shown in the plots, vector of length 2
+#' @param AnalyticVars  Vector of length two with the names of two analytic variables
+#'  to be shown in the plots
 #' @param scatterPlot  Logical (default is T): specify whether to show scatter plots when qqPlot = F
-#' @param qqPlot  Logical (default is T): specify whether to show q-q plots the bootstrap
+#' @param qqPlot  Logical (default is T): specify whether to show the q-q plots with the bootstrap
 #' envelopes and multivariate plots
 #' @param pvalue.digits  Numeric (default is 3): number of significant digits retained in tests for normality
 #' @param Identify  Logical(default is F): if T, user can identify points of interest in the plots
@@ -18,7 +19,7 @@
 #'
 #' @return   A list with the following components:
 #'  \itemize{
-#' \item{usage:}{  Vector with the contents of the argument doc, the date run, the version of R used}
+#' \item{usage:}{  String with the contents of the argument doc, the date run, the version of R used}
 #' \item{dataUsed:}{ The contents of the argument data restricted to the groups used}
 #' \item{dataNA:}{  A data frame with observations containing a least one missing value
 #'   for an analysis variable, NA if no missing values}
@@ -27,17 +28,20 @@
 #' \item{pvalues:}{  A data frame with the p-values for univariate and bivariate tests of normality}
 #' \item{data.check:}{ A data frame with the information on user-identified points of interest;
 #'     value is c(NA, NA) if no data identified}
-#' \item{location:}{ The contents of the parameter folder}
+#' \item{location:}{ The value of the parameter folder}
 #' }
 #'
 #' @section Details:
 #'  If qqPlot = T, by default each page has panes in two rows and three columns
 #'  (but there is a new page for successive groups). The function stops after producing each row
 #'   of each plot.  Enter c ("continue") at the prompt to get the next plot.
+#'   If qqPlot = F, only the standard qq plots are shown, and the function stops after producing each
+#'   page.
 #'   See the vignette for more information: visualizing each plot, the information obtained
 #'    by using the package qqtest, the tests for bivariate normality, and identifying points of interest.
 #'
 #' @import MASS  qqtest  MVN
+#'
 #' @examples
 #' data(ObsidianSources)
 #' plot.2d.Gauss<-fn.2dPlot.Gauss(data=ObsidianSources, GroupVar="Code", ID="ID", Groups=c("A","B"),

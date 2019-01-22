@@ -4,36 +4,39 @@
 \alias{fn.3dPlot}
 \title{fn.3dPlot}
 \usage{
-fn.3dPlot(doc = "fn.3dPlot version 0.1", data, GroupVar, Groups, AnalyticVars,
-  Selections, ByGroup = FALSE, PlotMedians = FALSE, Colors = c("red",
-  "black", "blue", "green", "purple"), SymbolSize = 0.7)
+fn.3dPlot(doc = "fn.3dPlot", data, GroupVar, Groups, AnalyticVars, Selections,
+  ByGroup = F, PlotMedians = F, Colors = c("red", "black", "blue",
+  "green", "purple"), SymbolSize = 0.7)
 }
 \arguments{
 \item{doc}{A string documenting use written to the output list; default is the function name}
 
 \item{data}{R matrix or data frame containing the data to be analyzed}
 
-\item{GroupVar}{name for variable defining grouping; can be " " if no grouping.}
+\item{GroupVar}{Name for variable defining grouping; can be " " if no grouping.}
 
-\item{Groups}{vector of values of group variable for which plots are to be done;
+\item{Groups}{Vector of values of group variable for which plots are to be done;
 if "All", use all groups; if " ", no grouping}
 
-\item{AnalyticVars}{vector of names (character values) of analytic results}
+\item{AnalyticVars}{Vector of names (character values) of the analytic variables}
 
-\item{Selections}{vector of length 3, or data frame with 3 columns, with combinations to be plotted}
+\item{Selections}{Vector of length 3, or data frame with 3 columns, with the combinations
+of the analytic variables to be plotted}
 
-\item{ByGroup}{if T, show scatterplot for each group for each selection of 3 variables}
+\item{ByGroup}{If T, show scatterplot for each group for each selection of 3 variables;
+if F, all specified groups are on one plot}
 
-\item{PlotMedians}{If T, plot only the medians in each group (the points are not plotted)}
+\item{PlotMedians}{If T, plot only the medians in each group (the points are not plotted)
+if F, the median locations are not plotted}
 
-\item{Colors}{colors of plotted points, default is a vector for showing several groups on one plot}
+\item{Colors}{Vector with the colors of plotted points, used sequentially for the groups}
 
-\item{SymbolSize}{value at most 1, smaller value gives smaller diameter points}
+\item{SymbolSize}{Value at most 1, a smaller value gives smaller diameter points}
 }
 \value{
 A list with the following components:
  \itemize{
-\item{usage:}{  A vector with the contents of the argument doc, the date run, the version of R used}
+\item{usage:}{  A string with the contents of the argument doc, the date run, the version of R used}
 \item{dataUsed:}{  The contents of the argument data restricted to the groups used}
 \item{dataNA:}{  A data frame with observations containing a least one missing value
   for an analysis variable, NA if no missing values}

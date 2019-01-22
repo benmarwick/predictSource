@@ -13,33 +13,33 @@ fn.3dPlot.rotate(doc = "fn.3dPlot.rotate", data, GroupVar, Groups,
 
 \item{data:}{R matrix or data frame containing the data to be analyzed}
 
-\item{GroupVar:}{name for variable defining grouping; a group variable must be specified}
+\item{GroupVar:}{Name for variable defining grouping; a group variable must be specified}
 
-\item{Groups:}{vector of values of group variable for which plots are to be done;
+\item{Groups:}{Vector of values of group variable for which plots are to be done;
 "All": use all groups;" ": no grouping}
 
-\item{AnalyticVars:}{vector of names (character values) of analytic results}
+\item{AnalyticVars:}{Vector of names (character values) of analytic results}
 
-\item{Selections:}{vector of length 3, or data frame with 3 columns, with combinations to be plotted}
+\item{Selections:}{Vector of length 3, or data frame with 3 columns, with combinations to be plotted}
 
-\item{ByGroup:}{if T, show scatterplot for each group for each selection of 3 variables
+\item{ByGroup:}{If T, show scatterplot for each group for each selection of 3 variables;
 default is F}
 
-\item{ptSize:}{size of plotted points, default is 5 (a larger value gives larger points)}
+\item{ptSize:}{Size of plotted points, default is 5 (a larger value gives larger points)}
 
-\item{Color:}{color(s) of plotted points; default is a vector
+\item{Color:}{Vector with the color(s) of plotted points; default is a vector
 red, black, blue, green, purple}
 
-\item{folder:}{the folder to which one or more files with images will be saved;
+\item{folder:}{The folder to which one or more files with images will be saved;
 default is " " (no files saved)}
 
-\item{dsFile:}{the complete path to a file in folder to which each image will be saved;
+\item{dsFile:}{The complete path to a file in folder to which each image will be saved;
 if folder is not " ", this must be a valid path and file name (ends in .pdf for current function)}
 }
 \value{
 A list with the following components:
 \itemize{
-\item{usage}{  A vector with the contents of the argument doc, the date run, the version of R used}
+\item{usage}{  A string with the contents of the argument doc, the date run, the version of R used}
 \item{dataUsed}{  The contents of the argument data restricted to the groups used}
 \item{dataNA:}{  A data frame with observations containing a least one missing value
   for an analysis variable, NA if no missing values}
@@ -55,7 +55,7 @@ A list with the following components:
 Create 3-dimensional data plot(s) that can be rotated
 }
 \section{}{
- Details
+ Details:
 See the vignette for details on the use of colors.  The rotated 3d plot can be saved to a file
 located at dsFile.  The code saves a file as a pdf; see the documentation for the function
 rgl.postscript() for changing the format to postscript, eps, tex, or others.  Point sizes may

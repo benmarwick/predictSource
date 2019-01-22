@@ -3,8 +3,8 @@
 #' Pairs plots of specified analytic values, by specified groups
 #'
 #' @param doc: a string documenting use added to the output list, default is the function name
-#' @param data: R matrix or data frame containing the data to be analyzedfn
-#' @param GroupVar: name for variable defining grouping, " " if no grouping
+#' @param data: R matrix or data frame containing the data to be analyzed
+#' @param GroupVar: name for variable defining grouping (required)
 #' @param Groups: vector of values of group variable for which plots are to be done.
 #'    if "All": use all groups; if " ": no grouping
 #' @param AnalyticVars: vector of names (character values) of analytic results

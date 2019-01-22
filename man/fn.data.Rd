@@ -23,7 +23,7 @@ fn.data(doc = "fn.data", data, Group, Subset, ID, AnalyticVars)
 A list with the elements:
  \itemize{
 \item{usage:}{  Documentatation, including function name, version of R used, date run)}
-\item{dataUsed:"}{  Data used, restricted to the specified group}
+\item{dataUsed:}{  Data used, restricted to the specified group}
 \item{analyticVars:}{  The value of AnalyticVars}
 \item{dataOut:}{  The data frame created by the function, with Group, Subset (if specified), ID, and analytic variables}
 }

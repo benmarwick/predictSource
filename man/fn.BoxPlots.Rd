@@ -26,7 +26,7 @@ if ' ', no grouping}
 \value{
 A list with the following components:
  \itemize{
-\item{usage:}{  A vector with the value of the argument doc, date run, version of R used}
+\item{usage:}{  A string with the value of the argument doc, date run, version of R used}
 \item{dataUsed:}{  A data frame with data restricted to data used for the box plots}
 \item{dataNA:}{  A data frame with observations containing a least one missing value
   for an analysis variable, NA if no missing values}
@@ -48,7 +48,8 @@ for that group is not displayed under a plot.  If an observation has a variable 
 
 \examples{
 data(ObsidianSources)
-
+boxPlots<-fn.BoxPlots(data=ObsidianSources, GroupVar="Code", Groups="All",
+AnalyticVars=c("Rb","Nb", "Zr","Sr"),Nrow=2,Ncol=2)
 
 # side-by-side box plots of each source and artifacts assigned to that source
 data(ObsidianSources)

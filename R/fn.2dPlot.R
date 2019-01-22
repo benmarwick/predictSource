@@ -15,23 +15,25 @@
 #' @param PlotByGroup default is T; if F, all groups are on each plot for a pair of variables
 #' @param PlotPoints if T (the default), all points are plotted; if F, no points are plotted
 #' @param LowessLine if T, a lowess line is plotted for each group; if F, no line is plotted
-#' @param Lowess.f parameter for lowess()less than or equal to 1, defining the range of x-values used;
+#' @param Lowess.f parameter for lowess() less than or equal to 1, defining the range of x-values used;
 #'     if NA (the default), uses the default value of 0.67
 #' @param KernelSmooth if T, a kernel smooth is plotted for each group; if F (the default), no kernel smooth is plotted
 #' @param KernelWidth the proportion of the range of x-values used in the kernel smooth; default is 0.3
-#' @param PlotEllipses if T, Gaussian confidence ellipses are plotted for each group; if F, no ellipses are plotted
+#' @param PlotEllipses if T, Gaussian confidence ellipses are plotted for each group;
+#' if F (the default), no ellipses are plotted
 #' @param Ellipses single value or vector of values with confidence values for the ellipses; default is c(0.95,0.99)
 #' @param PlotHulls if T, the convex hull is drawn for each set of points; if F (the default), no hulls are drawn
 #' @param PlotMedians if T, the code for each group is plotted at the median of the values for that group; default is F
 #' @param Identify if T, user can identify points of interest in the plots; default is F
 #' @param PlotColors: if T, colors are assigned to the groups
 #' @param Colors: single value or vector of color names; if PlotByGroup = F, the vector must have the same number of colors as the number of groups
-#' @param legendLoc: character, location of legend for a plot with points default is "topright", alternatives are combinations of "top", "bottom", "right", "left"
+#' @param legendLoc: character, location of legend for a plot with points;
+#' default is "topright", alternatives are combinations of "top", "bottom", "right", "left"
 #' @param folder:  The path to the folder in which data frames will be saved; default is " "
 #'
 #' @return   A list with the following components:
 #'  \itemize{
-#' \item{usage: }{  A vector with the contents of the argument doc, the date run, the version of R used}
+#' \item{usage: }{  A string with the contents of the argument doc, the date run, the version of R used}
 #' \item{dataUsed: }{ The contents of the argument data restricted to the groups used}
 #' \item{dataNA:}{  A data frame with observations containing a least one missing value
 #'   for an analysis variable, NA if no missing values}
@@ -42,7 +44,7 @@
 #' \item{colors:}{  A vector with the value of the argument Color}
 #' \item{data.check: }{ If Identify = T, a data frame with the information on user-identified points
 #'  of interest; value is c(NA,NA) if no points are identified}
-#' \item{location:}{ The contents of the parameter folder}
+#' \item{location:}{ The path to a folder in which results will be saved}
 #'  }
 #'
 #' @section Details:
@@ -53,13 +55,20 @@
 #' @examples
 
 #' #
-#' #  plot four pairs of variables by source (default has four plots on a page)
+#' #  plot two pair of variables by source (default has four plots on a page)
+#' data(ObsidianSources)
+#' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+#' plotVars<-rbind(analyticVars[1:2], analyticVars[c(1,5)])
+#' plot.2d <- fn.2dPlot(data = ObsidianSources, GroupVar = "Code", ID = "ID", Groups = c("A","B"),
+#'           AnalyticVars=plotVars, PlotByGroup=T, PlotColors=T, PlotEllipses=T,
+#'           LowessLine=T)
 #' #
 #' #  plot one pair of variables with all sources on one plot
 #' data(ObsidianSources)
 #' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 #' plot.2d <- fn.2dPlot(data = ObsidianSources, GroupVar = "Code", ID = "ID", Groups = "All",
-#'           AnalyticVars =analyticVars[1:2], PlotByGroup=F, PlotColors=T, namesPlotEllipses=T, LowessLine=T)
+#'           AnalyticVars =analyticVars[1:2], PlotByGroup=F, PlotColors=T, PlotEllipses=T,
+#'           LowessLine=T)
 #'
 #' @import MASS  ellipse
 #'

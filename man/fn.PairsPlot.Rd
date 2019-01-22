@@ -10,9 +10,9 @@ fn.PairsPlot(doc = "fn.PairsPlot", data, GroupVar, Groups, AnalyticVars,
 \arguments{
 \item{doc:}{a string documenting use added to the output list, default is the function name}
 
-\item{data:}{R matrix or data frame containing the data to be analyzedfn}
+\item{data:}{R matrix or data frame containing the data to be analyzed}
 
-\item{GroupVar:}{name for variable defining grouping, " " if no grouping}
+\item{GroupVar:}{name for variable defining grouping (required)}
 
 \item{Groups:}{vector of values of group variable for which plots are to be done.
 if "All": use all groups; if " ": no grouping}
