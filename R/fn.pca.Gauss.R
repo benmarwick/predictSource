@@ -37,10 +37,6 @@
 #'   \item{location:}{ The value of the parameter folder}
 #'  }
 #'
-#'@section  Details
-#'
-#' The function uses the function fn.2dPlot.Gauss().
-#'
 #' @import MASS nortest qqtest MVN
 #'
 #' @examples

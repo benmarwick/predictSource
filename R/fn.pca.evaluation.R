@@ -1,26 +1,26 @@
 #'  fn.pca.evaluation
 #'
-#'  Create plots to evaluate the predicted artifact sources using the source data principal component loadings
+#'  Create principal component plots to evaluate the predicted artifact sources
 #'
-#' @param doc: documentation in list returned by function
-#' @param SourceData: data from known sources, including code for location and element analyses
-#' @param ArtifactData: corresponding data from artifacts
-#' @param ID: ID for samples (artifacts), " " if none (default value)
-#' @param SourceGroup: name of variable with code for location
-#' @param ArtifactGroup: name of variable with code for predicted source
-#' @param known.sources: vector of locations to be considered as sources
-#' @param predicted.soures: vector of predicted sources to be considered, not all need be in known.sources
-#' @param AnalyticVars: elements used in the principal component analyses
-#' @param loc.legend: location of legend added to plots (alternates are "topleft",
+#' @param doc Documentation in list returned by function
+#' @param SourceData Data from known sources, including code for location and element analyses
+#' @param ArtifactData Corresponding data from artifacts
+#' @param ID ID for samples (artifacts), " " if none (default value)
+#' @param SourceGroup Name of variable with the code for a source
+#' @param ArtifactGroup Name of variable with the code for predicted source
+#' @param known.sources Vector of locations to be considered as sources
+#' @param predicted.sources Vector of predicted sources to be considered, not all need be in known.sources
+#' @param AnalyticVars Elements used in the principal component analyses
+#' @param loc.legend location of legend added to plots (alternates are "topleft",
 #'    "bottomright","bottomleft")
-#' @param Identify: if T, the user can identify artifacts of interest and obtain a data set with information on those artifacts
+#' @param Identify If T, the user can identify artifacts of interest and obtain a data set with information on those artifacts
 #'    (default is F)
-#' @param plotAllPoints: if T (the default), show a plot with two panes: all source points and
+#' @param plotAllPoints If T (the default), show a plot with two panes: all source points and
 #'    the convex hulls for the sources, and all unknown points with these source hulls
-#' @param plotHullsOutsidePoints: if T (the default), show a plot with two panes: all source points and
+#' @param plotHullsOutsidePoints If T (the default), show a plot with two panes: all source points and
 #'    the convex hulls for the sources, and the unknown points lying outside of their predicted source
 #'    convex hulls and these hulls
-#' @param plotOutsidePoints: if T (the default), show a plot with one pane: athe unknown points lying
+#' @param plotOutsidePoints If T (the default), show a plot with one pane: athe unknown points lying
 #'  outside of their predicted source convex hulls and these hulls (the second pane for
 #'  plotHullsOutsidePoints)
 #' @param folder  The path to the folder in which data frames will be saved; default is " "
@@ -52,29 +52,35 @@
 #'    predicted source}
 #'   \item{data.check:}{  If Identify=T, a data frame with the observations in dataUsed identified
 #'    as of interest; value is c(NA,NA) if no points are identified}
-#'   \item{location:}{  The values of the parameter folder}
+#'   \item{location:}{  The value of the parameter folder}
 #'    }
 #'
-#' @section  Details
-#'
+#' @section  Details:
 #' If using Rstudio, the plot created when Identify = T must be expanded by increasing the
 #'  size of the plot pane (the view tab is not available).
 #'
 #' @import mgcv
 #'
 #' @examples
-#'
-#' # Evaluate predicted sources of artifacts from scatterplots
-#'
-#' # evaluate predictions from a tree model
+#' # Evaluate sources of artifacts predicted from scatterplots
 #' data(ObsidianSources)
 #` data(ObsidianArtifacts)
 #` analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 #` sources <- unique(ObsidianSources[,"Code"])
-#` save.tree <- fn.tree(data=ObsidianSources, GroupVar="Code",Groups="All",
-#`   AnalyticVars=analyticVars, ID="ID", Model = "Rb"+"Sr"+"Y"+"Zr"+"Nb",
-#`   ModelTitle="Rb + Sr + Y + Zr + Nb", predictSources=T, predictData=ObsidianArtifacts,
-#`   plotTree=T, plotCp=F)
+#` pca.eval <- fn.pca.evaluation(SourceData=ObsidianSources,
+#'   ArtifactData=ObsidianArtifacts, SourceGroup= "Code", ArtifactGroup="Code",
+#'   known.sources=sources, predicted.sources=sources, AnalyticVars=analyticVars, ID="ID",
+#'   plotAllPoints=T, plotHullsOutsidePoints = T, plotOutsidePoints = T)
+#'
+#' # evaluate predictions from a tree model
+#' data(ObsidianSources)
+#' data(ObsidianArtifacts)
+#' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+#' sources <- unique(ObsidianSources[,"Code"])
+#' save.tree <- fn.tree(data=ObsidianSources, GroupVar="Code",Groups="All",
+#'   AnalyticVars=analyticVars, ID="ID", Model = "Rb"+"Sr"+"Y"+"Zr"+"Nb",
+#'   ModelTitle="Rb + Sr + Y + Zr + Nb", predictSources=T, predictData=ObsidianArtifacts,
+#'   plotTree=T, plotCp=F)
 #' pca.eval <- fn.pca.evaluation(SourceData=ObsidianSources,
 #'   ArtifactData=save.tree$predictedSources, SourceGroup= "Code", ArtifactGroup="source",
 #'   known.sources=sources, predicted.sources=sources, AnalyticVars=analyticVars, ID="ID",
@@ -82,18 +88,19 @@
 #'
 #' # evaluate predictions from a random forest analysis: plot only points outside the predicted source hull
 #' data(ObsidianSources)
-#` data(ObsidianArtifacts)
-#` analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-#` sources <- unique(ObsidianSources[,"Code"])
-#` save.randomForest <- fn.randomForest(data=ObsidianSources, GroupVar="Code",Groups="All",
-#`   AnalyticVars=analyticVars, ID="ID", NvarUsed=3, plotErrorRate=F, plotImportance=F,
-#`   predictSources=T, predictData=ObsidianArtifacts, plotSourceProbs=F)
+#' data(ObsidianArtifacts)
+#' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+#' sources <- unique(ObsidianSources[,"Code"])
+#' save.randomForest <- fn.randomForest(data=ObsidianSources, GroupVar="Code",Groups="All",
+#'   AnalyticVars=analyticVars, artifactID="ID", NvarUsed=3, plotErrorRate=F, plotImportance=F,
+#'   predictSources=T, predictData=ObsidianArtifacts, plotSourceProbs=F)
 #' pca.eval <- fn.pca.evaluation(SourceData=ObsidianSources,
 #'   ArtifactData=save.randomForest$predictedSources, SourceGroup= "Code", ArtifactGroup="source",
 #'   known.sources=sources, predicted.sources=sources, AnalyticVars=analyticVars, ID="ID",
 #'   plotAllPoints=F, plotHullsOutsidePoints = F, plotOutsidePoints = T)
 #'
 #' @export
+#'
 
 fn.pca.evaluation <-
   function(doc = "fn.pca.evaluation",

@@ -10,42 +10,42 @@ fn.pca.evaluation(doc = "fn.pca.evaluation", SourceData, ArtifactData,
   plotHullsOutsidePoints = T, plotOutsidePoints = T, folder = " ")
 }
 \arguments{
-\item{folder}{The path to the folder in which data frames will be saved; default is " "}
+\item{doc}{Documentation in list returned by function}
 
-\item{doc:}{documentation in list returned by function}
+\item{SourceData}{Data from known sources, including code for location and element analyses}
 
-\item{SourceData:}{data from known sources, including code for location and element analyses}
+\item{ArtifactData}{Corresponding data from artifacts}
 
-\item{ArtifactData:}{corresponding data from artifacts}
+\item{ID}{ID for samples (artifacts), " " if none (default value)}
 
-\item{ID:}{ID for samples (artifacts), " " if none (default value)}
+\item{SourceGroup}{Name of variable with the code for a source}
 
-\item{SourceGroup:}{name of variable with code for location}
+\item{ArtifactGroup}{Name of variable with the code for predicted source}
 
-\item{ArtifactGroup:}{name of variable with code for predicted source}
+\item{known.sources}{Vector of locations to be considered as sources}
 
-\item{known.sources:}{vector of locations to be considered as sources}
+\item{predicted.sources}{Vector of predicted sources to be considered, not all need be in known.sources}
 
-\item{predicted.soures:}{vector of predicted sources to be considered, not all need be in known.sources}
+\item{AnalyticVars}{Elements used in the principal component analyses}
 
-\item{AnalyticVars:}{elements used in the principal component analyses}
-
-\item{loc.legend:}{location of legend added to plots (alternates are "topleft",
-"bottomright","bottomleft")}
-
-\item{Identify:}{if T, the user can identify artifacts of interest and obtain a data set with information on those artifacts
+\item{Identify}{If T, the user can identify artifacts of interest and obtain a data set with information on those artifacts
 (default is F)}
 
-\item{plotAllPoints:}{if T (the default), show a plot with two panes: all source points and
+\item{loc.legend}{location of legend added to plots (alternates are "topleft",
+"bottomright","bottomleft")}
+
+\item{plotAllPoints}{If T (the default), show a plot with two panes: all source points and
 the convex hulls for the sources, and all unknown points with these source hulls}
 
-\item{plotHullsOutsidePoints:}{if T (the default), show a plot with two panes: all source points and
+\item{plotHullsOutsidePoints}{If T (the default), show a plot with two panes: all source points and
 the convex hulls for the sources, and the unknown points lying outside of their predicted source
 convex hulls and these hulls}
 
-\item{plotOutsidePoints:}{if T (the default), show a plot with one pane: athe unknown points lying
+\item{plotOutsidePoints}{If T (the default), show a plot with one pane: athe unknown points lying
 outside of their predicted source convex hulls and these hulls (the second pane for
 plotHullsOutsidePoints)}
+
+\item{folder}{The path to the folder in which data frames will be saved; default is " "}
 }
 \value{
 The function produces two plots: the convex hulls of the first two principal components
@@ -71,18 +71,28 @@ of the source data, and a plot with those convex hulls and the artifact data (us
    predicted source}
   \item{data.check:}{  If Identify=T, a data frame with the observations in dataUsed identified
    as of interest; value is c(NA,NA) if no points are identified}
-  \item{location:}{  The values of the parameter folder}
+  \item{location:}{  The value of the parameter folder}
    }
 }
 \description{
-Create plots to evaluate the predicted artifact sources using the source data principal component loadings
+Create principal component plots to evaluate the predicted artifact sources
 }
 \examples{
-
-# Evaluate predicted sources of artifacts from scatterplots
+# Evaluate sources of artifacts predicted from scatterplots
+data(ObsidianSources)
+  ArtifactData=ObsidianArtifacts, SourceGroup= "Code", ArtifactGroup="Code",
+  known.sources=sources, predicted.sources=sources, AnalyticVars=analyticVars, ID="ID",
+  plotAllPoints=T, plotHullsOutsidePoints = T, plotOutsidePoints = T)
 
 # evaluate predictions from a tree model
 data(ObsidianSources)
+data(ObsidianArtifacts)
+analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+sources <- unique(ObsidianSources[,"Code"])
+save.tree <- fn.tree(data=ObsidianSources, GroupVar="Code",Groups="All",
+  AnalyticVars=analyticVars, ID="ID", Model = "Rb"+"Sr"+"Y"+"Zr"+"Nb",
+  ModelTitle="Rb + Sr + Y + Zr + Nb", predictSources=T, predictData=ObsidianArtifacts,
+  plotTree=T, plotCp=F)
 pca.eval <- fn.pca.evaluation(SourceData=ObsidianSources,
   ArtifactData=save.tree$predictedSources, SourceGroup= "Code", ArtifactGroup="source",
   known.sources=sources, predicted.sources=sources, AnalyticVars=analyticVars, ID="ID",
@@ -90,6 +100,12 @@ pca.eval <- fn.pca.evaluation(SourceData=ObsidianSources,
 
 # evaluate predictions from a random forest analysis: plot only points outside the predicted source hull
 data(ObsidianSources)
+data(ObsidianArtifacts)
+analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+sources <- unique(ObsidianSources[,"Code"])
+save.randomForest <- fn.randomForest(data=ObsidianSources, GroupVar="Code",Groups="All",
+  AnalyticVars=analyticVars, artifactID="ID", NvarUsed=3, plotErrorRate=F, plotImportance=F,
+  predictSources=T, predictData=ObsidianArtifacts, plotSourceProbs=F)
 pca.eval <- fn.pca.evaluation(SourceData=ObsidianSources,
   ArtifactData=save.randomForest$predictedSources, SourceGroup= "Code", ArtifactGroup="source",
   known.sources=sources, predicted.sources=sources, AnalyticVars=analyticVars, ID="ID",

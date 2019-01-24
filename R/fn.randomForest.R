@@ -1,44 +1,44 @@
 #' fn.randomForest
 #'
-#'   Random forest analysis
+#'   Random forest analysis of source data, and predict sources of unknowns if requested
 #'
-#' @param doc Documentation for the function use, default value is the function name
-#' @param data:  Data frame with the data used to grow trees (source data if predictions are made)
-#' @param predictData:  Data frame with data on unknowns, NA if predictions not made (default value)
-#' @param GroupVar: Name of variable defining groups, grouping is required
-#' @param Groups: Vector of codes for groups to be used, 'All' if use all groups
-#' @param sourceID: if not " " (the default), the name of the variable with sample ID for source data
-#' @param AnalyticVars: Vector with names of analytic variables
-#' @param Ntrees: Number of trees grown, default value of 500 is that for the randomForest function
-#' @param NvarUsed: If not NA, number of variables to use in each random forest call to rpart;
-#'                  if NA, rpart uses the default (the square root of the number of candidate variables)
-#' @param Seed: If not NA, a random number generator seed to produce reproducible results;
+#' @param doc Documentation for the function use added to model usage, default value is the function name
+#' @param data  Data frame with the data used to grow trees (source data if predictions are made)
+#' @param GroupVar Name of variable defining groups, grouping is required
+#' @param Groups Vector of codes for groups to be used, 'All' if use all groups
+#' @param sourceID If not " " (the default), the name of the variable with sample ID for source data
+#' @param AnalyticVars Vector with names (character-valued) of the analytic variables
+#' @param Ntrees Number of trees grown, default value of 500 is that for the randomForest function
+#' @param NvarUsed If not NA (the default), number of variables to use in each random forest call
+#'  to rpart; if NA, rpart uses the default value for randomForest()
+#'   (the square root of the number of candidate variables)
+#' @param Seed If not NA, a random number generator seed to produce reproducible results;
 #' default value is 11111
-#' @param digitsImportance:  Significant digits for the importance measure, default is 1
-#' @param plotErrorRate: Logical, whether to show the error rate plot, default is T
-#' @param plotImportance: Logical, whether to show the plot of variable importance, default is T
-#' @param predictSources: Logical; if T, predict sources for the data in predictData; default is F
-#' @param artifactID: if not " " (the default), the name of the variable with sample ID for
+#' @param digitsImportance  Significant digits for the importance measure, default is 1
+#' @param plotErrorRate Logical, whether to show the error rate plot, default is T
+#' @param plotImportance Logical, whether to show the plot of variable importance, default is T
+#' @param predictSources Logical; if T, predict sources for the data in predictData; default is F
+#' @param predictData Data frame or matrix with data used to predict sources for observations,
+#'    must contain all variables in AnalyticVars.
+#' @param artifactID if not " " (the default), the name of the variable with the sample ID for
 #'  artifact data
-#' @param predictData: data frame or matrix with data used to predict sources for observations,
-#'    must contain all variables in AnalyticVars.  Missing values are not allowed.
-#' @param plotSourceProbs: Logical, if T (the default) and predictSources=T, show box plots of source
+#' @param plotSourceProbs Logical, if T (the default) and predictSources=T, show box plots of source
 #'    probabilities
 #' @param folder  The path to the folder in which data frames will be saved; default is " "
 #'
-#' @details The function implements a random forest analysis.  If predictSources = T and
-#'  plotSourceProbs is T, the function creates two box plots.  The first plot shows, for each source,
-#'   the set of probabilities of assignment to that source for the observations assigned to
-#'   that source (all of these probabilities should be large).  The second plot shows, for each
-#'   source, the set of probabilities of assignment that source for the observations not assigned
-#'   to that source (for each source, there is one such probability for observation); these
-#'   probabilities should be relatively small, and some should be zero.  See the vignette for
-#'   more details and examples of these plots.
+#' @details The function implements a random forest analysis using the R function randomForest().
+#' If predictSources = T andplotSourceProbs is T, the function creates two box plots.
+#'   The first plot shows, for each source,  the set of probabilities of assignment to that source
+#'    for the observations assigned to that source (all of these probabilities should be large).
+#'    The second plot shows, for each source, the set of probabilities of assignment that source
+#'     for the observations not assigned to that source (for each source,
+#'     there is one such probability for observation); these probabilities should be relatively small,
+#'     and some should be zero.  See the vignette for more details and examples of these plots.
 #'
 #' @return The function returns a list with the following components:
 #'
 #' \itemize{
-#'   \item{usage:}{ A vector with the contents of the argument doc, the date run, the version of R used}
+#'   \item{usage:}{ A string with the contents of the argument doc, the date run, the version of R used}
 #'   \item{dataUsed:}{ The contents of the argument data restricted to the groups used}
 #'   \item{sourcesNA:}{  A data frame with data from the data frame data with missing values,
 #'    NÁ if no missing values}

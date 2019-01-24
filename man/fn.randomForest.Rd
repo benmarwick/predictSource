@@ -11,46 +11,45 @@ fn.randomForest(doc = "fn.randomForest", data, GroupVar, Groups = "All",
   artifactID = " ", plotSourceProbs = T, folder = " ")
 }
 \arguments{
-\item{doc}{Documentation for the function use, default value is the function name}
+\item{doc}{Documentation for the function use added to model usage, default value is the function name}
 
-\item{folder}{The path to the folder in which data frames will be saved; default is " "}
+\item{data}{Data frame with the data used to grow trees (source data if predictions are made)}
 
-\item{data:}{Data frame with the data used to grow trees (source data if predictions are made)}
+\item{GroupVar}{Name of variable defining groups, grouping is required}
 
-\item{predictData:}{Data frame with data on unknowns, NA if predictions not made (default value)}
+\item{Groups}{Vector of codes for groups to be used, 'All' if use all groups}
 
-\item{GroupVar:}{Name of variable defining groups, grouping is required}
+\item{AnalyticVars}{Vector with names (character-valued) of the analytic variables}
 
-\item{Groups:}{Vector of codes for groups to be used, 'All' if use all groups}
+\item{sourceID}{If not " " (the default), the name of the variable with sample ID for source data}
 
-\item{sourceID:}{if not " " (the default), the name of the variable with sample ID for source data}
+\item{Ntrees}{Number of trees grown, default value of 500 is that for the randomForest function}
 
-\item{AnalyticVars:}{Vector with names of analytic variables}
+\item{NvarUsed}{If not NA (the default), number of variables to use in each random forest call
+to rpart; if NA, rpart uses the default value for randomForest()
+ (the square root of the number of candidate variables)}
 
-\item{Ntrees:}{Number of trees grown, default value of 500 is that for the randomForest function}
-
-\item{NvarUsed:}{If not NA, number of variables to use in each random forest call to rpart;
-if NA, rpart uses the default (the square root of the number of candidate variables)}
-
-\item{Seed:}{If not NA, a random number generator seed to produce reproducible results;
+\item{Seed}{If not NA, a random number generator seed to produce reproducible results;
 default value is 11111}
 
-\item{digitsImportance:}{Significant digits for the importance measure, default is 1}
+\item{digitsImportance}{Significant digits for the importance measure, default is 1}
 
-\item{plotErrorRate:}{Logical, whether to show the error rate plot, default is T}
+\item{plotErrorRate}{Logical, whether to show the error rate plot, default is T}
 
-\item{plotImportance:}{Logical, whether to show the plot of variable importance, default is T}
+\item{plotImportance}{Logical, whether to show the plot of variable importance, default is T}
 
-\item{predictSources:}{Logical; if T, predict sources for the data in predictData; default is F}
+\item{predictSources}{Logical; if T, predict sources for the data in predictData; default is F}
 
-\item{artifactID:}{if not " " (the default), the name of the variable with sample ID for
+\item{predictData}{Data frame or matrix with data used to predict sources for observations,
+must contain all variables in AnalyticVars.}
+
+\item{artifactID}{if not " " (the default), the name of the variable with the sample ID for
 artifact data}
 
-\item{predictData:}{data frame or matrix with data used to predict sources for observations,
-must contain all variables in AnalyticVars.  Missing values are not allowed.}
-
-\item{plotSourceProbs:}{Logical, if T (the default) and predictSources=T, show box plots of source
+\item{plotSourceProbs}{Logical, if T (the default) and predictSources=T, show box plots of source
 probabilities}
+
+\item{folder}{The path to the folder in which data frames will be saved; default is " "}
 }
 \value{
 The function returns a list with the following components:
@@ -83,17 +82,17 @@ The function returns a list with the following components:
  }
 }
 \description{
-Random forest analysis
+Random forest analysis of source data, and predict sources of unknowns if requested
 }
 \details{
-The function implements a random forest analysis.  If predictSources = T and
- plotSourceProbs is T, the function creates two box plots.  The first plot shows, for each source,
-  the set of probabilities of assignment to that source for the observations assigned to
-  that source (all of these probabilities should be large).  The second plot shows, for each
-  source, the set of probabilities of assignment that source for the observations not assigned
-  to that source (for each source, there is one such probability for observation); these
-  probabilities should be relatively small, and some should be zero.  See the vignette for
-  more details and examples of these plots.
+The function implements a random forest analysis using the R function randomForest().
+If predictSources = T andplotSourceProbs is T, the function creates two box plots.
+  The first plot shows, for each source,  the set of probabilities of assignment to that source
+   for the observations assigned to that source (all of these probabilities should be large).
+   The second plot shows, for each source, the set of probabilities of assignment that source
+    for the observations not assigned to that source (for each source,
+    there is one such probability for observation); these probabilities should be relatively small,
+    and some should be zero.  See the vignette for more details and examples of these plots.
 }
 \examples{
 data(ObsidianSources)

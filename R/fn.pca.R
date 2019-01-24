@@ -1,27 +1,27 @@
 #'  fn.pca
 #'
-#'  Compute and plot principal components using standardized data
+#'  Compute and plot principal components after standardizing the data
 #'
-#' @param doc: documentation in the list returned, default is the function name
-#' @param data: R matrix or data frame containing the data to be analyzed
-#' @param ID: optional name for an ID, default is " " if no ID
-#' @param GroupVar: name for variable defining grouping; a variable name is required
-#' @param Groups: vector of values of group variable for which plots are to be done.
+#' @param doc Documentation in the list returned, default is the function name
+#' @param data R matrix or data frame containing the data to be analyzed
+#' @param ID  Optional name for an ID, default is " " if no ID
+#' @param GroupVar Name for variable defining grouping; a variable name is required
+#' @param Groups Vector of values of group variable for which plots are to be done.
 #' If "All": use all groups.  "All" or a vector with group names is required
-#' @param AnalyticVars: vector of names (character values) of analytic results
-#' @param ScreePlot:  logical, if T create a scree plot, default is F
-#' @param BoxPlots:  logical, if T, create box plots of the first two components, default is F
-#' @param pcPlot:  logical, if T (the default), create the plot of the first two components
-#' @param PlotPoints:  logical, if T (the fault) and pcPlot=T, plot the points for the first two components
-#' @param PlotEllipses: logical, if T (the default), plot the confidence ellipse or ellipses for each group
-#' @param PlotHull:  logical, if T, plot the convex hull for each group, default is F
-#' @param PlotMedians:  logical, if T, plot the symbol for each group at the median point for that group, default is F
-#' @param Ellipses: value or vector of proportions for confidence ellipses default is c(.95,.99) to produce 95\% and 99\% confidence ellipses
-#' @param legendLoc: character, location of legend for a plot with points default is "topright", alternatives are combinations of "top", "bottom", "right", "left"
-#' @param PlotColors: if T, use list of colors in Colors for points; if F, plot points as black
-#' @param Colors: vector of color names
-#' @param Identify: if T, the user can identify points of interest in plots; information on these points is saved to a file; default is F
-#' @param digits: significant digits to return in objects in data frames, default is 3
+#' @param AnalyticVars Vector of names (character values) of analytic results
+#' @param ScreePlot  Logical, if T create a scree plot, default is F
+#' @param BoxPlots  Logical, if T, create box plots of the first two components, default is F
+#' @param pcPlot  Logical, if T (the default), create the plot of the first two components
+#' @param PlotPoints  Logical, if T (the default) and pcPlot=T, plot the points for the first two components
+#' @param PlotEllipses Logical, if T (the default), plot the confidence ellipse or ellipses for each group
+#' @param PlotHull  Logical, if T, plot the convex hull for each group, default is F
+#' @param PlotMedians  Logical, if T, plot the symbol for each group at the median point for that group, default is F
+#' @param Ellipses Value or vector of proportions for confidence ellipses; default is c(.95,.99) to produce 95\% and 99\% confidence ellipses
+#' @param legendLoc Character, location of legend for a plot with points; default is "topright", alternatives are combinations of "top", "bottom", "right", "left"
+#' @param PlotColors If T, use list of colors in Colors for points; if F, plot points as black
+#' @param Colors Vector of color names; default is a vector with five names
+#' @param Identify If T, the user can identify points of interest in plots; information on these points is saved to a file; default is F
+#' @param digits Significant digits to return in objects in data frames, default is 3
 #' @param folder  The path to the folder in which data frames will be saved; default is " "
 #'
 #' @section Details:
@@ -31,7 +31,7 @@
 #'
 #' @return The function produces a plot of the first two principal components, the contents of which are defined by the arguments PlotPoints, PlotEllipses, PlotHull, and PlotMedians. A scree plot and box plots are produced if requested.  The function returns a list with the following components:
 #' \itemize{
-#'   \item{usage:}{  A vector with the contents of the argument doc, the date run, the version of R used}
+#'   \item{usage:}{  A string with the contents of the argument doc, the date run, the version of R used}
 #'   \item{dataUsed:}{  The contents of the argument data restricted to the groups used}
 #'   \item{dataNA:}{  A data frame with observations containing a least one missing value
 #'   for an analysis variable, NA if no missing values}

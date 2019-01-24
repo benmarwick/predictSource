@@ -10,7 +10,7 @@ fn.tree(doc = "fn.tree", data, GroupVar, Groups = "All", AnalyticVars,
   folder = " ")
 }
 \arguments{
-\item{doc}{Documentation, default is fn.tree (the function name)}
+\item{doc}{Documentation added to defintion of usage, default is fn.tree (the function name)}
 
 \item{data}{Data frame with the data to be analyzed}
 
@@ -18,19 +18,20 @@ fn.tree(doc = "fn.tree", data, GroupVar, Groups = "All", AnalyticVars,
 
 \item{Groups}{Vector of codes for groups to be used, 'All' (the default) if use all groups}
 
-\item{AnalyticVars}{Names of analytic variables}
+\item{AnalyticVars}{Vector with the names (character values) of the analytic variables}
 
 \item{wts}{Option to weight the observations, if used, vector with length nrow(data); if NA (the default), assume equal weights}
 
-\item{CpDigits}{Number of significant digits to display in the Cp table, default is value is 3}
+\item{CpDigits}{Number of significant digits to display in the Cp table, default value is 3}
 
 \item{plotTree}{If T (true, the default), plot the recursive partitioning tree}
 
 \item{plotCp}{If T (tree, the default), plot the Cp table values}
 
-\item{Model}{A character string containing the variables considered separated by + signs}
+\item{Model}{A character string containing the names of the variables (characters) considered
+separated by + signs}
 
-\item{ModelTitle}{Model as a single character value}
+\item{ModelTitle}{The parameter Model as a single character value}
 
 \item{minSplit}{The minimum size of a group for splitting, default is 20 (the default in rpart())}
 
@@ -50,7 +51,7 @@ in AnalyticVars}
 The function returns a list with the following components:
 
 \itemize{
-  \item{usage:}{ A vector with the contents of the argument doc, the date run, the version of R used}
+  \item{usage:}{ A string with the contents of the argument doc, the date run, the version of R used}
   \item{dataUsed:}{ The contents of the argument data restricted to the groups used}
   \item{params.grouping:}{ A list with the values of the arguments GroupVar and Groups}
   \item{analyticVars:}{ A vector with the value of the argument AnalyticVars}
@@ -60,25 +61,33 @@ The function returns a list with the following components:
   \item{classification:}  {A data frame showing the crossclassification of sources and predicted sources}
   \item{CpTable:}{  A data frame showing the decrease in Cp with increasing numbers of splits}
   \item{predictedSources:}{  If predictSources = T, a data frame with the predicted sources}
-  \item{predictedTotals}{  If predictedSources = T, a vector with the number of objects predicted to be from each source}
+  \item{predictedTotals:}{  If predictedSources = T, a vector with the number of objects predicted to be from each source}
   \item{location:}{ The value of the parameter folder}
  }
 }
 \description{
-Fit a recursive partitioning model (classification tree)
+Fit a recursive partitioning model (classification tree) to data from sources
 }
 \details{
-The function fits a classification tree model.  The variables in AnalyticVars are considered in the order
-       they appear in the Model argument (from left to right).  See the vignette for more details.
+The function fits a classification tree model us the R function rpart().
+  The variables in AnalyticVars are considered in the order in which they appear in the
+   Model argument (from left to right).  See the vignette for more details.
 }
 \examples{
+# Analyze the obsidian source data with variables in the model statement in order of
+ importance from a random forst analysis
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 save.tree <- fn.tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
   Model = "Rb"+"Sr"+"Y"+"Zr"+"Nb", ModelTitle = "Sr + Nb + Rb + Y + Zr")
- # variables in the model statement in order of importance from a random forst analysis
- #
- #  predict sources of artifacts
+
+ #  Predict the sources of artifacts
 data(ObsidianSources)
+data(ObsidianArtifacts)
+analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+save.tree <- fn.tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
+     Model = "Sr"+ "Nb" + "Rb" + "Y"+"Zr", ModelTitle = "Sr + Nb + Rb + Y + Zr",
+     predictSources=T, predictData=ObsidianArtifacts, ID="ID",
+     plotTree=F, plotCp=F)
 
 }
