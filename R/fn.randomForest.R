@@ -1,6 +1,6 @@
 #' fn.randomForest
 #'
-#'   Random forest analysis of source data, and predict sources of unknowns if requested
+#'   Implements a random forest analysis of source data, and predicts sources of unknowns if requested
 #'
 #' @param doc Documentation for the function use added to model usage, default value is the function name
 #' @param data  Data frame with the data used to grow trees (source data if predictions are made)
@@ -27,10 +27,10 @@
 #' @param folder  The path to the folder in which data frames will be saved; default is " "
 #'
 #' @details The function implements a random forest analysis using the R function randomForest().
-#' If predictSources = T andplotSourceProbs is T, the function creates two box plots.
+#' If predictSources = T and plotSourceProbs is T, the function creates two box plots.
 #'   The first plot shows, for each source,  the set of probabilities of assignment to that source
 #'    for the observations assigned to that source (all of these probabilities should be large).
-#'    The second plot shows, for each source, the set of probabilities of assignment that source
+#'    The second plot shows, for each source, the set of probabilities of assignment to that source
 #'     for the observations not assigned to that source (for each source,
 #'     there is one such probability for observation); these probabilities should be relatively small,
 #'     and some should be zero.  See the vignette for more details and examples of these plots.
@@ -42,20 +42,23 @@
 #'   \item{dataUsed:}{ The contents of the argument data restricted to the groups used}
 #'   \item{sourcesNA:}{  A data frame with data from the data frame data with missing values,
 #'    NÁ if no missing values}
-#'   \item{predictData:}{  The data frame in the argument predictData}
-#'   \item{params.grouping:}{ A list with the values of the arguments GroupVar and Groups}
 #'   \item{analyticVars:}{ A vector with the value of the argument AnalyticVars}
-#'   \item{params.numeric:}{ A numeric vector with the values of the arguments Ntrees, NvarUsed, and Seed}
+#'   \item{params.numeric:}{ A numeric vector with the values of the arguments Ntrees, NvarUsed,\
+#'    and Seed}
+#'   \item{params.grouping:}{ A list with the values of the arguments GroupVar and Groups}
+#'   \item{params.logical:}{ A vector with the values of the arguments plotErrorRate,
+#'   plotImportance, predictSources, and plotSourceProbs}
 #'   \item{formula.rf:}  {The formula used in the analysis (the variables specified in the argument AnalyticVars
 #'                        separated by + signs)}
-#'   \item{forest:}{  The random forest}
+#'   \item{forest:}{  A summary of the random forest call, estimated error rate, and
+#'   confusion matrix}
 #'   \item{importance:}{  A data frame with information on the importance of each variable
 #'    in AnalyticVars}
+#'   \item{confusion:}{  A data frame with the estimate of the confusion matrix}
 #'   \item{predictedData:} {  A data frame with the artifact data used for predictions; if there
 #'   is missing data, after imputation of the missing data}
 #'   \item{predictedNA:}{ A data frame with the observations for which missing data were imputed;
 #'   NA if there are no missing data}
-#'   \item{confusion:}{  A data frame with the estimate of the confusion matrix}
 #'   \item{predictedSources:}{  A data frame with prediction information, sample ID (if requested),
 #'      and values of AnalyticVars}
 #'   \item{predictedTotals:}{  A vector with the predicted totals for each group (source)}
@@ -68,7 +71,7 @@
 #' data(ObsidianSources)
 #' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 #' save.randomForest <- fn.randomForest(data=ObsidianSources, GroupVar="Code",Groups="All",
-#'   sourceID="ID", AnalyticVars=analyticVars, NvarUsed=3)
+#'   sourceID="ID", AnalyticVars=analyticVars, NvarUsed=3, plotSourceProbs=F)
 #' #
 #' # predicted sources for artifacts
 #' data(ObsidianSources)
@@ -250,7 +253,7 @@ fn.randomForest <-
     params.numeric<-c(NvarUsed, Ntrees, Seed, digitsImportance)
     names(params.numeric)<-c("NvarUsed", "Ntrees", "Seed", "digitsImportance")
     params.logical<-c(plotErrorRate,plotImportance,predictSources,plotSourceProbs)
-    names(params.logical) <- c("plotErrorRate","plotImportance","plotSourceProbs")
+    names(params.logical) <- c("plotErrorRate","plotImportance","predictSources","plotSourceProbs")
     importance.rf <- round(importance.rf, dig=digitsImportance)
     if ((artifactID != " ") & (predictSources == T))
       predictions <- predictions[order(predictions[,artifactID]),]

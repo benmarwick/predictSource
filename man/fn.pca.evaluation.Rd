@@ -77,6 +77,10 @@ of the source data, and a plot with those convex hulls and the artifact data (us
 \description{
 Create principal component plots to evaluate the predicted artifact sources
 }
+\details{
+See the vignette for instructions for identifying points of interest using the paramter
+Identify = T.
+}
 \examples{
 # Evaluate sources of artifacts predicted from scatterplots
 data(ObsidianSources)

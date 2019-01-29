@@ -25,7 +25,7 @@
 #'  plotHullsOutsidePoints)
 #' @param folder  The path to the folder in which data frames will be saved; default is " "
 #'
-#' @section Details
+#' @details
 #' See the vignette for instructions for identifying points of interest using the paramter
 #' Identify = T.
 #'
@@ -54,10 +54,6 @@
 #'    as of interest; value is c(NA,NA) if no points are identified}
 #'   \item{location:}{  The value of the parameter folder}
 #'    }
-#'
-#' @section  Details:
-#' If using Rstudio, the plot created when Identify = T must be expanded by increasing the
-#'  size of the plot pane (the view tab is not available).
 #'
 #' @import mgcv
 #'
@@ -101,9 +97,7 @@
 #'
 #' @export
 #'
-
-fn.pca.evaluation <-
-  function(doc = "fn.pca.evaluation",
+fn.pca.evaluation <-function(doc = "fn.pca.evaluation",
            SourceData,
            ArtifactData,
            ID = " ",

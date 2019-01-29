@@ -81,8 +81,7 @@ fn.2dPlot.Gauss <- function (doc = "fn.2dPlot.Gauss",
   #
   GroupIndex <- rep(NA, nrow(data.Used))
   for (i in 1:nrow(data.Used)) {
-    for (j in 1:length(groups)) if (data.Used[i, GroupVar] ==
-                                    groups[j])
+    for (j in 1:length(groups)) if (data.Used[i, GroupVar] == groups[j])
       GroupIndex[i] <- j
   }
   #
@@ -102,7 +101,7 @@ fn.2dPlot.Gauss <- function (doc = "fn.2dPlot.Gauss",
     else if (scatterPlot) {
       qqnorm.pts<-qqnorm(temp1, main = paste(AnalyticVars[1],"source", groups[i.group]))
       qqline(temp1)
-    }
+      }
     if (Identify) {
       index<-identify(qqnorm.pts)
       data.grp<-data.Used[data.Used[,GroupVar]==groups[i.group],]
@@ -119,7 +118,7 @@ fn.2dPlot.Gauss <- function (doc = "fn.2dPlot.Gauss",
     else if (scatterPlot) {
       qqnorm.pts<-qqnorm(temp2, main = paste(AnalyticVars[2],"source", groups[i.group]))
       qqline(temp2)
-    }
+     }
     if (Identify) {
       index<-identify(qqnorm.pts)
       data.grp<-data.Used[data.Used[,GroupVar]==groups[i.group],]
@@ -137,7 +136,7 @@ fn.2dPlot.Gauss <- function (doc = "fn.2dPlot.Gauss",
     if (qqPlot)
       HZ <- MVN::mvn(data=temp, mvnTest="hz",multivariatePlot="qq")
       else  HZ <- MVN::mvn(data=temp, mvnTest="hz")
-    if (qqPlot) browser()
+    #
     p.HZ <- as.numeric(HZ[[1]][[3]], mode = "numeric")
     royston <- MVN::mvn(data=temp, mvnTest="royston")
     p.Royston <- as.numeric(royston[[1]][[3]], mode = "numeric")
@@ -147,14 +146,26 @@ fn.2dPlot.Gauss <- function (doc = "fn.2dPlot.Gauss",
   } # end of definition of function
   #
   pvalues <- matrix(NA, nrow=length(groups), ncol = 9)
+  #
   if (qqPlot)  par(mfrow = c(2,3))
   else par(mfrow = c(2,2))
+  #
+  iPlot<-0 # counter used when qqPlot=F
+  #
   for (i.group in 1:length(groups)) {
-    if ((i.group > 1) & (qqPlot==T)) {
-      plot.new() # blank plots so next group starts in new window
-      }
-    pvalues[i.group, ] <- fn.plot()
+    iPlot <- iPlot+1
+    pvalues[i.group, ] <- fn.plot() # plot for this group and compute p-values
+    if (qqPlot==T)  {
+      browser()
+      plot.new() # blank plot so next group starts in new window
     }
+    # two plots per frame if qqPlot=F
+    if ((qqPlot==F) & (floor(i.group/2)==i.group/2))  browser()
+  } # end of loop on i.group
+#     if ((qqPlot==F) & (as.integer(i.group/2)==i.group/2)) {
+ #       plot.new() # blank plots so next group starts in new window
+  #    pvalues[i.group, ] <- fn.plot()
+   # }
   #
   numeric.pvalues<-as.numeric(pvalues)
   numeric.pvalues<-round(numeric.pvalues,dig=pvalue.digits)
@@ -174,7 +185,7 @@ fn.2dPlot.Gauss <- function (doc = "fn.2dPlot.Gauss",
       index.ID<-order(data.check[,ID])
       data.check<-data.check[index.ID,]
     }
-  }
+  } # end of code for Identify=T
   #
   fcn.date.ver<-c(doc,date(),R.Version()$version.string)
   params<-c(groupVar=GroupVar,groups=Groups,digits.pvalue=pvalue.digits,
@@ -190,4 +201,4 @@ fn.2dPlot.Gauss <- function (doc = "fn.2dPlot.Gauss",
                 pvalues=return.pvalues,
                 data.check=data.check,
                 location=folder)
-   }
+  }
