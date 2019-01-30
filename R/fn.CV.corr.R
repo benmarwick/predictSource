@@ -1,23 +1,26 @@
 #' fn.CV.corr
 #'
 #' Compute coefficients of variation and correlations for specified
-#' analytic values, by specified groups.  Observations with missing values
-#' are removed from computations using them.
+#' analytic values, by specified groups, and plots to visualize correlations.
+#' Observations with missing values are removed from computations using them.
 #'
 #' @param doc: A character variable with documentation, default if the function name
 #' @param data: R matrix or data frame containing the data to be analyzedfn
-#' @param GroupVar: name for variable defining grouping; if " ", if no grouping
-#' @param Groups: vector of values of group variable for which plots are to be done. if "All" (the default),
-#'  use all groups, if " ", no grouping
-#' @param ID: name of a variable with a lab ID (used for sorting data), default is " "
-#' @param AnalyticVars: vector of names (character values) of analytic results
-#' @param Transpose: see Details
-#' @param CV.digits: number of significant digits in CV estimates, default is 2
-#' @param corr.digits: number of significant digits in correlation estimates, default is 2
+#' @param GroupVar: Name for variable defining grouping; if " ", if no grouping
+#' @param Groups: Vector of values of group variable for which plots are to be done.
+#'  If "All" (the default),  use all groups, if " ", no grouping
+#' @param ID: Name of a variable with a lab ID (used for sorting data), default is " "
+#' @param AnalyticVars: Vector of names (character values) of analytic results
+#' @param Transpose: See Details
+#' @param CV.digits: Number of significant digits in CV estimates, default is 2
+#' @param corr.digits: Number of significant digits in correlation estimates, default is 2
+#' @param plotCorrs: Logical, if T (the default), create a matrix of plots describing correlations
 #' @param folder  The path to the folder in which data frames will be saved; default is " "
 #'
 #' @section Details:
-#'   If Transpose=T, the correlation matrix has rows defined by the group variable and columns defined by the pairs of analytic variables.  If Transpose=F, the rows are defined by pairs of analytic variables and the columns are defined by the groups.
+#'   If Transpose=T, the correlation matrix has rows defined by the group variable and
+#'    columns defined by the pairs of analytic variables.  If Transpose=F,
+#'     the rows are defined by pairs of analytic variables and the columns are defined by the groups.
 #
 #' @return
 #'
@@ -41,6 +44,8 @@
 #' CV.corr<-fn.CV.corr(data = ObsidianSources, GroupVar="Code", Groups = "All",
 #'  AnalyticVars=analyticVars)
 #'
+#' @import  corrplot
+#'
 #' @export
 
 fn.CV.corr <-
@@ -53,15 +58,19 @@ fn.CV.corr <-
            Transpose = T,
            CV.digits = 2,
            corr.digits = 2,
-           folder = " ",
-           ds.CV,
-           ds.corr) {
-
+           plotCorrs = T,
+           folder = " ")
+    {
+    library(corrplot)
+    #
     if ((Groups[1] != " ") & (Groups[1] != "All")) {
       Use.rows <- (data[, GroupVar] %in% Groups)
       data.Used <- data[Use.rows, ]
+      sources <- Groups
       }
-    else  data.Used <- data
+    else  {data.Used <- data
+          sources <- unique(data[,GroupVar])
+    }
     #
     #  sort on GroupVar and ID if specified
     #
@@ -81,7 +90,7 @@ fn.CV.corr <-
     #
     # no grouping
     #
-    if (GroupVar[1] == " ") {
+    if (Groups[1] == "All") {
       #
       #  coefficient of variation
       #
@@ -100,6 +109,9 @@ fn.CV.corr <-
           use = "pairwise.complete.obs"
         ),
         dig = corr.digits)
+      if (plotCorrs)
+        corrplot(cor(data.Used[,AnalyticVars]),type="upper",method="ellipse",
+                 title="All groups")
     } # end of code for no grouping
     #
     #  grouping
@@ -120,10 +132,6 @@ fn.CV.corr <-
         data.i <-
           data.Used[rows.i, AnalyticVars]  # data restricted to group i
         #
-        #  indices with missing data for at least one variable
-        #
-        dataKeep.i <-
-        #
         #  coefficients of variation, with NA observations removed
         #
         means.i <- apply(data.i[,AnalyticVars], 2, mean, na.rm = TRUE)
@@ -132,7 +140,7 @@ fn.CV.corr <-
         CV <- data.frame(groups, compute.CV)
         colnames(CV) <- c(GroupVar, AnalyticVars)
         #
-        # Spearman correlations
+        # Spearman correlations, with NA observations removed
         #
       Corrs <-
         matrix(NA,
@@ -147,6 +155,7 @@ fn.CV.corr <-
       rownames(Corrs) <- Rows
       # data frame with Code and desired elements
       DataEls <- data.Used[, "Code"]
+      #
       for (i in 1:length(AnalyticVars))
         DataEls <- data.frame(DataEls, data.Used[, AnalyticVars[i]])
       colnames(DataEls) <- c("Code", AnalyticVars)
@@ -169,8 +178,29 @@ fn.CV.corr <-
           Row <- Row + length(AnalyticVars) - k
         }  # end of loop on k
       } # end of loop on j
-      }  # end of loop on i
-    }
+        }  # end of loop on i
+      if (plotCorrs) {
+        for (i in 1:length(sources)) {
+          rows.i <-
+            (data.Used[, GroupVar] %in% groups[i])  # rows from group i
+          data.i <-
+            data.Used[rows.i, AnalyticVars]  # data restricted to group i
+          corrplot(cor(data.i[,AnalyticVars]),type="upper",method="ellipse",
+                   title=groups[i])
+          browser()
+        } # end of loop on i
+      }  # end of code for plotting correlations
+      if (plotCorrs) {
+        for (i in 1:length(groups)) {
+          rows.i <-
+            (data.Used[, GroupVar] %in% groups[i])  # rows from group i
+          data.i <-
+            data.Used[rows.i, AnalyticVars]  # data restricted to group i
+          corrplot(cor(data.i[,AnalyticVars]),type="upper",method="ellipse",
+                 title=paste("group", sources[i]))
+        } # end of loop on i
+      }  # end of code to plot correlations
+    } # end of code for computation by group
 #
     if (Transpose == T)
       Corrs <- t(Corrs)
