@@ -24,7 +24,7 @@
 #' \item{dataNA:}{  A data frame with observations containing a least one missing value
 #'   for an analysis variable, NA if no missing values}
 #' \item{analyticVars:}{  The contents of the argument AnalyticVars}
-#' \item{params:}{  A vector with argument values for GroupVar, Groups, pvalue.digits, scatterPlot, qqPlot}
+#' \item{params:}{  A list with the values of grouping, logical, and numberic arguments}
 #' \item{pvalues:}{  A data frame with the p-values for univariate and bivariate tests of normality}
 #' \item{data.check:}{ A data frame with the information on user-identified points of interest;
 #'     value is c(NA, NA) if no data identified}
@@ -188,8 +188,15 @@ fn.2dPlot.Gauss <- function (doc = "fn.2dPlot.Gauss",
   } # end of code for Identify=T
   #
   fcn.date.ver<-c(doc,date(),R.Version()$version.string)
-  params<-c(groupVar=GroupVar,groups=Groups,digits.pvalue=pvalue.digits,
-                scattaerPlot=scatterPlot, qqPlot=qqPlot, Identify=Identify)
+  #
+  params.numeric<-pvalue.digits
+  names(params.numeric)<-"pvalue.digits"
+  params.grouping<-list(GroupVar,Groups)
+  names(params.grouping)<-c("GroupVar","Groups")
+  params.logical<-c(scatterPlot,qqPlot,Identify)
+  names(params.logical)<-c("scatterPlot","qqPlot","Identify")
+  params<-list(grouping=params.grouping,numeric=params.numeric,logical=params.logical)
+    #
   if (sum(dataKeep) < nrow(data.Used)) dataNA <- data.Used[!dataKeep,]
   else dataNA <- NA
   #

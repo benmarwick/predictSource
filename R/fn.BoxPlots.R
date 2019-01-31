@@ -17,8 +17,7 @@
 #' \item{dataUsed:}{  A data frame with data restricted to data used for the box plots}
 #' \item{dataNA:}{  A data frame with observations containing a least one missing value
 #'   for an analysis variable, NA if no missing values}
-#' \item{params.numeric:}{  A vector with the values of the arguments Nrow and Ncol}
-#' \item{params.grouping:}{  A vector with the values of the arguments GroupVar and Groups}
+#' \item{params:}{  A list with elements containing the values of the grouping and numeric parameters}
 #' \item{analyticVars:}{  A vector with the value of the argument AnalyticVars}
 #'}
 #'
@@ -97,17 +96,19 @@ fn.BoxPlots <-
               ylim = c(0, max(data.BP[,AnalyticVars], na.rm = T)), notch = T, sub = "Analysis")
     }
     fcn.date.ver<-paste(doc,date(),R.Version()$version.string)
+    #
     params.numeric<-c(Nrow,Ncol)
     names(params.numeric)<-c("Nrow","Ncol")
     params.grouping<-list(GroupVar,Groups)
     names(params.grouping)<-c("GroupVar","Groups")
+    params<-list(grouping=params.grouping, numeric=params.numeric)
+    #
     if (sum(dataKeep) < nrow(data.BP)) dataNA <- data.BP[!dataKeep,]
     else dataNA <- NA
     #
    list(usage=fcn.date.ver,
               dataUsed=data.BP,
               dataNA = dataNA,
-              params.numeric=params.numeric,
-              params.grouping=params.grouping,
+              params=params,
               analyticVars=AnalyticVars)
     }

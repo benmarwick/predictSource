@@ -193,8 +193,15 @@ fn.3dPlot <-
       }
     }
     fcn.date.ver<-c(doc,date(),R.Version()$version.string)
-    params<-list(ByGroup, PlotMedians, SymbolSize)
-    names(params)<-c("ByGroup","PlotMedians", "SymbolSize")
+    #
+    params.grouping<-list(GroupVar,Groups)
+    names(params.grouping)<-c("GroupVar","Groups")
+    params.logical<-c(ByGroup,PlotMedians)
+    names(params.logical)<-c("ByGroup","PlotMedians")
+    params.numeric<-SymbolSize
+    names(params.numeric)<-"SymbolSize"
+    params<-list(grouping=params.grouping,logical=params.logical,numeric=params.numeric,colors=Colors)
+    #
     if (sum(dataKeep) < nrow(data.Used)) dataNA <- data.Used[!dataKeep]
     else dataNA <- NA
     #
@@ -202,8 +209,6 @@ fn.3dPlot <-
               dataUsed=data.Used,
               dataNA=dataNA,
               params=params,
-              groups=Groups,
-              analyticVars=AnalyticVars,
-              colors=Colors)
+              analyticVars=AnalyticVars)
     out
   }

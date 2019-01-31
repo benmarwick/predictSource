@@ -29,8 +29,7 @@ A set of pairs plots as described above and a list with the following components
 \item{dataNA:}{  A data frame with observations containing a least one missing value
   for an analysis variable, NA if no missing values}
 \item{analyticVars:}{  The vector specified by the parameter AnalyticVars}
-\item{params.numeric:}{  The value of the argument Span}
-\item{params.grouping:}{  A vector with the values of the arguments GroupVar and Groups}
+\item{params:}{  A list with the values of the grouping and numeric arguments}
 \item{analyticVars:}{  A vector with the value of the argument AnalyticVars}
 }
 }

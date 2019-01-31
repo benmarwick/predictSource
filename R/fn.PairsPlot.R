@@ -27,8 +27,7 @@
 #' \item{dataNA:}{  A data frame with observations containing a least one missing value
 #'   for an analysis variable, NA if no missing values}
 #' \item{analyticVars:}{  The vector specified by the parameter AnalyticVars}
-#' \item{params.numeric:}{  The value of the argument Span}
-#' \item{params.grouping:}{  A vector with the values of the arguments GroupVar and Groups}
+#' \item{params:}{  A list with the values of the grouping and numeric arguments}
 #' \item{analyticVars:}{  A vector with the value of the argument AnalyticVars}
 #' }
 #'
@@ -80,17 +79,19 @@ fn.PairsPlot <-
        }
     }
     fcn.date.ver<-paste(doc,date(),R.Version()$version.string)
+    #
     params.numeric<-Span
     names(params.numeric)<-"Span"
     params.grouping<-list(GroupVar,Groups)
     names(params.grouping)<-c("GroupVar","Groups")
+    params<-list(grouping=params.grouping, numeric=params.numeric)
+    #
     if (sum(dataKeep) < nrow(data.Plot)) dataNA <- data.Plot[!dataKeep,]
     else dataNA <- NA
     #
     list(usage=fcn.date.ver,
               dataUsed=data,
               dataNA = dataNA,
-              params.numeric=params.numeric,
-              params.grouping=params.grouping,
+              params=params,
               analyticVars=AnalyticVars)
     }

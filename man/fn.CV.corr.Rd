@@ -6,7 +6,7 @@
 \usage{
 fn.CV.corr(doc = "fn.CV.corr", data, GroupVar, Groups = "All", ID = " ",
   AnalyticVars, Transpose = T, CV.digits = 2, corr.digits = 2,
-  folder = " ", ds.CV, ds.corr)
+  plotCorrs = T, folder = " ")
 }
 \arguments{
 \item{folder}{The path to the folder in which data frames will be saved; default is " "}
@@ -15,20 +15,22 @@ fn.CV.corr(doc = "fn.CV.corr", data, GroupVar, Groups = "All", ID = " ",
 
 \item{data:}{R matrix or data frame containing the data to be analyzedfn}
 
-\item{GroupVar:}{name for variable defining grouping; if " ", if no grouping}
+\item{GroupVar:}{Name for variable defining grouping; if " ", if no grouping}
 
-\item{Groups:}{vector of values of group variable for which plots are to be done. if "All" (the default),
-use all groups, if " ", no grouping}
+\item{Groups:}{Vector of values of group variable for which plots are to be done.
+If "All" (the default),  use all groups, if " ", no grouping}
 
-\item{ID:}{name of a variable with a lab ID (used for sorting data), default is " "}
+\item{ID:}{Name of a variable with a lab ID (used for sorting data), default is " "}
 
-\item{AnalyticVars:}{vector of names (character values) of analytic results}
+\item{AnalyticVars:}{Vector of names (character values) of analytic results}
 
-\item{Transpose:}{see Details}
+\item{Transpose:}{See Details}
 
-\item{CV.digits:}{number of significant digits in CV estimates, default is 2}
+\item{CV.digits:}{Number of significant digits in CV estimates, default is 2}
 
-\item{corr.digits:}{number of significant digits in correlation estimates, default is 2}
+\item{corr.digits:}{Number of significant digits in correlation estimates, default is 2}
+
+\item{plotCorrs:}{Logical, if T (the default), create a matrix of plots describing correlations}
 }
 \value{
 A list with the following components:
@@ -37,8 +39,7 @@ A list with the following components:
   \item{dataUsed:}{  The contents of the argument data restricted to the groups used}
   \item{dataNA:}{  A data frame with observations containing a least one missing value
   for an analysis variable, NA if no missing values}
-  \item{params.numeric:}{  A vector with the values of the arguments CV.digits and corr.digits}
-  \item{params.grouping:}{  A list with the values of the argument GroupVar and Groups}
+  \item{params:}{  A list containing the values of the grouping,logical, and numeric parameters}
   \item{analyticVars:}{  A vector with the value of the argument AnalyticVars}
   \item{CV:}{  A data frame with the coefficients of variation for each analytic variable in each group}
   \item{corr:}{  A data frame with the correlations between pairs of variables in each group}
@@ -47,12 +48,14 @@ A list with the following components:
 }
 \description{
 Compute coefficients of variation and correlations for specified
-analytic values, by specified groups.  Observations with missing values
-are removed from computations using them.
+analytic values, by specified groups, and plots to visualize correlations.
+Observations with missing values are removed from computations using them.
 }
 \section{Details}{
 
-  If Transpose=T, the correlation matrix has rows defined by the group variable and columns defined by the pairs of analytic variables.  If Transpose=F, the rows are defined by pairs of analytic variables and the columns are defined by the groups.
+  If Transpose=T, the correlation matrix has rows defined by the group variable and
+   columns defined by the pairs of analytic variables.  If Transpose=F,
+    the rows are defined by pairs of analytic variables and the columns are defined by the groups.
 }
 
 \examples{

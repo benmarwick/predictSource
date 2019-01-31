@@ -30,8 +30,7 @@
 #'   \item{dataUsed:}{  The contents of the argument data restricted to the groups used}
 #'   \item{dataNA:}{  A data frame with observations containing a least one missing value
 #'   for an analysis variable, NA if no missing values}
-#'   \item{params.numeric:}{  A vector with the values of the arguments CV.digits and corr.digits}
-#'   \item{params.grouping:}{  A list with the values of the argument GroupVar and Groups}
+#'   \item{params:}{  A list containing the values of the grouping,logical, and numeric parameters}
 #'   \item{analyticVars:}{  A vector with the value of the argument AnalyticVars}
 #'   \item{CV:}{  A data frame with the coefficients of variation for each analytic variable in each group}
 #'   \item{corr:}{  A data frame with the correlations between pairs of variables in each group}
@@ -82,13 +81,8 @@ fn.CV.corr <-
       rowsSort <- order(data.Used[,ID])
       data.Used <- data.Used[rowsSort,]
     }
-       #
-    dataKeep <- rep(T, nrow(data.Used)) # will contain indices for observations with
-        # no missing values
-    for (i in 1:length(AnalyticVars))
-      dataKeep[is.na(data.Used[,AnalyticVars[i]])] <- F
     #
-    # no grouping
+     # no grouping
     #
     if (Groups[1] == "All") {
       #
@@ -206,18 +200,27 @@ fn.CV.corr <-
       Corrs <- t(Corrs)
     #
     fcn.date.ver<-c(doc,date(),R.Version()$version.string)
+    #
     params.numeric<-c(digits.CV=CV.digits,digits.corr=corr.digits)
     names(params.numeric)<-c("CV.digits","corr.digits")
     params.grouping<-list(GroupVar,Groups)
     names(params.grouping)<-c("GroupVar","Groups")
+    params.logical<-c(Transpose,plotCorrs)
+    names(params.logical)<-c("Transpose","plotCorrs")
+    params<-list(grouping=params.grouping,logical=params.logical,numeric=params.numeric)
+    #
+    dataKeep <- rep(T, nrow(data.Used)) # will contain indices for observations with
+    # no missing values
+    for (i in 1:length(AnalyticVars))
+      dataKeep[is.na(data.Used[,AnalyticVars[i]])] <- F
+    #
     if (sum(dataKeep) < nrow(data.Used)) dataNA <- data.Used[!dataKeep,]
       else dataNA <- NA
     #
     list(usage=fcn.date.ver,
                 dataUsed=data.Used,
                 dataNA = dataNA,
-                params.numeric=params.numeric,
-                params.grouping=params.grouping,
+                params=params,
                 analyticVars=AnalyticVars,
                 CV=CV,
                 corr=Corrs,

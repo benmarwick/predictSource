@@ -43,12 +43,10 @@ A list with the following components:
 \item{dataUsed}{  The contents of the argument data restricted to the groups used}
 \item{dataNA:}{  A data frame with observations containing a least one missing value
   for an analysis variable, NA if no missing values}
-\item{params}{  A vector with the values of the arguments ByGroup and ptRadius}
-\item{groups}{  A vector (may be of length 1) with the value of the argument Groups}
+\item{params}{  A list with the values of the grouping, logical, numerical, and Color arguments}
 \item{analyticVars}{  A vector with the value of the argument AnalyticVars}
 \item{selections}{  A vector or matrix with the value of the argument Selections}
-\item{colors}{  A vector with the value of the argument Color}
-\item{location}{  The value of the parameter folder}
+\item{location}{  The value of the argument folder}
 }
 }
 \description{

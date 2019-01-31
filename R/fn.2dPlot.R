@@ -37,9 +37,7 @@
 #' \item{dataUsed: }{ The contents of the argument data restricted to the groups used}
 #' \item{dataNA:}{  A data frame with observations containing a least one missing value
 #'   for an analysis variable, NA if no missing values}
-#' \item{params.numeric: }{ A vector with the values of the arguments Lowess.f and KernelWidth}
-#' \item{params.grouping: }{ A character vector with the values of the arguments GroupVar and Groups}
-#' \item{ellipse.pct: }{ The value of the argument Ellipses}
+#' \item{params: }{ A list with the values of the grouping, logical and numeric arguments}
 #' \item{analyticVars: }{ The value of the argument AnalyticVars}
 #' \item{colors:}{  A vector with the value of the argument Color}
 #' \item{data.check: }{ If Identify = T, a data frame with the information on user-identified points
@@ -89,7 +87,7 @@ fn.2dPlot <- function (doc = "fn.2dPlot",
                        PlotEllipses = F,
                        PlotHulls = F,
                        PlotMedians = F,
-                        Ellipses = c(0.95, 0.99),
+                       Ellipses = c(0.95, 0.99),
                        Identify=F,
                        PlotColors = F,
                        Colors=c("black","red","blue","green","purple"),
@@ -310,20 +308,26 @@ fn.2dPlot <- function (doc = "fn.2dPlot",
     } # end of code for Identify = T
   #
   fcn.date.ver<-paste(doc,date(),R.Version()$version.string)
-  params.numeric<-c(Lowess.f,KernelWidth)
-  names(params.numeric)<-c("Lowess.f","KernelWidth")
+  #
+  smoothing<-c(Lowess.f,KernelWidth)
+  names(smoothing)<-c("Lowess.f","Kernelwidth")
+  params.numeric<-list(smoothing=smoothing,ellipse.pct=Ellipses)
   params.grouping<-list(GroupVar,Groups)
   names(params.grouping)<-c("GroupVar","Groups")
+  params.logical<-c(PlotByGroup,PlotPoints,PlotEllipses,PlotHulls,PlotMedians,LowessLine,
+                    KernelSmooth,Identify,PlotColors)
+  names(params.logical)<-c("PlotByGroup","PlotPoints","PlotEllipses","PlotHulls","PlotMedians",
+                           "LowessLine","KernelSmooth","Identify","PlotColors")
+  params<-list(grouping=params.grouping,logical=params.logical,numeric=params.numeric)
+  #
   if (sum(dataKeep) < nrow(data.Used)) dataNA <- data.Used[!dataKeep,]
   else dataNA <- NA
   #
   list(       usage=fcn.date.ver,
               dataUsed=data.Used,
               dataNA=dataNA,
-              params.numeric=params.numeric,
-              params.grouping=params.grouping,
+              params=params,
               analyticVars=AnalyticVars,
-              ellipse.pct=Ellipses,
               data.check=data.check,
               location=folder)
 }
