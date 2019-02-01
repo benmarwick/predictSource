@@ -60,11 +60,7 @@ The function returns a list with the following components:
   \item{sourcesNA:}{  A data frame with data from the data frame data with missing values,
    NÁ if no missing values}
   \item{analyticVars:}{ A vector with the value of the argument AnalyticVars}
-  \item{params.numeric:}{ A numeric vector with the values of the arguments Ntrees, NvarUsed,\
-   and Seed}
-  \item{params.grouping:}{ A list with the values of the arguments GroupVar and Groups}
-  \item{params.logical:}{ A vector with the values of the arguments plotErrorRate,
-  plotImportance, predictSources, and plotSourceProbs}
+  \item{params:}{ A list with the values of the grouping, logical, and numeric arguments}
   \item{formula.rf:}  {The formula used in the analysis (the variables specified in the argument AnalyticVars
                        separated by + signs)}
   \item{forest:}{  A summary of the random forest call, estimated error rate, and

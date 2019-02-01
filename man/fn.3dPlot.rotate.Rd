@@ -64,7 +64,7 @@ appear much larger in a saved file than on the monitor.
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 plot.3d.rotate<-fn.3dPlot.rotate(data=ObsidianSources, GroupVar="Code", Groups=c("A","B"),
-                                AnalyticVars = analyticVars, Selections=analyticVars[1:3],ByGroup=T)
+              AnalyticVars = analyticVars, Selections=analyticVars[1:3],ByGroup=T)
 # two plots
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")

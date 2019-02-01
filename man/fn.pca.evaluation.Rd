@@ -63,7 +63,8 @@ of the source data, and a plot with those convex hulls and the artifact data (us
   variables; NA if no missing data}
   \item{impError}{  Normalized root mean square error estimate for imputed data;
   NA if no missing data}
-  \item{params:}{  A list with the values of the arguments GroupVar and Groups}
+  \item{params:}{  A list with the values of the grouping and source arguments and
+  values of the logical arguments}
   \item{analyticVars:}{  A vector with the value of the argument AnalyticVars}
   \item{table.in.out:} {  A data frame with counts of the numbers of artifacts inside and
   outside of each predicted source location}

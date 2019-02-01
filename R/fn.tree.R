@@ -34,7 +34,7 @@
 #'   \item{dataUsed:}{ The contents of the argument data restricted to the groups used}
 #'   \item{params.grouping:}{ A list with the values of the arguments GroupVar and Groups}
 #'   \item{analyticVars:}{ A vector with the value of the argument AnalyticVars}
-#'   \item{params.logical:}{ The values of plotTree, predictSources}
+#'   \item{params:}{ A list with the values of the grouping, logical, and splitting parameters}
 #'   \item{model:}{ A character string with the value of the argument ModelTitle}
 #'   \item{Tree:}{ A list with details of the tree construction.}
 #'   \item{classification:}  {A data frame showing the crossclassification of sources and predicted sources}
@@ -169,14 +169,20 @@ fn.tree <-
       if (substr(ID,1,1) != " ")  predictedResults<-data.frame(source, predictData[,c(ID, AnalyticVars)])
       #
       } # end of code for predictSources == T
-   #
+    #
+    nsplit <- CpTable[,"nsplit"]
+    Cp <- round(CpTable[,-2],dig = CpDigits)
+    CpTable <- cbind(nsplit,Cp)
+    #
     fcn.date.ver<-paste(doc,date(),R.Version()$version.string)
+    #
     params.grouping<-list(GroupVar,Groups)
     names(params.grouping)<-c("GroupVar","Groups")
     params.logical<-c(plotTree, plotCp, predictSources)
     names(params.logical)<-c("plotTree", "plotCp", "predictSources")
-    params.splitting <- c(minSplit, cP)
-    names(params.splitting) <- c("minSplit","cP")
+    params.splitting <- c(minSplit, cP, CpDigits)
+    names(params.splitting) <- c("minSplit","cP", "CpDigits")
+    params<-list(grouping=params.grouping,logical=params.logical,splitting=params.splitting)
     #
     nsplit <- CpTable[,"nsplit"]
     Cp <- round(CpTable[,-2],dig = CpDigits)
@@ -186,9 +192,7 @@ fn.tree <-
       out<-list(usage=fcn.date.ver,
                 dataUsed=Data.used,
                 analyticVars=AnalyticVars,
-                params.grouping=params.grouping,
-                params.logical=params.logical,
-                params.splitting=params.splitting,
+                params=params,
                 model=ModelTitle,
                 Tree = Tree,
                 classification = classification,
@@ -199,9 +203,7 @@ fn.tree <-
         out<-list(usage=fcn.date.ver,
                   dataUsed=Data.used,
                   analyticVars=AnalyticVars,
-                  params.grouping=params.grouping,
-                  params.logical=params.logical,
-                  params.splitting=params.splitting,
+                  params=params,
                   model=ModelTitle,
                   Tree = Tree,
                   classification = classification,

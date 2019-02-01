@@ -44,7 +44,8 @@
 #'   variables; NA if no missing data}
 #'   \item{impError}{  Normalized root mean square error estimate for imputed data;
 #'   NA if no missing data}
-#'   \item{params:}{  A list with the values of the arguments GroupVar and Groups}
+#'   \item{params:}{  A list with the values of the grouping and source arguments and
+#'   values of the logical arguments}
 #'   \item{analyticVars:}{  A vector with the value of the argument AnalyticVars}
 #'   \item{table.in.out:} {  A data frame with counts of the numbers of artifacts inside and
 #'   outside of each predicted source location}
@@ -532,12 +533,6 @@ fn.pca.evaluation <-function(doc = "fn.pca.evaluation",
     #
     #  return information to an R object
     #
-    fcn.date.ver<-paste(doc,date(),R.Version()$version.string)
-    logicalParams <- c(plotAllPoints, plotHullsOutsidePoints, plotOutsidePoints)
-    names(logicalParams) <- c("plotAllPoints", "plotHullsOutsidePoints", "plotOutsidePoints")
-    params<-list(SourceGroup, ArtifactGroup,known.sources,predicted.sources,logicalParams)
-    names(params)<-c("SourceGroup","ArtifactGroup","known.sources","predicted.sources",
-                     "logicalParams")
     colnames(n.in.out) <- c("outside","inside")
     #
     if (ID[1] == " ")  keepVars <- c("group", AnalyticVars)
@@ -551,6 +546,13 @@ fn.pca.evaluation <-function(doc = "fn.pca.evaluation",
        pts.outside <- pts.outside[order(pts.outside[, "ID"]),]
        if (Identify == T)  data.check <- data.check[order(data.check[, "ID"]),]
     }
+    fcn.date.ver<-paste(doc,date(),R.Version()$version.string)
+    #
+    params.logical <- c(plotAllPoints, plotHullsOutsidePoints, plotOutsidePoints)
+    names(params.logical) <- c("plotAllPoints", "plotHullsOutsidePoints", "plotOutsidePoints")
+    params.grouping<-list(SourceGroup, ArtifactGroup,known.sources,predicted.sources)
+    names(params.grouping)<-c("SourceGroup","ArtifactGroup","known.sources","predicted.sources")
+    params<-list(grouping=params.grouping,logical=params.logical)
   #
   out<-list(usage=fcn.date.ver,
                 sourceData = sourceData,

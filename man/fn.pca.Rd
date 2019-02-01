@@ -60,19 +60,19 @@ The function produces a plot of the first two principal components, the contents
   \item{dataUsed:}{  The contents of the argument data restricted to the groups used}
   \item{dataNA:}{  A data frame with observations containing a least one missing value
   for an analysis variable, NA if no missing values}
-  \item{params.grouping:}{  A list with the values of the arguments GroupVar and Groups}
-  \item{params.logical:}  {A vector with the values of the arguments ScreePlot,BoxPlots,
-  PlotPoints,PlotEllipses,PlotHull,PlotMedians,PlotColors}
-  \item{colors:}{  The value of the argument Colors}
+  \item{params:}{  A list with the values of the arguments for grouping, logical parameters,
+  Ellipses, and Colors}
   \item{analyticVars:}{  A vector with the value of the argument AnalyticVars}
   \item{ellipse.pct:}{  The value of the argument Ellipses}
-  \item{variances:}{  A data frame including the percent of variation explained by each principal component and the cumulative percent explained}
+  \item{variances:}{  A data frame including the percent of variation explained by each
+  principal component and the cumulative percent explained}
   \item{weights:}{  A data frame with the principal component weights for each observation}
-  \item{Predicted:}{  A data frame with the predicted values for each principal component, plus the value of Groups and
-  an integer GroupIndex (with values 1:number of Groups)}
-  \item{DataPlusPredicted:}{  A data frame with the data used to compute the principal components, plus GroupIndex (as defined
- above) and predicted values for each principal component}
-  \item{data.check:}{  If Identify=T, a data frame with the observations in dataUsed identified as of interest}
+  \item{Predicted:}{  A data frame with the predicted values for each principal component,
+   plus the value of Groups and an integer GroupIndex (with values 1:number of Groups)}
+  \item{DataPlusPredicted:}{  A data frame with the data used to compute the principal components,
+   plus GroupIndex (as defined above) and predicted values for each principal component}
+  \item{data.check:}{  If Identify=T, a data frame with the observations in dataUsed
+   identified as of interest}
   \item{location:}{  The value of the parameter folder}
  }
 }

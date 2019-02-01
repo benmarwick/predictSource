@@ -43,11 +43,7 @@
 #'   \item{sourcesNA:}{  A data frame with data from the data frame data with missing values,
 #'    NÁ if no missing values}
 #'   \item{analyticVars:}{ A vector with the value of the argument AnalyticVars}
-#'   \item{params.numeric:}{ A numeric vector with the values of the arguments Ntrees, NvarUsed,\
-#'    and Seed}
-#'   \item{params.grouping:}{ A list with the values of the arguments GroupVar and Groups}
-#'   \item{params.logical:}{ A vector with the values of the arguments plotErrorRate,
-#'   plotImportance, predictSources, and plotSourceProbs}
+#'   \item{params:}{ A list with the values of the grouping, logical, and numeric arguments}
 #'   \item{formula.rf:}  {The formula used in the analysis (the variables specified in the argument AnalyticVars
 #'                        separated by + signs)}
 #'   \item{forest:}{  A summary of the random forest call, estimated error rate, and
@@ -247,25 +243,27 @@ fn.randomForest <-
                   AnalyticVars="sourceProbability", Nrow=1, Ncol=1)
     } # end of code for predictSources == T
     #
+    importance.rf <- round(importance.rf, dig=digitsImportance)
+    #
+    if ((artifactID != " ") & (predictSources == T))
+      predictions <- predictions[order(predictions[,artifactID]),]
+    #
     fcn.date.ver<-paste(doc,date(),R.Version()$version.string)
+    #
     params.grouping<-list(GroupVar,Groups)
     names(params.grouping)<-c("GroupVar","Groups")
     params.numeric<-c(NvarUsed, Ntrees, Seed, digitsImportance)
     names(params.numeric)<-c("NvarUsed", "Ntrees", "Seed", "digitsImportance")
     params.logical<-c(plotErrorRate,plotImportance,predictSources,plotSourceProbs)
     names(params.logical) <- c("plotErrorRate","plotImportance","predictSources","plotSourceProbs")
-    importance.rf <- round(importance.rf, dig=digitsImportance)
-    if ((artifactID != " ") & (predictSources == T))
-      predictions <- predictions[order(predictions[,artifactID]),]
+    params<-list(grouping=params.grouping,logical=params.logical,numeric=params.numeric)
     #
     out<-list(usage=fcn.date.ver,
                   dataUsed=Data.used,
                   sourcesNA=sourcesNA,
                   predictData=predictData,
                   analyticVars=AnalyticVars,
-                  params.grouping=params.grouping,
-                  params.numeric=params.numeric,
-                  params.logical=params.logical,
+                  params=params,
                   formula.rf=formula.rf,
                   forest = fit.rf,
                   importance = importance.rf,

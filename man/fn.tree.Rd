@@ -55,7 +55,7 @@ The function returns a list with the following components:
   \item{dataUsed:}{ The contents of the argument data restricted to the groups used}
   \item{params.grouping:}{ A list with the values of the arguments GroupVar and Groups}
   \item{analyticVars:}{ A vector with the value of the argument AnalyticVars}
-  \item{params.logical:}{ The values of plotTree, predictSources}
+  \item{params:}{ A list with the values of the grouping, logical, and splitting parameters}
   \item{model:}{ A character string with the value of the argument ModelTitle}
   \item{Tree:}{ A list with details of the tree construction.}
   \item{classification:}  {A data frame showing the crossclassification of sources and predicted sources}
