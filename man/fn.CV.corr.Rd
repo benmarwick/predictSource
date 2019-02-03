@@ -9,28 +9,28 @@ fn.CV.corr(doc = "fn.CV.corr", data, GroupVar, Groups = "All", ID = " ",
   plotCorrs = T, folder = " ")
 }
 \arguments{
+\item{doc}{A string with documentation, default is the function name}
+
+\item{data}{AR matrix or data frame containing the data to be analyzedfn}
+
+\item{GroupVar}{The name for the variable defining grouping; if " ", no grouping}
+
+\item{Groups}{Character valued defining the the groups used.  Options are a Vector of values
+of the group variable; "All" (the default; use all groups); " ", no grouping}
+
+\item{ID}{The name of a variable with a lab ID (used for sorting data), default is " "}
+
+\item{AnalyticVars}{A vector of names (character values) of analytic results}
+
+\item{Transpose}{See Details}
+
+\item{CV.digits}{The number of significant digits in CV estimates, default is 2}
+
+\item{corr.digits}{The number of significant digits in correlation estimates, default is 2}
+
+\item{plotCorrs}{Logical, if T (the default), create a matrix of plots describing correlations}
+
 \item{folder}{The path to the folder in which data frames will be saved; default is " "}
-
-\item{doc:}{A character variable with documentation, default if the function name}
-
-\item{data:}{R matrix or data frame containing the data to be analyzedfn}
-
-\item{GroupVar:}{Name for variable defining grouping; if " ", if no grouping}
-
-\item{Groups:}{Vector of values of group variable for which plots are to be done.
-If "All" (the default),  use all groups, if " ", no grouping}
-
-\item{ID:}{Name of a variable with a lab ID (used for sorting data), default is " "}
-
-\item{AnalyticVars:}{Vector of names (character values) of analytic results}
-
-\item{Transpose:}{See Details}
-
-\item{CV.digits:}{Number of significant digits in CV estimates, default is 2}
-
-\item{corr.digits:}{Number of significant digits in correlation estimates, default is 2}
-
-\item{plotCorrs:}{Logical, if T (the default), create a matrix of plots describing correlations}
 }
 \value{
 A list with the following components:

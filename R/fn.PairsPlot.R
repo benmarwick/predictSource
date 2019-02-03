@@ -2,13 +2,14 @@
 #'
 #' Pairs plots of specified analytic values, by specified groups
 #'
-#' @param doc: a string documenting use added to the output list, default is the function name
-#' @param data: R matrix or data frame containing the data to be analyzed
-#' @param GroupVar: name for variable defining grouping (required)
-#' @param Groups: vector of values of group variable for which plots are to be done.
+#' @param doc A string documenting use added to the output list, default is the function name
+#' @param data A matrix or data frame containing the data to be analyzed
+#' @param GroupVar The name for variable defining grouping (required)
+#' @param Groups A vector of values of group variable for which plots are to be done.
 #'    if "All": use all groups; if " ": no grouping
-#' @param AnalyticVars: vector of names (character values) of analytic results
-#' @param Span: value >0, <=1 defining the proportion of data used to estimate the lowess smooth
+#' @param AnalyticVars A vector of names (character values) of analytic results
+#' @param Span A value >0, <=1 defining the proportion of data used to estimate the lowess smooth.
+#' The default value (2/3) is the default value for the lowess function.
 #'
 #' @section  DETAILS:
 #'  The function produces a pairs plot with a lowess smooth through the scatter plot for

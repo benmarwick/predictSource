@@ -11,16 +11,16 @@ fn.2dPlot.Gauss(doc = "fn.2dPlot.Gauss", data, GroupVar, ID, Groups,
 \arguments{
 \item{doc}{A string documenting use written to the output list; default is the function name}
 
-\item{data}{R matrix or data frame containing the data to be analyzed}
+\item{data}{A matrix or data frame containing the data to be analyzed}
 
-\item{GroupVar}{Name for the variable defining grouping, " " if no grouping}
+\item{GroupVar}{The name for the variable defining grouping, " " if no grouping}
 
-\item{ID}{Name for the variable with a lab ID, " " if no lab ID is used}
+\item{ID}{The name for the variable with a lab ID, " " if no lab ID is used}
 
-\item{Groups}{Vector of values of the group variable for which plots are to be done;
+\item{Groups}{A vector of values of the group variable for which plots are to be done;
 if "All", use all groups; if " ", no grouping}
 
-\item{AnalyticVars}{Vector of length two with the names of two analytic variables
+\item{AnalyticVars}{A vector of length two with the names of two analytic variables
 to be shown in the plots}
 
 \item{scatterPlot}{Logical (default is T): specify whether to show scatter plots when qqPlot = F}

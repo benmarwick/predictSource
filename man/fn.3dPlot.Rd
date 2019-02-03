@@ -11,27 +11,27 @@ fn.3dPlot(doc = "fn.3dPlot", data, GroupVar, Groups, AnalyticVars, Selections,
 \arguments{
 \item{doc}{A string documenting use written to the output list; default is the function name}
 
-\item{data}{R matrix or data frame containing the data to be analyzed}
+\item{data}{A matrix or data frame containing the data to be analyzed}
 
-\item{GroupVar}{Name for variable defining grouping; can be " " if no grouping.}
+\item{GroupVar}{The name for variable defining grouping; can be " " if no grouping.}
 
-\item{Groups}{Vector of values of group variable for which plots are to be done;
+\item{Groups}{A vector of values of group variable for which plots are to be done;
 if "All", use all groups; if " ", no grouping}
 
-\item{AnalyticVars}{Vector of names (character values) of the analytic variables}
+\item{AnalyticVars}{A vector of names (character values) of the analytic variables}
 
-\item{Selections}{Vector of length 3, or data frame with 3 columns, with the combinations
+\item{Selections}{A vector of length 3, or data frame with 3 columns, with the combinations
 of the analytic variables to be plotted}
 
-\item{ByGroup}{If T, show scatterplot for each group for each selection of 3 variables;
-if F, all specified groups are on one plot}
+\item{ByGroup}{Logical.  If T, show scatterplot for each group for each selection of 3 variables;
+if F (the default), all specified groups are on one plot}
 
-\item{PlotMedians}{If T, plot only the medians in each group (the points are not plotted)
-if F, the median locations are not plotted}
+\item{PlotMedians}{Logical.  If T, plot only the medians in each group (the points are not plotted)
+if F (the default), the median locations are not plotted}
 
-\item{Colors}{Vector with the colors of plotted points, used sequentially for the groups}
+\item{Colors}{A vector with the colors of plotted points, used sequentially for the groups}
 
-\item{SymbolSize}{Value at most 1, a smaller value gives smaller diameter points}
+\item{SymbolSize}{A value at most 1, a smaller value gives smaller diameter points}
 }
 \value{
 A list with the following components:

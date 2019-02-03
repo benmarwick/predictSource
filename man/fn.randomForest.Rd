@@ -13,26 +13,26 @@ fn.randomForest(doc = "fn.randomForest", data, GroupVar, Groups = "All",
 \arguments{
 \item{doc}{Documentation for the function use added to model usage, default value is the function name}
 
-\item{data}{Data frame with the data used to grow trees (source data if predictions are made)}
+\item{data}{A data frame with the data used to grow trees (source data if predictions are made)}
 
-\item{GroupVar}{Name of variable defining groups, grouping is required}
+\item{GroupVar}{The name of variable defining groups, grouping is required}
 
-\item{Groups}{Vector of codes for groups to be used, 'All' if use all groups}
+\item{Groups}{A vector of codes for groups to be used, 'All' if use all groups}
 
-\item{AnalyticVars}{Vector with names (character-valued) of the analytic variables}
+\item{AnalyticVars}{A vector with names (character-valued) of the analytic variables}
 
 \item{sourceID}{If not " " (the default), the name of the variable with sample ID for source data}
 
-\item{Ntrees}{Number of trees grown, default value of 500 is that for the randomForest function}
+\item{Ntrees}{The number of trees grown, default value of 500 is that for the randomForest function}
 
-\item{NvarUsed}{If not NA (the default), number of variables to use in each random forest call
+\item{NvarUsed}{If not NA (the default), the number of variables to use in each random forest call
 to rpart; if NA, rpart uses the default value for randomForest()
  (the square root of the number of candidate variables)}
 
 \item{Seed}{If not NA, a random number generator seed to produce reproducible results;
 default value is 11111}
 
-\item{digitsImportance}{Significant digits for the importance measure, default is 1}
+\item{digitsImportance}{The number of significant digits for the importance measure, default is 1}
 
 \item{plotErrorRate}{Logical, whether to show the error rate plot, default is T}
 
@@ -40,7 +40,7 @@ default value is 11111}
 
 \item{predictSources}{Logical; if T, predict sources for the data in predictData; default is F}
 
-\item{predictData}{Data frame or matrix with data used to predict sources for observations,
+\item{predictData}{A data frame or matrix with data used to predict sources for observations,
 must contain all variables in AnalyticVars.}
 
 \item{artifactID}{if not " " (the default), the name of the variable with the sample ID for

@@ -10,23 +10,23 @@ fn.tree(doc = "fn.tree", data, GroupVar, Groups = "All", AnalyticVars,
   folder = " ")
 }
 \arguments{
-\item{doc}{Documentation added to defintion of usage, default is fn.tree (the function name)}
+\item{doc}{A string with documentation added to defintion of usage, default is fn.tree (the function name)}
 
-\item{data}{Data frame with the data to be analyzed}
+\item{data}{A data frame with the data to be analyzed}
 
-\item{GroupVar}{Name of the variable defining groups, grouping is required}
+\item{GroupVar}{The name of the variable defining groups, grouping is required}
 
-\item{Groups}{Vector of codes for groups to be used, 'All' (the default) if use all groups}
+\item{Groups}{A vector of codes for groups to be used, 'All' (the default) if use all groups}
 
-\item{AnalyticVars}{Vector with the names (character values) of the analytic variables}
+\item{AnalyticVars}{A vector with the names (character values) of the analytic variables}
 
 \item{wts}{Option to weight the observations, if used, vector with length nrow(data); if NA (the default), assume equal weights}
 
-\item{CpDigits}{Number of significant digits to display in the Cp table, default value is 3}
+\item{CpDigits}{The number of significant digits to display in the Cp table, default value is 3}
 
-\item{plotTree}{If T (true, the default), plot the recursive partitioning tree}
+\item{plotTree}{Logical.  If T (true, the default), plot the recursive partitioning tree}
 
-\item{plotCp}{If T (tree, the default), plot the Cp table values}
+\item{plotCp}{Logical.  If T (tree, the default), plot the Cp table values}
 
 \item{Model}{A character string containing the names of the variables (characters) considered
 separated by + signs}
@@ -43,7 +43,7 @@ in predictData; default is F}
 \item{predictData}{Data frame with data used to predict sources, must contain all variables
 in AnalyticVars}
 
-\item{ID}{If not " " (the default), name of a variable identifying a sample in predictData}
+\item{ID}{If not " " (the default), the name of a variable identifying a sample in predictData}
 
 \item{folder}{The path to the folder in which data frames will be saved; default is " "}
 }

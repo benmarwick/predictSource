@@ -3,22 +3,22 @@
 #'   Implements a random forest analysis of source data, and predicts sources of unknowns if requested
 #'
 #' @param doc Documentation for the function use added to model usage, default value is the function name
-#' @param data  Data frame with the data used to grow trees (source data if predictions are made)
-#' @param GroupVar Name of variable defining groups, grouping is required
-#' @param Groups Vector of codes for groups to be used, 'All' if use all groups
+#' @param data  A data frame with the data used to grow trees (source data if predictions are made)
+#' @param GroupVar The name of variable defining groups, grouping is required
+#' @param Groups A vector of codes for groups to be used, 'All' if use all groups
 #' @param sourceID If not " " (the default), the name of the variable with sample ID for source data
-#' @param AnalyticVars Vector with names (character-valued) of the analytic variables
-#' @param Ntrees Number of trees grown, default value of 500 is that for the randomForest function
-#' @param NvarUsed If not NA (the default), number of variables to use in each random forest call
+#' @param AnalyticVars A vector with names (character-valued) of the analytic variables
+#' @param Ntrees The number of trees grown, default value of 500 is that for the randomForest function
+#' @param NvarUsed If not NA (the default), the number of variables to use in each random forest call
 #'  to rpart; if NA, rpart uses the default value for randomForest()
 #'   (the square root of the number of candidate variables)
 #' @param Seed If not NA, a random number generator seed to produce reproducible results;
 #' default value is 11111
-#' @param digitsImportance  Significant digits for the importance measure, default is 1
+#' @param digitsImportance  The number of significant digits for the importance measure, default is 1
 #' @param plotErrorRate Logical, whether to show the error rate plot, default is T
 #' @param plotImportance Logical, whether to show the plot of variable importance, default is T
 #' @param predictSources Logical; if T, predict sources for the data in predictData; default is F
-#' @param predictData Data frame or matrix with data used to predict sources for observations,
+#' @param predictData A data frame or matrix with data used to predict sources for observations,
 #'    must contain all variables in AnalyticVars.
 #' @param artifactID if not " " (the default), the name of the variable with the sample ID for
 #'  artifact data

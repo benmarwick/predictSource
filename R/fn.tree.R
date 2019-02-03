@@ -2,15 +2,15 @@
 #'
 #' Fit a recursive partitioning model (classification tree) to data from sources
 #'
-#' @param doc Documentation added to defintion of usage, default is fn.tree (the function name)
-#' @param data  Data frame with the data to be analyzed
-#' @param GroupVar  Name of the variable defining groups, grouping is required
-#' @param Groups  Vector of codes for groups to be used, 'All' (the default) if use all groups
-#' @param AnalyticVars  Vector with the names (character values) of the analytic variables
+#' @param doc A string with documentation added to defintion of usage, default is fn.tree (the function name)
+#' @param data  A data frame with the data to be analyzed
+#' @param GroupVar  The name of the variable defining groups, grouping is required
+#' @param Groups  A vector of codes for groups to be used, 'All' (the default) if use all groups
+#' @param AnalyticVars  A vector with the names (character values) of the analytic variables
 #' @param wts Option to weight the observations, if used, vector with length nrow(data); if NA (the default), assume equal weights
-#' @param CpDigits  Number of significant digits to display in the Cp table, default value is 3
-#' @param plotTree If T (true, the default), plot the recursive partitioning tree
-#' @param plotCp  If T (tree, the default), plot the Cp table values
+#' @param CpDigits  The number of significant digits to display in the Cp table, default value is 3
+#' @param plotTree Logical.  If T (true, the default), plot the recursive partitioning tree
+#' @param plotCp  Logical.  If T (tree, the default), plot the Cp table values
 #' @param Model  A character string containing the names of the variables (characters) considered
 #'  separated by + signs
 #' @param ModelTitle  The parameter Model as a single character value
@@ -20,7 +20,7 @@
 #'  in predictData; default is F
 #' @param predictData  Data frame with data used to predict sources, must contain all variables
 #'  in AnalyticVars
-#' @param ID  If not " " (the default), name of a variable identifying a sample in predictData
+#' @param ID  If not " " (the default), the name of a variable identifying a sample in predictData
 #' @param folder  The path to the folder in which data frames will be saved; default is " "
 #'
 #' @details The function fits a classification tree model us the R function rpart().

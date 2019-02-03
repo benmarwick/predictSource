@@ -3,19 +3,19 @@
 #' Create 3-dimensional data plot. The function stops after producing each plot.  Enter c ("continue") at the prompt to get the next plot.  If this function is run using Rstudio, each plot appears in a separate window, not in the Rstudio plot pane.
 #'
 #' @param doc A string documenting use written to the output list; default is the function name
-#' @param data R matrix or data frame containing the data to be analyzed
-#' @param GroupVar Name for variable defining grouping; can be " " if no grouping.
-#' @param Groups Vector of values of group variable for which plots are to be done;
+#' @param data A matrix or data frame containing the data to be analyzed
+#' @param GroupVar The name for variable defining grouping; can be " " if no grouping.
+#' @param Groups A vector of values of group variable for which plots are to be done;
 #'    if "All", use all groups; if " ", no grouping
-#' @param AnalyticVars Vector of names (character values) of the analytic variables
-#' @param Selections Vector of length 3, or data frame with 3 columns, with the combinations
+#' @param AnalyticVars A vector of names (character values) of the analytic variables
+#' @param Selections A vector of length 3, or data frame with 3 columns, with the combinations
 #' of the analytic variables to be plotted
-#' @param ByGroup If T, show scatterplot for each group for each selection of 3 variables;
-#' if F, all specified groups are on one plot
-#' @param PlotMedians  If T, plot only the medians in each group (the points are not plotted)
-#' if F, the median locations are not plotted
-#' @param Colors Vector with the colors of plotted points, used sequentially for the groups
-#' @param SymbolSize Value at most 1, a smaller value gives smaller diameter points
+#' @param ByGroup Logical.  If T, show scatterplot for each group for each selection of 3 variables;
+#' if F (the default), all specified groups are on one plot
+#' @param PlotMedians  Logical.  If T, plot only the medians in each group (the points are not plotted)
+#' if F (the default), the median locations are not plotted
+#' @param Colors A vector with the colors of plotted points, used sequentially for the groups
+#' @param SymbolSize A value at most 1, a smaller value gives smaller diameter points
 #'
 #' @return   A list with the following components:
 #'  \itemize{

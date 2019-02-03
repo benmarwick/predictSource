@@ -2,13 +2,13 @@
 #'
 #'  Compute and plot principal components after standardizing the data
 #'
-#' @param doc Documentation in the list returned, default is the function name
-#' @param data R matrix or data frame containing the data to be analyzed
-#' @param ID  Optional name for an ID, default is " " if no ID
-#' @param GroupVar Name for variable defining grouping; a variable name is required
-#' @param Groups Vector of values of group variable for which plots are to be done.
-#' If "All": use all groups.  "All" or a vector with group names is required
-#' @param AnalyticVars Vector of names (character values) of analytic results
+#' @param doc A string with documentation in the list returned, default is the function name
+#' @param data A matrix or data frame containing the data to be analyzed
+#' @param ID  An optional name for an ID, default is " " if no ID
+#' @param GroupVar The name for variable defining grouping; a variable name is required
+#' @param Groups Character-valued defining the values of the group variable for which plots are
+#'  to be done.  Options are a vector of values; "All" (use all groups).  One of these is required
+#' @param AnalyticVars A vector of names (character values) of analytic results
 #' @param ScreePlot  Logical, if T create a scree plot, default is F
 #' @param BoxPlots  Logical, if T, create box plots of the first two components, default is F
 #' @param pcPlot  Logical, if T (the default), create the plot of the first two components
@@ -16,12 +16,13 @@
 #' @param PlotEllipses Logical, if T (the default), plot the confidence ellipse or ellipses for each group
 #' @param PlotHull  Logical, if T, plot the convex hull for each group, default is F
 #' @param PlotMedians  Logical, if T, plot the symbol for each group at the median point for that group, default is F
-#' @param Ellipses Value or vector of proportions for confidence ellipses; default is c(.95,.99) to produce 95\% and 99\% confidence ellipses
-#' @param legendLoc Character, location of legend for a plot with points; default is "topright", alternatives are combinations of "top", "bottom", "right", "left"
-#' @param PlotColors If T, use list of colors in Colors for points; if F, plot points as black
-#' @param Colors Vector of color names; default is a vector with five names
-#' @param Identify If T, the user can identify points of interest in plots; information on these points is saved to a file; default is F
-#' @param digits Significant digits to return in objects in data frames, default is 3
+#' @param Ellipses A value or vector of proportions for confidence ellipses; default is c(.95,.99) to produce 95\% and 99\% confidence ellipses
+#' @param legendLoc Character, location of legend for a plot with points;
+#'  default is "topright", alternatives are combinations of "top", "bottom", "right", "left"
+#' @param PlotColors Logical.  If T, use list of colors in Colors for points; if F, plot points as black
+#' @param Colors A vector of color names; default is a vector with five names
+#' @param Identify Logical.  If T, the user can identify points of interest in plots; information on these points is saved to a file; default is F
+#' @param digits The number of significant digits to return in objects in data frames, default is 3
 #' @param folder  The path to the folder in which data frames will be saved; default is " "
 #'
 #' @section Details:

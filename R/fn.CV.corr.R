@@ -4,17 +4,17 @@
 #' analytic values, by specified groups, and plots to visualize correlations.
 #' Observations with missing values are removed from computations using them.
 #'
-#' @param doc: A character variable with documentation, default if the function name
-#' @param data: R matrix or data frame containing the data to be analyzedfn
-#' @param GroupVar: Name for variable defining grouping; if " ", if no grouping
-#' @param Groups: Vector of values of group variable for which plots are to be done.
-#'  If "All" (the default),  use all groups, if " ", no grouping
-#' @param ID: Name of a variable with a lab ID (used for sorting data), default is " "
-#' @param AnalyticVars: Vector of names (character values) of analytic results
-#' @param Transpose: See Details
-#' @param CV.digits: Number of significant digits in CV estimates, default is 2
-#' @param corr.digits: Number of significant digits in correlation estimates, default is 2
-#' @param plotCorrs: Logical, if T (the default), create a matrix of plots describing correlations
+#' @param doc A string with documentation, default is the function name
+#' @param data AR matrix or data frame containing the data to be analyzedfn
+#' @param GroupVar The name for the variable defining grouping; if " ", no grouping
+#' @param Groups Character valued defining the the groups used.  Options are a Vector of values
+#'  of the group variable; "All" (the default; use all groups); " ", no grouping
+#' @param ID The name of a variable with a lab ID (used for sorting data), default is " "
+#' @param AnalyticVars A vector of names (character values) of analytic results
+#' @param Transpose See Details
+#' @param CV.digits The number of significant digits in CV estimates, default is 2
+#' @param corr.digits The number of significant digits in correlation estimates, default is 2
+#' @param plotCorrs Logical, if T (the default), create a matrix of plots describing correlations
 #' @param folder  The path to the folder in which data frames will be saved; default is " "
 #'
 #' @section Details:

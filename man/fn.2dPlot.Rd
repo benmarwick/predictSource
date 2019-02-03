@@ -14,32 +14,32 @@ fn.2dPlot(doc = "fn.2dPlot", data, GroupVar, ID, Groups, AnalyticVars,
 \arguments{
 \item{doc}{A string documenting use written to the output list; default is the function name}
 
-\item{data}{R matrix or data frame containing the data to be analyzed}
+\item{data}{A matrix or data frame containing the data to be analyzed}
 
-\item{GroupVar}{name for the variable defining grouping, " " if no grouping}
+\item{GroupVar}{The name for the variable defining grouping, " " if no grouping}
 
-\item{ID}{name for the variable with a lab ID, " " if no lab ID is used}
+\item{ID}{The name for the variable with a lab ID, " " if no lab ID is used}
 
-\item{Groups}{vector of values of the group variable for which plots are to be done;
+\item{Groups}{A vector of values of the group variable for which plots are to be done;
 if "All", use all groups; grouping is required (cannot be " ").}
 
-\item{AnalyticVars}{names of two analytic variables to be shown in the plots, vector of length 2
+\item{AnalyticVars}{The names of two analytic variables to be shown in the plots, vector of length 2
 or matrix with 2 columns; if a matrix, the set of plots is produced for each row.}
 
-\item{PlotByGroup}{default is T; if F, all groups are on each plot for a pair of variables}
+\item{PlotByGroup}{Logical.  The default is T; if F, all groups are on each plot for a pair of variables}
 
-\item{PlotPoints}{if T (the default), all points are plotted; if F, no points are plotted}
+\item{PlotPoints}{Logical.  If T (the default), all points are plotted; if F, no points are plotted}
 
-\item{LowessLine}{if T, a lowess line is plotted for each group; if F, no line is plotted}
+\item{LowessLine}{Logical. If T, a lowess line is plotted for each group; if F, no line is plotted}
 
 \item{Lowess.f}{parameter for lowess() less than or equal to 1, defining the range of x-values used;
 if NA (the default), uses the default value of 0.67}
 
-\item{KernelSmooth}{if T, a kernel smooth is plotted for each group; if F (the default), no kernel smooth is plotted}
+\item{KernelSmooth}{Logical.  If T, a kernel smooth is plotted for each group; if F (the default), no kernel smooth is plotted}
 
 \item{KernelWidth}{the proportion of the range of x-values used in the kernel smooth; default is 0.3}
 
-\item{PlotEllipses}{if T, Gaussian confidence ellipses are plotted for each group;
+\item{PlotEllipses}{Logical.  If T, Gaussian confidence ellipses are plotted for each group;
 if F (the default), no ellipses are plotted}
 
 \item{PlotHulls}{if T, the convex hull is drawn for each set of points; if F (the default), no hulls are drawn}
@@ -50,14 +50,14 @@ if F (the default), no ellipses are plotted}
 
 \item{Identify}{if T, user can identify points of interest in the plots; default is F}
 
-\item{PlotColors:}{if T, colors are assigned to the groups}
+\item{PlotColors}{ZLogical.  If T, colors are assigned to the groups}
 
-\item{Colors:}{single value or vector of color names; if PlotByGroup = F, the vector must have the same number of colors as the number of groups}
+\item{Colors}{single value or vector of color names; if PlotByGroup = F, the vector must have the same number of colors as the number of groups}
 
-\item{legendLoc:}{character, location of legend for a plot with points;
+\item{legendLoc}{Character, location of legend for a plot with points;
 default is "topright", alternatives are combinations of "top", "bottom", "right", "left"}
 
-\item{folder:}{The path to the folder in which data frames will be saved; default is " "}
+\item{folder}{The path to the folder in which data frames will be saved; default is " "}
 }
 \value{
 A list with the following components:

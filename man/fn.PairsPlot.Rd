@@ -8,18 +8,19 @@ fn.PairsPlot(doc = "fn.PairsPlot", data, GroupVar, Groups, AnalyticVars,
   Span = 2/3)
 }
 \arguments{
-\item{doc:}{a string documenting use added to the output list, default is the function name}
+\item{doc}{A string documenting use added to the output list, default is the function name}
 
-\item{data:}{R matrix or data frame containing the data to be analyzed}
+\item{data}{A matrix or data frame containing the data to be analyzed}
 
-\item{GroupVar:}{name for variable defining grouping (required)}
+\item{GroupVar}{The name for variable defining grouping (required)}
 
-\item{Groups:}{vector of values of group variable for which plots are to be done.
+\item{Groups}{A vector of values of group variable for which plots are to be done.
 if "All": use all groups; if " ": no grouping}
 
-\item{AnalyticVars:}{vector of names (character values) of analytic results}
+\item{AnalyticVars}{A vector of names (character values) of analytic results}
 
-\item{Span:}{value >0, <=1 defining the proportion of data used to estimate the lowess smooth}
+\item{Span}{A value >0, <=1 defining the proportion of data used to estimate the lowess smooth.
+The default value (2/3) is the default value for the lowess function.}
 }
 \value{
 A set of pairs plots as described above and a list with the following components:

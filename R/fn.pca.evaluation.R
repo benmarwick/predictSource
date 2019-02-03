@@ -2,25 +2,26 @@
 #'
 #'  Create principal component plots to evaluate the predicted artifact sources
 #'
-#' @param doc Documentation in list returned by function
-#' @param SourceData Data from known sources, including code for location and element analyses
-#' @param ArtifactData Corresponding data from artifacts
-#' @param ID ID for samples (artifacts), " " if none (default value)
-#' @param SourceGroup Name of variable with the code for a source
-#' @param ArtifactGroup Name of variable with the code for predicted source
-#' @param known.sources Vector of locations to be considered as sources
-#' @param predicted.sources Vector of predicted sources to be considered, not all need be in known.sources
-#' @param AnalyticVars Elements used in the principal component analyses
-#' @param loc.legend location of legend added to plots (alternates are "topleft",
+#' @param doc A string with documentation, default is the function name
+#' @param SourceData A data frame with the data from known sources,
+#' including a code for location and element analyses
+#' @param ArtifactData The corresponding data from artifacts
+#' @param ID The name of the ID for samples (artifacts), " " if none (default value)
+#' @param SourceGroup The name of the variable with the code for a source
+#' @param ArtifactGroup The name of the variable with the code for predicted source
+#' @param known.sources A vector of the source locations to be considered
+#' @param predicted.sources A vector of predicted sources to be considered, not all need be in known.sources
+#' @param AnalyticVars The elements used in the principal component analyses
+#' @param loc.legend The location of legend added to plots (alternates are "topleft",
 #'    "bottomright","bottomleft")
-#' @param Identify If T, the user can identify artifacts of interest and obtain a data set with information on those artifacts
+#' @param Identify Logical.  If T, the user can identify artifacts of interest and obtain a data set with information on those artifacts
 #'    (default is F)
-#' @param plotAllPoints If T (the default), show a plot with two panes: all source points and
+#' @param plotAllPoints Logical.  If T (the default), show a plot with two panes: all source points and
 #'    the convex hulls for the sources, and all unknown points with these source hulls
-#' @param plotHullsOutsidePoints If T (the default), show a plot with two panes: all source points and
+#' @param plotHullsOutsidePoints Logical.  If T (the default), show a plot with two panes: all source points and
 #'    the convex hulls for the sources, and the unknown points lying outside of their predicted source
 #'    convex hulls and these hulls
-#' @param plotOutsidePoints If T (the default), show a plot with one pane: athe unknown points lying
+#' @param plotOutsidePoints Logical.  If T (the default), show a plot with one pane: athe unknown points lying
 #'  outside of their predicted source convex hulls and these hulls (the second pane for
 #'  plotHullsOutsidePoints)
 #' @param folder  The path to the folder in which data frames will be saved; default is " "

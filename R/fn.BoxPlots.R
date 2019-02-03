@@ -2,14 +2,14 @@
 #'
 #' Box plots of specified analytic values, by specified groups.
 #'
-#' @param doc: string documenting use, included in list returned
-#' @param data: data frame or matrix with data to be analyzed
-#' @param GroupVar: name for variable defining grouping (required)
-#' @param Groups: vector of values of group variable for which plots are to be done; if 'All', use all groups:
+#' @param doc A string documenting use, included in list returned; default value is the function name
+#' @param data A data frame or matrix with data to be analyzed
+#' @param GroupVar The name for the variable defining grouping (required)
+#' @param Groups A vector of values of group variable for which plots are to be done; if 'All', use all groups:
 #'                if ' ', no grouping
-#' @param AnalyticVars: vector of names (character values) of analytic results to be analyzed
-#' @param Nrow: number of rows of plots for each page
-#' @param Ncol: number of columns of plots for each page
+#' @param AnalyticVars A vector of names (character values) of analytic results to be analyzed
+#' @param Nrow The number of rows of plots for each page
+#' @param Ncol The number of columns of plots for each page
 #'
 #' @return A list with the following components:
 #'  \itemize{

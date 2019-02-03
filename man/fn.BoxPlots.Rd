@@ -8,20 +8,20 @@ fn.BoxPlots(doc = "fn.BoxPlots", data, GroupVar, Groups, AnalyticVars, Nrow,
   Ncol)
 }
 \arguments{
-\item{doc:}{string documenting use, included in list returned}
+\item{doc}{A string documenting use, included in list returned; default value is the function name}
 
-\item{data:}{data frame or matrix with data to be analyzed}
+\item{data}{A data frame or matrix with data to be analyzed}
 
-\item{GroupVar:}{name for variable defining grouping (required)}
+\item{GroupVar}{The name for the variable defining grouping (required)}
 
-\item{Groups:}{vector of values of group variable for which plots are to be done; if 'All', use all groups:
+\item{Groups}{A vector of values of group variable for which plots are to be done; if 'All', use all groups:
 if ' ', no grouping}
 
-\item{AnalyticVars:}{vector of names (character values) of analytic results to be analyzed}
+\item{AnalyticVars}{A vector of names (character values) of analytic results to be analyzed}
 
-\item{Nrow:}{number of rows of plots for each page}
+\item{Nrow}{The number of rows of plots for each page}
 
-\item{Ncol:}{number of columns of plots for each page}
+\item{Ncol}{The number of columns of plots for each page}
 }
 \value{
 A list with the following components:

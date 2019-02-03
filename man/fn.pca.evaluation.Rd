@@ -10,38 +10,39 @@ fn.pca.evaluation(doc = "fn.pca.evaluation", SourceData, ArtifactData,
   plotHullsOutsidePoints = T, plotOutsidePoints = T, folder = " ")
 }
 \arguments{
-\item{doc}{Documentation in list returned by function}
+\item{doc}{A string with documentation, default is the function name}
 
-\item{SourceData}{Data from known sources, including code for location and element analyses}
+\item{SourceData}{A data frame with the data from known sources,
+including a code for location and element analyses}
 
-\item{ArtifactData}{Corresponding data from artifacts}
+\item{ArtifactData}{The corresponding data from artifacts}
 
-\item{ID}{ID for samples (artifacts), " " if none (default value)}
+\item{ID}{The name of the ID for samples (artifacts), " " if none (default value)}
 
-\item{SourceGroup}{Name of variable with the code for a source}
+\item{SourceGroup}{The name of the variable with the code for a source}
 
-\item{ArtifactGroup}{Name of variable with the code for predicted source}
+\item{ArtifactGroup}{The name of the variable with the code for predicted source}
 
-\item{known.sources}{Vector of locations to be considered as sources}
+\item{known.sources}{A vector of the source locations to be considered}
 
-\item{predicted.sources}{Vector of predicted sources to be considered, not all need be in known.sources}
+\item{predicted.sources}{A vector of predicted sources to be considered, not all need be in known.sources}
 
-\item{AnalyticVars}{Elements used in the principal component analyses}
+\item{AnalyticVars}{The elements used in the principal component analyses}
 
-\item{Identify}{If T, the user can identify artifacts of interest and obtain a data set with information on those artifacts
+\item{Identify}{Logical.  If T, the user can identify artifacts of interest and obtain a data set with information on those artifacts
 (default is F)}
 
-\item{loc.legend}{location of legend added to plots (alternates are "topleft",
+\item{loc.legend}{The location of legend added to plots (alternates are "topleft",
 "bottomright","bottomleft")}
 
-\item{plotAllPoints}{If T (the default), show a plot with two panes: all source points and
+\item{plotAllPoints}{Logical.  If T (the default), show a plot with two panes: all source points and
 the convex hulls for the sources, and all unknown points with these source hulls}
 
-\item{plotHullsOutsidePoints}{If T (the default), show a plot with two panes: all source points and
+\item{plotHullsOutsidePoints}{Logical.  If T (the default), show a plot with two panes: all source points and
 the convex hulls for the sources, and the unknown points lying outside of their predicted source
 convex hulls and these hulls}
 
-\item{plotOutsidePoints}{If T (the default), show a plot with one pane: athe unknown points lying
+\item{plotOutsidePoints}{Logical.  If T (the default), show a plot with one pane: athe unknown points lying
 outside of their predicted source convex hulls and these hulls (the second pane for
 plotHullsOutsidePoints)}
 

@@ -11,30 +11,30 @@ fn.3dPlot.rotate(doc = "fn.3dPlot.rotate", data, GroupVar, Groups,
 \arguments{
 \item{doc}{A string documenting usage written to the list return, default is the function name}
 
-\item{data:}{R matrix or data frame containing the data to be analyzed}
+\item{data}{A matrix or data frame containing the data to be analyzed}
 
-\item{GroupVar:}{Name for variable defining grouping; a group variable must be specified}
+\item{GroupVar}{The name for variable defining grouping; a group variable must be specified}
 
-\item{Groups:}{Vector of values of group variable for which plots are to be done;
+\item{Groups}{A vector of values of group variable for which plots are to be done;
 "All": use all groups;" ": no grouping}
 
-\item{AnalyticVars:}{Vector of names (character values) of analytic results}
+\item{AnalyticVars}{A vector of names (character values) of analytic results}
 
-\item{Selections:}{Vector of length 3, or data frame with 3 columns, with combinations to be plotted}
+\item{Selections}{A vector of length 3, or data frame with 3 columns, with combinations to be plotted}
 
-\item{ByGroup:}{If T, show scatterplot for each group for each selection of 3 variables;
+\item{ByGroup}{Logical. If T, show scatterplot for each group for each selection of 3 variables;
 default is F}
 
-\item{ptSize:}{Size of plotted points, default is 5 (a larger value gives larger points)}
+\item{ptSize}{The size of plotted points, default is 5 (a larger value gives larger points)}
 
-\item{Color:}{Vector with the color(s) of plotted points; default is a vector
-red, black, blue, green, purple}
-
-\item{folder:}{The folder to which one or more files with images will be saved;
+\item{folder}{The folder to which one or more files with images will be saved;
 default is " " (no files saved)}
 
-\item{dsFile:}{The complete path to a file in folder to which each image will be saved;
+\item{dsFile}{The complete path to a file in folder to which each image will be saved;
 if folder is not " ", this must be a valid path and file name (ends in .pdf for current function)}
+
+\item{Color}{A vector with the color(s) of plotted points; default is a vector
+red, black, blue, green, purple}
 }
 \value{
 A list with the following components:

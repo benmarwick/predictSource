@@ -4,20 +4,20 @@
 #'  Create 3-dimensional data plot(s) that can be rotated
 #'
 #' @param doc A string documenting usage written to the list return, default is the function name
-#' @param data: R matrix or data frame containing the data to be analyzed
-#' @param GroupVar: Name for variable defining grouping; a group variable must be specified
-#' @param Groups: Vector of values of group variable for which plots are to be done;
+#' @param data A matrix or data frame containing the data to be analyzed
+#' @param GroupVar The name for variable defining grouping; a group variable must be specified
+#' @param Groups A vector of values of group variable for which plots are to be done;
 #'    "All": use all groups;" ": no grouping
-#' @param AnalyticVars: Vector of names (character values) of analytic results
-#' @param Selections: Vector of length 3, or data frame with 3 columns, with combinations to be plotted
-#' @param ByGroup: If T, show scatterplot for each group for each selection of 3 variables;
+#' @param AnalyticVars A vector of names (character values) of analytic results
+#' @param Selections A vector of length 3, or data frame with 3 columns, with combinations to be plotted
+#' @param ByGroup  Logical. If T, show scatterplot for each group for each selection of 3 variables;
 #'                       default is F
-#' @param ptSize: Size of plotted points, default is 5 (a larger value gives larger points)
-#' @param Color: Vector with the color(s) of plotted points; default is a vector
+#' @param ptSize  The size of plotted points, default is 5 (a larger value gives larger points)
+#' @param Color A vector with the color(s) of plotted points; default is a vector
 #'            red, black, blue, green, purple
-#' @param folder: The folder to which one or more files with images will be saved;
+#' @param folder The folder to which one or more files with images will be saved;
 #' default is " " (no files saved)
-#' @param dsFile: The complete path to a file in folder to which each image will be saved;
+#' @param dsFile The complete path to a file in folder to which each image will be saved;
 #' if folder is not " ", this must be a valid path and file name (ends in .pdf for current function)
 #`
 #' @import MASS rgl scatterplot3d

@@ -3,12 +3,12 @@
 #' Plot and check specified pairs of analysis variables for bivariate normality.
 #'
 #' @param doc  A string documenting use written to the output list; default is the function name
-#' @param data  R matrix or data frame containing the data to be analyzed
-#' @param GroupVar  Name for the variable defining grouping, " " if no grouping
-#' @param ID  Name for the variable with a lab ID, " " if no lab ID is used
-#' @param Groups  Vector of values of the group variable for which plots are to be done;
+#' @param data  A matrix or data frame containing the data to be analyzed
+#' @param GroupVar  The name for the variable defining grouping, " " if no grouping
+#' @param ID  The name for the variable with a lab ID, " " if no lab ID is used
+#' @param Groups  A vector of values of the group variable for which plots are to be done;
 #'    if "All", use all groups; if " ", no grouping
-#' @param AnalyticVars  Vector of length two with the names of two analytic variables
+#' @param AnalyticVars  A vector of length two with the names of two analytic variables
 #'  to be shown in the plots
 #' @param scatterPlot  Logical (default is T): specify whether to show scatter plots when qqPlot = F
 #' @param qqPlot  Logical (default is T): specify whether to show the q-q plots with the bootstrap
