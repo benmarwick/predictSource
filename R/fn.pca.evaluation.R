@@ -24,6 +24,8 @@
 #' @param plotOutsidePoints Logical.  If T (the default), show a plot with one pane: athe unknown points lying
 #'  outside of their predicted source convex hulls and these hulls (the second pane for
 #'  plotHullsOutsidePoints)
+#'  @param Seed If not NA, a positive integer used to initialize the random number generator
+#'  when missing data are imputed.  Default value is 11111
 #' @param folder  The path to the folder in which data frames will be saved; default is " "
 #'
 #' @details
@@ -113,6 +115,7 @@ fn.pca.evaluation <-function(doc = "fn.pca.evaluation",
            plotAllPoints = T,
            plotHullsOutsidePoints = T,
            plotOutsidePoints = T,
+           Seed=11111,
            folder = " ")
 {
     #
@@ -130,6 +133,7 @@ fn.pca.evaluation <-function(doc = "fn.pca.evaluation",
     #  redefine sourceData if some analysis variables are missing by imputing missing values
     #
     if (sum(sourceKeep) < nrow(sourceData)) {
+      if (!is.na(Seed))  set.seed(Seed)
       temp<-rfImpute(sourceData[,SourceGroup] ~ ., sourceData[,AnalyticVars])
       colnames(temp) <- c(SourceGroup,AnalyticVars)
       sourceData <- temp[,c(SourceGroup,AnalyticVars)]
@@ -153,7 +157,6 @@ fn.pca.evaluation <-function(doc = "fn.pca.evaluation",
     #
     dummyID = rep(" ", nrow(sourceData))
     sourceData <- data.frame(sourceData[,c("group",AnalyticVars,"index", "data.source")], ID = dummyID)
-
     #
     #  create artifact data with group code and elements, restricted to potential sources of interest
     #
@@ -169,6 +172,9 @@ fn.pca.evaluation <-function(doc = "fn.pca.evaluation",
     #  redefine predictData if some analysis variables are missing by imputing missing values
     #
     if (sum(artifactKeep) < nrow(artifactData)) {
+      #  initialize random number generator if not initialized earlier
+      #
+      if ((sum(sourceKeep) == nrow(sourceData)) & (!is.na(Seed)))  set.seed(Seed)
       artifactsNA <- artifactData[!artifactKeep,]
       temp<-missForest(xmis=artifactData[,AnalyticVars],variablewise=F)
       impError <- temp$OOBerror
@@ -553,7 +559,7 @@ fn.pca.evaluation <-function(doc = "fn.pca.evaluation",
     names(params.logical) <- c("plotAllPoints", "plotHullsOutsidePoints", "plotOutsidePoints")
     params.grouping<-list(SourceGroup, ArtifactGroup,known.sources,predicted.sources)
     names(params.grouping)<-c("SourceGroup","ArtifactGroup","known.sources","predicted.sources")
-    params<-list(grouping=params.grouping,logical=params.logical)
+    params<-list(grouping=params.grouping,logical=params.logical,Seed=Seed)
   #
   out<-list(usage=fcn.date.ver,
                 sourceData = sourceData,

@@ -23,6 +23,8 @@
 #' @param Colors A vector of color names; default is a vector with five names
 #' @param Identify Logical.  If T, the user can identify points of interest in plots; information on these points is saved to a file; default is F
 #' @param digits The number of significant digits to return in objects in data frames, default is 3
+#' @param Seed  If not NA, the seed for the random number generator used if missing data are
+#' imputed; default is 11111
 #' @param folder  The path to the folder in which data frames will be saved; default is " "
 #'
 #' @section Details:
@@ -80,6 +82,7 @@ fn.pca <-  function(doc = "fn.pca",
                     Colors = c("red","black","blue","green","purple"),
                     Identify = F,
                     digits=3,
+                    Seed=11111,
                     folder = " ")
 {
    #
@@ -122,6 +125,7 @@ fn.pca <-  function(doc = "fn.pca",
     #  redefine data.Keep if some analysis variables are missing by imputing missing values
     #
     if (sum(dataKeep) < nrow(data.Used)) {
+      if (!na(Seed))  set.seed(Seed)
       dataNA <- data.Used[!dataKeep,]
       temp<-rfImpute(data.Used[,GroupVar] ~ ., data.Used[,AnalyticVars])
       if (ID == " ") data.Used <- data.frame(data.Used[,GroupVar],temp)
@@ -270,7 +274,8 @@ fn.pca <-  function(doc = "fn.pca",
     names(params.grouping)<-c("GroupVar","Groups")
     params.logical<-c(ScreePlot,BoxPlots,PlotPoints,PlotEllipses,PlotHull,PlotMedians,PlotColors)
     names(params.logical)<-c("ScreePlot","BoxPlots","PlotPoints","PlotEllipses","PlotHull","PlotMedians","PlotColors")
-    params<-list(grouping=params.grouping,logical=params.logical,ellipses=Ellipses,colors=Colors)
+    params<-list(grouping=params.grouping,logical=params.logical,ellipses=Ellipses,Seed=Seed,
+                 colors=Colors)
     #
     out<-list(usage=fcn.date.ver,
                 dataUsed=data.Used,

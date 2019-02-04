@@ -7,7 +7,8 @@
 fn.pca.evaluation(doc = "fn.pca.evaluation", SourceData, ArtifactData,
   ID = " ", SourceGroup, ArtifactGroup, known.sources, predicted.sources,
   AnalyticVars, Identify = F, loc.legend = "topright", plotAllPoints = T,
-  plotHullsOutsidePoints = T, plotOutsidePoints = T, folder = " ")
+  plotHullsOutsidePoints = T, plotOutsidePoints = T, Seed = 11111,
+  folder = " ")
 }
 \arguments{
 \item{doc}{A string with documentation, default is the function name}
@@ -44,7 +45,9 @@ convex hulls and these hulls}
 
 \item{plotOutsidePoints}{Logical.  If T (the default), show a plot with one pane: athe unknown points lying
 outside of their predicted source convex hulls and these hulls (the second pane for
-plotHullsOutsidePoints)}
+plotHullsOutsidePoints)
+@param Seed If not NA, a positive integer used to initialize the random number generator
+when missing data are imputed.  Default value is 11111}
 
 \item{folder}{The path to the folder in which data frames will be saved; default is " "}
 }

@@ -9,7 +9,7 @@ fn.pca(doc = "fn.pca", data, ID = " ", GroupVar, Groups, AnalyticVars,
   PlotEllipses = T, PlotHull = F, PlotMedians = F, Ellipses = c(0.95,
   0.99), PlotColors = T, legendLoc = "topright", Colors = c("red",
   "black", "blue", "green", "purple"), Identify = F, digits = 3,
-  folder = " ")
+  Seed = 11111, folder = " ")
 }
 \arguments{
 \item{doc}{A string with documentation in the list returned, default is the function name}
@@ -51,6 +51,9 @@ default is "topright", alternatives are combinations of "top", "bottom", "right"
 \item{Identify}{Logical.  If T, the user can identify points of interest in plots; information on these points is saved to a file; default is F}
 
 \item{digits}{The number of significant digits to return in objects in data frames, default is 3}
+
+\item{Seed}{If not NA, the seed for the random number generator used if missing data are
+imputed; default is 11111}
 
 \item{folder}{The path to the folder in which data frames will be saved; default is " "}
 }
