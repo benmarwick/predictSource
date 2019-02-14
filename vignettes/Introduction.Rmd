@@ -227,7 +227,6 @@ CV.corr<-fn.CV.corr(data = ObsidianSources, GroupVar=" ", Groups=" ", AnalyticVa
 knitr::kable(CV.corr$corr, caption="Table 4.2: Spearman correlations among pairs of elements from the Jemez sources, all groups combined.")
 #
 ```
-
 Table 4.3 shows the coefficients of variation for each element at each source.  Each standard deviation is small compared to the corresponding mean (each coefficient of variation is at most 0.11, and most are 0.05 or less) except for strontium at sources C and D.  The relatively large values of the coefficient of variation for strontium at those sources is a result of the small mean strontium values at those sources: the table of descriptive statistics (not shown) gives mean values for strontium of 5 and 10, at C and D, respectively, with ranges of 0 to 8 and 2 to 11, respectively.
 
 ```{r } 

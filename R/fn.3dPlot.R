@@ -115,14 +115,18 @@ fn.3dPlot <-
         }
         if (is.matrix(Selections)) {
           for (i in 1:nrow(Selections)) {
-            win.graph()
-            index <- is.na(data.Used[, Selections[i,1]]) | is.na(data.Used[,Selections[i,2]]) |
+            groups<-unique(data.Used[,GroupVar])
+            subtitle<-paste("Group:  ",groups[1],": ",Colors[1],"  ",sep="")
+            for (j in 2:length(groups))
+              subtitle<-paste(subtitle,groups[j],": ",Colors[j],"  ",sep="")
+              index_na <- is.na(data.Used[, Selections[i,1]]) | is.na(data.Used[,Selections[i,2]]) |
               is.na(data.Used[, Selections[i,3]])
-            scatterplot3d(data.Used[!index, Selections[i, 1]],data.Used[!index, Selections[i, 2]],
-                           data.Used[!index, Selections[i, 3]], xlab = Selections[i, 1],
+              scatterplot3d(data.Used[!index_na, Selections[i, 1]],data.Used[!index_na, Selections[i, 2]],
+                          data.Used[!index_na, Selections[i, 3]], xlab = Selections[i, 1],
                           ylab = Selections[i, 2], zlab = Selections[i, 3],
-                          color = Colors[1], pch = 16, cex.symbols = SymbolSize,
-                          main = paste(Selections[i, 1], ",", Selections[i,2], ",", Selections[i, 3]))
+                          color = Colors[group.index], pch = 16, cex.symbols = SymbolSize,
+                          main = paste(Selections[i, 1], ",", Selections[i,2], ",", Selections[i, 3]),
+                          sub=subtitle)
             browser()
           }
         }
@@ -133,9 +137,9 @@ fn.3dPlot <-
           for (i in 1:length(groups)) {
             win.graph()
             data.i<-data.Used[data.Used[,GroupVar]==groups[i],Selections]
-            index <- is.na(data.i[, Selections[i,1]]) | is.na(data.i[,Selections[i,2]]) |
+            index_na <- is.na(data.i[, Selections[i,1]]) | is.na(data.i[,Selections[i,2]]) |
               is.na(data.i[, Selections[i,3]])
-            scatterplot3d(data.i[!index,], xlab = Selections[1], ylab = Selections[2], zlab = Selections[3],
+            scatterplot3d(data.i[!index_na,], xlab = Selections[1], ylab = Selections[2], zlab = Selections[3],
                           color = Colors[1], pch = 16, cex.symbols = SymbolSize,
                           main = paste(groups[i],": ",Selections[1]," ,", Selections[2], ",", Selections[3],sep=""))
             browser()
@@ -145,13 +149,13 @@ fn.3dPlot <-
           for (i in 1:nrow(Selections)) {
             for (j in 1:length(groups)) {
               win.graph()
-              data.j<-data.Used[data.Used[,GroupVar]==groups[j],Selections[i,]]
-              index <- is.na(data.j[, Selections[i,1]]) | is.na(data.j[,Selections[i,2]]) |
+              data.j<-data.Used[data.Used[,GroupVar]==groups[j],Selections[i,], index]
+              index_na <- is.na(data.j[, Selections[i,1]]) | is.na(data.j[,Selections[i,2]]) |
                 is.na(data.j[, Selections[i,3]])
-              scatterplot3d(data.j[!index,], xlab = Selections[i, 1], ylab = Selections[i, 2],
+              scatterplot3d(data.j[!index_na,], xlab = Selections[i, 1], ylab = Selections[i, 2],
                             zlab = Selections[i,3], color = Colors[1], pch = 16, cex.symbols = SymbolSize,
                             main = paste(groups[i],": ",Selections[i, 1], ",", Selections[i,2], ",",
-                                         Selections[i, 3]), color = Colors[1])
+                                         Selections[i, 3]), color = Colors[index])
               browser()
             }
           }
