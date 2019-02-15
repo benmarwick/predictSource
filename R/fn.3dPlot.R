@@ -23,10 +23,8 @@
 #' \item{dataUsed:}{  The contents of the argument data restricted to the groups used}
 #' \item{dataNA:}{  A data frame with observations containing a least one missing value
 #'   for an analysis variable, NA if no missing values}
-#' \item{params:}{  A vector with the values of the arguments ByGroup and SymbolSize}
-#' \item{groups:}{  A vector (may be of length 1) with the value of the argument Groups}
+#' \item{params:}{  A list with the values of the grouping, logical, numeric and Color arguments}
 #' \item{analyticVars:}{  A vector with the value of the argument AnalyticVars}
-#' \item{colors:}{  A vector with the value of the argument Color}
 #' }
 #'
 #' @section Details:
@@ -38,11 +36,17 @@
 #' @import MASS scatterplot3d
 #'
 #' @examples
+#' #  show points from several groups on one plot
 #' data(ObsidianSources)
 #' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 #' plot3d<-fn.3dPlot(data=ObsidianSources, GroupVar="Code", Groups=c("A","B"), AnalyticVars=analyticVars,
 #'                   Selections=rbind(analyticVars[1:3],analyticVars[2:4]))
 #'
+#' #  plots with one group per plot
+#' data(ObsidianSources)
+#' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+#' plot3d<-fn.3dPlot(data=ObsidianSources, GroupVar="Code", Groups=c("A","B"), ByGroup=T, AnalyticVars=analyticVars,
+#'                   Selections=analyticVars[1:3])
 #' @export
 
 fn.3dPlot <-
@@ -68,12 +72,11 @@ fn.3dPlot <-
       data.Used <- data[, AnalyticVars]
     else data.Used <- data[, c(GroupVar, AnalyticVars)]
     #
-    #  matrix to contain indices for observations with no missing values
+    #  vector to contain indices for observations with no missing values
     #
     dataKeep <- rep(T, nrow(data.Used))
     for (i in 1:length(AnalyticVars))
       dataKeep[is.na(data.Used[,AnalyticVars[i]])] <- F
-    data.Used <- data.Used[dataKeep,]  # remove observations with any analysis variable with missing data
     #
     if ((GroupVar[1] != " ") & (Groups[1] == "All"))
       groups <- as.character(unique(data.Used[, GroupVar]))
@@ -137,8 +140,8 @@ fn.3dPlot <-
           for (i in 1:length(groups)) {
             win.graph()
             data.i<-data.Used[data.Used[,GroupVar]==groups[i],Selections]
-            index_na <- is.na(data.i[, Selections[i,1]]) | is.na(data.i[,Selections[i,2]]) |
-              is.na(data.i[, Selections[i,3]])
+            index_na <- is.na(data.i[, Selections[1]]) | is.na(data.i[,Selections[2]]) |
+              is.na(data.i[, Selections[3]])
             scatterplot3d(data.i[!index_na,], xlab = Selections[1], ylab = Selections[2], zlab = Selections[3],
                           color = Colors[1], pch = 16, cex.symbols = SymbolSize,
                           main = paste(groups[i],": ",Selections[1]," ,", Selections[2], ",", Selections[3],sep=""))
@@ -169,9 +172,9 @@ fn.3dPlot <-
         medians<-matrix(NA,nrow=length(groups),ncol=3)
         for (i in 1:length(groups)) {
           data.i<-data.Used[data.Used[,GroupVar]==groups[i],Selections]
-          index <- is.na(data.i[, Selections[1]]) | is.na(data.i[,Selections[2]]) |
+          index_na <- is.na(data.i[, Selections[1]]) | is.na(data.i[,Selections[2]]) |
             is.na(data.i[, Selections[3]])
-          medians[i,]<-apply(data.i[!index,],2,median)
+          medians[i,]<-apply(data.i[!index_na,],2,median)
         }
         scatterplot3d(medians, xlab = Selections[1],
                       ylab = Selections[2], zlab = Selections[3],
@@ -183,9 +186,9 @@ fn.3dPlot <-
           medians<-matrix(NA,nrow=length(groups),ncol=3)
           for (j in 1:length(groups)) {
             data.j <- data.Used[data.Used[, GroupVar] == groups[j],Selections[i,] ]
-            index <- is.na(data.j[, Selections[i,1]]) | is.na(data.j[,Selections[i,2]]) |
+            index_na <- is.na(data.j[, Selections[i,1]]) | is.na(data.j[,Selections[i,2]]) |
               is.na(data.j[, Selections[i,3]])
-            medians[j,]<-apply(data.j[!index,],2,median)
+            medians[j,]<-apply(data.j[!index_na,],2,median)
           }
           win.graph()
           scatterplot3d(medians, xlab = Selections[i, 1], ylab = Selections[i, 2],

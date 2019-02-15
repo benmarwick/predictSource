@@ -223,7 +223,7 @@ by group.")
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-CV.corr<-fn.CV.corr(data = ObsidianSources, GroupVar=" ", Groups=" ", AnalyticVars=analyticVars)
+CV.corr<-fn.CV.corr(data = ObsidianSources, GroupVar="Code", Groups="All", AnalyticVars=analyticVars, ByGroup=F)
 knitr::kable(CV.corr$corr, caption="Table 4.2: Spearman correlations among pairs of elements from the Jemez sources, all groups combined.")
 #
 ```
@@ -233,7 +233,7 @@ Table 4.3 shows the coefficients of variation for each element at each source.  
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-CV.corr<-fn.CV.corr(data = ObsidianSources, GroupVar="Code", Groups = "All", AnalyticVars=analyticVars)
+CV.corr<-fn.CV.corr(data = ObsidianSources, GroupVar="Code", Groups = "All", AnalyticVars=analyticVars, ByGroup=T)
 knitr::kable(CV.corr$CV, caption="Table 4.3:  Coefficients of variation of the elements from the Jemez sources.")
 #
 ```
@@ -645,7 +645,8 @@ save.randomForest <- fn.randomForest(data=ObsidianSources, GroupVar="Code",Group
 data(ObsidianSources)
 data(ObsidianArtifacts)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-save.randomForest <- fn.randomForest(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars, ID="ID", NvarUsed=3, plotErrorRate=F, plotImportance=F, predictSources=T,predictData=ObsidianArtifacts, plotSourceProbs=F)
+save.randomForest <- fn.randomForest(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars, 
+                                     sourceID="ID", NvarUsed=3, plotErrorRate=F, plotImportance=F, predictSources=T,predictData=ObsidianArtifacts, plotSourceProbs=F)
 check<-save.randomForest$predictedSources
 rows<-((check[,"C"]>0.14)&(check[,"C"]<0.35))
 checkC<-check[rows,]
@@ -658,9 +659,9 @@ knitr::kable(checkC[orderedRows,], caption="Table 7.3:  Rows with relative large
 data(ObsidianSources)
 data(ObsidianArtifacts)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-save.randomForest <- fn.randomForest(data=ObsidianSources, GroupVar="Code",Groups="All", ID="ID", AnalyticVars=analyticVars, NvarUsed=3, plotErrorRate=F, plotImportance=F, predictSources=T,predictData=ObsidianArtifacts, plotSourceProbs=F)
+save.randomForest <- fn.randomForest(data=ObsidianSources, GroupVar="Code",Groups="All", sourceID="ID", AnalyticVars=analyticVars, NvarUsed=3, plotErrorRate=F, plotImportance=F, predictSources=T,predictData=ObsidianArtifacts, plotSourceProbs=F)
 predictedSources<-save.randomForest$predictedSources[save.randomForest$predictedSources[,"source"]!="A",]
-save.pca <- fn.pca(data=predictedSources, ID="ID", GroupVar="source",Groups="All", AnalyticVars=analyticVars, PlotEllipses=F)
+save.pca <- fn.pca(data=predictedSources, ID="source", GroupVar="source",Groups="All", AnalyticVars=analyticVars, PlotEllipses=F)
 
 ```
 
@@ -749,7 +750,7 @@ data(ObsidianArtifacts)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 sources <- unique(ObsidianSources[,"Code"])
 save.randomForest <- fn.randomForest(data=ObsidianSources, GroupVar="Code",Groups="All",
-    AnalyticVars=analyticVars, ID="ID", NvarUsed=3, plotErrorRate=F, plotImportance=F,
+    AnalyticVars=analyticVars, sourceID="ID", NvarUsed=3, plotErrorRate=F, plotImportance=F,
     predictSources=T, predictData=ObsidianArtifacts, plotSourceProbs=F)
   pca.eval <- fn.pca.evaluation(SourceData=ObsidianSources,
     ArtifactData=save.randomForest$predictedSources, SourceGroup= "Code", ArtifactGroup="source",
@@ -780,10 +781,10 @@ data(tree.data.check)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 sources <- unique(ObsidianSources[,"Code"])
 save.randomForest <- fn.randomForest(data=ObsidianSources, GroupVar="Code",Groups="All",
-    AnalyticVars=analyticVars, ID="ID", NvarUsed=3, plotErrorRate=F, plotImportance=F,
+    AnalyticVars=analyticVars, sourceID="ID", NvarUsed=3, plotErrorRate=F, plotImportance=F,
     predictSources=T, predictData=ObsidianArtifacts, plotSourceProbs=F)
 tree.data.check <- tree.data.check[order(tree.data.check[,"ID"]),]
-save.rF<-save.randomForest$predictedSources[order(save.randomForest$predictedSources[,"ID"]),]
+save.rF<-save.randomForest$predictedSources[order(save.randomForest$predictedSources[,"source"]),]
 obsCheck<-merge(x=save.rF, y = tree.data.check[,c("ID","pc1","pc2")],
                 by = "ID", x.all=F, y.all=F)
 knitr::kable(obsCheck, caption="Table 8.2: Random forest probability estimates for artifacts which may have  been misidentified as from source C using the tree model identified by using Identify=T in fn.pca.evaluation().  source is the predicted source from the random forest procedure.")

@@ -9,6 +9,7 @@
 #' @param GroupVar The name for the variable defining grouping; if " ", no grouping
 #' @param Groups Character valued defining the the groups used.  Options are a Vector of values
 #'  of the group variable; "All" (the default; use all groups); " ", no grouping
+#' @param ByGroup  If T (the default), results are returned for each group in Groups; if F, groups are combined
 #' @param ID The name of a variable with a lab ID (used for sorting data), default is " "
 #' @param AnalyticVars A vector of names (character values) of analytic results
 #' @param Transpose See Details
@@ -38,10 +39,17 @@
 #'       }
 #'
 #' @examples
+#' #  All sources combined
 #' data(ObsidianSources)
 #' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 #' CV.corr<-fn.CV.corr(data = ObsidianSources, GroupVar="Code", Groups = "All",
-#'  AnalyticVars=analyticVars)
+#'  AnalyticVars=analyticVars, ByGroup=F)
+#'
+#' #  By source, restricted to two sources
+#' data(ObsidianSources)
+#' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+#' CV.corr<-fn.CV.corr(data = ObsidianSources, GroupVar="Code", Groups = c("A","B"),
+#'  AnalyticVars=analyticVars, ByGroup=T)
 #'
 #' @import  corrplot
 #'
@@ -52,6 +60,7 @@ fn.CV.corr <-
            data,
            GroupVar,
            Groups="All",
+           ByGroup=T,
            ID = " ",
            AnalyticVars,
            Transpose = T,
@@ -84,7 +93,7 @@ fn.CV.corr <-
     #
      # no grouping
     #
-    if (Groups[1] == "All") {
+    if (!ByGroup) {
       #
       #  coefficient of variation
       #
@@ -104,13 +113,24 @@ fn.CV.corr <-
         ),
         dig = corr.digits)
       if (plotCorrs)
+        if (Groups[1]=="All")  plotTitle <- "All groups"
+        else {
+          if (length(Groups)==1)  plotTitle <- Groups
+        else  {
+          plotTitle <- paste("Groups  ",Groups[1], sep="")
+          for (iGroup in (2:length(Groups)))
+              plotTitle <- paste(plotTitle,"  ",Groups[iGroup],sep="")
+        }
+    }
         corrplot(cor(data.Used[,AnalyticVars]),type="upper",method="ellipse",
-                 title="All groups")
+                 title=plotTitle)
     } # end of code for no grouping
     #
     #  grouping
     #
     else {
+      # ByGroup = T
+      #
       if (Groups[1] == "All")
         groups <- unique(data.Used[, GroupVar])
       if (Groups[1] != "All")
@@ -184,17 +204,7 @@ fn.CV.corr <-
           browser()
         } # end of loop on i
       }  # end of code for plotting correlations
-      if (plotCorrs) {
-        for (i in 1:length(groups)) {
-          rows.i <-
-            (data.Used[, GroupVar] %in% groups[i])  # rows from group i
-          data.i <-
-            data.Used[rows.i, AnalyticVars]  # data restricted to group i
-          corrplot(cor(data.i[,AnalyticVars]),type="upper",method="ellipse",
-                 title=paste("group", sources[i]))
-        } # end of loop on i
-      }  # end of code to plot correlations
-    } # end of code for computation by group
+     } # end of code for computation by group
 #
     if (Transpose == T)
       Corrs <- t(Corrs)
@@ -205,8 +215,8 @@ fn.CV.corr <-
     names(params.numeric)<-c("CV.digits","corr.digits")
     params.grouping<-list(GroupVar,Groups)
     names(params.grouping)<-c("GroupVar","Groups")
-    params.logical<-c(Transpose,plotCorrs)
-    names(params.logical)<-c("Transpose","plotCorrs")
+    params.logical<-c(ByGroup,Transpose,plotCorrs)
+    names(params.logical)<-c("ByGroup","Transpose","plotCorrs")
     params<-list(grouping=params.grouping,logical=params.logical,numeric=params.numeric)
     #
     dataKeep <- rep(T, nrow(data.Used)) # will contain indices for observations with

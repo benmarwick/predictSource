@@ -4,9 +4,9 @@
 \alias{fn.CV.corr}
 \title{fn.CV.corr}
 \usage{
-fn.CV.corr(doc = "fn.CV.corr", data, GroupVar, Groups = "All", ID = " ",
-  AnalyticVars, Transpose = T, CV.digits = 2, corr.digits = 2,
-  plotCorrs = T, folder = " ")
+fn.CV.corr(doc = "fn.CV.corr", data, GroupVar, Groups = "All",
+  ByGroup = T, ID = " ", AnalyticVars, Transpose = T, CV.digits = 2,
+  corr.digits = 2, plotCorrs = T, folder = " ")
 }
 \arguments{
 \item{doc}{A string with documentation, default is the function name}
@@ -17,6 +17,8 @@ fn.CV.corr(doc = "fn.CV.corr", data, GroupVar, Groups = "All", ID = " ",
 
 \item{Groups}{Character valued defining the the groups used.  Options are a Vector of values
 of the group variable; "All" (the default; use all groups); " ", no grouping}
+
+\item{ByGroup}{If T (the default), results are returned for each group in Groups; if F, groups are combined}
 
 \item{ID}{The name of a variable with a lab ID (used for sorting data), default is " "}
 
@@ -59,9 +61,16 @@ Observations with missing values are removed from computations using them.
 }
 
 \examples{
+#  All sources combined
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 CV.corr<-fn.CV.corr(data = ObsidianSources, GroupVar="Code", Groups = "All",
- AnalyticVars=analyticVars)
+ AnalyticVars=analyticVars, ByGroup=F)
+
+#  By source, restricted to two sources
+data(ObsidianSources)
+analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+CV.corr<-fn.CV.corr(data = ObsidianSources, GroupVar="Code", Groups = c("A","B"),
+ AnalyticVars=analyticVars, ByGroup=T)
 
 }
