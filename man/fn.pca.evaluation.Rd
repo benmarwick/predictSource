@@ -89,6 +89,10 @@ Identify = T.
 \examples{
 # Evaluate sources of artifacts predicted from scatterplots
 data(ObsidianSources)
+data(ObsidianArtifacts)
+analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+sources <- unique(ObsidianSources[,"Code"])
+pca.eval <- fn.pca.evaluation(SourceData=ObsidianSources,
   ArtifactData=ObsidianArtifacts, SourceGroup= "Code", ArtifactGroup="Code",
   known.sources=sources, predicted.sources=sources, AnalyticVars=analyticVars, ID="ID",
   plotAllPoints=T, plotHullsOutsidePoints = T, plotOutsidePoints = T)
@@ -99,7 +103,7 @@ data(ObsidianArtifacts)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 sources <- unique(ObsidianSources[,"Code"])
 save.tree <- fn.tree(data=ObsidianSources, GroupVar="Code",Groups="All",
-  AnalyticVars=analyticVars, ID="ID", Model = "Rb"+"Sr"+"Y"+"Zr"+"Nb",
+ AnalyticVars=analyticVars, ID="ID", Model = "Rb"+"Sr"+"Y"+"Zr"+"Nb",
   ModelTitle="Rb + Sr + Y + Zr + Nb", predictSources=T, predictData=ObsidianArtifacts,
   plotTree=T, plotCp=F)
 pca.eval <- fn.pca.evaluation(SourceData=ObsidianSources,

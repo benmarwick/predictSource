@@ -165,9 +165,10 @@ fn.pca <-  function(doc = "fn.pca",
     #
     predict.pc1 <- predict(pca)[, 1]
     predict.pc2 <- predict(pca)[, 2]
+    #
     if (GroupVar[1] == " ") {
-      plot(predict.pc1, predict.pc2, xlab = "Component 1",
-           ylab = "Component 2", main = "Principal component plot for all groups combined")
+      plot(predict.pc1, predict.pc2, xlab = "first PC",
+           ylab = "second PC", main = "Principal component plot for all groups combined")
       Predicted <- predict(pca)
       browser()
     }

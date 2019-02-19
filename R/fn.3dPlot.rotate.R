@@ -127,10 +127,9 @@ fn.3dPlot.rotate <-
       #
       if (is.vector(Selections)) {
         plot.new()
-        index <- is.na(data.Used[, Selections[1]]) | is.na(data.Used[,Selections[2]]) |
+        index_na <- is.na(data.Used[, Selections[1]]) | is.na(data.Used[,Selections[2]]) |
           is.na(data.Used[, Selections[3]])
-         plot3d(data.Used[!index, Selections[1]], data.Used[!index,Selections[2]],
-               data.Used[!index, Selections[3]], type="p", size=ptSize,
+         plot3d(data.Used[!index_na, Selections[1:3]], type="p", size=ptSize,
                xlab = Selections[1], ylab = Selections[2], zlab = Selections[3],
                col = Colors[data.Used[!index,"group.index"]],
                pch = 16, main=header)
@@ -141,10 +140,9 @@ fn.3dPlot.rotate <-
         for (i in 1:nrow(Selections)) {
           plot.new()
           par(oma=rep(2,4))
-          index <- is.na(data.Used[, Selections[i,1]]) | is.na(data.Used[,Selections[i,2]]) |
+          index_na <- is.na(data.Used[, Selections[i,1]]) | is.na(data.Used[,Selections[i,2]]) |
             is.na(data.Used[, Selections[i,3]])
-          plot3d(data.Used[!index, Selections[i, 1]], data.Used[!index, Selections[i, 2]],
-                 data.Used[!index, Selections[i, 3]], type="s", xlab = Selections[i, 1],
+          plot3d(data.Used[!index_na, Selections[i, 1:3]], xlab = Selections[i, 1],
                  ylab = Selections[i, 2], zlab = Selections[i, 3],
                  col = Colors[data.Used[,"group.index"]], pch = 16, type="p", size=ptSize,
                  main=header)
@@ -158,9 +156,9 @@ fn.3dPlot.rotate <-
         for (i in 1:length(groups)) {
           win.graph()
           data.i<-data.Used[data.Used[,GroupVar]==groups[i],Selections]
-          index <- is.na(data.i[, Selections[1]]) | is.na(data.i[,Selections[2]]) |
+          index_na <- is.na(data.i[, Selections[1]]) | is.na(data.i[,Selections[2]]) |
             is.na(data.i[, Selections[3]])
-          plot3d(data.i[!index,], xlab = Selections[1], ylab = Selections[2], zlab = Selections[3],
+          plot3d(data.i[!index_na,], xlab = Selections[1], ylab = Selections[2], zlab = Selections[3],
                         col = Colors[1], pch = 16, type="p", size=ptSize,
                         main = paste(groups[i],": ",Selections[1]," ,", Selections[2], ",",
                                      Selections[3],sep=""))
@@ -172,9 +170,9 @@ fn.3dPlot.rotate <-
           for (j in 1:length(groups)) {
             win.graph()
             data.j<-data.Used[data.Used[,GroupVar]==groups[j],Selections[i,]]
-            index <- is.na(data.j[, Selections[i,1]]) | is.na(data.j[,Selections[i,2]]) |
+            index_na <- is.na(data.j[, Selections[i,1]]) | is.na(data.j[,Selections[i,2]]) |
               is.na(data.j[, Selections[i,3]])
-            plot3d(data.j[!index,], xlab = Selections[i, 1], ylab = Selections[i, 2],
+            plot3d(data.j[!index_na,], xlab = Selections[i, 1], ylab = Selections[i, 2],
                    zlab = Selections[i,3], col = Colors[1], pch = 16,
                    type="p", size=ptSize,
                    main = paste(groups[i],": ",Selections[i, 1], ",", Selections[i,2], ",",

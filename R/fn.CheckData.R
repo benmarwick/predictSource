@@ -39,7 +39,8 @@
 #' @examples
 #' data(ObsidianSources)
 #' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-#'
+#' dataCheck<-fn.CheckData(data=ObsidianSources,CheckDupVars=analyticVars,GroupVar="Code",Groups="All",
+#' ID = "ID", AnalyticVars=analyticVars)
 #'
 #' @export
 

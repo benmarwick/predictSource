@@ -42,7 +42,7 @@
 #' ArtifactsCode <- as.vector(paste(Artifacts[,"Code"],"A",sep="."),mode="character")
 #' Codes <- c(SourcesCode, ArtifactsCode)
 #' SourcesArtifacts <- data.frame(rbind(ObsidianSources,Artifacts)[,analyticVars], Code = Codes)
-#' boxPlots<-fn.BoxPlots(data=SourcesArtifacts, GroupVar="Code", Groups="All",AnalyticVars=c("Rb","Nb"),Nrow=2,Ncol=1)
+#' boxPlots<-fn.BoxPlots(data=SourcesArtifacts, GroupVar="Code", Groups="All",AnalyticVars="Rb",Nrow=1,Ncol=1)
 #'
 #' @export
 #'
