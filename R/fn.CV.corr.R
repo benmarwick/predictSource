@@ -69,8 +69,6 @@ fn.CV.corr <-
            plotCorrs = T,
            folder = " ")
     {
-    library(corrplot)
-    #
     if ((Groups[1] != " ") & (Groups[1] != "All")) {
       Use.rows <- (data[, GroupVar] %in% Groups)
       data.Used <- data[Use.rows, ]
@@ -112,18 +110,18 @@ fn.CV.corr <-
           use = "pairwise.complete.obs"
         ),
         dig = corr.digits)
-      if (plotCorrs)
+      if (plotCorrs) {
         if (Groups[1]=="All")  plotTitle <- "All groups"
-        else {
+        else
           if (length(Groups)==1)  plotTitle <- Groups
         else  {
           plotTitle <- paste("Groups  ",Groups[1], sep="")
           for (iGroup in (2:length(Groups)))
               plotTitle <- paste(plotTitle,"  ",Groups[iGroup],sep="")
         }
-    }
-        corrplot(cor(data.Used[,AnalyticVars]),type="upper",method="ellipse",
+        corrplot(cor(data.Used[,AnalyticVars],method="s"),type="upper",method="ellipse",
                  title=plotTitle)
+        } # end of code to plot correlations
     } # end of code for no grouping
     #
     #  grouping
@@ -199,7 +197,7 @@ fn.CV.corr <-
             (data.Used[, GroupVar] %in% groups[i])  # rows from group i
           data.i <-
             data.Used[rows.i, AnalyticVars]  # data restricted to group i
-          corrplot(cor(data.i[,AnalyticVars]),type="upper",method="ellipse",
+          corrplot(cor(data.i[,AnalyticVars],method="s"),type="upper",method="ellipse",
                    title=groups[i])
           browser()
         } # end of loop on i

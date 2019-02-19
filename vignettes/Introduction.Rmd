@@ -213,7 +213,7 @@ Table 4.2 contains the Spearman correlation coefficients if group membership is 
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-CV.corr<-fn.CV.corr(data = ObsidianSources, GroupVar="Code", Groups = "All", AnalyticVars=analyticVars)
+CV.corr<-fn.CV.corr(data = ObsidianSources, GroupVar="Code", Groups = "All", AnalyticVars=analyticVars, plotCorrs=F)
 knitr::kable(CV.corr$corr, caption="Table 4.1: Spearman correlations among pairs of elements from the Jemez sources,
 by group.")
 #
@@ -223,17 +223,27 @@ by group.")
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-CV.corr<-fn.CV.corr(data = ObsidianSources, GroupVar="Code", Groups="All", AnalyticVars=analyticVars, ByGroup=F)
-knitr::kable(CV.corr$corr, caption="Table 4.2: Spearman correlations among pairs of elements from the Jemez sources, all groups combined.")
+CV.corr<-fn.CV.corr(data = ObsidianSources, GroupVar="Code", Groups="All", AnalyticVars=analyticVars, ByGroup=F, plotCorrs=F)
+knitr::kable(CV.corr$corr, caption="Table 4.2: Spearman correlations among pairs of elements from the Jemez obsidian sources, all groups combined.")
 #
 ```
+
+Figure 4.4 contains a graphical display of these correlations.  The slope of the semi-major axis of each ellipse indicates whether the corresponding correlation is positive or negative; the width of the ellipse (the length of the semi-minor axis) indicates the magnitude of the correlation (a shorter axis [narrower ellipse] indicates stronger correlation) as does the color of the ellipse. 
+
+```{r echo=FALSE, results='hide',message=FALSE, fig.cap="Figure 4.4: Graphical display of the correlations between the Jemez obsidian source analysis variables with all groups combined."} 
+library(karon)
+data(ObsidianSources)
+analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+CV.corr<-fn.CV.corr(data = ObsidianSources, GroupVar="Code", Groups = "All", AnalyticVars=analyticVars, ByGroup=F, plotCorrs=T)
+```
+
 Table 4.3 shows the coefficients of variation for each element at each source.  Each standard deviation is small compared to the corresponding mean (each coefficient of variation is at most 0.11, and most are 0.05 or less) except for strontium at sources C and D.  The relatively large values of the coefficient of variation for strontium at those sources is a result of the small mean strontium values at those sources: the table of descriptive statistics (not shown) gives mean values for strontium of 5 and 10, at C and D, respectively, with ranges of 0 to 8 and 2 to 11, respectively.
 
 ```{r } 
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-CV.corr<-fn.CV.corr(data = ObsidianSources, GroupVar="Code", Groups = "All", AnalyticVars=analyticVars, ByGroup=T)
+CV.corr<-fn.CV.corr(data = ObsidianSources, GroupVar="Code", Groups = "All", AnalyticVars=analyticVars, ByGroup=T, plotCorrs=F)
 knitr::kable(CV.corr$CV, caption="Table 4.3:  Coefficients of variation of the elements from the Jemez sources.")
 #
 ```
@@ -248,7 +258,7 @@ The next two plots show examples of all sources on one plot for zirconium versus
 
 The confidence ellipses provide information on whether the distributions of a pair of elements differ between or among sources.  If a bivariate distribution is Gaussian and 99% confidence ellipses do not overlap between or among sources, it is plausible that the distributions of a pair of elements between or among sources do not overlap.  The function fn.2dPlot.Gauss(), discussed below, provides plots and tests to evaluate the hypothesis that a bivariate distribution is Gaussian.  To anticipate, we find that the rubidium/zirconium distribution is likely to be Gaussian at source A but not at source B.  Note that the source values roughly fill the 95% confidence ellipse at source A, but those values tend to cluster at source B, and two lie approximately on the boundary of the 99% confidence ellipse.  
 
-```{r echo=FALSE, results='hide',message=FALSE, fig.cap="Figure 4.4: Example of a scatterplot for obsidian Jemez source data with confidence ellipses and robust lowess smoothing lines."} 
+```{r echo=FALSE, results='hide',message=FALSE, fig.cap="Figure 4.5: Example of a scatterplot for obsidian Jemez source data with confidence ellipses and robust lowess smoothing lines."} 
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
@@ -256,7 +266,7 @@ plot.2d <- fn.2dPlot(data = ObsidianSources, GroupVar = "Code", ID = "ID", Group
                 AnalyticVars = rbind(analyticVars[c(1,4)],analyticVars[c(1,5)]), PlotEllipses=T, LowessLine=T)
 ```
 
-```{r echo=FALSE, results='hide',message=FALSE, fig.cap="Figure 4.5: Example of a scatterplot for obsidian Jemez source data with confidence ellipses and kernel smoothing lines."} 
+```{r echo=FALSE, results='hide',message=FALSE, fig.cap="Figure 4.6: Example of a scatterplot for obsidian Jemez source data with confidence ellipses and kernel smoothing lines."} 
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
@@ -264,7 +274,7 @@ plot.2d <- fn.2dPlot(data = ObsidianSources, GroupVar = "Code", ID = "ID", Group
           AnalyticVars = rbind(analyticVars[c(1,4)], analyticVars[c(1,5)]), PlotEllipses=T, KernelSmooth=T)
 ```
 
-```{r echo=FALSE, results='hide',message=FALSE, fig.cap="Figure 4.6: Example of a scatterplot for obsidian Jemez source data with the median values of and convex hulls of the points at each source."} 
+```{r echo=FALSE, results='hide',message=FALSE, fig.cap="Figure 4.7: Example of a scatterplot for obsidian Jemez source data with the median values of and convex hulls of the points at each source."} 
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
@@ -272,7 +282,7 @@ plot.2d <- fn.2dPlot(data = ObsidianSources, GroupVar = "Code", ID = "ID", Group
           AnalyticVars = analyticVars[1:2], PlotByGroup=F, PlotPoints=F, PlotMedians=T, PlotHulls=T)
 ```
 
-```{r echo=FALSE, results='hide',message=FALSE, fig.cap="Figure 4.7: Example of a scatterplot for obsidian Jemez source data with data for all sources combined, confidence ellipses, and robust lowess smoothing lines."}
+```{r echo=FALSE, results='hide',message=FALSE, fig.cap="Figure 4.8: Example of a scatterplot for obsidian Jemez source data with data for all sources combined, confidence ellipses, and robust lowess smoothing lines."}
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
@@ -290,7 +300,7 @@ The function fn.3dPlot() creates one or more three-dimensional scatterplots.  If
 
 file:///C:/Consulting/Sourcing/Vignette/scatterRbSrY.doc
 
-```{r echo=FALSE, results='hide',message=FALSE, fig.cap="Figure 4.8: Example of a three-dimensional plot showing data from three Jemez obsidian sources."}
+```{r echo=FALSE, results='hide',message=FALSE, fig.cap="Figure 4.9: Example of a three-dimensional plot showing data from three Jemez obsidian sources."}
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
@@ -311,12 +321,13 @@ In addition to the standard Q-Q plot, the fn.2dPlot.Gauss() function implements 
 If qqPlot is T, the function also produces the multivariate Q-Q plot.  This plot is based the fact that, if the data are Gaussian, the generalized distances of the points from the mean (the squared Mahalanobis distances) have a chi-squared distribution with two degrees of freedom (Johnson and Wichern, section 4.6).      
 
 There are many statistical tests for univariate and bivariate Gaussian distributions.  The univariate tests have variable power against different violations of the Gaussian assumption.  The fn.2dPlot.Gauss() function implements two of the univariate tests, the Anderson-Darling and the Shapiro-Wilk tests.  Properties and definitions of many tests are in D’Agostino and Stephens, Chapter 9, Tests for the Normal Distribution.  In that chapter, D’Agostino states “the Anderson-Darling A2 test…is the EDF test we recommend for us[e]” (page 372) and “The most powerful EDF test appears to be the Anderson-Darling A2 ….  It is at times presented as being similar in power to the Shapiro-Wilk W test.” (page 404).  The p-values for those two tests are in a table produced by this function, in columns with names AD.variable_name and SW.variable_name, respectively.  The table also contains the p-values from three tests for a bivariate Gaussian distribution: Mardia's test based on skewness and kurtosis (D'Agostino and Stephens, page 409), and tests developed by Henze and Zirkler and by Royston. These tests use the mvn() function in the user-contributed package MVN.  The Royston test may be most appropriate for these relatively small sample sizes: Farrell, Salibian-Barrera, and Naczk comment that "A consistent and invariant test proposed by Henze and Zirkler...is found to have good power properties, particularly for sample sizes of 75 or more, while an approach suggested by Royston... performs effectively at detecting departures from MVN for smaller sample sizes."  The sample sizes and p-values for the tests are in the component named pvalues in the list returned by the function; examples are in Tables 7a and 7b, below.  [As discussed below, results from these data confirm the conclusion that the Royston and Henze-Zirkler tests should be preferred to the Mardia test.]    
+
 Q-Q plots evaluating the assumptions of univariate and bivariate Gaussian distributions for the bivariate rubidium/zirconium and rubidium/niobium pairs are below, as well as two examples of the multivariate Q-Q plot.  It is instructive to compare the univariate Q-Q plots with and without simulation, in order to evaluate which data points clearly are not consistent with a univariate Gaussian distribution, and to compare these with the p-values in Tables 4.5 and 4.6.  We also note that a value far from a univariate Q-Q line yields a value far from this line on the bivariate Q-Q plot.
 
 Rubidium/zirconium:  
-At source A, the Q-Q plot suggests that the distribution of rubidium has a long left tail.  However, the plot using simulation shows that the sample points are well within the 95% confidence region.  One zirconium value is large but within the 95% confidence region in the simulated plot.  The p-values for both univariate tests for both elements are relatively large.  Thus, both the results from the simulation Q-Q plots and the formal test statistics support univariate Gaussian distributions for both elements.  The multivariate Q-Q plot has a short right tail based on one value.  The p-values for all four tests for bivariate normality are also large (at least 0.24).  Therefore, it is plausible that these elements have a bivariate Gaussian distribution at source A. This conclusion is consistent with the scatterplot with confidence ellipses in Figure 4.7. 
+At source A, the Q-Q plot suggests that the distribution of rubidium has a long left tail.  However, the plot using simulation shows that the sample points are well within the 95% confidence region.  One zirconium value is large but within the 95% confidence region in the simulated plot.  The p-values for both univariate tests for both elements are relatively large.  Thus, both the results from the simulation Q-Q plots and the formal test statistics support univariate Gaussian distributions for both elements.  The multivariate Q-Q plot has a short right tail based on one value.  The p-values for all four tests for bivariate normality are also large (at least 0.24).  Therefore, it is plausible that these elements have a bivariate Gaussian distribution at source A. This conclusion is consistent with the scatterplot with confidence ellipses in Figure 4.8. 
 
-In contrast, at source B, the Q-Q plots show that both elements have short right tails.  The univariate test statistics have p-values less than 0.01.  The multivariate Q-Q plot has two extreme values.  All four multivariate tests yield small p-values (at most 0.005).  We conclude that these elements do not have a bivariate Gaussian distribution at source B. This conclusion is also consistent with the scatterplot in Figure 4.7.
+In contrast, at source B, the Q-Q plots show that both elements have short right tails.  The univariate test statistics have p-values less than 0.01.  The multivariate Q-Q plot has two extreme values.  All four multivariate tests yield small p-values (at most 0.005).  We conclude that these elements do not have a bivariate Gaussian distribution at source B. This conclusion is also consistent with the scatterplot in Figure 4.8.
 
 Rubidium/niobium:
 From the previous discussion, we know that rubidium has a Gaussian distribution at source A but not at source B.  At source A, the univariate test statistics have marginally "significant" p-values.  The multivariate Q-Q plot has a short right tail based on one value.  The Royston test yields a p-value of 0.065.  Based on these results, we may be willing to assume a bivariate Gaussian distribution for these two elements at source A.  However, the scatterplot with confidence ellipses in Figure 4.7 is of concern, as the lowess smooth is not linear, and there is one point on the boundary of the 99% ellipse.  If appears useful to look at scatterplots and smooths in evaluating whether distributions are Gaussian. 
@@ -324,7 +335,7 @@ From the previous discussion, we know that rubidium has a Gaussian distribution 
 Since niobium has many samples with equal values, it is clear that niobium does not have a Gaussian distribution (this is confirmed by the p-values from the univariate tests).  The Henze-Zirkler and Royston tests properly reject bivariate normality, even though the Mardia tests do not.  The same phenomenom occurs at sources C, D, and E.  This reinforces the preference for these tests.
 
 
-```{r echo=FALSE, results='hide',message=FALSE, fig.cap="Figure 4.8a: Q-Q plots of rubidium and zirconium, including the bivariate Q-Q plot, for the Jemez obsidian source data from source A." } 
+```{r echo=FALSE, results='hide',message=FALSE, fig.cap="Figure 4.10a: Q-Q plots of rubidium and zirconium, including the bivariate Q-Q plot, for the Jemez obsidian source data from source A." } 
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
@@ -333,7 +344,7 @@ plot.2d.Gauss<-fn.2dPlot.Gauss(data=ObsidianSources, GroupVar="Code", ID="ID", G
 
 ```
 
-```{r echo=FALSE, results='hide',message=FALSE, fig.cap="Figure 4.8b: Q-Q plots of rubidium and zirconium, including the bivariate Q-Q plot, for the Jemez obsidian source data from source B." } 
+```{r echo=FALSE, results='hide',message=FALSE, fig.cap="Figure 4.10b: Q-Q plots of rubidium and zirconium, including the bivariate Q-Q plot, for the Jemez obsidian source data from source B." } 
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
@@ -342,7 +353,7 @@ plot.2d.Gauss<-fn.2dPlot.Gauss(data=ObsidianSources, GroupVar="Code", ID="ID", G
     
 ```
 
-```{r echo=FALSE, results='hide',message=FALSE, fig.cap="Figure 4.8c: Q-Q plots of rubidium and niobium for the Jemez obsidian source data from sources A and B." } 
+```{r echo=FALSE, results='hide',message=FALSE, fig.cap="Figure 4.10c: Q-Q plots of rubidium and niobium for the Jemez obsidian source data from sources A and B." } 
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
@@ -376,6 +387,8 @@ Principal components analysis is a standard method implementing dimension reduct
 As in fn.2dPlot.Gauss(), the parameter Identify=T in this function allows the user to identify points of interest if points are plotted and the analytic values defining group medians if medians are plotted.  If points are identified, the data frame containing information on these points (data.check) is sorted by group name, and, if samples have IDs, by ID within group.  As a result of the R sort convention, an ID of A1x (x an integer from 0 to 9) appears above an ID of A2.  
 
 The function fn.pca.Gauss() provides information to evaluate whether the points from each group have a bivariate Gaussian distribution, with the same information provided by the function fn.2dPlot.Gauss().  The user can create a data frame containing the data generating points of interest by setting the parameter gaussIdentify = T.
+
+A principal components analysis requires that the data to be analyzed have no missing values (an observation with a missing value is deleted from the analysis).  The function fn.pca() uses the function rfImpute() to impute a single value for any missing value, so that no observations have missing data and all observations can be analyzed.  See the discussion in Section 9 (Discussion) for more information on this procedure.  There is no imputation in fn.pca.Gauss(): this function analyzes only the observations with complete data.
 
 ###5.1  Standard principal components analysis
 
@@ -567,7 +580,9 @@ Random forests are a method for obtaining more a more realistic estimate of clas
 
 Random forests can also be used to predict group memberships for observations from unknown sources.  Again, a large number of trees are grown using bootstrap data samples and a subsample of the predictors.  The group membership is predicted for each unknown.  After running all the trees, the membership for an unknown observation is defined to be the most commonly group predicted.  These predictions are likely to be better than those from classification a single classification tree.  In a sense, the random forest analysis is averaging the predictions from a large number of tree analyses.  These analyses are not completely independent, as the data used in the analyses will overlap, as may the predictor variables. However, just as averaging observations reduces the variance of an estimated mean, averaging the tree analyses should produce estimates of group membership that is more accurate than the estimates from a single tree analysis. 
 
-The function fn.randomForest() does a random forest analysis on known group membership. The user can change the number of trees grown using the parameter Ntrees and the number of variables used with the parameter NvarUsed; the default value is NA, in which case the code chooses a value close to the square root of the number of predictor variables.  An analysis is reproducible if the random number generator used to select the bootstrap samples and the variables used has a specified starting value.  It is desirable to specify such a value, which must be a positive integer; the code has a default value of 11111. 
+The function fn.randomForest() does a random forest analysis on known group membership using the R function randomForest(). The user can change the number of trees grown using the parameter Ntrees and the number of variables used with the parameter NvarUsed; the default value is NA, in which case the code chooses a value close to the square root of the number of predictor variables.  An analysis is reproducible if the random number generator used to select the bootstrap samples and the variables used has a specified starting value.  It is desirable to specify such a value, which must be a positive integer; the code has a default value of 11111. 
+
+Although the R function randomForest() uses classification trees, this function requires that the data to be analyzed (including the data for which group membership is to be predicted) have no missing values.  The function fn.randomForest() uses the R function rfImpute() to impute a single value to replace any missing value in the data used to define the algorithm for predicting group membership (for the obsidian data, the sources) and the R function missForest() to replace any missing value in the data for which group membership is to be predicted (for the obsidian data, the artifacts).  See Section 9 (Discussion) for more information on these functions.
 
 The fn.randomForest() function produces two plots, the estimated error rate as a function of the number of bootstrap samples, and the importance of each variable based on the mean decrease in the Gini index as a result of the split on that variable.  The error rate plot is shown below in Figure 7.1.  For the Jemez source data, fewer than 100 samples are required to obtain the estimated out of bag error rate.  For a set of sources that are harder to differentiate, the required number of samples is likely to be much higher.
 
@@ -691,6 +706,8 @@ boxPlots<-fn.BoxPlots(data=SourcesArtifacts, GroupVar="Source", Groups="All",Ana
 
 We have already seen that the utility principal component plots of the predictions from the tree and random forest analysis in evaluating predictions.  The tree analysis gives predictions that appear to be wrong, while all predictions from the random forest analysis appear to be correct.  The function fn.pca.evaluation() creates plots that are more informative than those in Figures 6.3 and 7.4 by adding symbols for the artifact points generated by the predictions (contained in the data frame specified in the parameter ArtifactData) to a principal components plot with the convex hulls of the source data (specified in the parameter SourceData).  The data frame ArtifactData must contain a variable with the predicted source for each point.  The points generated by the unknowns predicted to come from a source should fall within or close to the convex hull of that source if the predictions are correct.  The user specifies the known sources and predicted sources of interest with the parameters known.sources and predicted.sources, respectively.  Defining the parameter Identify to be T allows the user to create a data frame containing data generating points that may represent misclassified unknowns.
 
+Because a principal components analysis cannot use an observation with missing data, the function fn.pca.evaluation() imputes values to replace any missing values.  For the data from known groups (the source data), it uses the R function rfImpute; for the data from unknowns with predictions to be verified (artifacts), it uses the R function missForest.  See Section 9 (Discussion) for more information on these imputation functions.
+
 The evaluation function can produce three plots, shown in Figures 8.2a, 8.2b, and 8.2c, below (parameters in the call to the function allow the user to specify which plots to produce). The plots in these figures use the predictions from the classification tree obtained from fn.tree() with the model "Sr"+"Nb"+"Rb"+"Y"+"Zr".   Each plot is the plot of the first two principal components, obtained from a principal component analysis of all sources and all unknowns used in the analysis.  The first plot has two panels: the left panel plots the source points and the convex hulls for the sources; the right panel plots all unknowns with the convex hulls for the sources.  The second plot also has two panels: the left panel plots the source convex hulls labelled with the code for the source located at the median of all the source points; the right panel plots the source hulls and all unknown points that lie outside the predicted source hull.  The third plot is the right panel of the second plot; this plot is useful for identifying points of interest generated by unknowns.  This plot will be produced if Identify = T. The data frame check.data in the list returned by the function contains the data generating points identified to be of interest, as well as the first two principal component values for these points.
 
 
@@ -782,7 +799,7 @@ analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 sources <- unique(ObsidianSources[,"Code"])
 save.randomForest <- fn.randomForest(data=ObsidianSources, GroupVar="Code",Groups="All",
     AnalyticVars=analyticVars, sourceID="ID", NvarUsed=3, plotErrorRate=F, plotImportance=F,
-    predictSources=T, predictData=ObsidianArtifacts, plotSourceProbs=F)
+    predictSources=T, predictData=ObsidianArtifacts, artifactID= "ID", plotSourceProbs=F)
 tree.data.check <- tree.data.check[order(tree.data.check[,"ID"]),]
 save.rF<-save.randomForest$predictedSources[order(save.randomForest$predictedSources[,"source"]),]
 obsCheck<-merge(x=save.rF, y = tree.data.check[,c("ID","pc1","pc2")],
