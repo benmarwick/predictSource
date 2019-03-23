@@ -51,8 +51,8 @@ Data checks and summaries: duplicate records, negative analytic values, numbers 
 }
 \section{Detail}{
 
-AnalyticVars must be a vector of length at least 2.  If Groups specifies selected groups (is
-not equal to "All" or " "), if must be a vector of length at least 2.
+AnalyticVars must be a vector of length at least 2_  If Groups specifies selected groups (is
+not equal to "All" or " "), if must be a vector of length at least 2_
 }
 
 \examples{

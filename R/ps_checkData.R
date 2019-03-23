@@ -33,8 +33,8 @@
 #'   }
 #'
 #' @section Detail:
-#' AnalyticVars must be a vector of length at least 2.  If Groups specifies selected groups (is
-#' not equal to "All" or " "), if must be a vector of length at least 2.
+#' AnalyticVars must be a vector of length at least 2_  If Groups specifies selected groups (is
+#' not equal to "All" or " "), if must be a vector of length at least 2_
 #'
 #' @examples
 #' data(ObsidianSources)
@@ -58,32 +58,32 @@ ps_checkData <-
     #
     if ((Groups[1] != " ") & (Groups[1] != "All")) {
       UseRows <- (data[, GroupVar] %in% Groups)
-      data.Used <- data[UseRows, ]
+      data_Used <- data[UseRows, ]
     }
-    else  data.Used <- data
+    else  data_Used <- data
     #
     #  sort on GroupVar and ID if specified
     #
     if (GroupVar[1] != " ") {
-      rowsSort <- order(data.Used[,GroupVar])
-      data.Used <- data.Used[rowsSort,]
+      rowsSort <- order(data_Used[,GroupVar])
+      data_Used <- data_Used[rowsSort,]
     }
     if (ID[1] != " ") {
-      rowsSort <- order(data.Used[,ID])
-      data.Used <- data.Used[rowsSort,]
+      rowsSort <- order(data_Used[,ID])
+      data_Used <- data_Used[rowsSort,]
     }
     #
     #  check for duplicates
     #
-    DupRows <- duplicated(data.Used[, CheckDupVars])
-    DupRowNumbers <- (1:nrow(data.Used))[DupRows]
+    DupRows <- duplicated(data_Used[, CheckDupVars])
+    DupRowNumbers <- (1:nrow(data_Used))[DupRows]
     if (sum(DupRowNumbers) == 0)
         duplicates <- NA
     else  duplicates <- data[DupRows, ]
     #
     #  data summaries
     #
-    MinimumValues <- apply(data.Used[, AnalyticVars], 1, min, na.rm = T)
+    MinimumValues <- apply(data_Used[, AnalyticVars], 1, min, na_rm = T)
     NegRows <- (MinimumValues < 0)
     if (sum(NegRows) == 0)
       NegativeValues <- NA
@@ -92,18 +92,18 @@ ps_checkData <-
       if ((GroupVar[1] == " ") | (Groups[1] == " ")) {
       Nvalues <- rep(0, length(AnalyticVars))
       for (i in 1:length(AnalyticVars))
-        Nvalues[i] <- sum(!is.na(data[, AnalyticVars[i]]))
+        Nvalues[i] <- sum(!is_na(data[, AnalyticVars[i]]))
       }
     #
     if (Groups[1] == "All") {
-      groups <- as.character(unique(data.Used[, GroupVar]))
-      n.groups <- length(groups)
-      nvalues <- matrix(0, nrow = n.groups + 1, ncol = length(AnalyticVars))
-      for (i in 1:n.groups) {
-        data.groupi <- data.Used[data.Used[, GroupVar] == groups[i],
+      groups <- as_character(unique(data_Used[, GroupVar]))
+      n_groups <- length(groups)
+      nvalues <- matrix(0, nrow = n_groups + 1, ncol = length(AnalyticVars))
+      for (i in 1:n_groups) {
+        data_groupi <- data_Used[data_Used[, GroupVar] == groups[i],
                             AnalyticVars]
         for (j in 1:length(AnalyticVars))
-          nvalues[i, j] <- sum(!is.na(data.groupi[, AnalyticVars[j]]))
+          nvalues[i, j] <- sum(!is_na(data_groupi[, AnalyticVars[j]]))
       }  # end of loop on i
       nvalues[nrow(nvalues), ] <- apply(nvalues[-nrow(nvalues),
                                                 ], 2, sum)
@@ -112,13 +112,13 @@ ps_checkData <-
     } # end of code for Groups == "All"
     #
     if ((Groups[1] != " ") & (Groups[1] != "All")) {
-      n.groups <- length(Groups)
-      nvalues <- matrix(0, nrow = n.groups + 1, ncol = length(AnalyticVars))
-      for (i in 1:n.groups) {
-        data.groupi <- data.Used[data.Used[, GroupVar] == Groups[i],
+      n_groups <- length(Groups)
+      nvalues <- matrix(0, nrow = n_groups + 1, ncol = length(AnalyticVars))
+      for (i in 1:n_groups) {
+        data_groupi <- data_Used[data_Used[, GroupVar] == Groups[i],
                             AnalyticVars]
         for (j in 1:length(AnalyticVars))
-          nvalues[i, j] <- sum(!is.na(data.groupi[, AnalyticVars[j]]))
+          nvalues[i, j] <- sum(!is_na(data_groupi[, AnalyticVars[j]]))
       } # end of loop on i
       nvalues[nrow(nvalues), ] <- apply(nvalues[-nrow(nvalues),
                                                 ], 2, sum)
@@ -129,50 +129,50 @@ ps_checkData <-
     if (GroupVar == " ") {
       statistics <- matrix(NA, nrow = length(AnalyticVars), ncol = 7)
       for (j in 1:length(AnalyticVars)) {
-        statisticsj <- summary(data.Used[, AnalyticVars[j]])
+        statisticsj <- summary(data_Used[, AnalyticVars[j]])
         statistics[j, 1:length(statisticsj)] <- statisticsj
       } # end of loop on j
-      statistics.values <- round(statistics, dig = 0)
-      colnames(statistics.values) <- c("min", "Q1", "median",
-                                       "mean", "Q3", "max", "n.missing")
-      statistics.values[is.na(statistics.values[, 7]), 7] <- 0
+      statistics_values <- round(statistics, dig = 0)
+      colnames(statistics_values) <- c("min", "Q1", "median",
+                                       "mean", "Q3", "max", "n_missing")
+      statistics_values[is_na(statistics_values[, 7]), 7] <- 0
      } # end of code for GroupVar == " "
     else if (Groups[1] != " ") {
-      if (Groups[1] == "All")  groups <- as.character(unique(data.Used[, GroupVar]))
+      if (Groups[1] == "All")  groups <- as_character(unique(data_Used[, GroupVar]))
         else  groups <- Groups
-      n.groups <- length(groups)
-      n.vars <- length(AnalyticVars)
-      statistics.values <- matrix(NA, nrow = (n.groups + 1) *
-                                 n.vars, ncol = 7)
+      n_groups <- length(groups)
+      n_vars <- length(AnalyticVars)
+      statistics_values <- matrix(NA, nrow = (n_groups + 1) *
+                                 n_vars, ncol = 7)
       row <- 0
-      vector.groups <- rep(c(groups, " "), n.vars)
-      vector.values <- rep(" ", (n.groups + 1) * n.vars)
-      for (i in 1:n.vars) {
-        vector.values[(row + 1):(row + n.groups)] <- AnalyticVars[i]
-        for (j in 1:n.groups) {
-          data.valuesij <- data.Used[data.Used[, GroupVar] == groups[j],
+      vector_groups <- rep(c(groups, " "), n_vars)
+      vector_values <- rep(" ", (n_groups + 1) * n_vars)
+      for (i in 1:n_vars) {
+        vector_values[(row + 1):(row + n_groups)] <- AnalyticVars[i]
+        for (j in 1:n_groups) {
+          data_valuesij <- data_Used[data_Used[, GroupVar] == groups[j],
                                 AnalyticVars[i]]
-          statisticsij <- summary(data.valuesij)
-          statistics.values[row + j, 1:length(statisticsij)] <- statisticsij
+          statisticsij <- summary(data_valuesij)
+          statistics_values[row + j, 1:length(statisticsij)] <- statisticsij
         }  # end of loop on j
-        row <- row + n.groups + 1
+        row <- row + n_groups + 1
       }  # end of loop on i
       }  # end of code for specified groups
-      statistics.values <- round(statistics.values, dig = 0)
-      colnames(statistics.values) <- c("min", "Q1", "median",
-                                    "mean", "Q3", "max", "n.missing")
-      statistics.values[is.na(statistics.values[, 7]), 7] <- 0
+      statistics_values <- round(statistics_values, dig = 0)
+      colnames(statistics_values) <- c("min", "Q1", "median",
+                                    "mean", "Q3", "max", "n_missing")
+      statistics_values[is_na(statistics_values[, 7]), 7] <- 0
       if (GroupVar == " ")
-        statistics <- data.frame(Analysis = AnalyticVars, statistics.values)
-      else  statistics <- data.frame(Analysis = vector.values, Group = vector.groups,
-                            statistics.values)
+        statistics <- data.frame(Analysis = AnalyticVars, statistics_values)
+      else  statistics <- data.frame(Analysis = vector_values, Group = vector_groups,
+                            statistics_values)
       #
-    fcn.date.ver<-c(doc,date(),R.Version()$version.string)
+    fcn_date_ver<-c(doc,date(),R.Version()$version.string)
     params<-list(CheckDupVars,GroupVar,Groups)
     names(params)<-c("CheckDupVars","GroupVar","Groups")
     statistics[,"mean"] <- round(statistics[,"mean"], dig = 0)
   #
- list(usage=fcn.date.ver,
+ list(usage=fcn_date_ver,
                                  dataUsed=data,params=params,
                                  analyticVars=AnalyticVars,
                                  Duplicates = duplicates,
