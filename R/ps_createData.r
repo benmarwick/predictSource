@@ -51,7 +51,7 @@ ps_createData <- function(doc="ps_createData", data, Group,Subset,ID,AnalyticVar
   variables <- data[,AnalyticVars]
   dimnames(variables)[[2]] <- AnalyticVars
   #
-  if (Subset[1] != " ")  dataOut<-data_frame(Group=Group, Subset=Subset, ID=dataID, variables)
+  if (Subset[1] != " ")  dataOut<-data.frame(Group=Group, Subset=Subset, ID=dataID, variables)
     else  dataOut<-data_frame(Group=Group, ID=dataID, variables)
   fcn_date_ver<-paste(doc,date(),R.Version()$version.string)
   #

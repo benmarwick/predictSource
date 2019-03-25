@@ -58,32 +58,32 @@ ps_checkData <-
     #
     if ((Groups[1] != " ") & (Groups[1] != "All")) {
       UseRows <- (data[, GroupVar] %in% Groups)
-      data_Used <- data[UseRows, ]
+      dataUsed <- data[UseRows, ]
     }
-    else  data_Used <- data
+    else  dataUsed <- data
     #
     #  sort on GroupVar and ID if specified
     #
     if (GroupVar[1] != " ") {
-      rowsSort <- order(data_Used[,GroupVar])
-      data_Used <- data_Used[rowsSort,]
+      rowsSort <- order(dataUsed[,GroupVar])
+      dataUsed <- dataUsed[rowsSort,]
     }
     if (ID[1] != " ") {
-      rowsSort <- order(data_Used[,ID])
-      data_Used <- data_Used[rowsSort,]
+      rowsSort <- order(dataUsed[,ID])
+      dataUsed <- dataUsed[rowsSort,]
     }
     #
     #  check for duplicates
     #
-    DupRows <- duplicated(data_Used[, CheckDupVars])
-    DupRowNumbers <- (1:nrow(data_Used))[DupRows]
+    DupRows <- duplicated(dataUsed[, CheckDupVars])
+    DupRowNumbers <- (1:nrow(dataUsed))[DupRows]
     if (sum(DupRowNumbers) == 0)
         duplicates <- NA
     else  duplicates <- data[DupRows, ]
     #
     #  data summaries
     #
-    MinimumValues <- apply(data_Used[, AnalyticVars], 1, min, na_rm = T)
+    MinimumValues <- apply(dataUsed[, AnalyticVars], 1, min, na.rm = T)
     NegRows <- (MinimumValues < 0)
     if (sum(NegRows) == 0)
       NegativeValues <- NA
@@ -92,18 +92,18 @@ ps_checkData <-
       if ((GroupVar[1] == " ") | (Groups[1] == " ")) {
       Nvalues <- rep(0, length(AnalyticVars))
       for (i in 1:length(AnalyticVars))
-        Nvalues[i] <- sum(!is_na(data[, AnalyticVars[i]]))
+        Nvalues[i] <- sum(!is.na(data[, AnalyticVars[i]]))
       }
     #
     if (Groups[1] == "All") {
-      groups <- as_character(unique(data_Used[, GroupVar]))
+      groups <- as.character(unique(dataUsed[, GroupVar]))
       n_groups <- length(groups)
       nvalues <- matrix(0, nrow = n_groups + 1, ncol = length(AnalyticVars))
       for (i in 1:n_groups) {
-        data_groupi <- data_Used[data_Used[, GroupVar] == groups[i],
+        data_groupi <- dataUsed[dataUsed[, GroupVar] == groups[i],
                             AnalyticVars]
         for (j in 1:length(AnalyticVars))
-          nvalues[i, j] <- sum(!is_na(data_groupi[, AnalyticVars[j]]))
+          nvalues[i, j] <- sum(!is.na(data_groupi[, AnalyticVars[j]]))
       }  # end of loop on i
       nvalues[nrow(nvalues), ] <- apply(nvalues[-nrow(nvalues),
                                                 ], 2, sum)
@@ -115,10 +115,10 @@ ps_checkData <-
       n_groups <- length(Groups)
       nvalues <- matrix(0, nrow = n_groups + 1, ncol = length(AnalyticVars))
       for (i in 1:n_groups) {
-        data_groupi <- data_Used[data_Used[, GroupVar] == Groups[i],
+        data_groupi <- dataUsed[dataUsed[, GroupVar] == Groups[i],
                             AnalyticVars]
         for (j in 1:length(AnalyticVars))
-          nvalues[i, j] <- sum(!is_na(data_groupi[, AnalyticVars[j]]))
+          nvalues[i, j] <- sum(!is.na(data_groupi[, AnalyticVars[j]]))
       } # end of loop on i
       nvalues[nrow(nvalues), ] <- apply(nvalues[-nrow(nvalues),
                                                 ], 2, sum)
@@ -129,16 +129,16 @@ ps_checkData <-
     if (GroupVar == " ") {
       statistics <- matrix(NA, nrow = length(AnalyticVars), ncol = 7)
       for (j in 1:length(AnalyticVars)) {
-        statisticsj <- summary(data_Used[, AnalyticVars[j]])
+        statisticsj <- summary(dataUsed[, AnalyticVars[j]])
         statistics[j, 1:length(statisticsj)] <- statisticsj
       } # end of loop on j
       statistics_values <- round(statistics, dig = 0)
       colnames(statistics_values) <- c("min", "Q1", "median",
                                        "mean", "Q3", "max", "n_missing")
-      statistics_values[is_na(statistics_values[, 7]), 7] <- 0
+      statistics_values[is.na(statistics_values[, 7]), 7] <- 0
      } # end of code for GroupVar == " "
     else if (Groups[1] != " ") {
-      if (Groups[1] == "All")  groups <- as_character(unique(data_Used[, GroupVar]))
+      if (Groups[1] == "All")  groups <- as_character(unique(dataUsed[, GroupVar]))
         else  groups <- Groups
       n_groups <- length(groups)
       n_vars <- length(AnalyticVars)
@@ -150,7 +150,7 @@ ps_checkData <-
       for (i in 1:n_vars) {
         vector_values[(row + 1):(row + n_groups)] <- AnalyticVars[i]
         for (j in 1:n_groups) {
-          data_valuesij <- data_Used[data_Used[, GroupVar] == groups[j],
+          data_valuesij <- dataUsed[dataUsed[, GroupVar] == groups[j],
                                 AnalyticVars[i]]
           statisticsij <- summary(data_valuesij)
           statistics_values[row + j, 1:length(statisticsij)] <- statisticsij
@@ -161,7 +161,7 @@ ps_checkData <-
       statistics_values <- round(statistics_values, dig = 0)
       colnames(statistics_values) <- c("min", "Q1", "median",
                                     "mean", "Q3", "max", "n_missing")
-      statistics_values[is_na(statistics_values[, 7]), 7] <- 0
+      statistics_values[is.na(statistics_values[, 7]), 7] <- 0
       if (GroupVar == " ")
         statistics <- data.frame(Analysis = AnalyticVars, statistics_values)
       else  statistics <- data.frame(Analysis = vector_values, Group = vector_groups,
@@ -173,11 +173,12 @@ ps_checkData <-
     statistics[,"mean"] <- round(statistics[,"mean"], dig = 0)
   #
  list(usage=fcn_date_ver,
-                                 dataUsed=data,params=params,
-                                 analyticVars=AnalyticVars,
-                                 Duplicates = duplicates,
-                                 NegativeValues = NegativeValues,
-                                 Nvalues = Nvalues,
-                                 statistics = statistics,
-                                 location=folder)
+           dataUsed=data,
+           params=params,
+           analyticVars=AnalyticVars,
+           Duplicates = duplicates,
+           NegativeValues = NegativeValues,
+           Nvalues = Nvalues,
+           statistics = statistics,
+           location=folder)
   }
