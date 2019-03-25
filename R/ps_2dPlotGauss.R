@@ -13,7 +13,7 @@
 #' @param scatterPlot  Logical (default is T): specify whether to show scatter plots when qqPlot = F
 #' @param qqPlot  Logical (default is T): specify whether to show the q-q plots with the bootstrap
 #' envelopes and multivariate plots
-#' @param pvalue.digits  Numeric (default is 3): number of significant digits retained in tests for normality
+#' @param pvalue_digits  Numeric (default is 3): number of significant digits retained in tests for normality
 #' @param Identify  Logical(default is F): if T, user can identify points of interest in the plots
 #' @param folder  The path to the folder in which data frames will be saved; default is " "
 #'
@@ -26,7 +26,7 @@
 #' \item{analyticVars:}{  The contents of the argument AnalyticVars}
 #' \item{params:}{  A list with the values of grouping, logical, and numberic arguments}
 #' \item{pvalues:}{  A data frame with the p-values for univariate and bivariate tests of normality}
-#' \item{data.check:}{ A data frame with the information on user-identified points of interest;
+#' \item{dataCheck:}{ A data frame with the information on user-identified points of interest;
 #'     value is c(NA, NA) if no data identified}
 #' \item{location:}{ The value of the parameter folder}
 #' }
@@ -44,7 +44,7 @@
 #'
 #' @examples
 #' data(ObsidianSources)
-#' plot.2d.Gauss<-ps_2dPlotGauss(data=ObsidianSources, GroupVar="Code", ID="ID", Groups=c("A","B"),
+#' plot_2d_Gauss<-ps_2dPlotGauss(data=ObsidianSources, GroupVar="Code", ID="ID", Groups=c("A","B"),
 #'    AnalyticVars=c("Rb","Zr"))
 #'
 #' @export
@@ -57,7 +57,7 @@ ps_2dPlotGauss <- function (doc = "ps_2dPlotGauss",
                              AnalyticVars,
                              scatterPlot=T,
                              qqPlot = T,
-                             pvalue.digits=3,
+                             pvalue_digits=3,
                              Identify=F,
                              folder=" "
                             )
@@ -65,84 +65,84 @@ ps_2dPlotGauss <- function (doc = "ps_2dPlotGauss",
   if (length(AnalyticVars)!=2)  stop("length of AnalyticVars must be 2")
   #
   if (Groups[1] != "All") {
-    Use.rows <- (data[, GroupVar] %in% Groups)
-    data.Used <- data[Use.rows, ]
+    Use_rows <- (data[, GroupVar] %in% Groups)
+    dataUsed <- data[Use_rows, ]
   }
-  else data.Used <- data
+  else dataUsed <- data
   #
-  dataKeep <- rep(T, nrow(data.Used)) # will contain indices for observations with
+  dataKeep <- rep(T, nrow(dataUsed)) # will contain indices for observations with
   # no missing values
   for (i in 1:length(AnalyticVars))
-    dataKeep[is.na(data.Used[,AnalyticVars[i]])] <- F
+    dataKeep[is.na(dataUsed[,AnalyticVars[i]])] <- F
   #
   if (Groups[1] == "All")
-    groups <- as.character(unique(data.Used[, GroupVar]))
-  else groups <- as.character(Groups)
+    groups <- as_character(unique(dataUsed[, GroupVar]))
+  else groups <- as_character(Groups)
   #
-  GroupIndex <- rep(NA, nrow(data.Used))
-  for (i in 1:nrow(data.Used)) {
-    for (j in 1:length(groups)) if (data.Used[i, GroupVar] == groups[j])
+  GroupIndex <- rep(NA, nrow(dataUsed))
+  for (i in 1:nrow(dataUsed)) {
+    for (j in 1:length(groups)) if (dataUsed[i, GroupVar] == groups[j])
       GroupIndex[i] <- j
   }
   #
-  if (Identify) data.check<-data.Used[1,]
-      else  data.check <- c(NA, NA)  # set up data frame to store identified points
+  if (Identify) dataCheck<-dataUsed[1,]
+      else  dataCheck <- c(NA, NA)  # set up data frame to store identified points
   #
-  fn.plot <- function() {
-    temp <- data.Used[data.Used[, GroupVar] == groups[i.group],AnalyticVars]
+  fnPlot <- function() {
+    temp <- dataUsed[dataUsed[, GroupVar] == groups[i_group],AnalyticVars]
     temp1 <- temp[, AnalyticVars[1]]
     temp1 <- temp1[!is.na(temp[,AnalyticVars[1]])]
     if (qqPlot | Identify) {
       qqtest(data = temp1, dist = "normal", drawPercentiles = T,
-             main = paste(AnalyticVars[1],"source", groups[i.group]))
-      qqnorm.pts<-qqnorm(temp1, main = paste(AnalyticVars[1],"source", groups[i.group]))
+             main = paste(AnalyticVars[1],"source", groups[i_group]))
+      qqnorm_pts<-qqnorm(temp1, main = paste(AnalyticVars[1],"source", groups[i_group]))
       qqline(temp1)
     }
     else if (scatterPlot) {
-      qqnorm.pts<-qqnorm(temp1, main = paste(AnalyticVars[1],"source", groups[i.group]))
+      qqnorm_pts<-qqnorm(temp1, main = paste(AnalyticVars[1],"source", groups[i_group]))
       qqline(temp1)
       }
     if (Identify) {
-      index<-identify(qqnorm.pts)
-      data.grp<-data.Used[data.Used[,GroupVar]==groups[i.group],]
-      data.check<<-rbind(data.check,data.grp[index,])
+      index<-identify(qqnorm_pts)
+      data_grp<-dataUsed[dataUsed[,GroupVar]==groups[i_group],]
+      dataCheck<<-rbind(dataCheck,data_grp[index,])
       }
     temp2 <- temp[, AnalyticVars[2]]
     temp2 <- temp2[!is.na(temp[,AnalyticVars[2]])]
     if (qqPlot | Identify) {
       qqtest(data = temp2, dist = "normal", drawPercentiles = T,
-             main = paste(AnalyticVars[2],"source", groups[i.group]))
-      qqnorm.pts<-qqnorm(temp2, main = paste(AnalyticVars[2],"source", groups[i.group]))
+             main = paste(AnalyticVars[2],"source", groups[i_group]))
+      qqnorm_pts<-qqnorm(temp2, main = paste(AnalyticVars[2],"source", groups[i_group]))
       qqline(temp2)
     }
     else if (scatterPlot) {
-      qqnorm.pts<-qqnorm(temp2, main = paste(AnalyticVars[2],"source", groups[i.group]))
+      qqnorm_pts<-qqnorm(temp2, main = paste(AnalyticVars[2],"source", groups[i_group]))
       qqline(temp2)
      }
     if (Identify) {
-      index<-identify(qqnorm.pts)
-      data.grp<-data.Used[data.Used[,GroupVar]==groups[i.group],]
-      data.check<<-rbind(data.check,data.grp[index,])
+      index<-identify(qqnorm_pts)
+      data_grp<-dataUsed[dataUsed[,GroupVar]==groups[i_group],]
+      dataCheck<<-rbind(dataCheck,data_grp[index,])
     }
-    ADp1 <- ad.test(temp1)$p.value
-    ADp2 <- ad.test(temp2)$p.value
-    SWp1 <- shapiro.test(temp1)$p.value
-    SWp2 <- shapiro.test(temp2)$p.value
+    ADp1 <- ad_test(temp1)$p_value
+    ADp2 <- ad_test(temp2)$p_value
+    SWp1 <- shapiro_test(temp1)$p_value
+    SWp2 <- shapiro_test(temp2)$p_value
     temp <- temp[!is.na(temp[,AnalyticVars[1]]) & !is.na(temp[,AnalyticVars[2]]),]
-    n.samples <- nrow(temp)
+    n_samples <- nrow(temp)
     mardia <- MVN::mvn(data = temp, mvnTest="mardia")
-    p.mardia.skew <- as.numeric(as.character(mardia[[1]][[3]][[1]],mode="character"))
-    p.mardia.kurtosis <- as.numeric(as.character(mardia[[1]][[3]][[2]],mode="character"))
+    p_mardia_skew <- as_numeric(as_character(mardia[[1]][[3]][[1]],mode="character"))
+    p_mardia_kurtosis <- as_numeric(as_character(mardia[[1]][[3]][[2]],mode="character"))
     if (qqPlot)
       HZ <- MVN::mvn(data=temp, mvnTest="hz",multivariatePlot="qq")
       else  HZ <- MVN::mvn(data=temp, mvnTest="hz")
     #
-    p.HZ <- as.numeric(HZ[[1]][[3]], mode = "numeric")
+    p_HZ <- as_numeric(HZ[[1]][[3]], mode = "numeric")
     royston <- MVN::mvn(data=temp, mvnTest="royston")
-    p.Royston <- as.numeric(royston[[1]][[3]], mode = "numeric")
-    p.temp <- c(n.samples, ADp1, ADp2, SWp1, SWp2, p.mardia.skew, p.mardia.kurtosis, p.HZ, p.Royston)
+    p_Royston <- as_numeric(royston[[1]][[3]], mode = "numeric")
+    p_temp <- c(n_samples, ADp1, ADp2, SWp1, SWp2, p_mardia_skew, p_mardia_kurtosis, p_HZ, p_Royston)
     # return p-values
-    p.temp
+    p_temp
   } # end of definition of function
   #
   pvalues <- matrix(NA, nrow=length(groups), ncol = 9)
@@ -152,60 +152,60 @@ ps_2dPlotGauss <- function (doc = "ps_2dPlotGauss",
   #
   iPlot<-0 # counter used when qqPlot=F
   #
-  for (i.group in 1:length(groups)) {
+  for (i_group in 1:length(groups)) {
     iPlot <- iPlot+1
-    pvalues[i.group, ] <- fn.plot() # plot for this group and compute p-values
+    pvalues[i_group, ] <- fnPlot() # plot for this group and compute p-values
     if (qqPlot==T)  {
       browser()
-      plot.new() # blank plot so next group starts in new window
+      plot_new() # blank plot so next group starts in new window
     }
     # two plots per frame if qqPlot=F
-    if ((qqPlot==F) & (floor(i.group/2)==i.group/2))  browser()
-  } # end of loop on i.group
-#     if ((qqPlot==F) & (as.integer(i.group/2)==i.group/2)) {
- #       plot.new() # blank plots so next group starts in new window
-  #    pvalues[i.group, ] <- fn.plot()
+    if ((qqPlot==F) & (floor(i_group/2)==i_group/2))  browser()
+  } # end of loop on i_group
+#     if ((qqPlot==F) & (as_integer(i_group/2)==i_group/2)) {
+ #       plot_new() # blank plots so next group starts in new window
+  #    pvalues[i_group, ] <- fnPlot()
    # }
   #
-  numeric.pvalues<-as.numeric(pvalues)
-  numeric.pvalues<-round(numeric.pvalues,dig=pvalue.digits)
-  numeric.pvalues[numeric.pvalues < 0] <- NA
-  return.pvalues<-matrix(numeric.pvalues,nrow=length(groups),ncol=9)
-  dimnames(return.pvalues) <- list(groups, c("n", paste("AD.",AnalyticVars,sep=""), paste("SW.",AnalyticVars,sep=""),
+  numeric_pvalues<-as_numeric(pvalues)
+  numeric_pvalues<-round(numeric_pvalues,dig=pvalue_digits)
+  numeric_pvalues[numeric_pvalues < 0] <- NA
+  return_pvalues<-matrix(numeric_pvalues,nrow=length(groups),ncol=9)
+  dimnames(return_pvalues) <- list(groups, c("n", paste("AD_",AnalyticVars,sep=""), paste("SW_",AnalyticVars,sep=""),
                                              "maridaSkew", "mardiaKurtosis", "HZ", "Royston"))
   #
-  #  remove duplicated observations from data.check
+  #  remove duplicated observations from dataCheck
   #
   if (Identify) {
-    data.check<-data.check[-1,]  # remove dummy first row
-    if (ID != " ") index<-duplicated(data.check[,ID])
-    else  index<-duplicated(data.check[,c(GroupVar,AnalyticVars)])
-    if (length(index) > 0)  data.check<-data.check[!index,]
+    dataCheck<-dataCheck[-1,]  # remove dummy first row
+    if (ID != " ") index<-duplicated(dataCheck[,ID])
+    else  index<-duplicated(dataCheck[,c(GroupVar,AnalyticVars)])
+    if (length(index) > 0)  dataCheck<-dataCheck[!index,]
     if (ID != " ") {
-      index.ID<-order(data.check[,ID])
-      data.check<-data.check[index.ID,]
+      index_ID<-order(dataCheck[,ID])
+      dataCheck<-dataCheck[index_ID,]
     }
   } # end of code for Identify=T
   #
-  fcn.date.ver<-c(doc,date(),R.Version()$version.string)
+  fcn_date_ver<-c(doc,date(),R.Version()$version.string)
   #
-  params.numeric<-pvalue.digits
-  names(params.numeric)<-"pvalue.digits"
-  params.grouping<-list(GroupVar,Groups)
-  names(params.grouping)<-c("GroupVar","Groups")
-  params.logical<-c(scatterPlot,qqPlot,Identify)
-  names(params.logical)<-c("scatterPlot","qqPlot","Identify")
-  params<-list(grouping=params.grouping,numeric=params.numeric,logical=params.logical)
+  params_numeric<-pvalue_digits
+  names(params_numeric)<-"pvalue_digits"
+  params_grouping<-list(GroupVar,Groups)
+  names(params_grouping)<-c("GroupVar","Groups")
+  params_logical<-c(scatterPlot,qqPlot,Identify)
+  names(params_logical)<-c("scatterPlot","qqPlot","Identify")
+  params<-list(grouping=params_grouping,numeric=params_numeric,logical=params_logical)
     #
-  if (sum(dataKeep) < nrow(data.Used)) dataNA <- data.Used[!dataKeep,]
+  if (sum(dataKeep) < nrow(dataUsed)) dataNA <- dataUsed[!dataKeep,]
   else dataNA <- NA
   #
-  list(         usage=fcn.date.ver,
-                dataUsed=data.Used,
+  list(         usage=fcn_date_ver,
+                dataUsed=dataUsed,
                 dataNA=dataNA,
                 analyticVars=AnalyticVars,
                 params=params,
-                pvalues=return.pvalues,
-                data.check=data.check,
+                pvalues=return_pvalues,
+                dataCheck=dataCheck,
                 location=folder)
   }

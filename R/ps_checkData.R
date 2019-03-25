@@ -138,7 +138,7 @@ ps_checkData <-
       statistics_values[is.na(statistics_values[, 7]), 7] <- 0
      } # end of code for GroupVar == " "
     else if (Groups[1] != " ") {
-      if (Groups[1] == "All")  groups <- as_character(unique(dataUsed[, GroupVar]))
+      if (Groups[1] == "All")  groups <- as.character(unique(dataUsed[, GroupVar]))
         else  groups <- Groups
       n_groups <- length(groups)
       n_vars <- length(AnalyticVars)

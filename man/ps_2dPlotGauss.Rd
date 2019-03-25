@@ -5,7 +5,7 @@
 \title{Plot and check specified pairs of analysis variables for bivariate normality.}
 \usage{
 ps_2dPlotGauss(doc = "ps_2dPlotGauss", data, GroupVar, ID, Groups,
-  AnalyticVars, scatterPlot = T, qqPlot = T, pvalue.digits = 3,
+  AnalyticVars, scatterPlot = T, qqPlot = T, pvalue_digits = 3,
   Identify = F, folder = " ")
 }
 \arguments{
@@ -28,7 +28,7 @@ to be shown in the plots}
 \item{qqPlot}{Logical (default is T): specify whether to show the q-q plots with the bootstrap
 envelopes and multivariate plots}
 
-\item{pvalue.digits}{Numeric (default is 3): number of significant digits retained in tests for normality}
+\item{pvalue_digits}{Numeric (default is 3): number of significant digits retained in tests for normality}
 
 \item{Identify}{Logical(default is F): if T, user can identify points of interest in the plots}
 
@@ -44,7 +44,7 @@ A list with the following components:
 \item{analyticVars:}{  The contents of the argument AnalyticVars}
 \item{params:}{  A list with the values of grouping, logical, and numberic arguments}
 \item{pvalues:}{  A data frame with the p-values for univariate and bivariate tests of normality}
-\item{data.check:}{ A data frame with the information on user-identified points of interest;
+\item{dataCheck:}{ A data frame with the information on user-identified points of interest;
     value is c(NA, NA) if no data identified}
 \item{location:}{ The value of the parameter folder}
 }
@@ -65,7 +65,7 @@ Plot and check specified pairs of analysis variables for bivariate normality.
 
 \examples{
 data(ObsidianSources)
-plot.2d.Gauss<-ps_2dPlotGauss(data=ObsidianSources, GroupVar="Code", ID="ID", Groups=c("A","B"),
+plot_2d_Gauss<-ps_2dPlotGauss(data=ObsidianSources, GroupVar="Code", ID="ID", Groups=c("A","B"),
    AnalyticVars=c("Rb","Zr"))
 
 }

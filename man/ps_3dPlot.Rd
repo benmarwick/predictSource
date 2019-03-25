@@ -13,7 +13,7 @@ ps_3dPlot(doc = "ps_3dPlot", data, GroupVar, Groups, AnalyticVars, Selections,
 
 \item{data}{A matrix or data frame containing the data to be analyzed}
 
-\item{GroupVar}{The name for variable defining grouping; can be " " if no grouping.}
+\item{GroupVar}{The name for variable defining grouping; can be " " if no grouping_}
 
 \item{Groups}{A vector of values of group variable for which plots are to be done;
 if "All", use all groups; if " ", no grouping}
@@ -23,10 +23,10 @@ if "All", use all groups; if " ", no grouping}
 \item{Selections}{A vector of length 3, or data frame with 3 columns, with the combinations
 of the analytic variables to be plotted}
 
-\item{ByGroup}{Logical.  If T, show scatterplot for each group for each selection of 3 variables;
+\item{ByGroup}{Logical_  If T, show scatterplot for each group for each selection of 3 variables;
 if F (the default), all specified groups are on one plot}
 
-\item{PlotMedians}{Logical.  If T, plot only the medians in each group (the points are not plotted)
+\item{PlotMedians}{Logical_  If T, plot only the medians in each group (the points are not plotted)
 if F (the default), the median locations are not plotted}
 
 \item{Colors}{A vector with the colors of plotted points, used sequentially for the groups}
@@ -45,7 +45,9 @@ A list with the following components:
 }
 }
 \description{
-Create 3-dimensional data plot. The function stops after producing each plot.  Enter c ("continue") at the prompt to get the next plot.  If this function is run using Rstudio, each plot appears in a separate window, not in the Rstudio plot pane.
+Create 3-dimensional data plot. The function stops after producing each plot.
+Enter c ("continue") at the prompt to get the next plot.
+If this function is run using Rstudio, each plot appears in a separate window, not in the Rstudio plot pane.
 }
 \section{Details}{
 

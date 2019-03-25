@@ -14,13 +14,13 @@ ps_pairsPlot(doc = "ps_pairsPlot", data, GroupVar, Groups, AnalyticVars,
 
 \item{GroupVar}{The name for variable defining grouping (required)}
 
-\item{Groups}{A vector of values of group variable for which plots are to be done.
+\item{Groups}{A vector of values of group variable for which plots are to be done_
 if "All": use all groups; if " ": no grouping}
 
 \item{AnalyticVars}{A vector of names (character values) of analytic results}
 
-\item{Span}{A value >0, <=1 defining the proportion of data used to estimate the lowess smooth.
-The default value (2/3) is the default value for the lowess function.}
+\item{Span}{A value >0, <=1 defining the proportion of data used to estimate the lowess smooth_
+The default value (2/3) is the default value for the lowess function_}
 }
 \value{
 A set of pairs plots as described above and a list with the following components:

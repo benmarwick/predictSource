@@ -2,30 +2,30 @@
 #'
 #' Create 2-dimensional data plot or plots.  By default, a page has panes in two rows and
 #' two columns (but there is a new page for successive groups). The function stops after producing
-#' each row of each plot.  Enter c ("continue") at the prompt to get the next plot.
+#' each row of each plot_  Enter c ("continue") at the prompt to get the next plot.
 #'
 #' @param doc A string documenting use written to the output list; default is the function name
 #' @param data A matrix or data frame containing the data to be analyzed
 #' @param GroupVar The name for the variable defining grouping, " " if no grouping
 #' @param ID  The name for the variable with a lab ID, " " if no lab ID is used
 #' @param Groups  A vector of values of the group variable for which plots are to be done;
-#'    if "All", use all groups; grouping is required (cannot be " ").
+#'    if "All", use all groups; grouping is required (cannot be " ")_
 #' @param AnalyticVars The names of two analytic variables to be shown in the plots, vector of length 2
-#'  or matrix with 2 columns; if a matrix, the set of plots is produced for each row.
-#' @param PlotByGroup Logical.  The default is T; if F, all groups are on each plot for a pair of variables
-#' @param PlotPoints Logical.  If T (the default), all points are plotted; if F, no points are plotted
-#' @param LowessLine Logical. If T, a lowess line is plotted for each group; if F, no line is plotted
-#' @param Lowess.f parameter for lowess() less than or equal to 1, defining the range of x-values used;
-#'     if NA (the default), uses the default value of 0.67
-#' @param KernelSmooth Logical.  If T, a kernel smooth is plotted for each group; if F (the default), no kernel smooth is plotted
-#' @param KernelWidth the proportion of the range of x-values used in the kernel smooth; default is 0.3
-#' @param PlotEllipses Logical.  If T, Gaussian confidence ellipses are plotted for each group;
+#'  or matrix with 2 columns; if a matrix, the set of plots is produced for each row_
+#' @param PlotByGroup Logical_  The default is T; if F, all groups are on each plot for a pair of variables
+#' @param PlotPoints Logical_  If T (the default), all points are plotted; if F, no points are plotted
+#' @param LowessLine Logical_ If T, a lowess line is plotted for each group; if F, no line is plotted
+#' @param Lowess_f parameter for lowess() less than or equal to 1, defining the range of x-values used;
+#'     if NA (the default), uses the default value of 0_67
+#' @param KernelSmooth Logical_  If T, a kernel smooth is plotted for each group; if F (the default), no kernel smooth is plotted
+#' @param KernelWidth the proportion of the range of x-values used in the kernel smooth; default is 0_3
+#' @param PlotEllipses Logical_  If T, Gaussian confidence ellipses are plotted for each group;
 #' if F (the default), no ellipses are plotted
-#' @param Ellipses single value or vector of values with confidence values for the ellipses; default is c(0.95,0.99)
+#' @param Ellipses single value or vector of values with confidence values for the ellipses; default is c(0_95,0_99)
 #' @param PlotHulls if T, the convex hull is drawn for each set of points; if F (the default), no hulls are drawn
 #' @param PlotMedians if T, the code for each group is plotted at the median of the values for that group; default is F
 #' @param Identify if T, user can identify points of interest in the plots; default is F
-#' @param PlotColors  ZLogical.  If T, colors are assigned to the groups
+#' @param PlotColors  ZLogical_  If T, colors are assigned to the groups
 #' @param Colors single value or vector of color names; if PlotByGroup = F, the vector must have the same number of colors as the number of groups
 #' @param legendLoc Character, location of legend for a plot with points;
 #' default is "topright", alternatives are combinations of "top", "bottom", "right", "left"
@@ -40,7 +40,7 @@
 #' \item{params: }{ A list with the values of the grouping, logical and numeric arguments}
 #' \item{analyticVars: }{ The value of the argument AnalyticVars}
 #' \item{colors:}{  A vector with the value of the argument Color}
-#' \item{data.check: }{ If Identify = T, a data frame with the information on user-identified points
+#' \item{dataCheck: }{ If Identify = T, a data frame with the information on user-identified points
 #'  of interest; value is c(NA,NA) if no points are identified}
 #' \item{location:}{ The path to a folder in which results will be saved}
 #'  }
@@ -57,14 +57,14 @@
 #' data(ObsidianSources)
 #' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 #' plotVars<-rbind(analyticVars[1:2], analyticVars[c(1,5)])
-#' plot.2d <- ps_2dPlot(data = ObsidianSources, GroupVar = "Code", ID = "ID", Groups = c("A","B"),
+#' plot_2d <- ps_2dPlot(data = ObsidianSources, GroupVar = "Code", ID = "ID", Groups = c("A","B"),
 #'           AnalyticVars=plotVars, PlotByGroup=T, PlotColors=T, PlotEllipses=T,
 #'           LowessLine=T)
 #' #
 #' #  plot one pair of variables with all sources on one plot
 #' data(ObsidianSources)
 #' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-#' plot.2d <- ps_2dPlot(data = ObsidianSources, GroupVar = "Code", ID = "ID", Groups = "All",
+#' plot_2d <- ps_2dPlot(data = ObsidianSources, GroupVar = "Code", ID = "ID", Groups = "All",
 #'           AnalyticVars =analyticVars[1:2], PlotByGroup=F, PlotColors=T, PlotEllipses=T,
 #'           LowessLine=T)
 #'
@@ -81,7 +81,7 @@ ps_2dPlot <- function (doc = "ps_2dPlot",
                        PlotByGroup=T,
                        PlotPoints = T,
                        LowessLine=F,
-                       Lowess.f=NA,
+                       Lowess_f=NA,
                        KernelSmooth=F,
                        KernelWidth=0.3,
                        PlotEllipses = F,
@@ -95,24 +95,24 @@ ps_2dPlot <- function (doc = "ps_2dPlot",
                        folder=" ")
 {
   if (Groups[1] != "All") {
-    Use.rows <- (data[, GroupVar] %in% Groups)
-    data.Used <- data[Use.rows,]
+    Use_rows <- (data[, GroupVar] %in% Groups)
+    dataUsed <- data[Use_rows,]
   }
-  else data.Used <- data
+  else dataUsed <- data
   #
   # matrix to contain indices for observations with no missing values
-  dataKeep <- rep(T, nrow(data.Used))
+  dataKeep <- rep(T, nrow(dataUsed))
   for (i in 1:length(AnalyticVars))
-    dataKeep[is.na(data.Used[,AnalyticVars[i]])] <- F
+    dataKeep[is.na(dataUsed[,AnalyticVars[i]])] <- F
   #
   if (Groups[1] == "All")
-    groups <- as.character(unique(data.Used[, GroupVar]))
+    groups <- as.character(unique(dataUsed[, GroupVar]))
   else groups <- as.character(Groups)
   #
   #  vector to contain indices of groups, used in plotting
-  GroupIndex <- rep(NA, nrow(data.Used))
-  for (i in 1:nrow(data.Used)) {
-    for (j in 1:length(groups)) if (data.Used[i, GroupVar] == groups[j])
+  GroupIndex <- rep(NA, nrow(dataUsed))
+  for (i in 1:nrow(dataUsed)) {
+    for (j in 1:length(groups)) if (dataUsed[i, GroupVar] == groups[j])
       GroupIndex[i] <- j
   }
   #
@@ -120,36 +120,36 @@ ps_2dPlot <- function (doc = "ps_2dPlot",
   #
   if (is.vector(AnalyticVars)) {  # create AnalyticVars as a matrix or data frame to use default code
     AnalyticVars<-rbind(AnalyticVars,AnalyticVars)
-    n.pairs<-1
+    n_pairs<-1
   }
-  else n.pairs<-nrow(AnalyticVars)
+  else n_pairs<-nrow(AnalyticVars)
   #
   #  set up matrix to store information on points identified as of interest
   #
-  if (Identify)  data.check<-data.Used[1,]  # dummy row to set up information on
+  if (Identify)  dataCheck<-dataUsed[1,]  # dummy row to set up information on
      # identified observations
-     else  data.check <- c(NA, NA)
+     else  dataCheck <- c(NA, NA)
   #
   #   plots by Group
   #
   if (PlotByGroup) {
-#    n.pages <- round(0.01+length(groups)/2, dig = 0)  # number of pages (rounds up with an odd number of groups)
+#    n_pages <- round(0_01+length(groups)/2, dig = 0)  # number of pages (rounds up with an odd number of groups)
     #
-    fn.plot <- function(group,group.j, groupName) {
-      temp <- data.Used[(data.Used[, GroupVar] == groups[group]),]
+    fnPlot <- function(group,group_j, groupName) {
+      temp <- dataUsed[(dataUsed[, GroupVar] == groups[group]),]
       # restrict to observtions with both variables not NA
-      notNA <- !is.na(temp[,AnalyticVars[group.j,1]]) & !is.na(temp[,AnalyticVars[group.j,2]])
+      notNA <- !is.na(temp[,AnalyticVars[group_j,1]]) & !is.na(temp[,AnalyticVars[group_j,2]])
       temp <- temp[notNA,]
       # set up plot
-      rangeX<-range(temp[,AnalyticVars[group.j,1]])
-      rangeY<-range(temp[,AnalyticVars[group.j,2]])
+      rangeX<-range(temp[,AnalyticVars[group_j,1]])
+      rangeY<-range(temp[,AnalyticVars[group_j,2]])
       #
       #  modify ranges if necessary to account for plotting of confidence ellipses
       #
       if (PlotEllipses) {
         for (j in 1:length(Ellipses)) {
-          Covar <- var(temp[,AnalyticVars[group.j,]])
-          Ellipse <- ellipse(x = Covar, centre = apply(temp[,AnalyticVars[group.j,]],
+          Covar <- var(temp[,AnalyticVars[group_j,]])
+          Ellipse <- ellipse(x = Covar, centre = apply(temp[,AnalyticVars[group_j,]],
                              2, mean, na.rm = T), level = Ellipses[j], npoints = 200)
           rangeX<-range(rangeX,Ellipse[,1])
           rangeY<-range(rangeY,Ellipse[,2])
@@ -158,15 +158,15 @@ ps_2dPlot <- function (doc = "ps_2dPlot",
       #
       #  set up plot for specified pair of variables and group
       #
-      plot(type="n", x=rangeX, y=rangeY,xlab=AnalyticVars[group.j,1],
-           ylab=AnalyticVars[group.j,2], main=paste("group",groupName))
+      plot(type="n", x=rangeX, y=rangeY,xlab=AnalyticVars[group_j,1],
+           ylab=AnalyticVars[group_j,2], main=paste("group",groupName))
       #
       #  if specified, plot confidence ellipses
       #
       if (PlotEllipses) {
-        Covar <- var(temp[,AnalyticVars[group.j,]])
+        Covar <- var(temp[,AnalyticVars[group_j,]])
         for (j in 1:length(Ellipses)) {
-          Ellipse <- ellipse(x = Covar, centre = apply(temp[,AnalyticVars[group.j,]],
+          Ellipse <- ellipse(x = Covar, centre = apply(temp[,AnalyticVars[group_j,]],
                                                        2, mean, na.rm = T), level = Ellipses[j],
                              npoints = 200)
           lines(Ellipse, lty=1)
@@ -174,40 +174,40 @@ ps_2dPlot <- function (doc = "ps_2dPlot",
       }  # end of code for PlotEllipses=T
       #
       if (PlotPoints) {
-        points(temp[,AnalyticVars[group.j,]])
+        points(temp[,AnalyticVars[group_j,]])
         if ( Identify)  {
-          index<-identify(x=temp[,AnalyticVars[group.j,1]],y=temp[,AnalyticVars[group.j,2]] ) # row numbers identified
-          data.check<-rbind(data.check,temp[index,])  # add these rows to data.check
+          index<-identify(x=temp[,AnalyticVars[group_j,1]],y=temp[,AnalyticVars[group_j,2]] ) # row numbers identified
+          dataCheck<-rbind(dataCheck,temp[index,])  # add these rows to dataCheck
         }
       }
       if (LowessLine) {
-        if (is.na(Lowess.f)) lowess.fit<-lowess(temp[,AnalyticVars[group.j,]])
-        else  lowess.fit<-lowess(temp[,AnalyticVars[group.j,]],f=Lowess.f)
-        lines(lowess.fit)
+        if (is.na(Lowess_f)) lowess_fit<-lowess(temp[,AnalyticVars[group_j,]])
+        else  lowess_fit<-lowess(temp[,AnalyticVars[group_j,]],f=Lowess_f)
+        lines(lowess_fit)
       }
       if (KernelSmooth) {
-        kernel.fit<-ksmooth(x=temp[,AnalyticVars[group.j,1]],y=temp[,AnalyticVars[group.j,2]],"normal",
-                            bandwidth=sum(range(temp[,AnalyticVars[group.j,]][,1])*c(-1,1))*KernelWidth)
-        lines(kernel.fit)
+        kernel_fit<-ksmooth(x=temp[,AnalyticVars[group_j,1]],y=temp[,AnalyticVars[group_j,2]],"normal",
+                            bandwidth=sum(range(temp[,AnalyticVars[group_j,]][,1])*c(-1,1))*KernelWidth)
+        lines(kernel_fit)
       }
       if (PlotHulls)  {
-        hull.pts <- chull(temp[,AnalyticVars[group.j],])
-        hull.pts <- c(hull.pts, hull.pts[1])
-        lines(temp[hull.pts,])
+        hull_pts <- chull(temp[,AnalyticVars[group_j],])
+        hull_pts <- c(hull_pts, hull_pts[1])
+        lines(temp[hull_pts,])
       }
-      if (Identify)  data.check  # return data frame data.check with identified points
+      if (Identify)  dataCheck  # return data frame dataCheck with identified points
     }
     par(mfrow = c(2, 2))
-    for (i.group in 1:length(groups)) {
-      i.plot<-0  # initialize counter for number of plot panes
-       for (k in 1:n.pairs) {
-        if (!Identify)  fn.plot(group=i.group,group.j=k,groupName=groups[i.group])
-        if ( Identify)  data.check<-fn.plot(group=i.group,group.j=k,groupName=groups[i.group])
-        i.plot <- i.plot + 1
-       if ((i.plot == 4) | (i.plot == nrow(AnalyticVars))) browser()  # allow user to look at page
+    for (i_group in 1:length(groups)) {
+      i_plot<-0  # initialize counter for number of plot panes
+       for (k in 1:n_pairs) {
+        if (!Identify)  fnPlot(group=i_group,group_j=k,groupName=groups[i_group])
+        if ( Identify)  dataCheck<-fnPlot(group=i_group,group_j=k,groupName=groups[i_group])
+        i_plot <- i_plot + 1
+       if ((i_plot == 4) | (i_plot == nrow(AnalyticVars))) browser()  # allow user to look at page
        } # end of loop on k
-      if (nrow(AnalyticVars) != 2) plot.new() # new page for next group
-    }  # end of loop on i.group
+      if (nrow(AnalyticVars) != 2) plot_new() # new page for next group
+    }  # end of loop on i_group
   }  # end of code for plotting by group
   #
   #  all groups on one plot
@@ -218,18 +218,18 @@ ps_2dPlot <- function (doc = "ps_2dPlot",
       if (length(Colors) < length(groups))  stop("fewer colors specified than the number of groups")
     }
     #
-    for (j in 1:n.pairs) {
+    for (j in 1:n_pairs) {
       # set up plot for this pair of variables
       par(mfrow=c(1,1))
-      temp<-data.Used[,AnalyticVars[j,]]
+      temp<-dataUsed[,AnalyticVars[j,]]
       rangeX<-range(temp[,1])
       rangeY<-range(temp[,2])
       if (PlotEllipses) {
         for (k in 1:length(Ellipses)) {
-          for (i.group in 1:length(groups)) {
-            temp.i <- data.Used[data.Used[, GroupVar] == groups[i.group],AnalyticVars[j,]]
-            Covar <- var(temp.i)
-            Ellipse <- ellipse(x = Covar, centre = apply(temp.i,
+          for (i_group in 1:length(groups)) {
+            temp_i <- dataUsed[dataUsed[, GroupVar] == groups[i_group],AnalyticVars[j,]]
+            Covar <- var(temp_i)
+            Ellipse <- ellipse(x = Covar, centre = apply(temp_i,
                                                          2, mean, na.rm = T), level = Ellipses[k], npoints = 200)
             rangeX<-range(rangeX,Ellipse[,1])
             rangeY<-range(rangeY,Ellipse[,2])
@@ -247,43 +247,43 @@ ps_2dPlot <- function (doc = "ps_2dPlot",
           legend(x = legendLoc, legend = groups, pch = 0:(length(groups) - 1), col = Colors[1:length(groups)], bty = "n")
         else legend(x = legendLoc, legend = groups, pch = 0:(length(groups) - 1), bty = "n")
       }
-      for (i.group in 1:length(groups)) {
-        temp.i <- data.Used[data.Used[, GroupVar] == groups[i.group],]
+      for (i_group in 1:length(groups)) {
+        temp_i <- dataUsed[dataUsed[, GroupVar] == groups[i_group],]
         if (PlotMedians) {
-          medians<- apply(temp.i[,AnalyticVars[j,]],2,median, na.rm = T)
-          text(x = medians[1], y = medians[2], labels = groups[i.group], cex = 0.75, adj = 0.5)
+          medians<- apply(temp_i[,AnalyticVars[j,]],2,median, na.rm = T)
+          text(x = medians[1], y = medians[2], labels = groups[i_group], cex = 0.75, adj = 0.5)
         }  # end of code for PlotMediams
-        if (PlotPoints) {points(x=temp.i[,AnalyticVars[j,1]],y=temp.i[,AnalyticVars[j,2]],pch=(i.group-1), col = Colors[i.group])
+        if (PlotPoints) {points(x=temp_i[,AnalyticVars[j,1]],y=temp_i[,AnalyticVars[j,2]],pch=(i_group-1), col = Colors[i_group])
           if ( Identify)  {
-            index<-identify(x=temp.i[,AnalyticVars[j,1]],y=temp.i[,AnalyticVars[j,2]]) # row numbers identified
-            data.check<-rbind(data.check,temp.i[index,])  # add these rows to data.check
+            index<-identify(x=temp_i[,AnalyticVars[j,1]],y=temp_i[,AnalyticVars[j,2]]) # row numbers identified
+            dataCheck<-rbind(dataCheck,temp_i[index,])  # add these rows to dataCheck
           }
         }
         #
         if (LowessLine) {
-          if (is.na(Lowess.f)) lowess.fit<-lowess(x=temp.i[,AnalyticVars[j,1]],y=temp.i[,AnalyticVars[j,2]])
-          else  lowess.fit<-lowess(x=temp.i[,AnalyticVars[j,1]],y=temp.i[,AnalyticVars[j,2]],f=Lowess.f)
-          lines(lowess.fit,col=Colors[i.group])
+          if (is.na(Lowess_f)) lowess_fit<-lowess(x=temp_i[,AnalyticVars[j,1]],y=temp_i[,AnalyticVars[j,2]])
+          else  lowess_fit<-lowess(x=temp_i[,AnalyticVars[j,1]],y=temp_i[,AnalyticVars[j,2]],f=Lowess_f)
+          lines(lowess_fit,col=Colors[i_group])
         }
         if (KernelSmooth) {
-          kernel.fit<-ksmooth(x=temp.i[,AnalyticVars[j,1]],y=temp.i[,AnalyticVars[j,2]],"normal",
-                              bandwidth=sum(range(temp.i[,AnalyticVars[j,1]])*c(-1,1))*KernelWidth)
-          lines(kernel.fit,col=Colors[i.group])
+          kernel_fit<-ksmooth(x=temp_i[,AnalyticVars[j,1]],y=temp_i[,AnalyticVars[j,2]],"normal",
+                              bandwidth=sum(range(temp_i[,AnalyticVars[j,1]])*c(-1,1))*KernelWidth)
+          lines(kernel_fit,col=Colors[i_group])
         }
         if (PlotHulls)  {
-          hull.pts <- chull(temp.i[,AnalyticVars[j,]])
-          hull.pts <- c(hull.pts, hull.pts[1])
-          lines(temp.i[hull.pts,AnalyticVars[j,]],col=Colors[i.group])
+          hull_pts <- chull(temp_i[,AnalyticVars[j,]])
+          hull_pts <- c(hull_pts, hull_pts[1])
+          lines(temp_i[hull_pts,AnalyticVars[j,]],col=Colors[i_group])
         }
         if (PlotEllipses) {
           for (k in 1:length(Ellipses)) {
-            Covar <- var(temp.i[,AnalyticVars[j,]])
-            Ellipse <- ellipse(x = Covar, centre = apply(temp.i[,AnalyticVars[j,]],2, mean, na.rm = T),
+            Covar <- var(temp_i[,AnalyticVars[j,]])
+            Ellipse <- ellipse(x = Covar, centre = apply(temp_i[,AnalyticVars[j,]],2, mean, na.rm = T),
                                level = Ellipses[k], npoints = 200)
-            lines(Ellipse, lty=1,col=Colors[i.group])
+            lines(Ellipse, lty=1,col=Colors[i_group])
           }
         }  # end of code to plot ellipses
-      } # end of loop on i.group
+      } # end of loop on i_group
       browser()  # pause to examine and save plot for jth set of variables
     }  # end of code for jth set of variables
   }  #  end of code for plots with all groups on one plot for each pair of variables
@@ -291,43 +291,43 @@ ps_2dPlot <- function (doc = "ps_2dPlot",
   #  return documentation and results if identified points
   #
   if (Identify)  {
-    if (nrow(data.check) == 1)  data.check <- NA
-    if (nrow(data.check) > 1) {
-      data.check<-data.check[-1,]  #  remove dummy first row
+    if (nrow(dataCheck) == 1)  dataCheck <- NA
+    if (nrow(dataCheck) > 1) {
+      dataCheck<-dataCheck[-1,]  #  remove dummy first row
     #
-    #  remove duplicated observations from data.check
+    #  remove duplicated observations from dataCheck
     #
-      if (ID != " ") index<-duplicated(data.check[,ID])
-      else  index<-duplicated(data.check[,c(GroupVar,AnalyticVars)])
-      if (length(index) > 0)  data.check<-data.check[!index,]
+      if (ID != " ") index<-duplicated(dataCheck[,ID])
+      else  index<-duplicated(dataCheck[,c(GroupVar,AnalyticVars)])
+      if (length(index) > 0)  dataCheck<-dataCheck[!index,]
       if (ID != " ") {
-        index.ID<-order(data.check[,ID])
-        data.check<-data.check[index.ID,]
+        index_ID<-order(dataCheck[,ID])
+        dataCheck<-dataCheck[index_ID,]
         }
-      } # end of code for nrow(data.check) > 1
+      } # end of code for nrow(dataCheck) > 1
     } # end of code for Identify = T
   #
-  fcn.date.ver<-paste(doc,date(),R.Version()$version.string)
+  fcn_date_ver<-paste(doc,date(),R.Version()$version.string)
   #
-  smoothing<-c(Lowess.f,KernelWidth)
-  names(smoothing)<-c("Lowess.f","Kernelwidth")
-  params.numeric<-list(smoothing=smoothing,ellipse.pct=Ellipses)
-  params.grouping<-list(GroupVar,Groups)
-  names(params.grouping)<-c("GroupVar","Groups")
-  params.logical<-c(PlotByGroup,PlotPoints,PlotEllipses,PlotHulls,PlotMedians,LowessLine,
+  smoothing<-c(Lowess_f,KernelWidth)
+  names(smoothing)<-c("Lowess_f","Kernelwidth")
+  params_numeric<-list(smoothing=smoothing,ellipse_pct=Ellipses)
+  params_grouping<-list(GroupVar,Groups)
+  names(params_grouping)<-c("GroupVar","Groups")
+  params_logical<-c(PlotByGroup,PlotPoints,PlotEllipses,PlotHulls,PlotMedians,LowessLine,
                     KernelSmooth,Identify,PlotColors)
-  names(params.logical)<-c("PlotByGroup","PlotPoints","PlotEllipses","PlotHulls","PlotMedians",
+  names(params_logical)<-c("PlotByGroup","PlotPoints","PlotEllipses","PlotHulls","PlotMedians",
                            "LowessLine","KernelSmooth","Identify","PlotColors")
-  params<-list(grouping=params.grouping,logical=params.logical,numeric=params.numeric)
+  params<-list(grouping=params_grouping,logical=params_logical,numeric=params_numeric)
   #
-  if (sum(dataKeep) < nrow(data.Used)) dataNA <- data.Used[!dataKeep,]
+  if (sum(dataKeep) < nrow(dataUsed)) dataNA <- dataUsed[!dataKeep,]
   else dataNA <- NA
   #
-  list(       usage=fcn.date.ver,
-              dataUsed=data.Used,
+  list(       usage=fcn_date_ver,
+              dataUsed=dataUsed,
               dataNA=dataNA,
               params=params,
               analyticVars=AnalyticVars,
-              data.check=data.check,
+              dataCheck=dataCheck,
               location=folder)
 }

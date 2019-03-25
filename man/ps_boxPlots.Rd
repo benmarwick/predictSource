@@ -35,14 +35,14 @@ A list with the following components:
 }
 }
 \description{
-Box plots of specified analytic values, by specified groups.
+Box plots of specified analytic values, by specified groups_
 }
 \section{DETAILS}{
 
 If the function creates more than one plot, the code stops after each is displayed; enter c
-(continue) at the prompt to display the next plot.  If Groups specifies only one group, the code
-for that group is not displayed under a plot.  If an observation has a variable value that is
- missing, the variables without missing values are used in the corresponding box plots.
+(continue) at the prompt to display the next plot_  If Groups specifies only one group, the code
+for that group is not displayed under a plot_  If an observation has a variable value that is
+ missing, the variables without missing values are used in the corresponding box plots_
 }
 
 \examples{
@@ -57,7 +57,7 @@ analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 ObsidianSources<-ObsidianSources[,c("Code",analyticVars)]
 Artifacts <- ObsidianArtifacts[,c("Code",analyticVars)]
 SourcesCode <- as.vector(ObsidianSources[,"Code"], mode="character")
-ArtifactsCode <- as.vector(paste(Artifacts[,"Code"],"A",sep="."),mode="character")
+ArtifactsCode <- as.vector(paste(Artifacts[,"Code"],"A",sep="_"),mode="character")
 Codes <- c(SourcesCode, ArtifactsCode)
 SourcesArtifacts <- data.frame(rbind(ObsidianSources,Artifacts)[,analyticVars], Code = Codes)
 boxPlots<-ps_boxPlots(data=SourcesArtifacts, GroupVar="Code", Groups="All",AnalyticVars="Rb",Nrow=1,Ncol=1)

@@ -5,11 +5,11 @@
 #' @param doc A string documenting use added to the output list, default is the function name
 #' @param data A matrix or data frame containing the data to be analyzed
 #' @param GroupVar The name for variable defining grouping (required)
-#' @param Groups A vector of values of group variable for which plots are to be done.
+#' @param Groups A vector of values of group variable for which plots are to be done_
 #'    if "All": use all groups; if " ": no grouping
 #' @param AnalyticVars A vector of names (character values) of analytic results
-#' @param Span A value >0, <=1 defining the proportion of data used to estimate the lowess smooth.
-#' The default value (2/3) is the default value for the lowess function.
+#' @param Span A value >0, <=1 defining the proportion of data used to estimate the lowess smooth_
+#' The default value (2/3) is the default value for the lowess function_
 #'
 #' @section  DETAILS:
 #'  The function produces a pairs plot with a lowess smooth through the scatter plot for
@@ -50,47 +50,47 @@ ps_pairsPlot <-
            Span = 2 / 3) {
     #
     if ((Groups[1] != " ") & (Groups[1] != "All")) {
-      Plot.rows <- (data[, GroupVar] %in% Groups)
-      data.Plot <- data[Plot.rows, c(GroupVar, AnalyticVars)]
+      Plot_rows <- (data[, GroupVar] %in% Groups)
+      dataPlot <- data[Plot_rows, c(GroupVar, AnalyticVars)]
     }
-    else data.Plot <- data
+    else dataPlot <- data
     #
-    sortOnGroup <- order(data.Plot[,GroupVar])
-    data.Plot <- data.Plot[sortOnGroup,]
+    sortOnGroup <- order(dataPlot[,GroupVar])
+    dataPlot <- dataPlot[sortOnGroup,]
     #
-    dataKeep <- rep(T, nrow(data.Plot)) # will contain indices for observations with
+    dataKeep <- rep(T, nrow(dataPlot)) # will contain indices for observations with
     # no missing values
     for (i in 1:length(AnalyticVars))
-      dataKeep[is.na(data.Plot[,AnalyticVars[i]])] <- F
+      dataKeep[is.na(dataPlot[,AnalyticVars[i]])] <- F
     #
     if (Groups[1] == " ")
-      pairs(data.Plot[, AnalyticVars], panel = panel.smooth,
+      pairs(dataPlot[, AnalyticVars], panel = panel.smooth,
             span = Span)
     else {
       if (Groups[1] == "All")
-        groups <- unique(data.Plot[, GroupVar])
+        groups <- unique(dataPlot[, GroupVar])
       if (Groups[1] != "All")
         groups <- Groups
       for (i in 1:length(groups)) {
-        rows.temp <- (data.Plot[, GroupVar] %in% groups[i])
-        data.temp <- data.Plot[rows.temp, AnalyticVars]
-        pairs(data.temp, panel = panel.smooth, span = Span,
+        rows_temp <- (dataPlot[, GroupVar] %in% groups[i])
+        data_temp <- dataPlot[rows_temp, AnalyticVars]
+        pairs(data_temp, panel = panel.smooth, span = Span,
               main = paste("group", groups[i]))
         browser()
        }
     }
-    fcn.date.ver<-paste(doc,date(),R.Version()$version.string)
+    fcn_date_ver<-paste(doc,date(),R.Version()$version.string)
     #
-    params.numeric<-Span
-    names(params.numeric)<-"Span"
-    params.grouping<-list(GroupVar,Groups)
-    names(params.grouping)<-c("GroupVar","Groups")
-    params<-list(grouping=params.grouping, numeric=params.numeric)
+    params_numeric<-Span
+    names(params_numeric)<-"Span"
+    params_grouping<-list(GroupVar,Groups)
+    names(params_grouping)<-c("GroupVar","Groups")
+    params<-list(grouping=params_grouping, numeric=params_numeric)
     #
-    if (sum(dataKeep) < nrow(data.Plot)) dataNA <- data.Plot[!dataKeep,]
+    if (sum(dataKeep) < nrow(dataPlot)) dataNA <- dataPlot[!dataKeep,]
     else dataNA <- NA
     #
-    list(usage=fcn.date.ver,
+    list(usage=fcn_date_ver,
               dataUsed=data,
               dataNA = dataNA,
               params=params,

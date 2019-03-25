@@ -1,6 +1,6 @@
 #' ps_boxPlots
 #'
-#' Box plots of specified analytic values, by specified groups.
+#' Box plots of specified analytic values, by specified groups_
 #'
 #' @param doc A string documenting use, included in list returned; default value is the function name
 #' @param data A data frame or matrix with data to be analyzed
@@ -23,9 +23,9 @@
 #'
 #' @section  DETAILS:
 #' If the function creates more than one plot, the code stops after each is displayed; enter c
-#' (continue) at the prompt to display the next plot.  If Groups specifies only one group, the code
-#' for that group is not displayed under a plot.  If an observation has a variable value that is
-#'  missing, the variables without missing values are used in the corresponding box plots.
+#' (continue) at the prompt to display the next plot_  If Groups specifies only one group, the code
+#' for that group is not displayed under a plot_  If an observation has a variable value that is
+#'  missing, the variables without missing values are used in the corresponding box plots_
 #'
 #' @examples
 #' data(ObsidianSources)
@@ -39,7 +39,7 @@
 #' ObsidianSources<-ObsidianSources[,c("Code",analyticVars)]
 #' Artifacts <- ObsidianArtifacts[,c("Code",analyticVars)]
 #' SourcesCode <- as.vector(ObsidianSources[,"Code"], mode="character")
-#' ArtifactsCode <- as.vector(paste(Artifacts[,"Code"],"A",sep="."),mode="character")
+#' ArtifactsCode <- as.vector(paste(Artifacts[,"Code"],"A",sep="_"),mode="character")
 #' Codes <- c(SourcesCode, ArtifactsCode)
 #' SourcesArtifacts <- data.frame(rbind(ObsidianSources,Artifacts)[,analyticVars], Code = Codes)
 #' boxPlots<-ps_boxPlots(data=SourcesArtifacts, GroupVar="Code", Groups="All",AnalyticVars="Rb",Nrow=1,Ncol=1)
@@ -56,58 +56,58 @@ ps_boxPlots <-
            Ncol) {
 
     if ((Groups[1] != " ") & (Groups[1] != "All")) {
-      BP.rows <- (data[, GroupVar] %in% Groups)
-      data.BP <- data[BP.rows, c(GroupVar, AnalyticVars)]
+      BP_rows <- (data[, GroupVar] %in% Groups)
+      dataBP <- data[BP_rows, c(GroupVar, AnalyticVars)]
     }
-    else data.BP <- data
+    else dataBP <- data
     #
-    sortGroup<-order(data.BP[,GroupVar])
-    data.BP <- data.BP[sortGroup,]
+    sortGroup<-order(dataBP[,GroupVar])
+    dataBP <- dataBP[sortGroup,]
     #
-    dataKeep <- rep(T, nrow(data.BP)) # will contain indices for observations with
+    dataKeep <- rep(T, nrow(dataBP)) # will contain indices for observations with
     # no missing values, used only in list returned
     for (i in 1:length(AnalyticVars))
-      dataKeep[is.na(data.BP[,AnalyticVars[i]])] <- F
+      dataKeep[is.na(dataBP[,AnalyticVars[i]])] <- F
     #
     if (Groups[1] != " ") {
       par(mfrow = c(Nrow, Ncol))
-      plots.per.page <- Nrow * Ncol
-      plot.index <- 0
-      n.plots <- length(AnalyticVars)
-      n.plots.remaining <- n.plots
-      for (i in 1:(round(n.plots/plots.per.page) + 1)) {
-        for (j in 1:min(plots.per.page, n.plots.remaining)) {
-          if (n.plots.remaining > 0) {
-            analysis.no <- plot.index + j
-            boxplot(split(data.BP[, AnalyticVars[analysis.no]],
-                          as.vector(data.BP[, GroupVar])), ylim = c(0,
-                          max(data.BP[, AnalyticVars[analysis.no]],
-                          na.rm = T)), notch = T, main = paste("Analysis of ",
-                          AnalyticVars[analysis.no], sep = ""), sub = "Code for group")
+      plots_per_page <- Nrow * Ncol
+      plot_index <- 0
+      n_plots <- length(AnalyticVars)
+      n_plots_remaining <- n_plots
+      for (i in 1:(round(n_plots/plots_per_page) + 1)) {
+        for (j in 1:min(plots_per_page, n_plots_remaining)) {
+          if (n_plots_remaining > 0) {
+            analysis_no <- plot_index + j
+            boxplot(split(dataBP[, AnalyticVars[analysis_no]],
+                          as.vector(dataBP[, GroupVar])), ylim = c(0,
+                          max(dataBP[, AnalyticVars[analysis_no]],
+                          na_rm = T)), notch = T, main = paste("Analysis of ",
+                          AnalyticVars[analysis_no], sep = ""), sub = "Code for group")
           }
         }
-        plot.index <- plot.index + plots.per.page
-        n.plots.remaining <- n.plots.remaining - plots.per.page
-        if (n.plots.remaining > 0) browser()
+        plot_index <- plot_index + plots_per_page
+        n_plots_remaining <- n_plots_remaining - plots_per_page
+        if (n_plots_remaining > 0) browser()
       }
     }
     if (Groups[1] == " ") {
-      boxplot(data.BP[, AnalyticVars],
-              ylim = c(0, max(data.BP[,AnalyticVars], na.rm = T)), notch = T, sub = "Analysis")
+      boxplot(dataBP[, AnalyticVars],
+              ylim = c(0, max(dataBP[,AnalyticVars], na_rm = T)), notch = T, sub = "Analysis")
     }
-    fcn.date.ver<-paste(doc,date(),R.Version()$version.string)
+    fcn_date_ver<-paste(doc,date(),R.Version()$version.string)
     #
-    params.numeric<-c(Nrow,Ncol)
-    names(params.numeric)<-c("Nrow","Ncol")
-    params.grouping<-list(GroupVar,Groups)
-    names(params.grouping)<-c("GroupVar","Groups")
-    params<-list(grouping=params.grouping, numeric=params.numeric)
+    params_numeric<-c(Nrow,Ncol)
+    names(params_numeric)<-c("Nrow","Ncol")
+    params_grouping<-list(GroupVar,Groups)
+    names(params_grouping)<-c("GroupVar","Groups")
+    params<-list(grouping=params_grouping, numeric=params_numeric)
     #
-    if (sum(dataKeep) < nrow(data.BP)) dataNA <- data.BP[!dataKeep,]
+    if (sum(dataKeep) < nrow(dataBP)) dataNA <- dataBP[!dataKeep,]
     else dataNA <- NA
     #
-   list(usage=fcn.date.ver,
-              dataUsed=data.BP,
+   list(usage=fcn_date_ver,
+              dataUsed=dataBP,
               dataNA = dataNA,
               params=params,
               analyticVars=AnalyticVars)

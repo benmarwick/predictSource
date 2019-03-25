@@ -7,20 +7,20 @@
 #' @param doc A string with documentation, default is the function name
 #' @param data AR matrix or data frame containing the data to be analyzedfn
 #' @param GroupVar The name for the variable defining grouping; if " ", no grouping
-#' @param Groups Character valued defining the the groups used.  Options are a Vector of values
+#' @param Groups Character valued defining the the groups used_  Options are a Vector of values
 #'  of the group variable; "All" (the default; use all groups); " ", no grouping
 #' @param ByGroup  If T (the default), results are returned for each group in Groups; if F, groups are combined
 #' @param ID The name of a variable with a lab ID (used for sorting data), default is " "
 #' @param AnalyticVars A vector of names (character values) of analytic results
 #' @param Transpose See Details
-#' @param CV.digits The number of significant digits in CV estimates, default is 2
-#' @param corr.digits The number of significant digits in correlation estimates, default is 2
+#' @param CV_digits The number of significant digits in CV estimates, default is 2
+#' @param corr_digits The number of significant digits in correlation estimates, default is 2
 #' @param plotCorrs Logical, if T (the default), create a matrix of plots describing correlations
 #' @param folder  The path to the folder in which data frames will be saved; default is " "
 #'
 #' @section Details:
 #'   If Transpose=T, the correlation matrix has rows defined by the group variable and
-#'    columns defined by the pairs of analytic variables.  If Transpose=F,
+#'    columns defined by the pairs of analytic variables_  If Transpose=F,
 #'     the rows are defined by pairs of analytic variables and the columns are defined by the groups.
 #
 #' @return
@@ -42,13 +42,13 @@
 #' #  All sources combined
 #' data(ObsidianSources)
 #' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-#' CV.corr<-ps_CV_corr(data = ObsidianSources, GroupVar="Code", Groups = "All",
+#' CV_corr<-ps_CV_corr(data = ObsidianSources, GroupVar="Code", Groups = "All",
 #'  AnalyticVars=analyticVars, ByGroup=F)
 #'
 #' #  By source, restricted to two sources
 #' data(ObsidianSources)
 #' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-#' CV.corr<-ps_CV_corr(data = ObsidianSources, GroupVar="Code", Groups = c("A","B"),
+#' CV_corr<-ps_CV_corr(data = ObsidianSources, GroupVar="Code", Groups = c("A","B"),
 #'  AnalyticVars=analyticVars, ByGroup=T)
 #'
 #' @import  corrplot
@@ -64,29 +64,29 @@ ps_CV_corr <-
            ID = " ",
            AnalyticVars,
            Transpose = T,
-           CV.digits = 2,
-           corr.digits = 2,
+           CV_digits = 2,
+           corr_digits = 2,
            plotCorrs = T,
            folder = " ")
     {
     if ((Groups[1] != " ") & (Groups[1] != "All")) {
-      Use.rows <- (data[, GroupVar] %in% Groups)
-      data.Used <- data[Use.rows, ]
+      Use_rows <- (data[, GroupVar] %in% Groups)
+      dataUsed <- data[Use_rows, ]
       sources <- Groups
       }
-    else  {data.Used <- data
+    else  {dataUsed <- data
           sources <- unique(data[,GroupVar])
     }
     #
     #  sort on GroupVar and ID if specified
     #
     if (GroupVar[1] != " ") {
-      rowsSort <- order(data.Used[,GroupVar])
-      data.Used <- data.Used[rowsSort,]
+      rowsSort <- order(dataUsed[,GroupVar])
+      dataUsed <- dataUsed[rowsSort,]
     }
     if (ID[1] != " ") {
-      rowsSort <- order(data.Used[,ID])
-      data.Used <- data.Used[rowsSort,]
+      rowsSort <- order(dataUsed[,ID])
+      dataUsed <- dataUsed[rowsSort,]
     }
     #
      # no grouping
@@ -96,20 +96,20 @@ ps_CV_corr <-
       #  coefficient of variation
       #
       CV <- rep(NA, length(AnalyticVars))
-      means <- apply(data.Used[, AnalyticVars], 2, mean, na.rm=TRUE)
-      std <- sqrt(apply(data.Used[,AnalyticVars], 2, var, na.rm=TRUE))
-      CV <- round(std / means, dig = CV.digits)
+      means <- apply(dataUsed[, AnalyticVars], 2, mean, na.rm=TRUE)
+      std <- sqrt(apply(dataUsed[,AnalyticVars], 2, var, na.rm=TRUE))
+      CV <- round(std / means, dig = CV_digits)
       names(CV) <- AnalyticVars
       #
       #  Spearman correlations
       #
       Corrs <-
         round(cor(
-          x = data.Used[,AnalyticVars],
+          x = dataUsed[,AnalyticVars],
           method = "spearman",
           use = "pairwise.complete.obs"
         ),
-        dig = corr.digits)
+        dig = corr_digits)
       if (plotCorrs) {
         if (Groups[1]=="All")  plotTitle <- "All groups"
         else
@@ -119,7 +119,7 @@ ps_CV_corr <-
           for (iGroup in (2:length(Groups)))
               plotTitle <- paste(plotTitle,"  ",Groups[iGroup],sep="")
         }
-        corrplot(cor(data.Used[,AnalyticVars],method="s"),type="upper",method="ellipse",
+        corrplot(cor(dataUsed[,AnalyticVars],method="s"),type="upper",method="ellipse",
                  title=plotTitle)
         } # end of code to plot correlations
     } # end of code for no grouping
@@ -130,26 +130,26 @@ ps_CV_corr <-
       # ByGroup = T
       #
       if (Groups[1] == "All")
-        groups <- unique(data.Used[, GroupVar])
+        groups <- unique(dataUsed[, GroupVar])
       if (Groups[1] != "All")
         groups <- Groups
       #
-      compute.CV <-
+      compute_CV <-
         matrix(NA,
                nrow = length(groups),
                ncol = length(AnalyticVars))  # matrix to store values of CV for each group
       for (i in 1:length(groups)) {
-        rows.i <-
-          (data.Used[, GroupVar] %in% groups[i])  # rows from group i
-        data.i <-
-          data.Used[rows.i, AnalyticVars]  # data restricted to group i
+        rows_i <-
+          (dataUsed[, GroupVar] %in% groups[i])  # rows from group i
+        data_i <-
+          dataUsed[rows_i, AnalyticVars]  # data restricted to group i
         #
         #  coefficients of variation, with NA observations removed
         #
-        means.i <- apply(data.i[,AnalyticVars], 2, mean, na.rm = TRUE)
-        std.i <- sqrt(apply(data.i[,AnalyticVars], 2, var, na.rm = TRUE))
-        compute.CV[i,] <- round(std.i / means.i, dig = CV.digits)
-        CV <- data.frame(groups, compute.CV)
+        means_i <- apply(data_i[,AnalyticVars], 2, mean, na.rm = TRUE)
+        std_i <- sqrt(apply(data_i[,AnalyticVars], 2, var, na.rm = TRUE))
+        compute_CV[i,] <- round(std_i / means_i, dig = CV_digits)
+        CV <- data.frame(groups, compute_CV)
         colnames(CV) <- c(GroupVar, AnalyticVars)
         #
         # Spearman correlations, with NA observations removed
@@ -166,10 +166,10 @@ ps_CV_corr <-
                               "/", AnalyticVars[(i + 1):length(AnalyticVars)], sep = ""))
       rownames(Corrs) <- Rows
       # data frame with Code and desired elements
-      DataEls <- data.Used[, "Code"]
+      DataEls <- dataUsed[, "Code"]
       #
       for (i in 1:length(AnalyticVars))
-        DataEls <- data.frame(DataEls, data.Used[, AnalyticVars[i]])
+        DataEls <- data.frame(DataEls, dataUsed[, AnalyticVars[i]])
       colnames(DataEls) <- c("Code", AnalyticVars)
       # compute correlations and store in Corrs
       for (j in 1:length(groups)) {
@@ -180,7 +180,7 @@ ps_CV_corr <-
             method = "spearman",
             use = "pairwise.complete.obs"
           ),
-          dig = corr.digits)
+          dig = corr_digits)
         # load correlations into Corrs
         Row <- 0  # row in which to load correlations
         for (k in 1:(length(AnalyticVars) - 1)) {
@@ -193,11 +193,11 @@ ps_CV_corr <-
         }  # end of loop on i
       if (plotCorrs) {
         for (i in 1:length(sources)) {
-          rows.i <-
-            (data.Used[, GroupVar] %in% groups[i])  # rows from group i
-          data.i <-
-            data.Used[rows.i, AnalyticVars]  # data restricted to group i
-          corrplot(cor(data.i[,AnalyticVars],method="s"),type="upper",method="ellipse",
+          rows_i <-
+            (dataUsed[, GroupVar] %in% groups[i])  # rows from group i
+          data_i <-
+            dataUsed[rows_i, AnalyticVars]  # data restricted to group i
+          corrplot(cor(data_i[,AnalyticVars],method="s"),type="upper",method="ellipse",
                    title=groups[i])
           browser()
         } # end of loop on i
@@ -207,26 +207,26 @@ ps_CV_corr <-
     if (Transpose == T)
       Corrs <- t(Corrs)
     #
-    fcn.date.ver<-c(doc,date(),R.Version()$version.string)
+    fcn_date_ver<-c(doc,date(),R.Version()$version.string)
     #
-    params.numeric<-c(digits.CV=CV.digits,digits.corr=corr.digits)
-    names(params.numeric)<-c("CV.digits","corr.digits")
-    params.grouping<-list(GroupVar,Groups)
-    names(params.grouping)<-c("GroupVar","Groups")
-    params.logical<-c(ByGroup,Transpose,plotCorrs)
-    names(params.logical)<-c("ByGroup","Transpose","plotCorrs")
-    params<-list(grouping=params.grouping,logical=params.logical,numeric=params.numeric)
+    params_numeric<-c(digits_CV=CV_digits,digits_corr=corr_digits)
+    names(params_numeric)<-c("CV_digits","corr_digits")
+    params_grouping<-list(GroupVar,Groups)
+    names(params_grouping)<-c("GroupVar","Groups")
+    params_logical<-c(ByGroup,Transpose,plotCorrs)
+    names(params_logical)<-c("ByGroup","Transpose","plotCorrs")
+    params<-list(grouping=params_grouping,logical=params_logical,numeric=params_numeric)
     #
-    dataKeep <- rep(T, nrow(data.Used)) # will contain indices for observations with
+    dataKeep <- rep(T, nrow(dataUsed)) # will contain indices for observations with
     # no missing values
     for (i in 1:length(AnalyticVars))
-      dataKeep[is.na(data.Used[,AnalyticVars[i]])] <- F
+      dataKeep[is.na(dataUsed[,AnalyticVars[i]])] <- F
     #
-    if (sum(dataKeep) < nrow(data.Used)) dataNA <- data.Used[!dataKeep,]
+    if (sum(dataKeep) < nrow(dataUsed)) dataNA <- dataUsed[!dataKeep,]
       else dataNA <- NA
     #
-    list(usage=fcn.date.ver,
-                dataUsed=data.Used,
+    list(usage=fcn_date_ver,
+                dataUsed=dataUsed,
                 dataNA = dataNA,
                 params=params,
                 analyticVars=AnalyticVars,

@@ -5,8 +5,8 @@
 \title{ps_CV_corr}
 \usage{
 ps_CV_corr(doc = "ps_CV_corr", data, GroupVar, Groups = "All",
-  ByGroup = T, ID = " ", AnalyticVars, Transpose = T, CV.digits = 2,
-  corr.digits = 2, plotCorrs = T, folder = " ")
+  ByGroup = T, ID = " ", AnalyticVars, Transpose = T, CV_digits = 2,
+  corr_digits = 2, plotCorrs = T, folder = " ")
 }
 \arguments{
 \item{doc}{A string with documentation, default is the function name}
@@ -15,7 +15,7 @@ ps_CV_corr(doc = "ps_CV_corr", data, GroupVar, Groups = "All",
 
 \item{GroupVar}{The name for the variable defining grouping; if " ", no grouping}
 
-\item{Groups}{Character valued defining the the groups used.  Options are a Vector of values
+\item{Groups}{Character valued defining the the groups used_  Options are a Vector of values
 of the group variable; "All" (the default; use all groups); " ", no grouping}
 
 \item{ByGroup}{If T (the default), results are returned for each group in Groups; if F, groups are combined}
@@ -26,9 +26,9 @@ of the group variable; "All" (the default; use all groups); " ", no grouping}
 
 \item{Transpose}{See Details}
 
-\item{CV.digits}{The number of significant digits in CV estimates, default is 2}
+\item{CV_digits}{The number of significant digits in CV estimates, default is 2}
 
-\item{corr.digits}{The number of significant digits in correlation estimates, default is 2}
+\item{corr_digits}{The number of significant digits in correlation estimates, default is 2}
 
 \item{plotCorrs}{Logical, if T (the default), create a matrix of plots describing correlations}
 
@@ -56,7 +56,7 @@ Observations with missing values are removed from computations using them.
 \section{Details}{
 
   If Transpose=T, the correlation matrix has rows defined by the group variable and
-   columns defined by the pairs of analytic variables.  If Transpose=F,
+   columns defined by the pairs of analytic variables_  If Transpose=F,
     the rows are defined by pairs of analytic variables and the columns are defined by the groups.
 }
 
@@ -64,13 +64,13 @@ Observations with missing values are removed from computations using them.
 #  All sources combined
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-CV.corr<-ps_CV_corr(data = ObsidianSources, GroupVar="Code", Groups = "All",
+CV_corr<-ps_CV_corr(data = ObsidianSources, GroupVar="Code", Groups = "All",
  AnalyticVars=analyticVars, ByGroup=F)
 
 #  By source, restricted to two sources
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-CV.corr<-ps_CV_corr(data = ObsidianSources, GroupVar="Code", Groups = c("A","B"),
+CV_corr<-ps_CV_corr(data = ObsidianSources, GroupVar="Code", Groups = c("A","B"),
  AnalyticVars=analyticVars, ByGroup=T)
 
 }

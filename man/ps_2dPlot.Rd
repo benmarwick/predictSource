@@ -5,7 +5,7 @@
 \title{ps_2dPlot}
 \usage{
 ps_2dPlot(doc = "ps_2dPlot", data, GroupVar, ID, Groups, AnalyticVars,
-  PlotByGroup = T, PlotPoints = T, LowessLine = F, Lowess.f = NA,
+  PlotByGroup = T, PlotPoints = T, LowessLine = F, Lowess_f = NA,
   KernelSmooth = F, KernelWidth = 0.3, PlotEllipses = F, PlotHulls = F,
   PlotMedians = F, Ellipses = c(0.95, 0.99), Identify = F,
   PlotColors = F, Colors = c("black", "red", "blue", "green", "purple"),
@@ -21,36 +21,36 @@ ps_2dPlot(doc = "ps_2dPlot", data, GroupVar, ID, Groups, AnalyticVars,
 \item{ID}{The name for the variable with a lab ID, " " if no lab ID is used}
 
 \item{Groups}{A vector of values of the group variable for which plots are to be done;
-if "All", use all groups; grouping is required (cannot be " ").}
+if "All", use all groups; grouping is required (cannot be " ")_}
 
 \item{AnalyticVars}{The names of two analytic variables to be shown in the plots, vector of length 2
-or matrix with 2 columns; if a matrix, the set of plots is produced for each row.}
+or matrix with 2 columns; if a matrix, the set of plots is produced for each row_}
 
-\item{PlotByGroup}{Logical.  The default is T; if F, all groups are on each plot for a pair of variables}
+\item{PlotByGroup}{Logical_  The default is T; if F, all groups are on each plot for a pair of variables}
 
-\item{PlotPoints}{Logical.  If T (the default), all points are plotted; if F, no points are plotted}
+\item{PlotPoints}{Logical_  If T (the default), all points are plotted; if F, no points are plotted}
 
-\item{LowessLine}{Logical. If T, a lowess line is plotted for each group; if F, no line is plotted}
+\item{LowessLine}{Logical_ If T, a lowess line is plotted for each group; if F, no line is plotted}
 
-\item{Lowess.f}{parameter for lowess() less than or equal to 1, defining the range of x-values used;
-if NA (the default), uses the default value of 0.67}
+\item{Lowess_f}{parameter for lowess() less than or equal to 1, defining the range of x-values used;
+if NA (the default), uses the default value of 0_67}
 
-\item{KernelSmooth}{Logical.  If T, a kernel smooth is plotted for each group; if F (the default), no kernel smooth is plotted}
+\item{KernelSmooth}{Logical_  If T, a kernel smooth is plotted for each group; if F (the default), no kernel smooth is plotted}
 
-\item{KernelWidth}{the proportion of the range of x-values used in the kernel smooth; default is 0.3}
+\item{KernelWidth}{the proportion of the range of x-values used in the kernel smooth; default is 0_3}
 
-\item{PlotEllipses}{Logical.  If T, Gaussian confidence ellipses are plotted for each group;
+\item{PlotEllipses}{Logical_  If T, Gaussian confidence ellipses are plotted for each group;
 if F (the default), no ellipses are plotted}
 
 \item{PlotHulls}{if T, the convex hull is drawn for each set of points; if F (the default), no hulls are drawn}
 
 \item{PlotMedians}{if T, the code for each group is plotted at the median of the values for that group; default is F}
 
-\item{Ellipses}{single value or vector of values with confidence values for the ellipses; default is c(0.95,0.99)}
+\item{Ellipses}{single value or vector of values with confidence values for the ellipses; default is c(0_95,0_99)}
 
 \item{Identify}{if T, user can identify points of interest in the plots; default is F}
 
-\item{PlotColors}{ZLogical.  If T, colors are assigned to the groups}
+\item{PlotColors}{ZLogical_  If T, colors are assigned to the groups}
 
 \item{Colors}{single value or vector of color names; if PlotByGroup = F, the vector must have the same number of colors as the number of groups}
 
@@ -69,7 +69,7 @@ A list with the following components:
 \item{params: }{ A list with the values of the grouping, logical and numeric arguments}
 \item{analyticVars: }{ The value of the argument AnalyticVars}
 \item{colors:}{  A vector with the value of the argument Color}
-\item{data.check: }{ If Identify = T, a data frame with the information on user-identified points
+\item{dataCheck: }{ If Identify = T, a data frame with the information on user-identified points
  of interest; value is c(NA,NA) if no points are identified}
 \item{location:}{ The path to a folder in which results will be saved}
  }
@@ -77,7 +77,7 @@ A list with the following components:
 \description{
 Create 2-dimensional data plot or plots.  By default, a page has panes in two rows and
 two columns (but there is a new page for successive groups). The function stops after producing
-each row of each plot.  Enter c ("continue") at the prompt to get the next plot.
+each row of each plot_  Enter c ("continue") at the prompt to get the next plot.
 }
 \section{Details}{
 
@@ -92,14 +92,14 @@ each row of each plot.  Enter c ("continue") at the prompt to get the next plot.
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 plotVars<-rbind(analyticVars[1:2], analyticVars[c(1,5)])
-plot.2d <- ps_2dPlot(data = ObsidianSources, GroupVar = "Code", ID = "ID", Groups = c("A","B"),
+plot_2d <- ps_2dPlot(data = ObsidianSources, GroupVar = "Code", ID = "ID", Groups = c("A","B"),
           AnalyticVars=plotVars, PlotByGroup=T, PlotColors=T, PlotEllipses=T,
           LowessLine=T)
 #
 #  plot one pair of variables with all sources on one plot
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-plot.2d <- ps_2dPlot(data = ObsidianSources, GroupVar = "Code", ID = "ID", Groups = "All",
+plot_2d <- ps_2dPlot(data = ObsidianSources, GroupVar = "Code", ID = "ID", Groups = "All",
           AnalyticVars =analyticVars[1:2], PlotByGroup=F, PlotColors=T, PlotEllipses=T,
           LowessLine=T)
 
