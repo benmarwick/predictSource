@@ -15,7 +15,7 @@
 #' @param folder  The path to the folder in which data frames will be saved; default is " "
 #'
 #' @section  Details:
-#' This function uses the function fn.2dPlot.Gauss().  The function produces p-values
+#' This function uses the function ps_2dPlotGauss().  The function produces p-values
 #'  from univariate and multivariate tests of normality.  It produces Q-Q plots
 #'  of the first two principal components for each group, as well as those plots with bootstrap
 #'  envelopes and the bivariate Q-Q plot if qqPlot=T.
@@ -27,12 +27,12 @@
 #'   \item{dataUsed:}{ The contents of the argument data restricted to the groups used}
 #'   \item{dataNA:}{  A data frame with observations containing a least one missing value
 #'   for an analysis variable, NA if no missing values}
-#'   \item{params.grouping:}{ A list with the values of the arguments GroupVar and Groups}
+#'   \item{params_grouping:}{ A list with the values of the arguments GroupVar and Groups}
 #'   \item{analyticVars:}{ A vector with the value of the argument AnalyticVars}
-#'   \item{params.logical:}{ The value of QQtest}
-#'   \item{p.values:}{ A data frame with the p-values for the Gaussian assumptions for each
+#'   \item{params_logical:}{ The value of QQtest}
+#'   \item{p_values:}{ A data frame with the p-values for the Gaussian assumptions for each
 #'    group specified}
-#'  \item{data.check:}{  A data frame with data identified as generating points of interest;
+#'  \item{dataCheck:}{  A data frame with data identified as generating points of interest;
 #'  value is NA if no points are identified}
 #'   \item{location:}{ The value of the parameter folder}
 #'  }
@@ -42,7 +42,7 @@
 #' @examples
 #' data(ObsidianSources)
 #' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-#' pca.Gauss <- ps_pcaGauss(data=ObsidianSources, GroupVar="Code",Groups=c("A","B"),
+#' pca_Gauss <- ps_pcaGauss(data=ObsidianSources, GroupVar="Code",Groups=c("A","B"),
 #'   AnalyticVars=analyticVars)
 #'
 #' @export
@@ -61,30 +61,30 @@ ps_pcaGauss <-
     {
     # restrict to desired set of groups
     if (Groups[1] != "All") {
-      Use.rows <- (data[, GroupVar] %in% Groups)
-      data.Used <- data[Use.rows, ]
+      Use_rows <- (data[, GroupVar] %in% Groups)
+      dataUsed <- data[Use_rows, ]
     } else
-      data.Used <- data[, ]
+      dataUsed <- data[, ]
     #
     #  sort on GroupVar and ID if specified
     #
     if (GroupVar[1] != " ") {
-      rowsSort <- order(data.Used[,GroupVar])
-      data.Used <- data.Used[rowsSort,]
+      rowsSort <- order(dataUsed[,GroupVar])
+      dataUsed <- dataUsed[rowsSort,]
     }
     if (gaussID[1] != " ") {
-      rowsSort <- order(data.Used[,gaussID])
-      data.Used <- data.Used[rowsSort,]
+      rowsSort <- order(dataUsed[,gaussID])
+      dataUsed <- dataUsed[rowsSort,]
     }
-    dataKeep <- rep(T, nrow(data.Used)) # will contain indices for observations with no missing data
-    for (i in 1:nrow(data.Used)) {
+    dataKeep <- rep(T, nrow(dataUsed)) # will contain indices for observations with no missing data
+    for (i in 1:nrow(dataUsed)) {
       for (j in 1:length(AnalyticVars))
-        if (is.na(data.Used[,AnalyticVars][i,j]))  dataKeep[i] <- F
+        if (is.na(dataUsed[,AnalyticVars][i,j]))  dataKeep[i] <- F
     }
-    if (sum(dataKeep) < nrow(data.Used))  dataNA<-data.Used[!dataKeep,]
+    if (sum(dataKeep) < nrow(dataUsed))  dataNA<-dataUsed[!dataKeep,]
       else  dataNA<-NA
     #
-    data.Used <- data.Used[dataKeep,]
+    dataUsed <- dataUsed[dataKeep,]
     #
 
 
@@ -92,19 +92,19 @@ ps_pcaGauss <-
     # define variable groups as groups used in analysis
     if (Groups[1] == "All")
       groups <-
-        as.character(unique(data.Used[, GroupVar]))
+        as.character(unique(dataUsed[, GroupVar]))
     else
       groups <- as.character(Groups)
     #
-    pca <- prcomp(data.Used[, AnalyticVars], scale = TRUE)
+    pca <- prcomp(dataUsed[, AnalyticVars], scale = TRUE)
     # predicted values for first two components
-    predict.pc1 <- predict(pca)[, 1]
-    predict.pc2 <- predict(pca)[, 2]
+    predict_pc1 <- predict(pca)[, 1]
+    predict_pc2 <- predict(pca)[, 2]
     # add numeric code for group to data set
-    GroupIndex <- rep(NA, nrow(data.Used))
-    for (i in 1:nrow(data.Used)) {
+    GroupIndex <- rep(NA, nrow(dataUsed))
+    for (i in 1:nrow(dataUsed)) {
       for (j in 1:length(groups))
-        if (data.Used[i, GroupVar] == groups[j])
+        if (dataUsed[i, GroupVar] == groups[j])
           GroupIndex[i] <- j
     }
 
@@ -114,47 +114,47 @@ ps_pcaGauss <-
       list(
         groups,
         c(
-          "ADpc.1",
-          "ADpc.2",
-          "SWpc.1",
-          "SWpc.2",
-          "Mardia.skew",
-          "Mardia.kurtosis",
+          "ADpc_1",
+          "ADpc_2",
+          "SWpc_1",
+          "SWpc_2",
+          "Mardia_skew",
+          "Mardia_kurtosis",
           "HZ",
           "Royston"
         )
       )
-    DataPlusPredicted <- data.frame(data.Used,predict(pca))
-    pc.GroupVar <- GroupVar
-    pc.Groups <- Groups
-    pc.qqPlot <- qqPlot
-    pc.digits <- 3
+    DataPlusPredicted <- data.frame(dataUsed,predict(pca))
+    pc_GroupVar <- GroupVar
+    pc_Groups <- Groups
+    pc_qqPlot <- qqPlot
+    pc_digits <- 3
     #
-    outGauss <- fn.2dPlot.Gauss(data=DataPlusPredicted, GroupVar=pc.GroupVar, Groups=pc.Groups,
-                           AnalyticVars=c("PC1", "PC2"), ID=gaussID, qqPlot=pc.qqPlot, pvalue.digits=pc.digits,
+    outGauss <- ps_2dPlotGauss(data=DataPlusPredicted, GroupVar=pc_GroupVar, Groups=pc_Groups,
+                           AnalyticVars=c("PC1", "PC2"), ID=gaussID, qqPlot=pc_qqPlot, pvalue_digits=pc_digits,
                            Identify=gaussIdentify)
     browser()
     #
-    fcn.date.ver<-paste(doc,date(),R.Version()$version.string)
-    params.grouping<-list(GroupVar,Groups)
-    names(params.grouping)<-c("GroupVar","Groups")
-    params.logical<-c(qqPlot, gaussIdentify)
-    names(params.logical)<-c("qqPlot","gaussIdentify")
+    fcnDateVersion<-paste(doc,date(),R.Version()$version.string)
+    params_grouping<-list(GroupVar,Groups)
+    names(params_grouping)<-c("GroupVar","Groups")
+    params_logical<-c(qqPlot, gaussIdentify)
+    names(params_logical)<-c("qqPlot","gaussIdentify")
     #
     if (gaussIdentify == T) {
-    if (gaussID == " ") data.check<-outGauss$data.check[,c(GroupVar, AnalyticVars)]
-    else  data.check<-outGauss$data.check[,c(GroupVar, gaussID, AnalyticVars)]
+    if (gaussID == " ") dataCheck<-outGauss$dataCheck[,c(GroupVar, AnalyticVars)]
+    else  dataCheck<-outGauss$dataCheck[,c(GroupVar, gaussID, AnalyticVars)]
     }
-    else  data.check <- NA
+    else  dataCheck <- NA
     #
-    out<-list(usage=fcn.date.ver,
-                dataUsed=data.Used,
+    out<-list(usage=fcnDateVersion,
+                dataUsed=dataUsed,
                 dataNA=dataNA,
                 analyticVars=AnalyticVars,
-                params.grouping=params.grouping,
-                params.logical=params.logical,
-                p.values = outGauss$pvalues,
-                data.check = data.check,
+                params_grouping=params_grouping,
+                params_logical=params_logical,
+                p_values = outGauss$pvalues,
+                dataCheck = dataCheck,
                 location=folder)
     out
   }

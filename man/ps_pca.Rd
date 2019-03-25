@@ -21,7 +21,7 @@ ps_pca(doc = "ps_pca", data, ID = " ", GroupVar, Groups, AnalyticVars,
 \item{GroupVar}{The name for variable defining grouping; a variable name is required}
 
 \item{Groups}{Character-valued defining the values of the group variable for which plots are
-to be done.  Options are a vector of values; "All" (use all groups).  One of these is required}
+to be done_  Options are a vector of values; "All" (use all groups)_  One of these is required}
 
 \item{AnalyticVars}{A vector of names (character values) of analytic results}
 
@@ -39,16 +39,16 @@ to be done.  Options are a vector of values; "All" (use all groups).  One of the
 
 \item{PlotMedians}{Logical, if T, plot the symbol for each group at the median point for that group, default is F}
 
-\item{Ellipses}{A value or vector of proportions for confidence ellipses; default is c(.95,.99) to produce 95\% and 99\% confidence ellipses}
+\item{Ellipses}{A value or vector of proportions for confidence ellipses; default is c(_95,_99) to produce 95\% and 99\% confidence ellipses}
 
-\item{PlotColors}{Logical.  If T, use list of colors in Colors for points; if F, plot points as black}
+\item{PlotColors}{Logical_  If T, use list of colors in Colors for points; if F, plot points as black}
 
 \item{legendLoc}{Character, location of legend for a plot with points;
 default is "topright", alternatives are combinations of "top", "bottom", "right", "left"}
 
 \item{Colors}{A vector of color names; default is a vector with five names}
 
-\item{Identify}{Logical.  If T, the user can identify points of interest in plots; information on these points is saved to a file; default is F}
+\item{Identify}{Logical_  If T, the user can identify points of interest in plots; information on these points is saved to a file; default is F}
 
 \item{digits}{The number of significant digits to return in objects in data frames, default is 3}
 
@@ -58,7 +58,7 @@ imputed; default is 11111}
 \item{folder}{The path to the folder in which data frames will be saved; default is " "}
 }
 \value{
-The function produces a plot of the first two principal components, the contents of which are defined by the arguments PlotPoints, PlotEllipses, PlotHull, and PlotMedians. A scree plot and box plots are produced if requested.  The function returns a list with the following components:
+The function produces a plot of the first two principal components, the contents of which are defined by the arguments PlotPoints, PlotEllipses, PlotHull, and PlotMedians_ A scree plot and box plots are produced if requested_  The function returns a list with the following components:
 \itemize{
   \item{usage:}{  A string with the contents of the argument doc, the date run, the version of R used}
   \item{dataUsed:}{  The contents of the argument data restricted to the groups used}
@@ -67,7 +67,7 @@ The function produces a plot of the first two principal components, the contents
   \item{params:}{  A list with the values of the arguments for grouping, logical parameters,
   Ellipses, and Colors}
   \item{analyticVars:}{  A vector with the value of the argument AnalyticVars}
-  \item{ellipse.pct:}{  The value of the argument Ellipses}
+  \item{ellipse_pct:}{  The value of the argument Ellipses}
   \item{variances:}{  A data frame including the percent of variation explained by each
   principal component and the cumulative percent explained}
   \item{weights:}{  A data frame with the principal component weights for each observation}
@@ -75,7 +75,7 @@ The function produces a plot of the first two principal components, the contents
    plus the value of Groups and an integer GroupIndex (with values 1:number of Groups)}
   \item{DataPlusPredicted:}{  A data frame with the data used to compute the principal components,
    plus GroupIndex (as defined above) and predicted values for each principal component}
-  \item{data.check:}{  If Identify=T, a data frame with the observations in dataUsed
+  \item{dataCheck:}{  If Identify=T, a data frame with the observations in dataUsed
    identified as of interest}
   \item{location:}{  The value of the parameter folder}
  }
@@ -93,6 +93,6 @@ To go to the next pane, right click and select "Stop" in base R; click on "Finis
 \examples{
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-save.pca <- ps_pca(data=ObsidianSources, ID="ID", GroupVar="Code",Groups="All", AnalyticVars=analyticVars)
+save_pca <- ps_pca(data=ObsidianSources, ID="ID", GroupVar="Code",Groups="All", AnalyticVars=analyticVars)
 
 }

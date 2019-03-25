@@ -10,7 +10,7 @@
 #'    "All": use all groups;" ": no grouping
 #' @param AnalyticVars A vector of names (character values) of analytic results
 #' @param Selections A vector of length 3, or data frame with 3 columns, with combinations to be plotted
-#' @param ByGroup  Logical. If T, show scatterplot for each group for each selection of 3 variables;
+#' @param ByGroup  Logical_ If T, show scatterplot for each group for each selection of 3 variables;
 #'                       default is F
 #' @param ptSize  The size of plotted points, default is 5 (a larger value gives larger points)
 #' @param Color A vector with the color(s) of plotted points; default is a vector
@@ -18,14 +18,14 @@
 #' @param folder The folder to which one or more files with images will be saved;
 #' default is " " (no files saved)
 #' @param dsFile The complete path to a file in folder to which each image will be saved;
-#' if folder is not " ", this must be a valid path and file name (ends in .pdf for current function)
+#' if folder is not " ", this must be a valid path and file name (ends in _pdf for current function)
 #`
 #' @import MASS rgl scatterplot3d
 #'
 #' @section: Details:
 #' See the vignette for details on the use of colors.  The rotated 3d plot can be saved to a file
 #' located at dsFile.  The code saves a file as a pdf; see the documentation for the function
-#' rgl.postscript() for changing the format to postscript, eps, tex, or others.  Point sizes may
+#' rgl_postscript() for changing the format to postscript, eps, tex, or others.  Point sizes may
 #' appear much larger in a saved file than on the monitor.
 #'
 #' @return A list with the following components:
@@ -43,12 +43,12 @@
 #' @examples
 #' data(ObsidianSources)
 #' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-#' plot.3d.rotate<-ps_3dPlotRotate(data=ObsidianSources, GroupVar="Code", Groups=c("A","B"),
+#' plot_3d_rotate<-ps_3dPlotRotate(data=ObsidianSources, GroupVar="Code", Groups=c("A","B"),
 #'               AnalyticVars = analyticVars, Selections=analyticVars[1:3],ByGroup=T)
 #' # two plots
 #' data(ObsidianSources)
 #' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-#' plot.3d.rotate<-ps_3dPlotRotate(data=ObsidianSources, GroupVar="Code", Groups=c("A","B"),
+#' plot_3d_rotate<-ps_3dPlotRotate(data=ObsidianSources, GroupVar="Code", Groups=c("A","B"),
 #'                                 AnalyticVars = analyticVars,
 #'                                 Selections=rbind(analyticVars[1:3],analyticVars[2:4]))
 #' @export
@@ -69,20 +69,20 @@ ps_3dPlotRotate <-
   {
   #
     if ((Groups[1] != " ") & (Groups[1] != "All")) {
-      Use.rows <- (data[, GroupVar] %in% Groups)
-      data.Used <- data[Use.rows, c(GroupVar, AnalyticVars)]
+      Use_rows <- (data[, GroupVar] %in% Groups)
+      dataUsed <- data[Use_rows, c(GroupVar, AnalyticVars)]
     }
     else if (GroupVar[1] == " ")
-      data.Used <- data[, AnalyticVars]
-    else data.Used <- data[, c(GroupVar, AnalyticVars)]
+      dataUsed <- data[, AnalyticVars]
+    else dataUsed <- data[, c(GroupVar, AnalyticVars)]
     #
-    dataKeep <- rep(T, nrow(data.Used)) # will contain indices for observations with
+    dataKeep <- rep(T, nrow(dataUsed)) # will contain indices for observations with
     # no missing values
     for (i in 1:length(AnalyticVars))
-      dataKeep[is.na(data.Used[,AnalyticVars[i]])] <- F
+      dataKeep[is.na(dataUsed[,AnalyticVars[i]])] <- F
     #
     if ((GroupVar[1] != " ") & (Groups[1] == "All"))
-      groups <- as.character(unique(data.Used[, GroupVar]))
+      groups <- as.character(unique(dataUsed[, GroupVar]))
     else if (GroupVar[1] != " ")
       groups <- as.character(Groups)
     #
@@ -91,29 +91,29 @@ ps_3dPlotRotate <-
     if (!ByGroup)
       if (length(Colors) < length(groups))  stop("too few cols specified")
     #
-    #  sort data.Used on grouping variable to assign cols to points
+    #  sort dataUsed on grouping variable to assign cols to points
     #
     if (GroupVar[1] != " ") {
-      index<-order(data.Used[,GroupVar])
-      data.Used<-data.Used[index,]
+      index<-order(dataUsed[,GroupVar])
+      dataUsed<-dataUsed[index,]
     }
     #
-    #  add index to data.Used to specific color for plotting points in groups
+    #  add index to dataUsed to specific color for plotting points in groups
     #
     if ((!ByGroup) & (Groups[1] != " "))  {
-      n.group<-rep(0,length(groups))
+      n_group<-rep(0,length(groups))
       for (i in 1:length(groups))  {
-        n.group<-nrow(data.Used[data.Used[,GroupVar]==groups[i],])
-        if (i == 1) group.index<-rep(1,n.group)
-        else  group.index<-c(group.index,rep(i,n.group))
+        n_group<-nrow(dataUsed[dataUsed[,GroupVar]==groups[i],])
+        if (i == 1) group_index<-rep(1,n_group)
+        else  group_index<-c(group_index,rep(i,n_group))
       }
-      data.Used<-cbind(data.Used,group.index=group.index)
+      dataUsed<-cbind(dataUsed,group_index=group_index)
     }
     #
     #  use first color if no grouping
     #
     if ((!ByGroup) & (Groups[1] == " "))
-      data.Used<-cbind(data.Used,group.index=rep(1,nrow(data.Used)))
+      dataUsed<-cbind(dataUsed,group_index=rep(1,nrow(dataUsed)))
     #
     #  plot points
     if (!ByGroup) { # groups combined
@@ -127,24 +127,24 @@ ps_3dPlotRotate <-
       #
       if (is.vector(Selections)) {
         plot.new()
-        index_na <- is.na(data.Used[, Selections[1]]) | is.na(data.Used[,Selections[2]]) |
-          is.na(data.Used[, Selections[3]])
-         plot3d(data.Used[!index_na, Selections[1:3]], type="p", size=ptSize,
+        index_na <- is.na(dataUsed[, Selections[1]]) | is.na(dataUsed[,Selections[2]]) |
+          is.na(dataUsed[, Selections[3]])
+         plot3d(dataUsed[!index_na, Selections[1:3]], type="p", size=ptSize,
                xlab = Selections[1], ylab = Selections[2], zlab = Selections[3],
-               col = Colors[data.Used[!index,"group.index"]],
+               col = Colors[dataUsed[!index,"group_index"]],
                pch = 16, main=header)
-        if (folder != " ") rgl.postscript(filename=dsFile, fmt="pdf")
+        if (folder != " ") rgl_postscript(filename=dsFile, fmt="pdf")
        }  # end of code for Selections as vector
       #
       if (is.matrix(Selections)) {
         for (i in 1:nrow(Selections)) {
           plot.new()
           par(oma=rep(2,4))
-          index_na <- is.na(data.Used[, Selections[i,1]]) | is.na(data.Used[,Selections[i,2]]) |
-            is.na(data.Used[, Selections[i,3]])
-          plot3d(data.Used[!index_na, Selections[i, 1:3]], xlab = Selections[i, 1],
+          index_na <- is.na(dataUsed[, Selections[i,1]]) | is.na(dataUsed[,Selections[i,2]]) |
+            is.na(dataUsed[, Selections[i,3]])
+          plot3d(dataUsed[!index_na, Selections[i, 1:3]], xlab = Selections[i, 1],
                  ylab = Selections[i, 2], zlab = Selections[i, 3],
-                 col = Colors[data.Used[,"group.index"]], pch = 16, type="p", size=ptSize,
+                 col = Colors[dataUsed[,"group_index"]], pch = 16, type="p", size=ptSize,
                  main=header)
           browser()
          }
@@ -155,10 +155,10 @@ ps_3dPlotRotate <-
       if (is.vector(Selections)) {
         for (i in 1:length(groups)) {
           win.graph()
-          data.i<-data.Used[data.Used[,GroupVar]==groups[i],Selections]
-          index_na <- is.na(data.i[, Selections[1]]) | is.na(data.i[,Selections[2]]) |
-            is.na(data.i[, Selections[3]])
-          plot3d(data.i[!index_na,], xlab = Selections[1], ylab = Selections[2], zlab = Selections[3],
+          data_i<-dataUsed[dataUsed[,GroupVar]==groups[i],Selections]
+          index_na <- is.na(data_i[, Selections[1]]) | is.na(data_i[,Selections[2]]) |
+            is.na(data_i[, Selections[3]])
+          plot3d(data_i[!index_na,], xlab = Selections[1], ylab = Selections[2], zlab = Selections[3],
                         col = Colors[1], pch = 16, type="p", size=ptSize,
                         main = paste(groups[i],": ",Selections[1]," ,", Selections[2], ",",
                                      Selections[3],sep=""))
@@ -169,10 +169,10 @@ ps_3dPlotRotate <-
         for (i in 1:nrow(Selections)) {
           for (j in 1:length(groups)) {
             win.graph()
-            data.j<-data.Used[data.Used[,GroupVar]==groups[j],Selections[i,]]
-            index_na <- is.na(data.j[, Selections[i,1]]) | is.na(data.j[,Selections[i,2]]) |
-              is.na(data.j[, Selections[i,3]])
-            plot3d(data.j[!index_na,], xlab = Selections[i, 1], ylab = Selections[i, 2],
+            data_j<-dataUsed[dataUsed[,GroupVar]==groups[j],Selections[i,]]
+            index_na <- is.na(data_j[, Selections[i,1]]) | is.na(data_j[,Selections[i,2]]) |
+              is.na(data_j[, Selections[i,3]])
+            plot3d(data_j[!index_na,], xlab = Selections[i, 1], ylab = Selections[i, 2],
                    zlab = Selections[i,3], col = Colors[1], pch = 16,
                    type="p", size=ptSize,
                    main = paste(groups[i],": ",Selections[i, 1], ",", Selections[i,2], ",",
@@ -183,21 +183,21 @@ ps_3dPlotRotate <-
       } # end of code for Selections as a matrix
     } # end of plot points by group
     #
-    fcn.date.ver<-c(doc,date(),R.Version()$version.string)
+    fcnDateVersion<-c(doc,date(),R.Version()$version.string)
     #
-    params.grouping<-list(GroupVar,Groups)
-    names(params.grouping)<-c("GroupVar","Groups")
-    params.logical<-ByGroup
-    names(params.logical)<-"ByGroup"
-    params.numeric<-ptSize
-    names(params.numeric)<-"ptSize"
-    params<-list(grouping=params.grouping,logical=params.logical,numeric=params.numeric,colors=Colors)
+    params_grouping<-list(GroupVar,Groups)
+    names(params_grouping)<-c("GroupVar","Groups")
+    params_logical<-ByGroup
+    names(params_logical)<-"ByGroup"
+    params_numeric<-ptSize
+    names(params_numeric)<-"ptSize"
+    params<-list(grouping=params_grouping,logical=params_logical,numeric=params_numeric,colors=Colors)
     #
-    if (sum(dataKeep) < nrow(data.Used)) dataNA <- data.Used[!dataKeep,]
+    if (sum(dataKeep) < nrow(dataUsed)) dataNA <- dataUsed[!dataKeep,]
     else dataNA <- NA
     #
-    out<-list(usage=fcn.date.ver,
-                dataUsed=data.Used,
+    out<-list(usage=fcnDateVersion,
+                dataUsed=dataUsed,
                 dataNA=dataNA,
                 params=params,
                 groups=Groups,

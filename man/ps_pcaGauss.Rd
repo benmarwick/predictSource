@@ -36,12 +36,12 @@ The function returns a list with the following components:
   \item{dataUsed:}{ The contents of the argument data restricted to the groups used}
   \item{dataNA:}{  A data frame with observations containing a least one missing value
   for an analysis variable, NA if no missing values}
-  \item{params.grouping:}{ A list with the values of the arguments GroupVar and Groups}
+  \item{params_grouping:}{ A list with the values of the arguments GroupVar and Groups}
   \item{analyticVars:}{ A vector with the value of the argument AnalyticVars}
-  \item{params.logical:}{ The value of QQtest}
-  \item{p.values:}{ A data frame with the p-values for the Gaussian assumptions for each
+  \item{params_logical:}{ The value of QQtest}
+  \item{p_values:}{ A data frame with the p-values for the Gaussian assumptions for each
    group specified}
- \item{data.check:}{  A data frame with data identified as generating points of interest;
+ \item{dataCheck:}{  A data frame with data identified as generating points of interest;
  value is NA if no points are identified}
   \item{location:}{ The value of the parameter folder}
  }
@@ -51,7 +51,7 @@ Check whether first two principal components are Gaussian
 }
 \section{Details}{
 
-This function uses the function fn.2dPlot.Gauss().  The function produces p-values
+This function uses the function ps_2dPlotGauss().  The function produces p-values
  from univariate and multivariate tests of normality.  It produces Q-Q plots
  of the first two principal components for each group, as well as those plots with bootstrap
  envelopes and the bivariate Q-Q plot if qqPlot=T.
@@ -60,7 +60,7 @@ This function uses the function fn.2dPlot.Gauss().  The function produces p-valu
 \examples{
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-pca.Gauss <- ps_pcaGauss(data=ObsidianSources, GroupVar="Code",Groups=c("A","B"),
+pca_Gauss <- ps_pcaGauss(data=ObsidianSources, GroupVar="Code",Groups=c("A","B"),
   AnalyticVars=analyticVars)
 
 }

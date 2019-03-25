@@ -22,7 +22,7 @@ ps_3dPlotRotate(doc = "ps_3dPlotRotate", data, GroupVar, Groups, AnalyticVars,
 
 \item{Selections}{A vector of length 3, or data frame with 3 columns, with combinations to be plotted}
 
-\item{ByGroup}{Logical. If T, show scatterplot for each group for each selection of 3 variables;
+\item{ByGroup}{Logical_ If T, show scatterplot for each group for each selection of 3 variables;
 default is F}
 
 \item{ptSize}{The size of plotted points, default is 5 (a larger value gives larger points)}
@@ -31,7 +31,7 @@ default is F}
 default is " " (no files saved)}
 
 \item{dsFile}{The complete path to a file in folder to which each image will be saved;
-if folder is not " ", this must be a valid path and file name (ends in .pdf for current function)}
+if folder is not " ", this must be a valid path and file name (ends in _pdf for current function)}
 
 \item{Color}{A vector with the color(s) of plotted points; default is a vector
 red, black, blue, green, purple}
@@ -56,19 +56,19 @@ Create 3-dimensional data plot(s) that can be rotated
  Details:
 See the vignette for details on the use of colors.  The rotated 3d plot can be saved to a file
 located at dsFile.  The code saves a file as a pdf; see the documentation for the function
-rgl.postscript() for changing the format to postscript, eps, tex, or others.  Point sizes may
+rgl_postscript() for changing the format to postscript, eps, tex, or others.  Point sizes may
 appear much larger in a saved file than on the monitor.
 }
 
 \examples{
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-plot.3d.rotate<-ps_3dPlotRotate(data=ObsidianSources, GroupVar="Code", Groups=c("A","B"),
+plot_3d_rotate<-ps_3dPlotRotate(data=ObsidianSources, GroupVar="Code", Groups=c("A","B"),
               AnalyticVars = analyticVars, Selections=analyticVars[1:3],ByGroup=T)
 # two plots
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-plot.3d.rotate<-ps_3dPlotRotate(data=ObsidianSources, GroupVar="Code", Groups=c("A","B"),
+plot_3d_rotate<-ps_3dPlotRotate(data=ObsidianSources, GroupVar="Code", Groups=c("A","B"),
                                 AnalyticVars = analyticVars,
                                 Selections=rbind(analyticVars[1:3],analyticVars[2:4]))
 }
