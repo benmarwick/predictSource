@@ -4,7 +4,7 @@
 \alias{ps_pcaGauss}
 \title{ps_pcaGauss}
 \usage{
-ps_pcaGauss(doc = "ps_pcaGauss", data, GroupVar, Groups, gaussID = " ",
+ps_pcaGauss(doc = "fn_pca_Gauss", data, GroupVar, Groups, gaussID = " ",
   AnalyticVars, qqPlot = T, gaussIdentify = F, folder = " ")
 }
 \arguments{
@@ -41,7 +41,7 @@ The function returns a list with the following components:
   \item{params_logical:}{ The value of QQtest}
   \item{p_values:}{ A data frame with the p-values for the Gaussian assumptions for each
    group specified}
- \item{dataCheck:}{  A data frame with data identified as generating points of interest;
+ \item{data_check:}{  A data frame with data identified as generating points of interest;
  value is NA if no points are identified}
   \item{location:}{ The value of the parameter folder}
  }

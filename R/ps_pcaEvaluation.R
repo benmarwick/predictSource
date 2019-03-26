@@ -9,32 +9,33 @@
 #' @param ID The name of the ID for samples (artifacts), " " if none (default value)
 #' @param SourceGroup The name of the variable with the code for a source
 #' @param ArtifactGroup The name of the variable with the code for predicted source
-#' @param known.sources A vector of the source locations to be considered
-#' @param predicted.sources A vector of predicted sources to be considered, not all need be in known.sources
+#' @param known_sources A vector of the source locations to be considered
+#' @param predicted_sources A vector of predicted sources to be considered, not all need be in known_sources
 #' @param AnalyticVars The elements used in the principal component analyses
-#' @param loc.legend The location of legend added to plots (alternates are "topleft",
+#' @param loc_legend The location of legend added to plots (alternates are "topleft",
 #'    "bottomright","bottomleft")
-#' @param Identify Logical.  If T, the user can identify artifacts of interest and obtain a data set with information on those artifacts
+#' @param Identify Logical_  If T, the user can identify artifacts of interest and obtain a data set with information on those artifacts
 #'    (default is F)
-#' @param plotAllPoints Logical.  If T (the default), show a plot with two panes: all source points and
+#' @param plotAllPoints Logical_  If T (the default), show a plot with two panes: all source points and
 #'    the convex hulls for the sources, and all unknown points with these source hulls
-#' @param plotHullsOutsidePoints Logical.  If T (the default), show a plot with two panes: all source points and
+#' @param plotHullsOutsidePoints Logical_  If T (the default), show a plot with two panes: all source points and
 #'    the convex hulls for the sources, and the unknown points lying outside of their predicted source
 #'    convex hulls and these hulls
-#' @param plotOutsidePoints Logical.  If T (the default), show a plot with one pane: athe unknown points lying
+#' @param plotOutsidePoints Logical_  If T (the default), show a plot with one pane: athe unknown points lying
 #'  outside of their predicted source convex hulls and these hulls (the second pane for
 #'  plotHullsOutsidePoints)
 #'  @param Seed If not NA, a positive integer used to initialize the random number generator
-#'  when missing data are imputed.  Default value is 11111
+#'  when missing data are imputed_  Default value is 11111
 #' @param folder  The path to the folder in which data frames will be saved; default is " "
 #'
 #' @details
 #' See the vignette for instructions for identifying points of interest using the paramter
 #' Identify = T.
 #'
-#'@return The function produces two plots: the convex hulls of the first two principal components
-#' of the source data, and a plot with those convex hulls and the artifact data (using the weights
-#'  obtained from the source data).  The function returns a list with the following components:
+#'.@return The function produces two plots: the convex hulls of the first two principal components
+#' of the source data, and a plot with those convex hulls and the artifact data (this plot uses a
+#' principal component analysis of both the source and artifact data).
+#' The function returns a list with the following components:
 #'
 #' \itemize{
 #'   \item{usage:}{  A vector with the contents of the argument doc, the date run,
@@ -50,11 +51,11 @@
 #'   \item{params:}{  A list with the values of the grouping and source arguments and
 #'   values of the logical arguments}
 #'   \item{analyticVars:}{  A vector with the value of the argument AnalyticVars}
-#'   \item{table.in.out:} {  A data frame with counts of the numbers of artifacts inside and
+#'   \item{table_in_out:} {  A data frame with counts of the numbers of artifacts inside and
 #'   outside of each predicted source location}
-#'   \item{pts.outside:}  {  A data frame with the data for artifact points located outside of the
+#'   \item{pts_outside:}  {  A data frame with the data for artifact points located outside of the
 #'    predicted source}
-#'   \item{data.check:}{  If Identify=T, a data frame with the observations in dataUsed identified
+#'   \item{dataCheck:}{  If Identify=T, a data frame with the observations in dataUsed identified
 #'    as of interest; value is c(NA,NA) if no points are identified}
 #'   \item{location:}{  The value of the parameter folder}
 #'    }
@@ -67,23 +68,24 @@
 #' data(ObsidianArtifacts)
 #' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 #' sources <- unique(ObsidianSources[,"Code"])
-#' pca.eval <- ps_pcaEvaluation(SourceData=ObsidianSources,
+#' pca_eval <- ps_pcaEvaluation(SourceData=ObsidianSources,
 #'   ArtifactData=ObsidianArtifacts, SourceGroup= "Code", ArtifactGroup="Code",
-#'   known.sources=sources, predicted.sources=sources, AnalyticVars=analyticVars, ID="ID",
+#'   known_sources=sources, predicted_sources=sources, AnalyticVars=analyticVars, ID="ID",
 #'   plotAllPoints=T, plotHullsOutsidePoints = T, plotOutsidePoints = T)
 #'
-#' # evaluate predictions from a tree model
+#' # evaluate predictions from a tree model; this may need to be run twice
+#' (save_tree is created but may not be available for ps_pcaEvaluation)
 #' data(ObsidianSources)
 #' data(ObsidianArtifacts)
 #' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 #' sources <- unique(ObsidianSources[,"Code"])
-#' save.tree <- fn.tree(data=ObsidianSources, GroupVar="Code",Groups="All",
+#' save_tree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All",
 #'  AnalyticVars=analyticVars, ID="ID", Model = "Rb"+"Sr"+"Y"+"Zr"+"Nb",
 #'   ModelTitle="Rb + Sr + Y + Zr + Nb", predictSources=T, predictData=ObsidianArtifacts,
 #'   plotTree=T, plotCp=F)
-#' pca.eval <- ps_pcaEvaluation(SourceData=ObsidianSources,
-#'   ArtifactData=save.tree$predictedSources, SourceGroup= "Code", ArtifactGroup="source",
-#'   known.sources=sources, predicted.sources=sources, AnalyticVars=analyticVars, ID="ID",
+#' pca_eval <- ps_pcaEvaluation(SourceData=ObsidianSources,
+#'   ArtifactData=save_tree$predictedSources, SourceGroup= "Code", ArtifactGroup="source",
+#'   known_sources=sources, predicted_sources=sources, AnalyticVars=analyticVars, ID="ID",
 #'   plotAllPoints=T, plotHullsOutsidePoints = T, plotOutsidePoints = T)
 #'
 #' # evaluate predictions from a random forest analysis: plot only points outside the predicted source hull
@@ -91,12 +93,12 @@
 #' data(ObsidianArtifacts)
 #' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 #' sources <- unique(ObsidianSources[,"Code"])
-#' save.randomForest <- fn.randomForest(data=ObsidianSources, GroupVar="Code",Groups="All",
+#' save_randomForest <- ps_randomForest(data=ObsidianSources, GroupVar="Code",Groups="All",
 #'   AnalyticVars=analyticVars, artifactID="ID", NvarUsed=3, plotErrorRate=F, plotImportance=F,
 #'   predictSources=T, predictData=ObsidianArtifacts, plotSourceProbs=F)
-#' pca.eval <- ps_pcaEvaluation(SourceData=ObsidianSources,
-#'   ArtifactData=save.randomForest$predictedSources, SourceGroup= "Code", ArtifactGroup="source",
-#'   known.sources=sources, predicted.sources=sources, AnalyticVars=analyticVars, ID="ID",
+#' pca_eval <- ps_pcaEvaluation(SourceData=ObsidianSources,
+#'   ArtifactData=save_randomForest$predictedSources, SourceGroup= "Code", ArtifactGroup="source",
+#'   known_sources=sources, predicted_sources=sources, AnalyticVars=analyticVars, ID="ID",
 #'   plotAllPoints=F, plotHullsOutsidePoints = F, plotOutsidePoints = T)
 #'
 #' @export
@@ -107,11 +109,11 @@ ps_pcaEvaluation <-function(doc = "ps_pcaEvaluation",
            ID = " ",
            SourceGroup,
            ArtifactGroup,
-           known.sources,
-           predicted.sources,
+           known_sources,
+           predicted_sources,
            AnalyticVars,
            Identify = F,
-           loc.legend = "topright",
+           loc_legend = "topright",
            plotAllPoints = T,
            plotHullsOutsidePoints = T,
            plotOutsidePoints = T,
@@ -121,7 +123,7 @@ ps_pcaEvaluation <-function(doc = "ps_pcaEvaluation",
     #
     #  create source data set with group code and elements, restricted to identified sources
     #
-    SourceRows <- SourceData[, SourceGroup] %in% known.sources
+    SourceRows <- SourceData[, SourceGroup] %in% known_sources
     sourceData <- SourceData[SourceRows, c(SourceGroup, AnalyticVars)]
     #
     # matrix to contain indices for observations with no missing values
@@ -145,22 +147,22 @@ ps_pcaEvaluation <-function(doc = "ps_pcaEvaluation",
     #
     SourceIndex <- rep(NA, nrow(sourceData))
     for (i in 1:nrow(sourceData)) {
-      for (j in 1:length(known.sources))
-        if (sourceData[i, SourceGroup] == known.sources[j])
+      for (j in 1:length(known_sources))
+        if (sourceData[i, SourceGroup] == known_sources[j])
           SourceIndex[i] <- j
       }  # end of loop on i
-    data.Source <- rep(T, nrow(sourceData))
-    sourceData <- data.frame(sourceData[,c(SourceGroup,AnalyticVars)], SourceIndex, data.Source)
-    colnames(sourceData) <- c("group",AnalyticVars,"index", "data.source")
+    data_Source <- rep(T, nrow(sourceData))
+    sourceData <- data.frame(sourceData[,c(SourceGroup,AnalyticVars)], SourceIndex, data_Source)
+    colnames(sourceData) <- c("group",AnalyticVars,"index", "data_source")
     #
     #  create dummy lab ID for combining artifactData and sourceData
     #
     dummyID = rep(" ", nrow(sourceData))
-    sourceData <- data.frame(sourceData[,c("group",AnalyticVars,"index", "data.source")], ID = dummyID)
+    sourceData <- data.frame(sourceData[,c("group",AnalyticVars,"index", "data_source")], ID = dummyID)
     #
     #  create artifact data with group code and elements, restricted to potential sources of interest
     #
-    artifactRows <- ArtifactData[, ArtifactGroup] %in% predicted.sources
+    artifactRows <- ArtifactData[, ArtifactGroup] %in% predicted_sources
     artifactData <- ArtifactData[artifactRows,]
     #
     #  vector with F if row contains missing analytic variable
@@ -209,14 +211,14 @@ ps_pcaEvaluation <-function(doc = "ps_pcaEvaluation",
     #
     ArtifactIndex <- rep(NA, nrow(artifactData))
     for (i in 1:nrow(artifactData)) {
-      for (j in 1:length(known.sources))
-        if (artifactData[i, ArtifactGroup] == as.character(predicted.sources[j],type="character"))
+      for (j in 1:length(known_sources))
+        if (artifactData[i, ArtifactGroup] == as.character(predicted_sources[j],type="character"))
           ArtifactIndex[i] <- j
     }  # end of loop on i
-    data.Source <- rep(F,nrow(artifactData))
-    artifactData <- cbind(artifactData[,c(ArtifactGroup,AnalyticVars)], ArtifactIndex, data.Source,
+    data_Source <- rep(F,nrow(artifactData))
+    artifactData <- cbind(artifactData[,c(ArtifactGroup,AnalyticVars)], ArtifactIndex, data_Source,
                           artifactData[,"ID"])  # needed if no ID provided
-    colnames(artifactData) <- c("group", AnalyticVars, "index", "data.source", "ID")
+    colnames(artifactData) <- c("group", AnalyticVars, "index", "data_source", "ID")
     if (ID[1] != " ")  artifactData <- artifactData[order(artifactData[,"ID"]),]
     #
     #  combine data sets for principal components analysis
@@ -229,21 +231,21 @@ ps_pcaEvaluation <-function(doc = "ps_pcaEvaluation",
     #
     #  matrix with information from summary
     #
-    importance.pca <- summary(pca)$importance
+    importance_pca <- summary(pca)$importance
     #
     #  compute locations of points on principal component plot
     #
     if (ID[1] == " ")
-      pcaLocations <- cbind(analysisData[, c("group", AnalyticVars, "index","data.source")], pc1 = predict(pca)[, 1],
+      pcaLocations <- cbind(analysisData[, c("group", AnalyticVars, "index","data_source")], pc1 = predict(pca)[, 1],
         pc2 = predict(pca)[, 2])
       else
-      pcaLocations <- cbind(analysisData[, c("group", AnalyticVars, "index","data.source", "ID")], pc1 = predict(pca)[, 1],
+      pcaLocations <- cbind(analysisData[, c("group", AnalyticVars, "index","data_source", "ID")], pc1 = predict(pca)[, 1],
          pc2 = predict(pca)[, 2])
     #
     #  create separate principal component location data sets for sources and artifacts
     #
-    pcaLocationsSources <- pcaLocations[pcaLocations[,"data.source"] == T,]
-    pcaLocationsArtifacts <- pcaLocations[pcaLocations[,"data.source"] == F,]
+    pcaLocationsSources <- pcaLocations[pcaLocations[,"data_source"] == T,]
+    pcaLocationsArtifacts <- pcaLocations[pcaLocations[,"data_source"] == F,]
     #
     #  principal component weights
     #
@@ -257,12 +259,12 @@ ps_pcaEvaluation <-function(doc = "ps_pcaEvaluation",
     #
     #  compute limits for axes to include all points
     #
-    range.pc1 <- range(pcaLocations[, "pc1"])
-    range.pc2 <- range(pcaLocations[, "pc2"])
+    range_pc1 <- range(pcaLocations[, "pc1"])
+    range_pc2 <- range(pcaLocations[, "pc2"])
 
     #
-    plot.data <-
-      list(rep(NA, length(known.sources))) # save convex hull data for second plot
+    plot_data <-
+      list(rep(NA, length(known_sources))) # save convex hull data for second plot
     #
     # code for first two panel plot: source points and convex hulls, and all artifact poins with hulls
     #
@@ -276,21 +278,21 @@ ps_pcaEvaluation <-function(doc = "ps_pcaEvaluation",
     #
     #  convex hulls for source data
     #
-      fn.convex.hull <- function(hull.group) {
-        locations <- pcaLocationsSources[pcaLocationsSources[, "group"] == hull.group, c("pc1", "pc2")]
+      fcnConvexHull <- function(hull_group) {
+        locations <- pcaLocationsSources[pcaLocationsSources[, "group"] == hull_group, c("pc1", "pc2")]
         chull <- chull(x = locations[, "pc1"], y = locations[, "pc2"])
         chull <- c(chull, chull[1])
-        hull.pts <-
+        hull_pts <-
           locations[chull, c("pc1", "pc2")]  # points in order defining hull
-        lines(x = hull.pts[, "pc1"], y = hull.pts[, "pc2"])
-        hull.pts
-      }  # end of fn.convex.hull
+        lines(x = hull_pts[, "pc1"], y = hull_pts[, "pc2"])
+        hull_pts
+      }  # end of fcnConvexHull
       #
     #  set up size of plot
     plot(
       type = "n",
-      x = range.pc1,
-      y = range.pc2,
+      x = range_pc1,
+      y = range_pc2,
       xlab = "first PC",
       ylab = "second PC",
       main = "Sources"
@@ -303,12 +305,12 @@ ps_pcaEvaluation <-function(doc = "ps_pcaEvaluation",
       pch = pcaLocationsSources[, "index"]
     )
     # plot convex hulls
-    for (i in 1:length(known.sources))
-      plot.data[[i]] <- fn.convex.hull(hull.group = known.sources[i])
+    for (i in 1:length(known_sources))
+      plot_data[[i]] <- fcnConvexHull(hull_group = known_sources[i])
     legend(
-      x = loc.legend,
-      legend = known.sources,
-      pch = 1:(length(known.sources)),
+      x = loc_legend,
+      legend = known_sources,
+      pch = 1:(length(known_sources)),
       bty = "n"
     )
     #
@@ -316,25 +318,25 @@ ps_pcaEvaluation <-function(doc = "ps_pcaEvaluation",
     #
     plot(
       type = "n",
-      x = range.pc1,
-      y = range.pc2,
+      x = range_pc1,
+      y = range_pc2,
       xlab = "first PC",
       ylab = "second PC",
       main = "Hulls and unknowns"
     )
     #
     # convex hulls of source data
-    for (i in 1:length(known.sources))
-      lines(plot.data[[i]])
+    for (i in 1:length(known_sources))
+      lines(plot_data[[i]])
     #  plot artifact points
     points(x = pcaLocationsArtifacts[, "pc1"],
            y = pcaLocationsArtifacts[, "pc2"],
            cex = .5,
            pch = pcaLocationsArtifacts[, "index"])
     legend(
-      x = loc.legend,
-      legend = known.sources,
-      pch = 1:(length(known.sources)),
+      x = loc_legend,
+      legend = known_sources,
+      pch = 1:(length(known_sources)),
       bty = "n"
     )
     browser()
@@ -342,55 +344,55 @@ ps_pcaEvaluation <-function(doc = "ps_pcaEvaluation",
     #
     #  create vector of indicators for whether principal components point for a artifact is in predicted source hull
     #
-    artifact.in.hull <- rep(NA, nrow(pcaLocationsArtifacts))  # indicator, T if artifact in predicted source convex hull
+    artifact_in_hull <- rep(NA, nrow(pcaLocationsArtifacts))  # indicator, T if artifact in predicted source convex hull
     #
     #   convex hulls for source data
     #
-    fn.convex.hull <- function(hull.group) {
-      locations <- pcaLocationsSources[pcaLocationsSources[, "group"] == hull.group, c("pc1", "pc2")]
+    fcnConvexHull <- function(hull_group) {
+      locations <- pcaLocationsSources[pcaLocationsSources[, "group"] == hull_group, c("pc1", "pc2")]
       chull <- chull(x = locations[, "pc1"], y = locations[, "pc2"])
       chull <- c(chull, chull[1])
-      hull.pts <-
+      hull_pts <-
         locations[chull, c("pc1", "pc2")]  # points in order defining hull
-      lines(x = hull.pts[, "pc1"], y = hull.pts[, "pc2"])
-      hull.pts
-    }  # end of fn.convex.hull
+      lines(x = hull_pts[, "pc1"], y = hull_pts[, "pc2"])
+      hull_pts
+    }  # end of fcnConvexHull
     #
-    for (i in 1:length(known.sources)) {
-      plot.data[[i]] <- fn.convex.hull(hull.group = known.sources[i])
-      index.i <- (known.sources[pcaLocationsArtifacts[, "index"]] == known.sources[i]) # rows with data prediced from this source
-      if (sum(index.i) > 0) {
+    for (i in 1:length(known_sources)) {
+      plot_data[[i]] <- fcnConvexHull(hull_group = known_sources[i])
+      index_i <- (known_sources[pcaLocationsArtifacts[, "index"]] == known_sources[i]) # rows with data prediced from this source
+      if (sum(index_i) > 0) {
         # at least one artifact from source i
-        temp.i <- pcaLocationsArtifacts[index.i,]
-        hull.i <- plot.data[[i]]  # convex hull for this source
-        artifact.in.hull[index.i] <- in.out(bnd = as.matrix(hull.i, mode="numeric"), x = as.matrix(temp.i[, c("pc1", "pc2")],mode="numeric"))
-      }  # end of loop for sum(index.i) > 0
+        temp_i <- pcaLocationsArtifacts[index_i,]
+        hull_i <- plot_data[[i]]  # convex hull for this source
+        artifact_in_hull[index_i] <- in.out(bnd = as.matrix(hull_i, mode="numeric"), x = as.matrix(temp_i[, c("pc1", "pc2")],mode="numeric"))
+      }  # end of loop for sum(index_i) > 0
     }  # end of loop on i
-    pcaLocationsArtifacts <- data.frame(pcaLocationsArtifacts, in.hull = artifact.in.hull)
+    pcaLocationsArtifacts <- data.frame(pcaLocationsArtifacts, in_hull = artifact_in_hull)
     #
     #  create data frame with data on points outside predicted hull
     #
-    pts.outside <- pcaLocationsArtifacts[!pcaLocationsArtifacts[,"in.hull",],]
-    pts.outside.pc <- round(as.matrix(pts.outside[, c("pc1","pc2")], mode = "numeric"), dig=2)
-    cols.keep <- colnames(pts.outside)[(colnames(pts.outside) != "artifact.group") &
-                                       (colnames(pts.outside) != "data.source") &
-                                       (colnames(pts.outside) != "pc1") & (colnames(pts.outside) != "pc2")]
-    pts.outside <- pts.outside[, cols.keep]
-    pts.outside <- data.frame(pts.outside, pts.outside.pc)
+    pts_outside <- pcaLocationsArtifacts[!pcaLocationsArtifacts[,"in_hull",],]
+    pts_outside_pc <- round(as.matrix(pts_outside[, c("pc1","pc2")], mode = "numeric"), dig=2)
+    cols_keep <- colnames(pts_outside)[(colnames(pts_outside) != "artifact_group") &
+                                       (colnames(pts_outside) != "data_source") &
+                                       (colnames(pts_outside) != "pc1") & (colnames(pts_outside) != "pc2")]
+    pts_outside <- pts_outside[, cols_keep]
+    pts_outside <- data.frame(pts_outside, pts_outside_pc)
     #
     #  table with counts of artifacts inside and outside of predicted source hull
     #
-    n.in.out <- table(pcaLocationsArtifacts[,"group"],pcaLocationsArtifacts[,"in.hull"])
-    dummy<-matrix(NA, nrow = nrow(n.in.out), ncol = ncol(n.in.out)+1)
-    dummy[1:nrow(n.in.out),1:ncol(n.in.out)]<-n.in.out
-    dummy[,ncol(n.in.out)+1] <- apply(n.in.out,1,sum)
+    n_in_out <- table(pcaLocationsArtifacts[,"group"],pcaLocationsArtifacts[,"in_hull"])
+    dummy<-matrix(NA, nrow = nrow(n_in_out), ncol = ncol(n_in_out)+1)
+    dummy[1:nrow(n_in_out),1:ncol(n_in_out)]<-n_in_out
+    dummy[,ncol(n_in_out)+1] <- apply(n_in_out,1,sum)
     dummy <- rbind(dummy, apply(dummy, 2, sum))
     colnames(dummy) <- c("outside", "inside", "total")
-    rownames(dummy) <- c(rownames(n.in.out), "total")
+    rownames(dummy) <- c(rownames(n_in_out), "total")
     #
     # end of code to create and use indicator for artifact points outside of predicted hulls
     #
-    data.check <- c(NA, NA)  # value returned if no points identified
+    dataCheck <- c(NA, NA)  # value returned if no points identified
     #
     if (plotHullsOutsidePoints == T) {
       #
@@ -404,23 +406,23 @@ ps_pcaEvaluation <-function(doc = "ps_pcaEvaluation",
     #
     #  convex hulls for source data
     #
-      fn.convex.hull <- function(hull.group) {
-        locations <- pcaLocationsSources[pcaLocationsSources[, "group"] == hull.group, c("pc1", "pc2")]
+      fcnConvexHull <- function(hull_group) {
+        locations <- pcaLocationsSources[pcaLocationsSources[, "group"] == hull_group, c("pc1", "pc2")]
         chull <- chull(x = locations[, "pc1"], y = locations[, "pc2"])
         chull <- c(chull, chull[1])
-        hull.pts <-
+        hull_pts <-
           locations[chull, c("pc1", "pc2")]  # points in order defining hull
-        lines(x = hull.pts[, "pc1"], y = hull.pts[, "pc2"])
-        hull.pts
-      }  # end of fn.convex.hull
+        lines(x = hull_pts[, "pc1"], y = hull_pts[, "pc2"])
+        hull_pts
+      }  # end of fcnConvexHull
       #
       if (plotAllPoints == F)  plot.new()
     par(mfrow = c(1, 2))
     #  set up plot
     plot(
       type = "n",
-      x = range.pc1,
-      y = range.pc2,
+      x = range_pc1,
+      y = range_pc2,
       xlab = "first PC",
       ylab = "second PC",
       main = "Source hulls"
@@ -428,17 +430,17 @@ ps_pcaEvaluation <-function(doc = "ps_pcaEvaluation",
     #
     #  plot convex hulls of sources
     #
-    for (i in 1:length(known.sources))
-      lines(plot.data[[i]])
+    for (i in 1:length(known_sources))
+      lines(plot_data[[i]])
     #  add ID for each group at the median of the observed values
-    groups <- known.sources
+    groups <- known_sources
     medians <-
       matrix(NA, nrow = length(groups), ncol = 2)  # matrix to store medians from each group
     for (i in 1:length(groups)) {
-      temp.medians <-
+      temp_medians <-
         pcaLocationsSources[pcaLocationsSources[, "group"] == groups[i], c("pc1", "pc2")]  # data from group i
-      medians[i, 1] <- median(temp.medians[, 1], na.rm = T)
-      medians[i, 2] <- median(temp.medians[, 2], na.rm = T)
+      medians[i, 1] <- median(temp_medians[, 1], na_rm = T)
+      medians[i, 2] <- median(temp_medians[, 2], na_rm = T)
     }  # end of loop on i
     medians <-
       cbind(1:length(groups), medians)  # add column with group number
@@ -455,8 +457,8 @@ ps_pcaEvaluation <-function(doc = "ps_pcaEvaluation",
     #
     plot(
       type = "n",
-      x = range.pc1,
-      y = range.pc2,
+      x = range_pc1,
+      y = range_pc2,
       xlab = "first PC",
       ylab = "second PC",
       main = "Unknowns outside hulls"
@@ -464,21 +466,21 @@ ps_pcaEvaluation <-function(doc = "ps_pcaEvaluation",
     #
     # plot source convex hulls
     #
-    for (i in 1:length(known.sources))
-      lines(plot.data[[i]])
+    for (i in 1:length(known_sources))
+      lines(plot_data[[i]])
     legend(
-      x = loc.legend,
-      legend = known.sources,
-      pch = 1:length(known.sources),
+      x = loc_legend,
+      legend = known_sources,
+      pch = 1:length(known_sources),
       bty = "n"
     )  # legend for plot
     #
     #  plot points outside of predicted hull
     #
-    points(x = pcaLocationsArtifacts[!pcaLocationsArtifacts["in.hull"], "pc1"],
-           y = pcaLocationsArtifacts[!pcaLocationsArtifacts["in.hull"], "pc2"],
+    points(x = pcaLocationsArtifacts[!pcaLocationsArtifacts["in_hull"], "pc1"],
+           y = pcaLocationsArtifacts[!pcaLocationsArtifacts["in_hull"], "pc2"],
            cex = .5,
-           pch = pcaLocationsArtifacts[!pcaLocationsArtifacts["in.hull"], "index"])
+           pch = pcaLocationsArtifacts[!pcaLocationsArtifacts["in_hull"], "index"])
     browser()
     #
     }  #  end of code for two-panel evaluation plot
@@ -489,22 +491,22 @@ ps_pcaEvaluation <-function(doc = "ps_pcaEvaluation",
     #
     #  convex hulls for source data
     #
-      fn.convex.hull <- function(hull.group) {
-        locations <- pcaLocationsSources[pcaLocationsSources[, "group"] == hull.group, c("pc1", "pc2")]
+      fcnConvexHull <- function(hull_group) {
+        locations <- pcaLocationsSources[pcaLocationsSources[, "group"] == hull_group, c("pc1", "pc2")]
         chull <- chull(x = locations[, "pc1"], y = locations[, "pc2"])
         chull <- c(chull, chull[1])
-        hull.pts <-
+        hull_pts <-
           locations[chull, c("pc1", "pc2")]  # points in order defining hull
-        lines(x = hull.pts[, "pc1"], y = hull.pts[, "pc2"])
-        hull.pts
-      }  # end of fn.convex.hull
+        lines(x = hull_pts[, "pc1"], y = hull_pts[, "pc2"])
+        hull_pts
+      }  # end of fcnConvexHull
       #
     if ((plotAllPoints == F) & (plotHullsOutsidePoints == F))  plot.new()
     par(mfrow=c(1,1))
     plot(
       type = "n",
-      x = range.pc1,
-      y = range.pc2,
+      x = range_pc1,
+      y = range_pc2,
       xlab = "first PC",
       ylab = "second PC",
       main = "Points outside source hulls"
@@ -512,56 +514,56 @@ ps_pcaEvaluation <-function(doc = "ps_pcaEvaluation",
     #
     # plot source convex hulls
     #
-    for (i in 1:length(known.sources))
-      plot.data[[i]] <- fn.convex.hull(hull.group = known.sources[i])
-      lines(plot.data[[i]])
+    for (i in 1:length(known_sources))
+      plot_data[[i]] <- fcnConvexHull(hull_group = known_sources[i])
+      lines(plot_data[[i]])
     legend(
-      x = loc.legend,
-      legend = known.sources,
-      pch = 1:length(known.sources),
+      x = loc_legend,
+      legend = known_sources,
+      pch = 1:length(known_sources),
       bty = "n"
     )  # legend for plot
     #
     #  plot points outside of predicted hull
     #
-    points(x = pts.outside[, "pc1"], y = pts.outside[,"pc2"],
-           cex = .5, pch = pts.outside[, "index"])
+    points(x = pts_outside[, "pc1"], y = pts_outside[,"pc2"],
+           cex = .5, pch = pts_outside[, "index"])
     #
     if (Identify == T) {
     # identify points of interest
-    index<-identify(pts.outside[,c("pc1","pc2")])
-    data.check<-pts.outside[index,]
-    colnames.data.check<-colnames(data.check)[(colnames(data.check)!="index")&(colnames(data.check)!="data.source")]
-    data.check<-data.check[,colnames.data.check]
-    data.check[,c("pc1","pc2")] <- round(as.matrix(data.check[,c("pc1","pc2")],mode="numeric"),dig=2)
+    index<-identify(pts_outside[,c("pc1","pc2")])
+    dataCheck<-pts_outside[index,]
+    colnames_dataCheck<-colnames(dataCheck)[(colnames(dataCheck)!="index")&(colnames(dataCheck)!="data_source")]
+    dataCheck<-dataCheck[,colnames_dataCheck]
+    dataCheck[,c("pc1","pc2")] <- round(as.matrix(dataCheck[,c("pc1","pc2")],mode="numeric"),dig=2)
     }
     #
     }   #  end of code for one-panel evaluation plot
     #
     #  return information to an R object
     #
-    colnames(n.in.out) <- c("outside","inside")
+    colnames(n_in_out) <- c("outside","inside")
     #
     if (ID[1] == " ")  keepVars <- c("group", AnalyticVars)
       else          keepVars <- c("group", "ID", AnalyticVars)
     artifactData <- artifactData[,keepVars]
-    pts.outside <- pts.outside[,c(keepVars, "pc1", "pc2")]
-    if (Identify == T) data.check <- data.check[,c(keepVars, "pc1", "pc2")]
+    pts_outside <- pts_outside[,c(keepVars, "pc1", "pc2")]
+    if (Identify == T) dataCheck <- dataCheck[,c(keepVars, "pc1", "pc2")]
     #
     if (ID[1] != " ") {
        artifactData <- artifactData[order(artifactData[, "ID"]),]
-       pts.outside <- pts.outside[order(pts.outside[, "ID"]),]
-       if (Identify == T)  data.check <- data.check[order(data.check[, "ID"]),]
+       pts_outside <- pts_outside[order(pts_outside[, "ID"]),]
+       if (Identify == T)  dataCheck <- dataCheck[order(dataCheck[, "ID"]),]
     }
-    fcn.date.ver<-paste(doc,date(),R.Version()$version.string)
+    fcnDateVersion<-paste(doc,date(),R.Version()$version.string)
     #
-    params.logical <- c(plotAllPoints, plotHullsOutsidePoints, plotOutsidePoints)
-    names(params.logical) <- c("plotAllPoints", "plotHullsOutsidePoints", "plotOutsidePoints")
-    params.grouping<-list(SourceGroup, ArtifactGroup,known.sources,predicted.sources)
-    names(params.grouping)<-c("SourceGroup","ArtifactGroup","known.sources","predicted.sources")
-    params<-list(grouping=params.grouping,logical=params.logical,Seed=Seed)
+    params_logical <- c(plotAllPoints, plotHullsOutsidePoints, plotOutsidePoints)
+    names(params_logical) <- c("plotAllPoints", "plotHullsOutsidePoints", "plotOutsidePoints")
+    params_grouping<-list(SourceGroup, ArtifactGroup,known_sources,predicted_sources)
+    names(params_grouping)<-c("SourceGroup","ArtifactGroup","known_sources","predicted_sources")
+    params<-list(grouping=params_grouping,logical=params_logical,Seed=Seed)
   #
-  out<-list(usage=fcn.date.ver,
+  out<-list(usage=fcnDateVersion,
                 sourceData = sourceData,
                 sourcesNA = sourcesNA,
                 artifactData = artifactData,
@@ -569,9 +571,9 @@ ps_pcaEvaluation <-function(doc = "ps_pcaEvaluation",
                 analyticVars = AnalyticVars,
                 impError = impError,
                 params = params,
-                table.in.out = n.in.out,
-                points.outside = pts.outside,
-                data.check = data.check,
+                table_in_out = n_in_out,
+                points_outside = pts_outside,
+                dataCheck = dataCheck,
                 location=folder)
    out
    }

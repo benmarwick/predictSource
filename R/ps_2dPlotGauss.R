@@ -40,7 +40,7 @@
 #'   See the vignette for more information: visualizing each plot, the information obtained
 #'    by using the package qqtest, the tests for bivariate normality, and identifying points of interest.
 #'
-#' @import MASS  qqtest  MVN
+#' @import MASS  qqtest  MVN  nortest
 #'
 #' @examples
 #' data(ObsidianSources)
@@ -76,8 +76,8 @@ ps_2dPlotGauss <- function (doc = "ps_2dPlotGauss",
     dataKeep[is.na(dataUsed[,AnalyticVars[i]])] <- F
   #
   if (Groups[1] == "All")
-    groups <- as_character(unique(dataUsed[, GroupVar]))
-  else groups <- as_character(Groups)
+    groups <- as.character(unique(dataUsed[, GroupVar]))
+  else groups <- as.character(Groups)
   #
   GroupIndex <- rep(NA, nrow(dataUsed))
   for (i in 1:nrow(dataUsed)) {
@@ -124,23 +124,24 @@ ps_2dPlotGauss <- function (doc = "ps_2dPlotGauss",
       data_grp<-dataUsed[dataUsed[,GroupVar]==groups[i_group],]
       dataCheck<<-rbind(dataCheck,data_grp[index,])
     }
-    ADp1 <- ad_test(temp1)$p_value
-    ADp2 <- ad_test(temp2)$p_value
-    SWp1 <- shapiro_test(temp1)$p_value
-    SWp2 <- shapiro_test(temp2)$p_value
+    ADp1 <- ad.test(temp1)$p.value
+    ADp2 <- ad.test(temp2)$p.value
+    SWp1 <- shapiro.test(temp1)$p.value
+    SWp2 <- shapiro.test(temp2)$p.value
     temp <- temp[!is.na(temp[,AnalyticVars[1]]) & !is.na(temp[,AnalyticVars[2]]),]
     n_samples <- nrow(temp)
     mardia <- MVN::mvn(data = temp, mvnTest="mardia")
-    p_mardia_skew <- as_numeric(as_character(mardia[[1]][[3]][[1]],mode="character"))
-    p_mardia_kurtosis <- as_numeric(as_character(mardia[[1]][[3]][[2]],mode="character"))
+    p_mardia_skew <- as.numeric(as.character(mardia[[1]][[3]][[1]],mode="character"))
+    p_mardia_kurtosis <- as.numeric(as.character(mardia[[1]][[3]][[2]],mode="character"))
     if (qqPlot)
       HZ <- MVN::mvn(data=temp, mvnTest="hz",multivariatePlot="qq")
       else  HZ <- MVN::mvn(data=temp, mvnTest="hz")
     #
-    p_HZ <- as_numeric(HZ[[1]][[3]], mode = "numeric")
+    p_HZ <- as.numeric(HZ[[1]][[3]], mode = "numeric")
     royston <- MVN::mvn(data=temp, mvnTest="royston")
-    p_Royston <- as_numeric(royston[[1]][[3]], mode = "numeric")
+    p_Royston <- as.numeric(royston[[1]][[3]], mode = "numeric")
     p_temp <- c(n_samples, ADp1, ADp2, SWp1, SWp2, p_mardia_skew, p_mardia_kurtosis, p_HZ, p_Royston)
+    browser()
     # return p-values
     p_temp
   } # end of definition of function
@@ -156,18 +157,17 @@ ps_2dPlotGauss <- function (doc = "ps_2dPlotGauss",
     iPlot <- iPlot+1
     pvalues[i_group, ] <- fnPlot() # plot for this group and compute p-values
     if (qqPlot==T)  {
-      browser()
-      plot_new() # blank plot so next group starts in new window
+      plot.new() # blank plot so next group starts in new window
     }
     # two plots per frame if qqPlot=F
     if ((qqPlot==F) & (floor(i_group/2)==i_group/2))  browser()
   } # end of loop on i_group
 #     if ((qqPlot==F) & (as_integer(i_group/2)==i_group/2)) {
- #       plot_new() # blank plots so next group starts in new window
+ #       plot.new() # blank plots so next group starts in new window
   #    pvalues[i_group, ] <- fnPlot()
    # }
   #
-  numeric_pvalues<-as_numeric(pvalues)
+  numeric_pvalues<-as.numeric(pvalues)
   numeric_pvalues<-round(numeric_pvalues,dig=pvalue_digits)
   numeric_pvalues[numeric_pvalues < 0] <- NA
   return_pvalues<-matrix(numeric_pvalues,nrow=length(groups),ncol=9)
@@ -187,7 +187,7 @@ ps_2dPlotGauss <- function (doc = "ps_2dPlotGauss",
     }
   } # end of code for Identify=T
   #
-  fcn_date_ver<-c(doc,date(),R.Version()$version.string)
+  fcnDateVersion<-c(doc,date(),R.Version()$version.string)
   #
   params_numeric<-pvalue_digits
   names(params_numeric)<-"pvalue_digits"
@@ -200,7 +200,7 @@ ps_2dPlotGauss <- function (doc = "ps_2dPlotGauss",
   if (sum(dataKeep) < nrow(dataUsed)) dataNA <- dataUsed[!dataKeep,]
   else dataNA <- NA
   #
-  list(         usage=fcn_date_ver,
+  list(         usage=fcnDateVersion,
                 dataUsed=dataUsed,
                 dataNA=dataNA,
                 analyticVars=AnalyticVars,

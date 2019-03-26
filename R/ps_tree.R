@@ -150,7 +150,7 @@ ps_tree <-
     nsplitopt <- vector(mode = "integer", length = 25)
     for (i in 1:length(nsplitopt)) {
       cp <- Tree$cptable
-      nsplitopt[i] <- cp[which_min(cp[, "xerror"]), "nsplit"]
+      nsplitopt[i] <- cp[which.min(cp[, "xerror"]), "nsplit"]
     }
     nsplitopt <- cbind(Model = rep(0, 25), Splits = nsplitopt)
     Nsplitopt <-

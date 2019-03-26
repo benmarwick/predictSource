@@ -32,7 +32,7 @@
 #'   \item{params_logical:}{ The value of QQtest}
 #'   \item{p_values:}{ A data frame with the p-values for the Gaussian assumptions for each
 #'    group specified}
-#'  \item{dataCheck:}{  A data frame with data identified as generating points of interest;
+#'  \item{data_check:}{  A data frame with data identified as generating points of interest;
 #'  value is NA if no points are identified}
 #'   \item{location:}{ The value of the parameter folder}
 #'  }
@@ -49,7 +49,7 @@
 #'
 
 ps_pcaGauss <-
-  function(doc = "ps_pcaGauss",
+  function(doc = "fn_pca_Gauss",
            data,
            GroupVar,
            Groups,
@@ -85,9 +85,6 @@ ps_pcaGauss <-
       else  dataNA<-NA
     #
     dataUsed <- dataUsed[dataKeep,]
-    #
-
-
     #
     # define variable groups as groups used in analysis
     if (Groups[1] == "All")
@@ -142,10 +139,10 @@ ps_pcaGauss <-
     names(params_logical)<-c("qqPlot","gaussIdentify")
     #
     if (gaussIdentify == T) {
-    if (gaussID == " ") dataCheck<-outGauss$dataCheck[,c(GroupVar, AnalyticVars)]
-    else  dataCheck<-outGauss$dataCheck[,c(GroupVar, gaussID, AnalyticVars)]
+    if (gaussID == " ") data_check<-outGauss$data_check[,c(GroupVar, AnalyticVars)]
+    else  data_check<-outGauss$data_check[,c(GroupVar, gaussID, AnalyticVars)]
     }
-    else  dataCheck <- NA
+    else  data_check <- NA
     #
     out<-list(usage=fcnDateVersion,
                 dataUsed=dataUsed,
@@ -154,7 +151,7 @@ ps_pcaGauss <-
                 params_grouping=params_grouping,
                 params_logical=params_logical,
                 p_values = outGauss$pvalues,
-                dataCheck = dataCheck,
+                data_check = data_check,
                 location=folder)
     out
   }
