@@ -41,7 +41,7 @@ default value is 11111}
 \item{predictSources}{Logical; if T, predict sources for the data in predictData; default is F}
 
 \item{predictData}{A data frame or matrix with data used to predict sources for observations,
-must contain all variables in AnalyticVars.}
+must contain all variables in AnalyticVars_}
 
 \item{artifactID}{if not " " (the default), the name of the variable with the sample ID for
 artifact data}
@@ -61,7 +61,7 @@ The function returns a list with the following components:
    NÁ if no missing values}
   \item{analyticVars:}{ A vector with the value of the argument AnalyticVars}
   \item{params:}{ A list with the values of the grouping, logical, and numeric arguments}
-  \item{formula.rf:}  {The formula used in the analysis (the variables specified in the argument AnalyticVars
+  \item{formula_rf:}  {The formula used in the analysis (the variables specified in the argument AnalyticVars
                        separated by + signs)}
   \item{forest:}{  A summary of the random forest call, estimated error rate, and
   confusion matrix}
@@ -96,14 +96,14 @@ If predictSources = T and plotSourceProbs is T, the function creates two box plo
 \examples{
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-save.randomForest <- ps_randomForest(data=ObsidianSources, GroupVar="Code",Groups="All",
+save_randomForest <- ps_randomForest(data=ObsidianSources, GroupVar="Code",Groups="All",
   sourceID="ID", AnalyticVars=analyticVars, NvarUsed=3, plotSourceProbs=F)
 #
 # predicted sources for artifacts
 data(ObsidianSources)
 data(ObsidianArtifacts)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-save.randomForest <- ps_randomForest(data=ObsidianSources, GroupVar="Code",Groups="All",
+save_randomForest <- ps_randomForest(data=ObsidianSources, GroupVar="Code",Groups="All",
 AnalyticVars=analyticVars, sourceID="ID", NvarUsed=3, plotErrorRate=F, plotImportance=F,
 predictSources=T, predictData=ObsidianArtifacts, artifactID="ID", plotSourceProbs=T)
 

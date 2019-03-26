@@ -9,13 +9,13 @@
 #' @param AnalyticVars  A vector with the names (character values) of the analytic variables
 #' @param wts Option to weight the observations, if used, vector with length nrow(data); if NA (the default), assume equal weights
 #' @param CpDigits  The number of significant digits to display in the Cp table, default value is 3
-#' @param plotTree Logical.  If T (true, the default), plot the recursive partitioning tree
-#' @param plotCp  Logical.  If T (tree, the default), plot the Cp table values
+#' @param plotTree Logical_  If T (true, the default), plot the recursive partitioning tree
+#' @param plotCp  Logical_  If T (tree, the default), plot the Cp table values
 #' @param Model  A character string containing the names of the variables (characters) considered
 #'  separated by + signs
 #' @param ModelTitle  The parameter Model as a single character value
 #' @param minSplit  The minimum size of a group for splitting, default is 20 (the default in rpart())
-#' @param cP  The required improvement in Cp for a group to be split, default is .01 (the default in rpart())
+#' @param cP  The required improvement in Cp for a group to be split, default is _01 (the default in rpart())
 #' @param predictSources  Logical: if T, use the tree to predict sources for observations
 #'  in predictData; default is F
 #' @param predictData  Data frame with data used to predict sources, must contain all variables
@@ -32,11 +32,11 @@
 #' \itemize{
 #'   \item{usage:}{ A string with the contents of the argument doc, the date run, the version of R used}
 #'   \item{dataUsed:}{ The contents of the argument data restricted to the groups used}
-#'   \item{params.grouping:}{ A list with the values of the arguments GroupVar and Groups}
+#'   \item{params_grouping:}{ A list with the values of the arguments GroupVar and Groups}
 #'   \item{analyticVars:}{ A vector with the value of the argument AnalyticVars}
 #'   \item{params:}{ A list with the values of the grouping, logical, and splitting parameters}
 #'   \item{model:}{ A character string with the value of the argument ModelTitle}
-#'   \item{Tree:}{ A list with details of the tree construction.}
+#'   \item{Tree:}{ A list with details of the tree construction_}
 #'   \item{classification:}  {A data frame showing the crossclassification of sources and predicted sources}
 #'   \item{CpTable:}{  A data frame showing the decrease in Cp with increasing numbers of splits}
 #'   \item{predictedSources:}{  If predictSources = T, a data frame with the predicted sources}
@@ -49,14 +49,14 @@
 #'  importance from a random forst analysis
 #' data(ObsidianSources)
 #' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-#' save.tree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
+#' save_tree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
 #'   Model = "Rb"+"Sr"+"Y"+"Zr"+"Nb", ModelTitle = "Sr + Nb + Rb + Y + Zr")
 #'
 #'  #  Predict the sources of artifacts
 #' data(ObsidianSources)
 #' data(ObsidianArtifacts)
 #' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-#' save.tree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
+#' save_tree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
 #'      Model = "Sr"+ "Nb" + "Rb" + "Y"+"Zr", ModelTitle = "Sr + Nb + Rb + Y + Zr",
 #'      predictSources=T, predictData=ObsidianArtifacts, ID="ID",
 #'      plotTree=F, plotCp=F)
@@ -84,17 +84,17 @@ ps_tree <-
            ID = " ",
            folder = " ")
 {
-    # create dataset Data.used based on grouping restrict to desired set of groups
+    # create dataset dataUsed based on grouping restrict to desired set of groups
     if (Groups[1] != "All") {
-      Use.rows <- (data[, GroupVar] %in% Groups)
-      Data.used <- data[Use.rows, ]
+      Use_rows <- (data[, GroupVar] %in% Groups)
+      dataUsed <- data[Use_rows, ]
     } else
-      Data.used <- data[, ]
+      dataUsed <- data[, ]
     #
     #  sort source data on GroupVar
     #
-    rowsSort <- order(Data.used[,GroupVar])
-    Data.used <- Data.used[rowsSort,]
+    rowsSort <- order(dataUsed[,GroupVar])
+    dataUsed <- dataUsed[rowsSort,]
     #
     #  if predictions to be made and ID used, sort on ID
     #
@@ -104,23 +104,23 @@ ps_tree <-
     # define variable groups as groups used in analysis
     if ((GroupVar[1] != " ") & (Groups[1] == "All"))
       groups <-
-        as.character(unique(Data.used[, GroupVar]))
+        as.character(unique(dataUsed[, GroupVar]))
     else if (GroupVar[1] != " ")
       groups <- as.character(Groups)
     #
     if (is.na(wts))
-      Weights = rep(1, nrow(Data.used))
+      Weights = rep(1, nrow(dataUsed))
     else
       Weights = wts
     #
-    Sources <- factor(Data.used[, GroupVar])
-    formula.rhs <-
+    Sources <- factor(dataUsed[, GroupVar])
+    formula_rhs <-
       paste(AnalyticVars, collapse = "+")  # right hand side of formula
-    formula.tree <-
-      as.formula(paste("Sources", formula.rhs, sep = " ~ "))
+    formula_tree <-
+      as.formula(paste("Sources", formula_rhs, sep = " ~ "))
     Tree <-
-      rpart(formula.tree,
-            data = Data.used,
+      rpart(formula_tree,
+            data = dataUsed,
             weights = Weights,
             method = "class",
             minsplit=minSplit,
@@ -144,13 +144,13 @@ ps_tree <-
       pch = 1
              )
       lines(x = CpTable[, "nsplit"], y = CpTable[, "xerror"], lty = 1)
-      legend(x = "bottomleft", legend = formula.rhs, bty = "n")
+      legend(x = "bottomleft", legend = formula_rhs, bty = "n")
      } # end of code for plotCp
     # optimal number of splits
     nsplitopt <- vector(mode = "integer", length = 25)
     for (i in 1:length(nsplitopt)) {
       cp <- Tree$cptable
-      nsplitopt[i] <- cp[which.min(cp[, "xerror"]), "nsplit"]
+      nsplitopt[i] <- cp[which_min(cp[, "xerror"]), "nsplit"]
     }
     nsplitopt <- cbind(Model = rep(0, 25), Splits = nsplitopt)
     Nsplitopt <-
@@ -174,23 +174,23 @@ ps_tree <-
     Cp <- round(CpTable[,-2],dig = CpDigits)
     CpTable <- cbind(nsplit,Cp)
     #
-    fcn.date.ver<-paste(doc,date(),R.Version()$version.string)
+    fcnDateVersion<-paste(doc,date(),R.Version()$version.string)
     #
-    params.grouping<-list(GroupVar,Groups)
-    names(params.grouping)<-c("GroupVar","Groups")
-    params.logical<-c(plotTree, plotCp, predictSources)
-    names(params.logical)<-c("plotTree", "plotCp", "predictSources")
-    params.splitting <- c(minSplit, cP, CpDigits)
-    names(params.splitting) <- c("minSplit","cP", "CpDigits")
-    params<-list(grouping=params.grouping,logical=params.logical,splitting=params.splitting)
+    params_grouping<-list(GroupVar,Groups)
+    names(params_grouping)<-c("GroupVar","Groups")
+    params_logical<-c(plotTree, plotCp, predictSources)
+    names(params_logical)<-c("plotTree", "plotCp", "predictSources")
+    params_splitting <- c(minSplit, cP, CpDigits)
+    names(params_splitting) <- c("minSplit","cP", "CpDigits")
+    params<-list(grouping=params_grouping,logical=params_logical,splitting=params_splitting)
     #
     nsplit <- CpTable[,"nsplit"]
     Cp <- round(CpTable[,-2],dig = CpDigits)
     CpTable <- cbind(nsplit,Cp)
     #
     if (!predictSources)
-      out<-list(usage=fcn.date.ver,
-                dataUsed=Data.used,
+      out<-list(usage=fcnDateVersion,
+                dataUsed=dataUsed,
                 analyticVars=AnalyticVars,
                 params=params,
                 model=ModelTitle,
@@ -200,8 +200,8 @@ ps_tree <-
                 location=folder)
     #
     if (predictSources)
-        out<-list(usage=fcn.date.ver,
-                  dataUsed=Data.used,
+        out<-list(usage=fcnDateVersion,
+                  dataUsed=dataUsed,
                   analyticVars=AnalyticVars,
                   params=params,
                   model=ModelTitle,

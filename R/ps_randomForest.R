@@ -19,7 +19,7 @@
 #' @param plotImportance Logical, whether to show the plot of variable importance, default is T
 #' @param predictSources Logical; if T, predict sources for the data in predictData; default is F
 #' @param predictData A data frame or matrix with data used to predict sources for observations,
-#'    must contain all variables in AnalyticVars.
+#'    must contain all variables in AnalyticVars_
 #' @param artifactID if not " " (the default), the name of the variable with the sample ID for
 #'  artifact data
 #' @param plotSourceProbs Logical, if T (the default) and predictSources=T, show box plots of source
@@ -44,7 +44,7 @@
 #'    NÁ if no missing values}
 #'   \item{analyticVars:}{ A vector with the value of the argument AnalyticVars}
 #'   \item{params:}{ A list with the values of the grouping, logical, and numeric arguments}
-#'   \item{formula.rf:}  {The formula used in the analysis (the variables specified in the argument AnalyticVars
+#'   \item{formula_rf:}  {The formula used in the analysis (the variables specified in the argument AnalyticVars
 #'                        separated by + signs)}
 #'   \item{forest:}{  A summary of the random forest call, estimated error rate, and
 #'   confusion matrix}
@@ -66,14 +66,14 @@
 #' @examples
 #' data(ObsidianSources)
 #' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-#' save.randomForest <- ps_randomForest(data=ObsidianSources, GroupVar="Code",Groups="All",
+#' save_randomForest <- ps_randomForest(data=ObsidianSources, GroupVar="Code",Groups="All",
 #'   sourceID="ID", AnalyticVars=analyticVars, NvarUsed=3, plotSourceProbs=F)
 #' #
 #' # predicted sources for artifacts
 #' data(ObsidianSources)
 #' data(ObsidianArtifacts)
 #' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-#' save.randomForest <- ps_randomForest(data=ObsidianSources, GroupVar="Code",Groups="All",
+#' save_randomForest <- ps_randomForest(data=ObsidianSources, GroupVar="Code",Groups="All",
 #' AnalyticVars=analyticVars, sourceID="ID", NvarUsed=3, plotErrorRate=F, plotImportance=F,
 #' predictSources=T, predictData=ObsidianArtifacts, artifactID="ID", plotSourceProbs=T)
 #'
@@ -101,20 +101,20 @@ ps_randomForest <-
            folder = " "
            )
 {
-    # create dataset Data.used based on grouping: restrict to desired set of groups
+    # create dataset dataUsed based on grouping: restrict to desired set of groups
     if (Groups[1] != "All") {
-      Use.rows <- (data[, GroupVar] %in% Groups)
+      Use_rows <- (data[, GroupVar] %in% Groups)
       if (sourceID != " ") {
-        Data.used <- data[Use.rows, c(GroupVar, AnalyticVars)]
-        dataID <- data[Use.rows, sourceID]
+        dataUsed <- data[Use_rows, c(GroupVar, AnalyticVars)]
+        dataID <- data[Use_rows, sourceID]
       }
       } else
-      Data.used <- data[, c(GroupVar, AnalyticVars)]
+      dataUsed <- data[, c(GroupVar, AnalyticVars)]
     #
     # define variable groups as groups used in analysis
     if ((GroupVar[1] != " ") & (Groups[1] == "All"))
       groups <-
-        as.character(unique(Data.used[, GroupVar]))
+        as.character(unique(dataUsed[, GroupVar]))
     else if (GroupVar[1] != " ")
       groups <- as.character(Groups)
     #
@@ -123,31 +123,31 @@ ps_randomForest <-
     #
     # matrix to contain indices for observations with no missing values
     #
-    dataKeep <- rep(T, nrow(Data.used))
+    dataKeep <- rep(T, nrow(dataUsed))
     for (i in 1:length(AnalyticVars))
-      dataKeep[is.na(Data.used[,AnalyticVars[i]])] <- F
+      dataKeep[is.na(dataUsed[,AnalyticVars[i]])] <- F
     #
-    #  redefine Data.used if some analysis variables are missing by imputing missing values
+    #  redefine dataUsed if some analysis variables are missing by imputing missing values
     #
-    if (sum(dataKeep) < nrow(Data.used)) {
-      temp<-rfImpute(Data.used[,GroupVar] ~ ., Data.used)
-      Data.used <- temp[,c(GroupVar,AnalyticVars)]
+    if (sum(dataKeep) < nrow(dataUsed)) {
+      temp<-rfImpute(dataUsed[,GroupVar] ~ ., dataUsed)
+      dataUsed <- temp[,c(GroupVar,AnalyticVars)]
       sourcesNA <- data[!dataKeep,]
     }
       else sourcesNA <- NA
     #
-    Sources <- factor(Data.used[, GroupVar])
-    formula.rhs <-
+    Sources <- factor(dataUsed[, GroupVar])
+    formula_rhs <-
       paste(AnalyticVars, collapse = "+")  # right hand side of formula
-    formula.rf <-
-      as.formula(paste("Sources", formula.rhs, sep = " ~ "))
+    formula_rf <-
+      as.formula(paste("Sources", formula_rhs, sep = " ~ "))
     if (is.na(NvarUsed))
-      fit.rf <-
-      randomForest(formula.rf, data = Data.used, ntree = Ntrees)
+      fit_rf <-
+      randomForest(formula_rf, data = dataUsed, ntree = Ntrees)
     else
-      fit.rf <-
-      randomForest(formula.rf,
-                   data = Data.used,
+      fit_rf <-
+      randomForest(formula_rf,
+                   data = dataUsed,
                    mtry = NvarUsed,
                    ntree = Ntrees)
     # specify number of variables in each call to rpart
@@ -157,13 +157,13 @@ ps_randomForest <-
     par(mfrow=c(1,1))
     #
     if (plotErrorRate) {
-      plot(fit.rf, main = "Estimated error rate by number of trees")
+      plot(fit_rf, main = "Estimated error rate by number of trees")
       browser()
     }
     #
-    importance.rf <- importance(fit.rf)
+    importance_rf <- importance(fit_rf)
     if (plotImportance)  {
-      varImpPlot(fit.rf, main = "Variable importance")
+      varImpPlot(fit_rf, main = "Variable importance")
       browser()
     }
 #
@@ -196,11 +196,11 @@ ps_randomForest <-
         impError <- NA
       }
       #
-      response <- predict(object=fit.rf, newdata=predictData, type="response")
-      probMatrix <- predict(object=fit.rf, newdata=predictData, type="prob")
-      pred.source <- table(response)
-      pred.probs <- apply(probMatrix,2,sum)
-      predictedTotals <- rbind(pred.source, pred.probs)
+      response <- predict(object=fit_rf, newdata=predictData, type="response")
+      probMatrix <- predict(object=fit_rf, newdata=predictData, type="prob")
+      pred_source <- table(response)
+      pred_probs <- apply(probMatrix,2,sum)
+      predictedTotals <- rbind(pred_source, pred_probs)
       rownames(predictedTotals) <- c("source", "sum probabilities")
       if (artifactID == " ")
         predictions <- data.frame(source=as.character(response), as.matrix(probMatrix),
@@ -218,7 +218,7 @@ ps_randomForest <-
           if (response[i]==colnames(probMatrix)[j])  probSource[i,2] <- probMatrix[i,j]
         }
       if (plotSourceProbs) {
-        fn.BoxPlots(data = probSource, GroupVar="source", Groups="All",
+        ps_boxPlots(data = probSource, GroupVar="source", Groups="All",
                   AnalyticVars="SourceProbability", Nrow=1, Ncol=1)
         browser()
       }
@@ -226,48 +226,48 @@ ps_randomForest <-
       # box plots of probabilities for sources not assigned to each unknown
       notSource<- rep("x", 4*length(response))
       prob <- rep(NA, 4*length(response))
-      i.row <- 0
+      i_row <- 0
       colNames <- as.character(colnames(probMatrix), mode="character")
       for (i in 1:length(response)) {
         for (j in 1:ncol(probMatrix)) {
           if (response[i]!=colnames(probMatrix)[j]) {
-            i.row <- i.row + 1
-            notSource[i.row] <- as.character(colNames[j])
-            prob[i.row] <- probMatrix[i,j]
+            i_row <- i_row + 1
+            notSource[i_row] <- as.character(colNames[j])
+            prob[i_row] <- probMatrix[i,j]
           }
         } # end of loop on j
       } # end of loop on i
       probNotSource <- data.frame(source=notSource, sourceProbability=prob)
       if (plotSourceProbs)
-        fn.BoxPlots(data = probNotSource, GroupVar="source", Groups="All",
+        ps_boxPlots(data = probNotSource, GroupVar="source", Groups="All",
                   AnalyticVars="sourceProbability", Nrow=1, Ncol=1)
     } # end of code for predictSources == T
     #
-    importance.rf <- round(importance.rf, dig=digitsImportance)
+    importance_rf <- round(importance_rf, dig=digitsImportance)
     #
     if ((artifactID != " ") & (predictSources == T))
       predictions <- predictions[order(predictions[,artifactID]),]
     #
-    fcn.date.ver<-paste(doc,date(),R.Version()$version.string)
+    fcnDateVersion<-paste(doc,date(),R.Version()$version.string)
     #
-    params.grouping<-list(GroupVar,Groups)
-    names(params.grouping)<-c("GroupVar","Groups")
-    params.numeric<-c(NvarUsed, Ntrees, Seed, digitsImportance)
-    names(params.numeric)<-c("NvarUsed", "Ntrees", "Seed", "digitsImportance")
-    params.logical<-c(plotErrorRate,plotImportance,predictSources,plotSourceProbs)
-    names(params.logical) <- c("plotErrorRate","plotImportance","predictSources","plotSourceProbs")
-    params<-list(grouping=params.grouping,logical=params.logical,numeric=params.numeric)
+    params_grouping<-list(GroupVar,Groups)
+    names(params_grouping)<-c("GroupVar","Groups")
+    params_numeric<-c(NvarUsed, Ntrees, Seed, digitsImportance)
+    names(params_numeric)<-c("NvarUsed", "Ntrees", "Seed", "digitsImportance")
+    params_logical<-c(plotErrorRate,plotImportance,predictSources,plotSourceProbs)
+    names(params_logical) <- c("plotErrorRate","plotImportance","predictSources","plotSourceProbs")
+    params<-list(grouping=params_grouping,logical=params_logical,numeric=params_numeric)
     #
-    out<-list(usage=fcn.date.ver,
-                  dataUsed=Data.used,
+    out<-list(usage=fcnDateVersion,
+                  dataUsed=dataUsed,
                   sourcesNA=sourcesNA,
                   predictData=predictData,
                   analyticVars=AnalyticVars,
                   params=params,
-                  formula.rf=formula.rf,
-                  forest = fit.rf,
-                  importance = importance.rf,
-                  confusion = fit.rf$confusion,
+                  formula_rf=formula_rf,
+                  forest = fit_rf,
+                  importance = importance_rf,
+                  confusion = fit_rf$confusion,
                   predictedData = predictData,
                   predictedNA = predictNA,
                   predictedSources = predictions,
@@ -276,3 +276,4 @@ ps_randomForest <-
                   location = folder)
       out
   }
+

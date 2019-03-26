@@ -24,9 +24,9 @@ ps_tree(doc = "ps_tree", data, GroupVar, Groups = "All", AnalyticVars,
 
 \item{CpDigits}{The number of significant digits to display in the Cp table, default value is 3}
 
-\item{plotTree}{Logical.  If T (true, the default), plot the recursive partitioning tree}
+\item{plotTree}{Logical_  If T (true, the default), plot the recursive partitioning tree}
 
-\item{plotCp}{Logical.  If T (tree, the default), plot the Cp table values}
+\item{plotCp}{Logical_  If T (tree, the default), plot the Cp table values}
 
 \item{Model}{A character string containing the names of the variables (characters) considered
 separated by + signs}
@@ -35,7 +35,7 @@ separated by + signs}
 
 \item{minSplit}{The minimum size of a group for splitting, default is 20 (the default in rpart())}
 
-\item{cP}{The required improvement in Cp for a group to be split, default is .01 (the default in rpart())}
+\item{cP}{The required improvement in Cp for a group to be split, default is _01 (the default in rpart())}
 
 \item{predictSources}{Logical: if T, use the tree to predict sources for observations
 in predictData; default is F}
@@ -53,11 +53,11 @@ The function returns a list with the following components:
 \itemize{
   \item{usage:}{ A string with the contents of the argument doc, the date run, the version of R used}
   \item{dataUsed:}{ The contents of the argument data restricted to the groups used}
-  \item{params.grouping:}{ A list with the values of the arguments GroupVar and Groups}
+  \item{params_grouping:}{ A list with the values of the arguments GroupVar and Groups}
   \item{analyticVars:}{ A vector with the value of the argument AnalyticVars}
   \item{params:}{ A list with the values of the grouping, logical, and splitting parameters}
   \item{model:}{ A character string with the value of the argument ModelTitle}
-  \item{Tree:}{ A list with details of the tree construction.}
+  \item{Tree:}{ A list with details of the tree construction_}
   \item{classification:}  {A data frame showing the crossclassification of sources and predicted sources}
   \item{CpTable:}{  A data frame showing the decrease in Cp with increasing numbers of splits}
   \item{predictedSources:}{  If predictSources = T, a data frame with the predicted sources}
@@ -78,14 +78,14 @@ The function fits a classification tree model us the R function rpart().
  importance from a random forst analysis
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-save.tree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
+save_tree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
   Model = "Rb"+"Sr"+"Y"+"Zr"+"Nb", ModelTitle = "Sr + Nb + Rb + Y + Zr")
 
  #  Predict the sources of artifacts
 data(ObsidianSources)
 data(ObsidianArtifacts)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-save.tree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
+save_tree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
      Model = "Sr"+ "Nb" + "Rb" + "Y"+"Zr", ModelTitle = "Sr + Nb + Rb + Y + Zr",
      predictSources=T, predictData=ObsidianArtifacts, ID="ID",
      plotTree=F, plotCp=F)
