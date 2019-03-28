@@ -77,7 +77,7 @@ A list with the following components:
 \description{
 Create 2-dimensional data plot or plots.  By default, a page has panes in two rows and
 two columns (but there is a new page for successive groups). The function stops after producing
-each row of each plot_  Enter c ("continue") at the prompt to get the next plot.
+each row of each plot.  Enter c ("continue") at the prompt to get the next plot.
 }
 \section{Details}{
 

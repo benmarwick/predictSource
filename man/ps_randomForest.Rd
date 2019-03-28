@@ -61,7 +61,7 @@ The function returns a list with the following components:
    NÁ if no missing values}
   \item{analyticVars:}{ A vector with the value of the argument AnalyticVars}
   \item{params:}{ A list with the values of the grouping, logical, and numeric arguments}
-  \item{formula_rf:}  {The formula used in the analysis (the variables specified in the argument AnalyticVars
+  \item{formulaRf:}  {The formula used in the analysis (the variables specified in the argument AnalyticVars
                        separated by + signs)}
   \item{forest:}{  A summary of the random forest call, estimated error rate, and
   confusion matrix}

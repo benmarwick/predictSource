@@ -162,7 +162,7 @@ ps_2dPlotGauss <- function (doc = "ps_2dPlotGauss",
     # two plots per frame if qqPlot=F
     if ((qqPlot==F) & (floor(i_group/2)==i_group/2))  browser()
   } # end of loop on i_group
-#     if ((qqPlot==F) & (as_integer(i_group/2)==i_group/2)) {
+#     if ((qqPlot==F) & (as.integer(i_group/2)==i_group/2)) {
  #       plot.new() # blank plots so next group starts in new window
   #    pvalues[i_group, ] <- fnPlot()
    # }

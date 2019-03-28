@@ -201,7 +201,7 @@ ps_3dPlot <-
         }
       }
     }
-    fcn_date_ver<-c(doc,date(),R.Version()$version.string)
+    fcnDateVersion<-c(doc,date(),R.Version()$version.string)
     #
     params_grouping<-list(GroupVar,Groups)
     names(params_grouping)<-c("GroupVar","Groups")
@@ -214,7 +214,7 @@ ps_3dPlot <-
     if (sum(dataKeep) < nrow(dataUsed)) dataNA <- dataUsed[!dataKeep]
     else dataNA <- NA
     #
-    out<-list(usage=fcn_date_ver,
+    out<-list(usage=fcnDateVersion,
               dataUsed=dataUsed,
               dataNA=dataNA,
               params=params,

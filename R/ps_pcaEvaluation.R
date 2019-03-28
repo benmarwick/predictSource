@@ -51,9 +51,9 @@
 #'   \item{params:}{  A list with the values of the grouping and source arguments and
 #'   values of the logical arguments}
 #'   \item{analyticVars:}{  A vector with the value of the argument AnalyticVars}
-#'   \item{table_in_out:} {  A data frame with counts of the numbers of artifacts inside and
+#'   \item{tableInOut:} {  A data frame with counts of the numbers of artifacts inside and
 #'   outside of each predicted source location}
-#'   \item{pts_outside:}  {  A data frame with the data for artifact points located outside of the
+#'   \item{ptsOutside:}  {  A data frame with the data for artifact points located outside of the
 #'    predicted source}
 #'   \item{dataCheck:}{  If Identify=T, a data frame with the observations in dataUsed identified
 #'    as of interest; value is c(NA,NA) if no points are identified}
@@ -263,7 +263,7 @@ ps_pcaEvaluation <-function(doc = "ps_pcaEvaluation",
     range_pc2 <- range(pcaLocations[, "pc2"])
 
     #
-    plot_data <-
+    plotData <-
       list(rep(NA, length(known_sources))) # save convex hull data for second plot
     #
     # code for first two panel plot: source points and convex hulls, and all artifact poins with hulls
@@ -306,7 +306,7 @@ ps_pcaEvaluation <-function(doc = "ps_pcaEvaluation",
     )
     # plot convex hulls
     for (i in 1:length(known_sources))
-      plot_data[[i]] <- fcnConvexHull(hull_group = known_sources[i])
+      plotData[[i]] <- fcnConvexHull(hull_group = known_sources[i])
     legend(
       x = loc_legend,
       legend = known_sources,
@@ -327,7 +327,7 @@ ps_pcaEvaluation <-function(doc = "ps_pcaEvaluation",
     #
     # convex hulls of source data
     for (i in 1:length(known_sources))
-      lines(plot_data[[i]])
+      lines(plotData[[i]])
     #  plot artifact points
     points(x = pcaLocationsArtifacts[, "pc1"],
            y = pcaLocationsArtifacts[, "pc2"],
@@ -359,12 +359,12 @@ ps_pcaEvaluation <-function(doc = "ps_pcaEvaluation",
     }  # end of fcnConvexHull
     #
     for (i in 1:length(known_sources)) {
-      plot_data[[i]] <- fcnConvexHull(hull_group = known_sources[i])
+      plotData[[i]] <- fcnConvexHull(hull_group = known_sources[i])
       index_i <- (known_sources[pcaLocationsArtifacts[, "index"]] == known_sources[i]) # rows with data prediced from this source
       if (sum(index_i) > 0) {
         # at least one artifact from source i
         temp_i <- pcaLocationsArtifacts[index_i,]
-        hull_i <- plot_data[[i]]  # convex hull for this source
+        hull_i <- plotData[[i]]  # convex hull for this source
         artifact_in_hull[index_i] <- in.out(bnd = as.matrix(hull_i, mode="numeric"), x = as.matrix(temp_i[, c("pc1", "pc2")],mode="numeric"))
       }  # end of loop for sum(index_i) > 0
     }  # end of loop on i
@@ -431,7 +431,7 @@ ps_pcaEvaluation <-function(doc = "ps_pcaEvaluation",
     #  plot convex hulls of sources
     #
     for (i in 1:length(known_sources))
-      lines(plot_data[[i]])
+      lines(plotData[[i]])
     #  add ID for each group at the median of the observed values
     groups <- known_sources
     medians <-
@@ -467,7 +467,7 @@ ps_pcaEvaluation <-function(doc = "ps_pcaEvaluation",
     # plot source convex hulls
     #
     for (i in 1:length(known_sources))
-      lines(plot_data[[i]])
+      lines(plotData[[i]])
     legend(
       x = loc_legend,
       legend = known_sources,
@@ -515,8 +515,8 @@ ps_pcaEvaluation <-function(doc = "ps_pcaEvaluation",
     # plot source convex hulls
     #
     for (i in 1:length(known_sources))
-      plot_data[[i]] <- fcnConvexHull(hull_group = known_sources[i])
-      lines(plot_data[[i]])
+      plotData[[i]] <- fcnConvexHull(hull_group = known_sources[i])
+      lines(plotData[[i]])
     legend(
       x = loc_legend,
       legend = known_sources,
@@ -571,8 +571,8 @@ ps_pcaEvaluation <-function(doc = "ps_pcaEvaluation",
                 analyticVars = AnalyticVars,
                 impError = impError,
                 params = params,
-                table_in_out = n_in_out,
-                points_outside = pts_outside,
+                tableInOut = n_in_out,
+                pointsOutside = pts_outside,
                 dataCheck = dataCheck,
                 location=folder)
    out

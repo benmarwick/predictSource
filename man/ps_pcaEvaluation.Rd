@@ -77,9 +77,9 @@ The function returns a list with the following components:
   \item{params:}{  A list with the values of the grouping and source arguments and
   values of the logical arguments}
   \item{analyticVars:}{  A vector with the value of the argument AnalyticVars}
-  \item{table_in_out:} {  A data frame with counts of the numbers of artifacts inside and
+  \item{tableInOut:} {  A data frame with counts of the numbers of artifacts inside and
   outside of each predicted source location}
-  \item{pts_outside:}  {  A data frame with the data for artifact points located outside of the
+  \item{ptsOutside:}  {  A data frame with the data for artifact points located outside of the
    predicted source}
   \item{dataCheck:}{  If Identify=T, a data frame with the observations in dataUsed identified
    as of interest; value is c(NA,NA) if no points are identified}

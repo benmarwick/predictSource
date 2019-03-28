@@ -53,9 +53,9 @@ ps_createData <- function(doc="ps_createData", data, Group,Subset,ID,AnalyticVar
   #
   if (Subset[1] != " ")  dataOut<-data.frame(Group=Group, Subset=Subset, ID=dataID, variables)
     else  dataOut<-data_frame(Group=Group, ID=dataID, variables)
-  fcn_date_ver<-paste(doc,date(),R.Version()$version.string)
+  fcnDateVersion<-paste(doc,date(),R.Version()$version.string)
   #
-  list(usage=fcn_date_ver,
+  list(usage=fcnDateVersion,
               analyticVars=AnalyticVars,
               dataOut=dataOut)
 }

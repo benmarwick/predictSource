@@ -23,9 +23,9 @@
 #'
 #' @section  DETAILS:
 #' If the function creates more than one plot, the code stops after each is displayed; enter c
-#' (continue) at the prompt to display the next plot_  If Groups specifies only one group, the code
-#' for that group is not displayed under a plot_  If an observation has a variable value that is
-#'  missing, the variables without missing values are used in the corresponding box plots_
+#' (continue) at the prompt to display the next plot.  If Groups specifies only one group, the code
+#' for that group is not displayed under a plot.  If an observation has a variable value that is
+#'  missing, the variables without missing values are used in the corresponding box plots.
 #'
 #' @examples
 #' data(ObsidianSources)
@@ -95,18 +95,18 @@ ps_boxPlots <-
       boxplot(dataBP[, AnalyticVars],
               ylim = c(0, max(dataBP[,AnalyticVars], na_rm = T)), notch = T, sub = "Analysis")
     }
-    fcn_date_ver<-paste(doc,date(),R.Version()$version.string)
+    fcnDateVersion<-paste(doc,date(),R.Version()$version.string)
     #
     params_numeric<-c(Nrow,Ncol)
     names(params_numeric)<-c("Nrow","Ncol")
     params_grouping<-list(GroupVar,Groups)
     names(params_grouping)<-c("GroupVar","Groups")
-    params<-list(grouping=params_grouping, numeric=params_numeric)
+    params<-list(grouping=paramsGrouping, numeric=paramsNumeric)
     #
     if (sum(dataKeep) < nrow(dataBP)) dataNA <- dataBP[!dataKeep,]
     else dataNA <- NA
     #
-   list(usage=fcn_date_ver,
+   list(usage=fcnDateVersion,
               dataUsed=dataBP,
               dataNA = dataNA,
               params=params,

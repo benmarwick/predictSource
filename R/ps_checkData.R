@@ -167,12 +167,12 @@ ps_checkData <-
       else  statistics <- data.frame(Analysis = vector_values, Group = vector_groups,
                             statistics_values)
       #
-    fcn_date_ver<-c(doc,date(),R.Version()$version.string)
+    fcnDateVersion<-c(doc,date(),R.Version()$version.string)
     params<-list(CheckDupVars,GroupVar,Groups)
     names(params)<-c("CheckDupVars","GroupVar","Groups")
     statistics[,"mean"] <- round(statistics[,"mean"], dig = 0)
   #
- list(usage=fcn_date_ver,
+ list(usage=fcnDateVersion,
            dataUsed=data,
            params=params,
            analyticVars=AnalyticVars,

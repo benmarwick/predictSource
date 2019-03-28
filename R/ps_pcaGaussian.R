@@ -1,4 +1,4 @@
-#' ps_pcaGauss
+#' ps_pcaGaussian
 #'
 #' Check whether first two principal components are Gaussian
 #'
@@ -27,11 +27,12 @@
 #'   \item{dataUsed:}{ The contents of the argument data restricted to the groups used}
 #'   \item{dataNA:}{  A data frame with observations containing a least one missing value
 #'   for an analysis variable, NA if no missing values}
-#'   \item{params:}{ A list with the values of the arguments grouping and logical arguments}
+#'   \item{params_grouping:}{ A list with the values of the arguments GroupVar and Groups}
 #'   \item{analyticVars:}{ A vector with the value of the argument AnalyticVars}
+#'   \item{params_logical:}{ The value of QQtest}
 #'   \item{p_values:}{ A data frame with the p-values for the Gaussian assumptions for each
 #'    group specified}
-#'  \item{data_check:}{  A data frame with data identified as generating points of interest;
+#'  \item{dataCheck:}{  A data frame with data identified as generating points of interest;
 #'  value is NA if no points are identified}
 #'   \item{location:}{ The value of the parameter folder}
 #'  }
@@ -41,14 +42,14 @@
 #' @examples
 #' data(ObsidianSources)
 #' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-#' pca_Gauss <- ps_pcaGauss(data=ObsidianSources, GroupVar="Code",Groups=c("A","B"),
+#' pca_Gauss <- ps_pcaGaussian(data=ObsidianSources, GroupVar="Code",Groups=c("A","B"),
 #'   AnalyticVars=analyticVars)
 #'
 #' @export
 #'
 
-ps_pcaGauss <-
-  function(doc = "fn_pca_Gauss",
+ps_pcaGaussian <-
+  function(doc = "ps_pcaGaussian",
            data,
            GroupVar,
            Groups,
@@ -136,21 +137,21 @@ ps_pcaGauss <-
     names(params_grouping)<-c("GroupVar","Groups")
     params_logical<-c(qqPlot, gaussIdentify)
     names(params_logical)<-c("qqPlot","gaussIdentify")
-    params<-list(grouping=params_grouping,logical=params_logical)
     #
     if (gaussIdentify == T) {
-    if (gaussID == " ") data_check<-outGauss$data_check[,c(GroupVar, AnalyticVars)]
-    else  data_check<-outGauss$data_check[,c(GroupVar, gaussID, AnalyticVars)]
+    if (gaussID == " ") dataCheck<-outGauss$dataCheck[,c(GroupVar, AnalyticVars)]
+    else  dataCheck<-outGauss$dataCheck[,c(GroupVar, gaussID, AnalyticVars)]
     }
-    else  data_check <- NA
+    else  dataCheck <- NA
     #
     out<-list(usage=fcnDateVersion,
                 dataUsed=dataUsed,
                 dataNA=dataNA,
                 analyticVars=AnalyticVars,
-                params,
+                params_grouping=params_grouping,
+                params_logical=params_logical,
                 p_values = outGauss$pvalues,
-                data_check = data_check,
+                dataCheck = dataCheck,
                 location=folder)
     out
   }

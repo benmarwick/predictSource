@@ -2,7 +2,7 @@
 #'
 #' Create 2-dimensional data plot or plots.  By default, a page has panes in two rows and
 #' two columns (but there is a new page for successive groups). The function stops after producing
-#' each row of each plot_  Enter c ("continue") at the prompt to get the next plot.
+#' each row of each plot.  Enter c ("continue") at the prompt to get the next plot.
 #'
 #' @param doc A string documenting use written to the output list; default is the function name
 #' @param data A matrix or data frame containing the data to be analyzed
@@ -206,7 +206,7 @@ ps_2dPlot <- function (doc = "ps_2dPlot",
         i_plot <- i_plot + 1
        if ((i_plot == 4) | (i_plot == nrow(AnalyticVars))) browser()  # allow user to look at page
        } # end of loop on k
-      if (nrow(AnalyticVars) != 2) plot_new() # new page for next group
+      if (nrow(AnalyticVars) != 2) plot.new() # new page for next group
     }  # end of loop on i_group
   }  # end of code for plotting by group
   #
@@ -307,7 +307,7 @@ ps_2dPlot <- function (doc = "ps_2dPlot",
       } # end of code for nrow(dataCheck) > 1
     } # end of code for Identify = T
   #
-  fcn_date_ver<-paste(doc,date(),R.Version()$version.string)
+  fcnDateVersion<-paste(doc,date(),R.Version()$version.string)
   #
   smoothing<-c(Lowess_f,KernelWidth)
   names(smoothing)<-c("Lowess_f","Kernelwidth")
@@ -323,7 +323,7 @@ ps_2dPlot <- function (doc = "ps_2dPlot",
   if (sum(dataKeep) < nrow(dataUsed)) dataNA <- dataUsed[!dataKeep,]
   else dataNA <- NA
   #
-  list(       usage=fcn_date_ver,
+  list(       usage=fcnDateVersion,
               dataUsed=dataUsed,
               dataNA=dataNA,
               params=params,

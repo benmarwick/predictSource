@@ -79,7 +79,7 @@ ps_pairsPlot <-
         browser()
        }
     }
-    fcn_date_ver<-paste(doc,date(),R.Version()$version.string)
+    fcnDateVersion<-paste(doc,date(),R.Version()$version.string)
     #
     params_numeric<-Span
     names(params_numeric)<-"Span"
@@ -90,7 +90,7 @@ ps_pairsPlot <-
     if (sum(dataKeep) < nrow(dataPlot)) dataNA <- dataPlot[!dataKeep,]
     else dataNA <- NA
     #
-    list(usage=fcn_date_ver,
+    list(usage=fcnDateVersion,
               dataUsed=data,
               dataNA = dataNA,
               params=params,

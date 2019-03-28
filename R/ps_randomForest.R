@@ -44,7 +44,7 @@
 #'    NÁ if no missing values}
 #'   \item{analyticVars:}{ A vector with the value of the argument AnalyticVars}
 #'   \item{params:}{ A list with the values of the grouping, logical, and numeric arguments}
-#'   \item{formula_rf:}  {The formula used in the analysis (the variables specified in the argument AnalyticVars
+#'   \item{formulaRf:}  {The formula used in the analysis (the variables specified in the argument AnalyticVars
 #'                        separated by + signs)}
 #'   \item{forest:}{  A summary of the random forest call, estimated error rate, and
 #'   confusion matrix}
@@ -264,7 +264,7 @@ ps_randomForest <-
                   predictData=predictData,
                   analyticVars=AnalyticVars,
                   params=params,
-                  formula_rf=formula_rf,
+                  formulaRf=formula_rf,
                   forest = fit_rf,
                   importance = importance_rf,
                   confusion = fit_rf$confusion,

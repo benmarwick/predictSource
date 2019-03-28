@@ -40,9 +40,9 @@ Box plots of specified analytic values, by specified groups_
 \section{DETAILS}{
 
 If the function creates more than one plot, the code stops after each is displayed; enter c
-(continue) at the prompt to display the next plot_  If Groups specifies only one group, the code
-for that group is not displayed under a plot_  If an observation has a variable value that is
- missing, the variables without missing values are used in the corresponding box plots_
+(continue) at the prompt to display the next plot.  If Groups specifies only one group, the code
+for that group is not displayed under a plot.  If an observation has a variable value that is
+ missing, the variables without missing values are used in the corresponding box plots.
 }
 
 \examples{

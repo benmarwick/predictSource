@@ -207,7 +207,7 @@ ps_CV_corr <-
     if (Transpose == T)
       Corrs <- t(Corrs)
     #
-    fcn_date_ver<-c(doc,date(),R.Version()$version.string)
+    fcnDateVersion<-c(doc,date(),R.Version()$version.string)
     #
     params_numeric<-c(digits_CV=CV_digits,digits_corr=corr_digits)
     names(params_numeric)<-c("CV_digits","corr_digits")
@@ -225,7 +225,7 @@ ps_CV_corr <-
     if (sum(dataKeep) < nrow(dataUsed)) dataNA <- dataUsed[!dataKeep,]
       else dataNA <- NA
     #
-    list(usage=fcn_date_ver,
+    list(usage=fcnDateVersion,
                 dataUsed=dataUsed,
                 dataNA = dataNA,
                 params=params,
