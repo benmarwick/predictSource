@@ -35,7 +35,7 @@ The data used to illustrate these procedures are five elements from five obsidia
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-tree <- fn.tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
+tree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
                  Model="Sr"+"Nb"+"Rb"+"Y"+"Zr", ModelTitle="Sr + Nb + Rb + Y + Zr", plotCp=F)
 
 ```
@@ -45,10 +45,10 @@ data(ObsidianSources)
 data(ObsidianArtifacts)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 sources <- unique(ObsidianSources[,"Code"])
-save.tree <- fn.tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
+save.tree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
   Model = "Sr"+"Nb"+"Rb"+"Y"+"Zr", ModelTitle="Sr + Nb + Rb + Y + Zr", predictSources=T,       predictData=ObsidianArtifacts, ID="ID", plotTree=F, plotCp=F)
-pca.eval <- fn.pca.evaluation(SourceData=ObsidianSources, ArtifactData=save.tree$predictedSources,
-  SourceGroup= "Code", ArtifactGroup="source",known.sources=sources, predicted.sources=sources,
+pca.eval <- ps_pcaEvaluation(SourceData=ObsidianSources, ArtifactData=save.tree$predictedSources,
+  SourceGroup= "Code", ArtifactGroup="source",known_sources=sources, predicted_sources=sources,
   AnalyticVars=analyticVars, plotAllPoints=T, plotHullsOutsidePoints=T, plotOutsidePoints=T)
   
 ```
@@ -89,7 +89,7 @@ Other R functions could also be used, including read.table(); see the documentat
 
 If it is necessary to combine several data files into an analysis file, use the function fn.data() to create an R data frame from each of the individual R objects.  For example, Shakley’s website contains an excel file with data for individual sources.  After creating an R data frame for a source using e.g. read.csv(), the element dataOut of the list created by fn.data() is a data frame with the analysis variables in a specified sequence; to create this new data frame, use the command
 
-new_object_name <- fn.data(data=object_name)$dataOut
+new_object_name <- ps_createData(data=object_name)$dataOut
 
 where object_name is the data frame created from read.csv(); alternatively, save the result of fn.data() as an R object (a list), and create the new data frame with the command
 
@@ -97,16 +97,16 @@ new_object_name <-list_name$dataOut
 
 These data frames can then be combined into an analysis data frame using the R function rbind().  If it may be necessary to repeat this operation for a number of source files, it may be useful to define an R function  
 
-fn.combine <- function()
+ps_combine <- function()
 rbind(data1, data2,…..)
 
 This function will return the result of the rbind() operation to define a data frame, such as
 
-analysisFile <- fn.combine()
+analysisFile <- ps_combine()
 
 After creating the analysis file, use 
 
-fn.CheckData(data=analysisFile, CheckDupVars, GroupVar, Groups, AnalyticVars) 
+ps_checkData(data=analysisFile, CheckDupVars, GroupVar, Groups, AnalyticVars) 
 
 to obtain basic descriptive statistics and carry out several data checks (number of observations, number of missing values, number of negative values, duplicate observations, and descriptive statistics, by group and analysis variable).  For the data set ObsidianSources, there are no negative values for the five elements of interest and no duplicate observations.  The numbers of observations by source and element are in Table 3.1.
 
@@ -114,8 +114,8 @@ to obtain basic descriptive statistics and carry out several data checks (number
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-CheckData<-fn.CheckData(data=ObsidianSources,CheckDupVars=c("Code","ID"),GroupVar="Code",Groups="All",AnalyticVars=analyticVars)
-knitr::kable(CheckData$Nvalues, caption="Table 3.1: Number of values for each element from each Jemez source.")
+checkData<-ps_checkData(data=ObsidianSources,CheckDupVars=c("Code","ID"),GroupVar="Code",Groups="All",AnalyticVars=analyticVars)
+knitr::kable(checkData$Nvalues, caption="Table 3.1: Number of values for each element from each Jemez source.")
 
 ```
 
@@ -124,7 +124,7 @@ The descriptive statistics for the elements in the classification tree in Figure
 ```{r } 
 library(karon)
 data(ObsidianSources)
-checkData<-fn.CheckData(data=ObsidianSources,CheckDupVars=c("Code","ID"),GroupVar="Code",Groups="All",AnalyticVars=c("Sr","Rb","Nb","Y"))
+checkData<-ps_checkData(data=ObsidianSources,CheckDupVars=c("Code","ID"),GroupVar="Code",Groups="All",AnalyticVars=c("Sr","Rb","Nb","Y"))
 knitr::kable(checkData$statistics, caption="Table 3.2: Descriptive statistics for the elements in the Jemez obsidian sources used in the classsification tree in Figure 1.1.")
 
 ```
@@ -136,7 +136,7 @@ For understanding later results, we need the corresponding descriptive statistic
 ```{r } 
 library(karon)
 data(ObsidianArtifacts)
-checkData<-fn.CheckData(data=ObsidianArtifacts,CheckDupVars=c("Code","ID"), GroupVar=" ", Groups=" ", AnalyticVars=c("Sr","Rb","Y"))
+checkData<-ps_checkData(data=ObsidianArtifacts,CheckDupVars=c("Code","ID"), GroupVar=" ", Groups=" ", AnalyticVars=c("Sr","Rb","Y"))
 knitr::kable(checkData$statistics, caption="Table 3.3: Descriptive statistics for the elements in the obsidian artifacts used in the classsification tree in Figure 1.1.")
 
 ```
@@ -151,7 +151,7 @@ The package contains functions to create basic descriptive statistics tables and
 
 ###  4.1  Box plots
 
-Box plots, created by the function fn.BoxPlots(), are useful for comparing the distributions of an element among sources and for identifying outlying values.  Figure 4.1 shows box plots for four elements for the source data.  To understand the information in a plot, look at the plot of zirconium at source C.  The heavy line, at the narrow part of the notch, is the median of the zirconium values at C.  The top and bottom of the box represent the 25th and 75th percentiles of the data, respectively (the quantiles).  The notches define a 95% confidence interval for the median; if these do not overlap for two sources, it is plausible that those sources have significantly different medians.  (These plots yield warning messages that some of the notches should extend beyond the quartiles; these messages can be ignored.) Vertical dashed lines from the quartiles to a larger or smaller value with a horizontal line define the ranges of “adjacent values”.  The largest adjacent value is the largest value less than or equal to the upper quartile plus 1.5 times the interquartile range (the upper quartile minus the lower quartile).  The smallest adjacent value is the smallest value greater than or equal to the lower quartile minus 1.5 times the interquartile range.  For a standard normal distribution (mean 0, standard deviation 1), the median is 0, the upper and lower quartiles are 0.68 and -0.68, respectively; the upper and lower adjacent values are 2.72 (4 x 0.68) and -2.72, respectively.  The probability that a value from standard Gaussian distribution is greater than 2.72 is 0.003.  It follows that, for Gaussian data, the probability that a value lies outside the range of adjacent values is less than 0.01.  Therefore, values outside the range of adjacent values either may be considered outliers, or the data is unlikely to be Gaussian.   
+Box plots, created by the function ps_boxPlots(), are useful for comparing the distributions of an element among sources and for identifying outlying values.  Figure 4.1 shows box plots for four elements for the source data.  To understand the information in a plot, look at the plot of zirconium at source C.  The heavy line, at the narrow part of the notch, is the median of the zirconium values at C.  The top and bottom of the box represent the 25th and 75th percentiles of the data, respectively (the quantiles).  The notches define a 95% confidence interval for the median; if these do not overlap for two sources, it is plausible that those sources have significantly different medians.  (These plots yield warning messages that some of the notches should extend beyond the quartiles; these messages can be ignored.) Vertical dashed lines from the quartiles to a larger or smaller value with a horizontal line define the ranges of “adjacent values”.  The largest adjacent value is the largest value less than or equal to the upper quartile plus 1.5 times the interquartile range (the upper quartile minus the lower quartile).  The smallest adjacent value is the smallest value greater than or equal to the lower quartile minus 1.5 times the interquartile range.  For a standard normal distribution (mean 0, standard deviation 1), the median is 0, the upper and lower quartiles are 0.68 and -0.68, respectively; the upper and lower adjacent values are 2.72 (4 x 0.68) and -2.72, respectively.  The probability that a value from standard Gaussian distribution is greater than 2.72 is 0.003.  It follows that, for Gaussian data, the probability that a value lies outside the range of adjacent values is less than 0.01.  Therefore, values outside the range of adjacent values either may be considered outliers, or the data is unlikely to be Gaussian.   
 
 If the box and the adjacent values are approximately symmetric around the median, then the distribution of the data is approximately symmetric.  Relative variation for values for an element among sources can be evaluated by comparing heights of boxes among sources.  
 the boxes   
@@ -162,7 +162,7 @@ From Figure 4.1, below, we see immediately that there is little variation among 
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Nb")
-boxPlots<-fn.BoxPlots(data=ObsidianSources, GroupVar="Code",                Groups="All",AnalyticVars=analyticVars,Nrow=2,Ncol=2)
+boxPlots<-ps_boxPlots(data=ObsidianSources, GroupVar="Code",                Groups="All",AnalyticVars=analyticVars,Nrow=2,Ncol=2)
 
 ```
 
@@ -175,11 +175,11 @@ data(ObsidianArtifacts)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 ObsidianSources<-ObsidianSources[,c("Code",analyticVars)]
 Artifacts <- ObsidianArtifacts[,c("Code",analyticVars)]
-SourcesCode <- as.vector(ObsidianSources[,"Code"], mode="character")
-ArtifactsCode <- as.vector(paste(Artifacts[,"Code"],"a",sep="."),mode="character")
-Codes <- c(SourcesCode, ArtifactsCode)
-SourcesArtifacts <- data.frame(rbind(ObsidianSources,Artifacts)[,analyticVars], Code = Codes)
-boxPlots<-fn.BoxPlots(data=SourcesArtifacts, GroupVar="Code", Groups="All",AnalyticVars=c("Rb","Nb"),Nrow=2,Ncol=1)
+sourcesCode <- as.vector(ObsidianSources[,"Code"], mode="character")
+artifactsCode <- as.vector(paste(Artifacts[,"Code"],"a",sep="."),mode="character")
+codes <- c(sourcesCode, artifactsCode)
+sourcesArtifacts <- data.frame(rbind(ObsidianSources,Artifacts)[,analyticVars], Code = codes)
+boxPlots<-ps_boxPlots(data=sourcesArtifacts, GroupVar="Code", Groups="All",AnalyticVars=c("Rb","Nb"),Nrow=2,Ncol=1)
 
 ```
 
@@ -189,7 +189,7 @@ Note that one artifact assigned to source D has values suggesting that it is act
 
 A pairs plot, useful in visualizing the relations between pair of variables, is a matrix containing bivariate scatter plots for all pairs of quantitative variables.  The matrix is symmetric, so corresponding plots across the main diagonal interchange the horizontal and vertical axes.  Each plot contains a robust locally weighted line to describe the trend in the data.  This line is obtained from the R function `lowess()` which computes a predicted value at each abscissa (x-value) from a regression based on a fraction of the data, with weights decreasing at abscissas farther from the point, and rejecting outliers (see e.g. Chambers et al., 1983, Chapter 4).  This function tends to try to have the line go through or near the points with the largest and smallest abscissas; therefore the behavior at the ends of the plot is not reliable.  The line is obtained from the function `panel.smooth()` within the call to `pairs()` with an argument span.  The line (smoother) will not be useful if there are very few values; an example plot demonstrates that trends may show useful results even with 15 values.  
 
-The plot is obtained with the function `fn.PairsPlot()` and the arguments data, GroupVar, Groups, AnalyticVars, and Span.  All except Span have the same meanings as in the function fn.BoxPlot.  Span is a value between 0 and 1 (not equal to 0) defining the proportion of data used to estimate robust smooth; the function is written with a default value of 2/3, which can be changed.  A small value (such as 0.1) will produce plots which do not show a clear trend; a large value (close to 1) will produce plots which do not show changes in trends.  Running the function will produce warnings that span is not a graphical parameter; these warnings should be ignored.
+The plot is obtained with the function ps_pairsPlot() and the arguments data, GroupVar, Groups, AnalyticVars, and Span.  All except Span have the same meanings as in the function fn.BoxPlot.  Span is a value between 0 and 1 (not equal to 0) defining the proportion of data used to estimate robust smooth; the function is written with a default value of 2/3, which can be changed.  A small value (such as 0.1) will produce plots which do not show a clear trend; a large value (close to 1) will produce plots which do not show changes in trends.  Running the function will produce warnings that span is not a graphical parameter; these warnings should be ignored.
 
 The plot below of the relations between elements at source A shows that the relationships between rubidium and ytterbium, and between rubidium and zirconium, are roughly linear, but that, roughly, there is no relation between the values of strontium and those of ytterbium and zirconium.  Note that it is necessary to look at both scatterplots of the relation between a pair of variables, as limited variation in one variable and dependence of the location of the largest and smallest values of one variable can make there seem to be a relationship (see the plots of strontium as the ordinate versus ytterbium or zirconium).  
 
@@ -197,13 +197,13 @@ The plot below of the relations between elements at source A shows that the rela
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-pairsPlot <- fn.PairsPlot(data=ObsidianSources, GroupVar="Code", Groups="A", AnalyticVars=analyticVars)
+pairsPlot <- ps_pairsPlot(data=ObsidianSources, GroupVar="Code", Groups="A", AnalyticVars=analyticVars)
 
 ```
 
 ###4.3 Coefficients of variation of elements and correlations between pairs of elements
 
-Numerical estimates of the associations between pairs of analytic variables at each source, in the form of Spearman correlation coefficients, are produced by the function fn.CV.corr().  This function also produces an estimate of the coefficient of variation (the standard deviation divided by the mean) for each variable at each source.  Because the Spearman correlation coefficient is computed from the ranks of the data, it is not affected by the numerical value of an outlier.  The coefficient of variation does use the numerical values, hence is affected by an outlier.  This function returns a list with elements with tne names CV (the coefficients of variation) and corr (the correlations).  By default, both the coefficients of variation and the correlations are rounded to two decimal places.    
+Numerical estimates of the associations between pairs of analytic variables at each source, in the form of Spearman correlation coefficients, are produced by the function ps_CV_corr().  This function also produces an estimate of the coefficient of variation (the standard deviation divided by the mean) for each variable at each source.  Because the Spearman correlation coefficient is computed from the ranks of the data, it is not affected by the numerical value of an outlier.  The coefficient of variation does use the numerical values, hence is affected by an outlier.  This function returns a list with elements with tne names CV (the coefficients of variation) and corr (the correlations).  By default, both the coefficients of variation and the correlations are rounded to two decimal places.    
 
 Table 4.1 contains the Spearman correlation coefficient estimates for all pairs of variables at each source.  Each estimate describes how close the relation between a pair of variables is to strictly monotone.  If a relationship is roughly monotone, the correlation coefficient does not describe how rapidly one variable changes with respect to the other (the correlation coefficient for a linear relationship can be large even if the slope of the line describing the relationship is small).  For example, the estimated correlation between strontium and zirconium at source A is 0.51, even though the pairs plot of these elements with strontium as the ordinate shows that strontium increases slowly as zirconium increases.  The correlation table is very useful for summarizing relationships between pairs of elements at the sources: it is clear that these relationships vary substantially among these sources.
 
@@ -213,8 +213,8 @@ Table 4.2 contains the Spearman correlation coefficients if group membership is 
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-CV.corr<-fn.CV.corr(data = ObsidianSources, GroupVar="Code", Groups = "All", AnalyticVars=analyticVars, plotCorrs=F)
-knitr::kable(CV.corr$corr, caption="Table 4.1: Spearman correlations among pairs of elements from the Jemez sources,
+CV_corr<-ps_CV_corr(data = ObsidianSources, GroupVar="Code", Groups = "All", AnalyticVars=analyticVars, plotCorrs=F)
+knitr::kable(CV_corr$corr, caption="Table 4.1: Spearman correlations among pairs of elements from the Jemez sources,
 by group.")
 #
 ```
@@ -223,8 +223,8 @@ by group.")
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-CV.corr<-fn.CV.corr(data = ObsidianSources, GroupVar="Code", Groups="All", AnalyticVars=analyticVars, ByGroup=F, plotCorrs=F)
-knitr::kable(CV.corr$corr, caption="Table 4.2: Spearman correlations among pairs of elements from the Jemez obsidian sources, all groups combined.")
+CV_corr<-ps_CV_corr(data = ObsidianSources, GroupVar="Code", Groups="All", AnalyticVars=analyticVars, ByGroup=F, plotCorrs=F)
+knitr::kable(CV_corr$corr, caption="Table 4.2: Spearman correlations among pairs of elements from the Jemez obsidian sources, all groups combined.")
 #
 ```
 
@@ -234,7 +234,7 @@ Figure 4.4 contains a graphical display of these correlations.  The slope of the
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-CV.corr<-fn.CV.corr(data = ObsidianSources, GroupVar="Code", Groups = "All", AnalyticVars=analyticVars, ByGroup=F, plotCorrs=T)
+CV_corr<-ps_CV_corr(data = ObsidianSources, GroupVar="Code", Groups = "All", AnalyticVars=analyticVars, ByGroup=F, plotCorrs=T)
 ```
 
 Table 4.3 shows the coefficients of variation for each element at each source.  Each standard deviation is small compared to the corresponding mean (each coefficient of variation is at most 0.11, and most are 0.05 or less) except for strontium at sources C and D.  The relatively large values of the coefficient of variation for strontium at those sources is a result of the small mean strontium values at those sources: the table of descriptive statistics (not shown) gives mean values for strontium of 5 and 10, at C and D, respectively, with ranges of 0 to 8 and 2 to 11, respectively.
@@ -243,18 +243,18 @@ Table 4.3 shows the coefficients of variation for each element at each source.  
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-CV.corr<-fn.CV.corr(data = ObsidianSources, GroupVar="Code", Groups = "All", AnalyticVars=analyticVars, ByGroup=T, plotCorrs=F)
-knitr::kable(CV.corr$CV, caption="Table 4.3:  Coefficients of variation of the elements from the Jemez sources.")
+CV_corr<-ps_CV_corr(data = ObsidianSources, GroupVar="Code", Groups = "All", AnalyticVars=analyticVars, ByGroup=T, plotCorrs=F)
+knitr::kable(CV_corr$CV, caption="Table 4.3:  Coefficients of variation of the elements from the Jemez sources.")
 #
 ```
 
 ###4.4  Two-and three-dimensional scatterplots
 
-Two- and three-dimensional scatterplots are very useful in visualizing relationships among elements.  The user can obtain these plots from the functions fn.2dPlot and fn.3dPlot, respectively.  Several sources can be shown on a single plot, with different colors identifying the sources.  If there are a large number of sources, the user can plot medians instead of points.  For two dimensional plots, the user can show additional information: Gaussian confidence ellipses for the values from each source; the convex hull of the points from each source; either of two nonparametric curves describing the relation between elements at a source, a lowess smooth or kernel smoother.  The user can also identify points of interest (e.g. outliers) on a two-dimensional plot and create a data frame containing the data yielding those points.  The function fn.2dPlot.Gauss computes test statistics for checking that a pair of elements at a source has a bivariate Gaussian distribution.  The function fn.3dPlot.rotate allows the user to rotate a three-dimensional plot.  
+Two- and three-dimensional scatterplots are very useful in visualizing relationships among elements.  The user can obtain these plots from the functions ps_2dPlot and ps_3dPlot, respectively.  Several sources can be shown on a single plot, with different colors identifying the sources.  If there are a large number of sources, the user can plot medians instead of points.  For two dimensional plots, the user can show additional information: Gaussian confidence ellipses for the values from each source; the convex hull of the points from each source; either of two nonparametric curves describing the relation between elements at a source, a lowess smooth or kernel smoother.  The user can also identify points of interest (e.g. outliers) on a two-dimensional plot and create a data frame containing the data yielding those points.  The function fn.2dPlot.Gauss computes test statistics for checking that a pair of elements at a source has a bivariate Gaussian distribution.  The function ps_3dPlotRotate allows the user to rotate a three-dimensional plot.  
 
 Examples of two-dimensional scatterplots are below.  The first two show plots of two pairs of elements (rubidium/zirconium and rubidium/niobium) from sources A and B , with 95% and 99% Gaussian confidence ellipses; the first and second include lowess and kernel smooths for the points, respectively.  The two types of smoothers show similar trends; the kernel smooths could be made less wiggly by increasing the default value (0.3) of the span parameter KernelWidth.    
 
-The next two plots show examples of all sources on one plot for zirconium versus rubidium.  The first of these shows the convex hull of the points at each source, with the source symbol plotted as the median of the points.  We see, for example, that the medians at sources B and D are close to the smallest values of rubidium, indicating that, for each source, there are one or more rubidium values that are large compared to most of the values.  The second plot shows the points and confidence ellipses at each source, with colors and plotting characters identifying the sources.  Requesting this plot with Identify = T allows the user to create a data set (plot.2d$data.check) containing the data generating points that may be of interest.  Table 4.4 shows the data generating five such points.  For example, the point from source E has a strontium value of 72, which is smaller than the value from any other sample from source E.
+The next two plots show examples of all sources on one plot for zirconium versus rubidium.  The first of these shows the convex hull of the points at each source, with the source symbol plotted as the median of the points.  We see, for example, that the medians at sources B and D are close to the smallest values of rubidium, indicating that, for each source, there are one or more rubidium values that are large compared to most of the values.  The second plot shows the points and confidence ellipses at each source, with colors and plotting characters identifying the sources.  Requesting this plot with Identify = T allows the user to create a data set (plot_2d$data.check) containing the data generating points that may be of interest.  Table 4.4 shows the data generating five such points.  For example, the point from source E has a strontium value of 72, which is smaller than the value from any other sample from source E.
 
 The confidence ellipses provide information on whether the distributions of a pair of elements differ between or among sources.  If a bivariate distribution is Gaussian and 99% confidence ellipses do not overlap between or among sources, it is plausible that the distributions of a pair of elements between or among sources do not overlap.  The function fn.2dPlot.Gauss(), discussed below, provides plots and tests to evaluate the hypothesis that a bivariate distribution is Gaussian.  To anticipate, we find that the rubidium/zirconium distribution is likely to be Gaussian at source A but not at source B.  Note that the source values roughly fill the 95% confidence ellipse at source A, but those values tend to cluster at source B, and two lie approximately on the boundary of the 99% confidence ellipse.  
 
@@ -262,7 +262,7 @@ The confidence ellipses provide information on whether the distributions of a pa
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-plot.2d <- fn.2dPlot(data = ObsidianSources, GroupVar = "Code", ID = "ID", Groups = c("A","B"),
+plot_2d <- ps_2dPlot(data = ObsidianSources, GroupVar = "Code", ID = "ID", Groups = c("A","B"),
                 AnalyticVars = rbind(analyticVars[c(1,4)],analyticVars[c(1,5)]), PlotEllipses=T, LowessLine=T)
 ```
 
@@ -270,7 +270,7 @@ plot.2d <- fn.2dPlot(data = ObsidianSources, GroupVar = "Code", ID = "ID", Group
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-plot.2d <- fn.2dPlot(data = ObsidianSources, GroupVar = "Code", ID = "ID", Groups = c("A", "B"),
+plot_2d <- ps_2dPlot(data = ObsidianSources, GroupVar = "Code", ID = "ID", Groups = c("A", "B"),
           AnalyticVars = rbind(analyticVars[c(1,4)], analyticVars[c(1,5)]), PlotEllipses=T, KernelSmooth=T)
 ```
 
@@ -278,7 +278,7 @@ plot.2d <- fn.2dPlot(data = ObsidianSources, GroupVar = "Code", ID = "ID", Group
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-plot.2d <- fn.2dPlot(data = ObsidianSources, GroupVar = "Code", ID = "ID", Groups = "All", 
+plot_2d <- ps_2dPlot(data = ObsidianSources, GroupVar = "Code", ID = "ID", Groups = "All", 
           AnalyticVars = analyticVars[1:2], PlotByGroup=F, PlotPoints=F, PlotMedians=T, PlotHulls=T)
 ```
 
@@ -286,7 +286,7 @@ plot.2d <- fn.2dPlot(data = ObsidianSources, GroupVar = "Code", ID = "ID", Group
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-plot.2d <- fn.2dPlot(data = ObsidianSources, GroupVar = "Code", ID = "ID", Groups = "All",
+plot_2d <- ps_2dPlot(data = ObsidianSources, GroupVar = "Code", ID = "ID", Groups = "All",
           AnalyticVars = analyticVars[c(1,4)], PlotByGroup = F, PlotColors=T, PlotEllipses=T, LowessLine=T)
 ```
 
@@ -296,7 +296,7 @@ knitr::kable(sources.data.check,caption="Table 4.4: Data generating identified p
 #
 ```
 
-The function fn.3dPlot() creates one or more three-dimensional scatterplots.  If two or more groups (sources) are shown on the same plot, different colors identify the groups, as in the example below.  The colors are specified in the parameter Colors; if several groups are shown on the same plot, there must be at least as many colors as groups; the default valule of the parameter Colors has five colors (red, black,  blue, green, purple); colors are used in that order.  The user can rotate the plot using the function fn.3dPlot.rotate().
+The function ps_3dPlot() creates one or more three-dimensional scatterplots.  If two or more groups (sources) are shown on the same plot, different colors identify the groups, as in the example below.  The colors are specified in the parameter Colors; if several groups are shown on the same plot, there must be at least as many colors as groups; the default valule of the parameter Colors has five colors (red, black,  blue, green, purple); colors are used in that order.  The user can rotate the plot using the function ps_3dPlotRotate().
 
 file:///C:/Consulting/Sourcing/Vignette/scatterRbSrY.doc
 
@@ -304,19 +304,19 @@ file:///C:/Consulting/Sourcing/Vignette/scatterRbSrY.doc
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-plot3d<-fn.3dPlot(data=ObsidianSources, GroupVar="Code", Groups=c("A","B","C"), AnalyticVars=analyticVars,
+plot3d<-ps_3dPlot(data=ObsidianSources, GroupVar="Code", Groups=c("A","B","C"), AnalyticVars=analyticVars,
                    Selections=rbind(analyticVars[1:3],analyticVars[2:4]))
 ```
 
 ###4.5  Evaluating bivariate normality
 
-The function fn.2dPlot.Gauss() allows the user to evaluate the hypothesis that a pair of variables has a bivariate Gaussian distribution in a group (source).  This function is also used in the function fn.pca.Gauss() to evaluate whether the first two principal components at a group have a bivariate distribution; therefore, the discussion in this section is also appropriate for a similar analysis of principal components results.  In either case, evaluating bivariate normality is useful in deciding whether a confidence ellipse is valid for describing the variation in the data at a group. 
+The function ps_2dPlotGauss() allows the user to evaluate the hypothesis that a pair of variables has a bivariate Gaussian distribution in a group (source).  This function is also used in the function ps_pcaGauss() to evaluate whether the first two principal components at a group have a bivariate distribution; therefore, the discussion in this section is also appropriate for a similar analysis of principal components results.  In either case, evaluating bivariate normality is useful in deciding whether a confidence ellipse is valid for describing the variation in the data at a group. 
 
 For a pair of variables to have a bivariate Gaussian distribution, each variable must have a univariate Gaussian distribution, and the bivariate distribution must also be Gaussian. Note that, if the bivariate distribution is not Gaussian, one of these conditions can be true (each condition is necessary but not sufficient).  The function fn.2d.Gauss() displays Q-Q plots giving the user information on whether the univariate distributions may be Gaussian. The function also computes p-values for test statistics for univariate Gaussian distributions and for a bivariate Gaussian distribution.  These p-values are in the component named pvalues in the list returned by the function.  This function also allows users to identify points of interest in the univariate Q-Q plots (if the parameter Identify=T); the component data.check in the list returned by the function contains the data generating the points of interest.
 
 A Q-Q plot is a quantile-quantile plot of the sample quantiles for univariate data versus the theoretical quantiles for a univariate Gaussian distribution.  Therefore, if the univariate distribution is Gaussian, the points on the plot are roughly linear.  Points with the largest values that are above the trend line indicate a distribution with a short right tail; points with the smallest values that are above the trend line indicate a distribution with a short left tail.  The opposite behaviors at the extreme indicate long tails.  See e.g. Chambers et al., Chapter 6, for a discussion of Q-Q plots. 
 
-In addition to the standard Q-Q plot, the fn.2dPlot.Gauss() function implements a more informative plot.  To obtain this plot, a large number (by default, 1000) Gaussian distributions are simulated from the observed mean and variance of a data set.  The upper and lower 95% and 99% confidence bands for the points in the simulated Q-Q plots are computed and plotted, along with the observed points (in blue).  Observed points that fall within the 95% bands (and perhaps the 99% bands) should not be regarded as unusual.  Thus, the simulated plot figure provides information on whether a point that appears to depart from the trend line is unusual.  The simulated Q-Q plot is computed from the user-contributed function qqtest(); see Oldfield for a discussion and details.  The fn.2d.Gauss() function produces the simulation and standard Q-Q plots side-by-side for each data set.
+In addition to the standard Q-Q plot, the ps_2dPlotGauss() function implements a more informative plot.  To obtain this plot, a large number (by default, 1000) Gaussian distributions are simulated from the observed mean and variance of a data set.  The upper and lower 95% and 99% confidence bands for the points in the simulated Q-Q plots are computed and plotted, along with the observed points (in blue).  Observed points that fall within the 95% bands (and perhaps the 99% bands) should not be regarded as unusual.  Thus, the simulated plot figure provides information on whether a point that appears to depart from the trend line is unusual.  The simulated Q-Q plot is computed from the user-contributed function qqtest(); see Oldfield for a discussion and details.  The fn.2d.Gauss() function produces the simulation and standard Q-Q plots side-by-side for each data set.
 
 If qqPlot is T, the function also produces the multivariate Q-Q plot.  This plot is based the fact that, if the data are Gaussian, the generalized distances of the points from the mean (the squared Mahalanobis distances) have a chi-squared distribution with two degrees of freedom (Johnson and Wichern, section 4.6).      
 
@@ -339,7 +339,7 @@ Since niobium has many samples with equal values, it is clear that niobium does 
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-plot.2d.Gauss<-fn.2dPlot.Gauss(data=ObsidianSources, GroupVar="Code", ID="ID", Groups="A",
+plot2dGauss<-ps_2dPlotGauss(data=ObsidianSources, GroupVar="Code", ID="ID", Groups="A",
     AnalyticVars=c("Rb","Zr"), qqPlot=T)
 
 ```
@@ -348,7 +348,7 @@ plot.2d.Gauss<-fn.2dPlot.Gauss(data=ObsidianSources, GroupVar="Code", ID="ID", G
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-plot.2d.Gauss<-fn.2dPlot.Gauss(data=ObsidianSources, GroupVar="Code", ID="ID", Groups="B",
+plot2dGauss<-ps_2dPlotGauss(data=ObsidianSources, GroupVar="Code", ID="ID", Groups="B",
     AnalyticVars=c("Rb","Zr"))
     
 ```
@@ -357,24 +357,24 @@ plot.2d.Gauss<-fn.2dPlot.Gauss(data=ObsidianSources, GroupVar="Code", ID="ID", G
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-plot.2d.Gauss<-fn.2dPlot.Gauss(data=ObsidianSources, GroupVar="Code", ID="ID", Groups=c("A","B"),
+plot2dGauss<-ps_2dPlotGauss(data=ObsidianSources, GroupVar="Code", ID="ID", Groups=c("A","B"),
     AnalyticVars=c("Rb","Nb"), qqPlot=F)
 
 ```
 
 ```{r}
-plot.2d.Gauss<-fn.2dPlot.Gauss(data=ObsidianSources, GroupVar="Code", ID="ID", Groups="All",
+plot2dGauss<-ps_2dPlotGauss(data=ObsidianSources, GroupVar="Code", ID="ID", Groups="All",
     AnalyticVars=c("Rb","Zr"),qqPlot=F, scatterPlot=F)
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")    
-knitr::kable(plot.2d.Gauss$pvalues,caption="Table 4.5:  P-values from test statistics for a bivariable Rb/Zr distribution at the Jemez obsidian sources.")
+knitr::kable(plot2dGauss$pvalues,caption="Table 4.5:  P-values from test statistics for a bivariable Rb/Zr distribution at the Jemez obsidian sources.")
 
 ```
 ```{r}
-plot.2d.Gauss<-fn.2dPlot.Gauss(data=ObsidianSources, GroupVar="Code", ID="ID", Groups="All",
+plot2dGauss<-ps_2dPlotGauss(data=ObsidianSources, GroupVar="Code", ID="ID", Groups="All",
     AnalyticVars=c("Rb","Nb"),qqPlot=F, scatterPlot=F)
-knitr::kable(plot.2d.Gauss$pvalues,caption="Table 4.6:  Samples sizes and p-values from test statistics for a bivariable Rb/Nb distribution at the Jemez obsidian sources.")
+knitr::kable(plot2dGauss$pvalues,caption="Table 4.6:  Samples sizes and p-values from test statistics for a bivariable Rb/Nb distribution at the Jemez obsidian sources.")
 
 ```
 

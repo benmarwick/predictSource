@@ -97,10 +97,10 @@ ps_boxPlots <-
     }
     fcnDateVersion<-paste(doc,date(),R.Version()$version.string)
     #
-    params_numeric<-c(Nrow,Ncol)
-    names(params_numeric)<-c("Nrow","Ncol")
-    params_grouping<-list(GroupVar,Groups)
-    names(params_grouping)<-c("GroupVar","Groups")
+    paramsNumeric<-c(Nrow,Ncol)
+    names(paramsNumeric)<-c("Nrow","Ncol")
+    paramsGrouping<-list(GroupVar,Groups)
+    names(paramsGrouping)<-c("GroupVar","Groups")
     params<-list(grouping=paramsGrouping, numeric=paramsNumeric)
     #
     if (sum(dataKeep) < nrow(dataBP)) dataNA <- dataBP[!dataKeep,]
