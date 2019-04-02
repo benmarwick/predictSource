@@ -382,17 +382,17 @@ knitr::kable(plot2dGauss$pvalues,caption="Table 4.6:  Samples sizes and p-values
 
 ##5.  PRINCIPAL COMPONENTS ANALYSIS
 
-Principal components analysis is a standard method implementing dimension reduction in order to create one or more two-dimensional plots to evaluate the separation of groups based on quantitative variables.  The function fn.pca() in this package does a principal components analysis after standardizing the data (so that each variable has mean zero and variance 1), plots the first two principal components (with the options in in fn.2dPlot()), and returns a list with the computed values of interest (defined below).  The user can also produce a scree plot, showing the variances for each principal component, and, if the analysis is by group, box plots of the values of the component for each group for the first two components.  An option for the principal components plot is to show confidence ellipses around the points from each group (source).  
+Principal components analysis is a standard method implementing dimension reduction in order to create one or more two-dimensional plots to evaluate the separation of groups based on quantitative variables.  The function ps_pca() in this package does a principal components analysis after standardizing the data (so that each variable has mean zero and variance 1), plots the first two principal components (with the options in ps_2dPlot()), and returns a list with the computed values of interest (defined below).  The user can also produce a scree plot, showing the variances for each principal component, and, if the analysis is by group, box plots of the values of the component for each group for the first two components.  An option for the principal components plot is to show confidence ellipses around the points from each group (source).  
 
-As in fn.2dPlot.Gauss(), the parameter Identify=T in this function allows the user to identify points of interest if points are plotted and the analytic values defining group medians if medians are plotted.  If points are identified, the data frame containing information on these points (data.check) is sorted by group name, and, if samples have IDs, by ID within group.  As a result of the R sort convention, an ID of A1x (x an integer from 0 to 9) appears above an ID of A2.  
+As in ps_2dPlot.Gauss(), the parameter Identify=T in this function allows the user to identify points of interest if points are plotted and the analytic values defining group medians if medians are plotted.  If points are identified, the data frame containing information on these points (data.check) is sorted by group name, and, if samples have IDs, by ID within group.  As a result of the R sort convention, an ID of A1x (x an integer from 0 to 9) appears above an ID of A2.  
 
-The function fn.pca.Gauss() provides information to evaluate whether the points from each group have a bivariate Gaussian distribution, with the same information provided by the function fn.2dPlot.Gauss().  The user can create a data frame containing the data generating points of interest by setting the parameter gaussIdentify = T.
+The function ps_pcaGauss() provides information to evaluate whether the points from each group have a bivariate Gaussian distribution, with the same information provided by the function ps_2dPlotGauss().  The user can create a data frame containing the data generating points of interest by setting the parameter gaussIdentify = T.
 
-A principal components analysis requires that the data to be analyzed have no missing values (an observation with a missing value is deleted from the analysis).  The function fn.pca() uses the function rfImpute() to impute a single value for any missing value, so that no observations have missing data and all observations can be analyzed.  See the discussion in Section 9 (Discussion) for more information on this procedure.  There is no imputation in fn.pca.Gauss(): this function analyzes only the observations with complete data.
+A principal components analysis requires that the data to be analyzed have no missing values (an observation with a missing value is deleted from the analysis).  The function ps_pca() uses the function rfImpute() to impute a single value for any missing value, so that no observations have missing data and all observations can be analyzed.  See the discussion in Section 9 (Discussion) for more information on this procedure.  There is no imputation in ps_pcaGauss(): this function analyzes only the observations with complete data.
 
 ###5.1  Standard principal components analysis
 
-The function fn.pca() returns a list with numerical information on the analysis.  The component named variances is a data frame with the standard deviation, proportion of total variance, and cumulative proportion of variance for each component (see Table 5.1).  The component named weights contains, for each component, the weight for each predictor variable (for the obsidian data, each element) used to compute the value of the component for that variable; these weights are standardized so that the sum of the squares of the weights for each component is 1 (see Table 5.2 for the results for this analysis).  The components named Predicted and DataPlusPredicted contain the predicted principal component values and the original data plus the predicted values, respectively, for the data used in the analysis (see Table 5.3 for a partial table for the obsidian source data).  In addition, if the user identifies points of interest, the data generating those points are in the component data.check. 
+The function ps_pca() returns a list with numerical information on the analysis.  The component named variances is a data frame with the standard deviation, proportion of total variance, and cumulative proportion of variance for each component (see Table 5.1).  The component named weights contains, for each component, the weight for each predictor variable (for the obsidian data, each element) used to compute the value of the component for that variable; these weights are standardized so that the sum of the squares of the weights for each component is 1 (see Table 5.2 for the results for this analysis).  The components named Predicted and DataPlusPredicted contain the predicted principal component values and the original data plus the predicted values, respectively, for the data used in the analysis (see Table 5.3 for a partial table for the obsidian source data).  In addition, if the user identifies points of interest, the data generating those points are in the component data.check. 
 
 For the obsidian data, the scree plot (Figure 5.1) shows that, of the five principal components, the first two components explain nearly all the variance in the source data.  Table 5.1 shows that these components explain 96% of the total variance.  A common rule of thumb is that the components used should explain at least 90% of the total variance.  Therefore, we should be able to draw valid conclusions using the first two components.
 
@@ -406,27 +406,27 @@ Figure 5.2 containts the plot of the first two principal components by group wit
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-save.pca <- fn.pca(data=ObsidianSources, ID="ID", GroupVar="Code",Groups="All", AnalyticVars=analyticVars, pcPlot=F, ScreePlot=T)
+save_pca <- ps_pca(data=ObsidianSources, ID="ID", GroupVar="Code",Groups="All", AnalyticVars=analyticVars, pcPlot=F, ScreePlot=T)
 ```
 
 ```{r  echo=FALSE, results='hide',message=FALSE, fig.cap="Figure 5.2: Box plots of the first two principal components from the principal components analysis of the Jemez obsidian source data."}
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-save.pca <- fn.pca(data=ObsidianSources, ID="ID", GroupVar="Code",Groups="All", AnalyticVars=analyticVars, pcPlot=F, BoxPlots=T)
+save_pca <- ps_pca(data=ObsidianSources, ID="ID", GroupVar="Code",Groups="All", AnalyticVars=analyticVars, pcPlot=F, BoxPlots=T)
 ```
 ```{r  echo=FALSE, results='hide',message=FALSE}
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-save.pca <- fn.pca(data=ObsidianSources, ID="ID", GroupVar="Code",Groups="All", AnalyticVars=analyticVars) 
+save_pca <- ps_pca(data=ObsidianSources, ID="ID", GroupVar="Code",Groups="All", AnalyticVars=analyticVars) 
 ```
 ```{r}
-save.pca <- fn.pca(data=ObsidianSources, ID="ID", GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
+save_pca <- ps_pca(data=ObsidianSources, ID="ID", GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
                    pcPlot=F)
-knitr::kable(save.pca$variances, caption="Table 5.1:  Proportions of the variance explained in the principal components analysis of the Jemez obsidian source data.")
-knitr::kable(save.pca$weights, caption="Table 5.2:  Weights for each principal component in the principal components analysis of the Jemez obsidian source data.")
-knitr::kable(head(save.pca$DataPlusPredicted), caption="Table 5,3:  Original data and principal components in the principal components analysis of the Jemez obsidian source data.")
+knitr::kable(save_pca$variances, caption="Table 5.1:  Proportions of the variance explained in the principal components analysis of the Jemez obsidian source data.")
+knitr::kable(save_pca$weights, caption="Table 5.2:  Weights for each principal component in the principal components analysis of the Jemez obsidian source data.")
+knitr::kable(head(save_pca$DataPlusPredicted), caption="Table 5,3:  Original data and principal components in the principal components analysis of the Jemez obsidian source data.")
 
 ```
 
@@ -434,14 +434,14 @@ knitr::kable(head(save.pca$DataPlusPredicted), caption="Table 5,3:  Original dat
 
 At each source, each principal component is a linear combination of the elements at that source (for the Jemez obsidian source data, the coefficients are in Table 5.2).  If each variable has a Gaussian distribution in a set of variables, a linear combination of these variables has a univariate Gaussian distribution.  Therefore, if each element at a source has a Gaussian distribution, the first two principal components at this source may have a Gaussian distribution.  However, if at least one element does not have a Gaussian distribution, these principal components are unlikely to have a Gaussian distribution.
 
-The function fn.pca.Gauss() computes p-values, by source, for assessing whether the first two principal components have a bivariate Gaussian distribution.  This function uses the function fn.2dPlot.Gauss(), so the discussion of that function applies here.  Table 5.4 contains the p-values from this functions.  It is likely that we have a bivariate Gaussian distribution at sources A and C, but not at sources B, D, and E.
+The function ps_pca.Gauss() computes p-values, by source, for assessing whether the first two principal components have a bivariate Gaussian distribution.  This function uses the function fn.2dPlot.Gauss(), so the discussion of that function applies here.  Table 5.4 contains the p-values from this functions.  It is likely that we have a bivariate Gaussian distribution at sources A and C, but not at sources B, D, and E.
 
 
 ```{r echo=FALSE, message=FALSE}
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-pca.Gauss <- fn.pca.Gauss(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars, qqPlot=F)
-knitr::kable(pca.Gauss$p.values, caption="Table 5.4: P-values from test statistics for a bivariate Gaussian distribution of the first two principal components at each Jemez obsidian source.")
+pca_Gauss <- ps_pcaGauss(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars, qqPlot=F)
+knitr::kable(pca_Gauss$p.values, caption="Table 5.4: P-values from test statistics for a bivariate Gaussian distribution of the first two principal components at each Jemez obsidian source.")
 
 ```
 
@@ -458,9 +458,9 @@ the procedure used yields a prediction error by using cross-validation (defined 
 the procedure allows some missing values (see below);
 if the number of outcome groups and the number of predictor variables are both small enough, the tree can be displayed as a graph, showing the criterion for splitting at each node.
 
-More details about recursiving partitioning are in James et al.; Molnar; Strobl, Malley, and Tutz; and in Therneau and Atkinson (this latter reference has examples and explanation of output for the R rpart() function, which we use in our function fn.tree() to create classification trees).  It is important to note that, because every node decision is binary, a tree will yield a predicted terminal group for every observation, even if an observation does not resemble any of the other members in that group.  The rpart() function uses "surrogate variables" in the algorithm creating the classification tree if an observation contains a missing value; for an explanation of how these variabless are chosen, see Therneau and Atkinson. 
+More details about recursiving partitioning are in James et al.; Molnar; Strobl, Malley, and Tutz; and in Therneau and Atkinson (this latter reference has examples and explanation of output for the R rpart() function, which we use in our function ps_tree() to create classification trees).  It is important to note that, because every node decision is binary, a tree will yield a predicted terminal group for every observation, even if an observation does not resemble any of the other members in that group.  The rpart() function uses "surrogate variables" in the algorithm creating the classification tree if an observation contains a missing value; for an explanation of how these variabless are chosen, see Therneau and Atkinson. 
 
-The function fn.tree() defines splits using a dichotomous criterion for a single variable (in the tree diagram, for the arm going left, the value of that variable is less than a specified amount).  The procedure starts by finding the variable in the model statement and the two subgroups defined using that variable that yields two subgroups of the outcome variable (in the case of the obsidian data, subgroups of the sources) that are as "pure" as possible.  The default criterion, used in fn.tree(), is the Gini criterion.  This splitting procedure is used at each daughter node. 
+The function ps_tree() defines splits using a dichotomous criterion for a single variable (in the tree diagram, for the arm going left, the value of that variable is less than a specified amount).  The procedure starts by finding the variable in the model statement and the two subgroups defined using that variable that yields two subgroups of the outcome variable (in the case of the obsidian data, subgroups of the sources) that are as "pure" as possible.  The default criterion, used in fn.tree(), is the Gini criterion.  This splitting procedure is used at each daughter node. 
 
 There are a number of implementations of recursive partitioning.  We used the rpart() function in the rpart library in R.  This function provides an estimate of the potential error (misclassification) in a tree using cross-validation: a subset of the data is deleted, the tree is created using the remaining data; the tree is applied to the subset, to obtain an error rate; this process is repeated, by default 10 times.  The rpart() function also has a statistical procedure for choosing the proper number of splits (recursive partitioning trees tend to be too complex, overfitting the data).   The software grows a tree with too many nodes (overfits the data), then prunes back the tree so that each split results in a specified minimum improvement (by default, 0.01) in a measure of diversity within a node.  
 
@@ -479,7 +479,7 @@ Figure 6.1 shows the classification tree using the obsidian source data (this is
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-tree <- fn.tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
+tree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
                  Model="Sr"+"Nb"+"Rb"+"Y"+"Zr", ModelTitle="Sr + Nb + Rb + Y + Zr", plotCp=F)
 ```
 
@@ -491,18 +491,18 @@ Figure 6.2 shows the reduction in the crossvalidation error estimate with an inc
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-tree <- fn.tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
+tree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
                  Model="Sr"+"Nb"+"Rb"+"Y"+"Zr", ModelTitle="Sr + Nb + Rb + Y + Zr", plotTree=F)
 ```
 
-If the tree is too complex to display, the description of the tree is contained in the component Tree in the list produced by fn.tree().  For the obsidian sources, this object (an R list) is displayed below.  The text above the information [node), split, n, loss, yval, (yprob)] describes what is displayed: the node number, the split criterion, the number of observations at that node, a measure of loss, the predicted group membership at that node, and the proportions in each of the groups at that node.  The predicted group membership is the group with the highest proportion.  It is helpful to compare this display with the plot showing the tree.  Observe that, for a node below the root, the first indented line describes a path to the left in the split, and the value of "node)" is twice the value of "node)" in the node that has been split. The value of "node)" for the path to the right is one greater than the value for the path to the left.  This object is displayed below (for much greater detail, we encourage the reader to use the command summary(tree$Tree) after running the example code):
+If the tree is too complex to display, the description of the tree is contained in the component Tree in the list produced by ps_tree().  For the obsidian sources, this object (an R list) is displayed below.  The text above the information [node), split, n, loss, yval, (yprob)] describes what is displayed: the node number, the split criterion, the number of observations at that node, a measure of loss, the predicted group membership at that node, and the proportions in each of the groups at that node.  The predicted group membership is the group with the highest proportion.  It is helpful to compare this display with the plot showing the tree.  Observe that, for a node below the root, the first indented line describes a path to the left in the split, and the value of "node)" is twice the value of "node)" in the node that has been split. The value of "node)" for the path to the right is one greater than the value for the path to the left.  This object is displayed below (for much greater detail, we encourage the reader to use the command summary(tree$Tree) after running the example code):
 
 
 ```{r  echo=FALSE, message=FALSE, fig.cap="Display 6.1: Full description of the classification tree for the Jemez obsidian source data using five elements as predictors."}
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-tree <- fn.tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
+tree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
                  Model="Sr"+"Nb"+"Rb"+"Y"+"Zr", ModelTitle="Sr + Nb + Rb + Y + Zr", plotCp=F, plotTree=F)
 tree$Tree
 
@@ -514,7 +514,7 @@ The component classification in the list produced by fn.tree() contains a table 
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-tree <- fn.tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
+tree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
                  Model="Sr"+"Nb"+"Rb"+"Y"+"Zr", ModelTitle="Sr + Nb + Rb + Y + Zr", plotTree=F, plotCp = F)
 knitr::kable(tree$classification, caption = "Table 6.2:  Classification tree predictions for the Jemez obsidian sources using five elements as potential predictors.")
 
@@ -526,22 +526,22 @@ Table 6.3 contains the improvement in predicted group purity, as measured by Cp,
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
- tree <- fn.tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
+ tree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
                  Model="Sr"+"Nb"+"Rb"+"Y"+"Zr", ModelTitle="Sr + Nb + Rb + Y + Zr", plotTree=F, plotCp = F)
 knitr::kable(tree$CpTable, caption = "Table 6.3:  Cp table from the classification tree for the Jemez obsidian sources using five elements as potential predictors.")
 
 ```
 
-The fn.tree() function will predict sources of unknowns when the parameter predictSources is T and the parameter predictData specifies the data on the unknowns.  The member of the list produced by the function named predictedSources (a data frame) contains the predicted source for each observation, the analytic variables, and, if specified, a sample ID.  An example using the obsidian artifact data is in Table 6.4.  The member of the list named predictedTotals is a vector with the number of unknowns predicted to be from each source; Table 6.5 contains the results using the obsidian data.
+The ps_tree() function will predict sources of unknowns when the parameter predictSources is T and the parameter predictData specifies the data on the unknowns.  The member of the list produced by the function named predictedSources (a data frame) contains the predicted source for each observation, the analytic variables, and, if specified, a sample ID.  An example using the obsidian artifact data is in Table 6.4.  The member of the list named predictedTotals is a vector with the number of unknowns predicted to be from each source; Table 6.5 contains the results using the obsidian data.
 
 ```{r, echo=FALSE, message=FALSE }
 library(karon)
 data(ObsidianSources)
 data(ObsidianArtifacts)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-save.tree <- fn.tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
+save_tree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
    Model = "Sr"+"Nb"+"Rb"+"Y"+"Zr", ModelTitle="Sr + Nb + Rb + Y + Zr",predictSources=T, predictData=ObsidianArtifacts, ID="ID", plotTree=F, plotCp=F)
-knitr::kable(save.tree$predictedSources[1:5,], caption = "Table 6.4: An example of the data frame containing predicted sources of obsidian artifacts from the classification tree for the Jemez obsidian sources using five elements as potential predictors.")
+knitr::kable(save_tree$predictedSources[1:5,], caption = "Table 6.4: An example of the data frame containing predicted sources of obsidian artifacts from the classification tree for the Jemez obsidian sources using five elements as potential predictors.")
 
 ```
 
@@ -550,9 +550,9 @@ library(karon)
 data(ObsidianSources)
 data(ObsidianArtifacts)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-save.tree <- fn.tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
+save_tree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
    Model = "Sr"+"Nb"+"Rb"+"Y"+"Zr", ModelTitle="Sr + Nb + Rb + Y + Zr", predictSources=T, predictData=ObsidianArtifacts, ID="ID", plotTree=F, plotCp=F)
-knitr::kable(save.tree$predictedTotals, caption = "Table 6.6:  Predicted number of obsidian artifacts
+knitr::kable(save_tree$predictedTotals, caption = "Table 6.6:  Predicted number of obsidian artifacts
 from each source based on the classification tree for the Jemez obsidian sources using five elements as potential predictors.")
 
 ```
@@ -564,11 +564,11 @@ library(karon)
 data(ObsidianSources)
 data(ObsidianArtifacts)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-tree <- fn.tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
+tree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
                 ID="ID", Model="Sr"+"Nb"+"Rb"+"Y"+"Zr", ModelTitle="Sr + Nb + Rb + Y + Zr",
                 plotTree=F, plotCp = F, predictSources=T, predictData=ObsidianArtifacts)
 predictedSources<-tree$predictedSources[tree$predictedSources[,"source"]!="A",]
-save.pca <- fn.pca(data=predictedSources, ID="ID", GroupVar="source",Groups="All", AnalyticVars=analyticVars, PlotEllipses=F)
+save_pca <- ps_pca(data=predictedSources, ID="ID", GroupVar="source",Groups="All", AnalyticVars=analyticVars, PlotEllipses=F)
 
 ```
 
