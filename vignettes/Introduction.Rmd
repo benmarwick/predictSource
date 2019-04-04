@@ -3,10 +3,10 @@ title: "Introduction to the karon package"
 author: "John Karon & Ben Marwick"
 date: "`r Sys.Date()`"
 output:
-  word_document: default
-  pdf_document: default
   html_document:
     df_print: paged
+  pdf_document: default
+  word_document: default
 vignette: |
   %\VignetteIndexEntry{Vignette Title} %\VignetteEngine{knitr::rmarkdown} %\VignetteEncoding{UTF-8}
 ---
@@ -638,7 +638,7 @@ With the logical parameter plotSourceProbs set equal to T, the user obtains two 
 
 The first plot uses only the probability for the predicted source for each unknown; the second uses all other probabilities.  We ignore the single unknown predicted to be from source A.  In the first plot, the median probability is 1 for artifacts from source C and only slightly less than 1 for artifacts from sources B and D. The first quartile of probabilities of unknowns from B is smaller then those from C and D: unknowns from source B are harder to predict than from C and D using three analytic variables. 
 
-The second plot shows that there are a few relatively large probabilities for unknowns incorrectly assigned to sources B and C.  Table 7.3 displays the data from the data frame predictedSources yielding the probabilities between 0.19 and 0.30 (note that a single point on the plot can represent more than one unknown).  The unknown yielding the large probability in Figure z2 for source B was predicted to be from source C; the eight unknowns yielding the large probabilities for source C were predicted to be from source B; these artifacts are likely to correspond to the apparent misclassifications by the tree model (this could be verified by creating a data frame containing the data generating those points by setting Identify equal to T when using ps_pca() to generate Figure 8.2c).  Figure 8.3 shows a principal components plot (using ps_pca()) of the artifacts predicted to be from sources B, C, and D (the artifact from A was eliminated, as its point is far from the others); the first two principal components also explain 91% of the variance in this plot  Comparison with Figure 6.3 for the analysis of the predictions from the tree model show that the artifacts apparently misclassified by that model may be assigned the correct source by the random forest analysis.  
+The second plot shows that there are a few relatively large probabilities for unknowns incorrectly assigned to sources B and C.  Table 7.3 displays the data from the data frame predictedSources yielding the probabilities between 0.19 and 0.30 (note that a single point on the plot can represent more than one unknown).  The unknown yielding the large probability in Figure 7.3b for source B was predicted to be from source C; the eight unknowns yielding the large probabilities for source C were predicted to be from source B; these artifacts are likely to correspond to the apparent misclassifications by the tree model (this could be verified by creating a data frame containing the data generating those points by setting Identify equal to T when using ps_pca() to generate Figure 8.2c).  Figure 8.3 shows a principal components plot (using ps_pca()) of the artifacts predicted to be from sources B, C, and D (the artifact from A was eliminated, as its point is far from the others); the first two principal components also explain 91% of the variance in this plot  Comparison with Figure 6.3 for the analysis of the predictions from the tree model show that the artifacts apparently misclassified by that model may be assigned the correct source by the random forest analysis.  
 
 ```{r  echo=FALSE, results='hide',message=FALSE, fig.cap="Figure 7.3a: Box plots of the estimated probabilities for the predicted sources for the obsidian artifacts.", fig.keep='first'}
 data(ObsidianSources)
