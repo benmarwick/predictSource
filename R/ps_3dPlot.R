@@ -4,34 +4,44 @@
 #' Enter c ("continue") at the prompt to get the next plot.
 #' If this function is run using Rstudio, each plot appears in a separate window, not in the Rstudio plot pane.
 #'
-#' @param doc A string documenting use written to the output list; default is the function name
+#' @param doc A string documenting use written to the output list;
+#' default is the function name
 #' @param data A matrix or data frame containing the data to be analyzed
-#' @param GroupVar The name for variable defining grouping; can be " " if no grouping_
-#' @param Groups A vector of values of group variable for which plots are to be done;
-#'    if "All", use all groups; if " ", no grouping
+#' @param GroupVar The name for variable defining grouping;
+#' can be " " if no grouping_
+#' @param Groups A vector of values of group variable for which plots
+#'  are to be done; if "All", use all groups; if " ", no grouping
 #' @param AnalyticVars A vector of names (character values) of the analytic variables
-#' @param Selections A vector of length 3, or data frame with 3 columns, with the combinations
-#' of the analytic variables to be plotted
-#' @param ByGroup Logical_  If T, show scatterplot for each group for each selection of 3 variables;
-#' if F (the default), all specified groups are on one plot
-#' @param PlotMedians  Logical_  If T, plot only the medians in each group (the points are not plotted)
+#' @param Selections A vector of length 3, or data frame with 3 columns,
+#'  with the combinations of the analytic variables to be plotted
+#' @param ByGroup Logical_  If T, show scatterplot for each group
+#'  for each selection of 3 variables; if F (the default),
+#'   all specified groups are on one plot
+#' @param PlotMedians  Logical_  If T, plot only the medians in each group
+#'  (the points are not plotted)
 #' if F (the default), the median locations are not plotted
-#' @param Colors A vector with the colors of plotted points, used sequentially for the groups
-#' @param SymbolSize A value at most 1, a smaller value gives smaller diameter points
+#' @param Colors A vector with the colors of plotted points,
+#' used sequentially for the groups
+#' @param SymbolSize A value at most 1, a smaller value gives
+#' smaller diameter points
 #'
 #' @return   A list with the following components:
 #'  \itemize{
-#' \item{usage:}{  A string with the contents of the argument doc, the date run, the version of R used}
-#' \item{dataUsed:}{  The contents of the argument data restricted to the groups used}
-#' \item{dataNA:}{  A data frame with observations containing a least one missing value
-#'   for an analysis variable, NA if no missing values}
-#' \item{params:}{  A list with the values of the grouping, logical, numeric and Color arguments}
+#' \item{usage:}{  A string with the contents of the argument doc,
+#' the date run, the version of R used}
+#' \item{dataUsed:}{  The contents of the argument data restricted
+#' to the groups used}
+#' \item{dataNA:}{  A data frame with observations containing at
+#' least one missing value for an analysis variable, NA if no missing values}
+#' \item{params:}{  A list with the values of the grouping, logical,
+#'  numeric and Color arguments}
 #' \item{analyticVars:}{  A vector with the value of the argument AnalyticVars}
 #' }
 #'
 #' @section Details:
-#'  See the vignette for more information: visualizing each plot, specification of the argument
-#'  Selections as a matrix or data frame, and use of colors.  If the plot or plots are not by group,
+#'  See the vignette for more information: visualizing each plot,
+#'  specification of the argument Selections as a matrix or data frame,
+#'   and use of colors.  If the plot or plots are not by group,
 #'   all points have the color of the first element in Colors.
 #'   If PlotMedians = T, the value of ByGroup is not used.
 #'
@@ -41,14 +51,15 @@
 #' #  show points from several groups on one plot
 #' data(ObsidianSources)
 #' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-#' plot3d<-ps_3dPlot(data=ObsidianSources, GroupVar="Code", Groups=c("A","B"), AnalyticVars=analyticVars,
-#'                   Selections=rbind(analyticVars[1:3],analyticVars[2:4]))
+#' plot3d<-ps_3dPlot(data=ObsidianSources, GroupVar="Code",
+#' Groups=c("A","B"), AnalyticVars=analyticVars,
+#' Selections=rbind(analyticVars[1:3],analyticVars[2:4]))
 #'
 #' #  plots with one group per plot
 #' data(ObsidianSources)
 #' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-#' plot3d<-ps_3dPlot(data=ObsidianSources, GroupVar="Code", Groups=c("A","B"), ByGroup=T, AnalyticVars=analyticVars,
-#'                   Selections=analyticVars[1:3])
+#' plot3d<-ps_3dPlot(data=ObsidianSources, GroupVar="Code", Groups=c("A","B"),
+#'  ByGroup=T, AnalyticVars=analyticVars, Selections=analyticVars[1:3])
 #' @export
 
 ps_3dPlot <-
@@ -140,7 +151,7 @@ ps_3dPlot <-
       if ((GroupVar[1] != " ") & (ByGroup)) { # plot points by group
         if (is.vector(Selections)) {
           for (i in 1:length(groups)) {
-            win.graph()
+            dev.new()
             data_i<-dataUsed[dataUsed[,GroupVar]==groups[i],Selections]
             index_na <- is.na(data_i[, Selections[1]]) | is.na(data_i[,Selections[2]]) |
               is.na(data_i[, Selections[3]])
@@ -153,7 +164,7 @@ ps_3dPlot <-
         if (is.matrix(Selections)) {
           for (i in 1:nrow(Selections)) {
             for (j in 1:length(groups)) {
-              win.graph()
+              dev.new()
               data_j<-dataUsed[dataUsed[,GroupVar]==groups[j],Selections[i,], index]
               index_na <- is.na(data_j[, Selections[i,1]]) | is.na(data_j[,Selections[i,2]]) |
                 is.na(data_j[, Selections[i,3]])
@@ -170,7 +181,7 @@ ps_3dPlot <-
     if ((PlotMedians) & (GroupVar != " ")) {
       # plot medians
       if (is.vector(Selections)) {
-        win.graph()
+        dev.new()
         medians<-matrix(NA,nrow=length(groups),ncol=3)
         for (i in 1:length(groups)) {
           data_i<-dataUsed[dataUsed[,GroupVar]==groups[i],Selections]
@@ -192,7 +203,7 @@ ps_3dPlot <-
               is.na(data_j[, Selections[i,3]])
             medians[j,]<-apply(data_j[!index_na,],2,median)
           }
-          win.graph()
+          dev.new()
           scatterplot3d(medians, xlab = Selections[i, 1], ylab = Selections[i, 2],
                         zlab = Selections[i, 3], color = "black",
                         pch = groups, cex_symbols = SymbolSize, main = paste("group medians:",

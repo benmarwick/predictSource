@@ -13,7 +13,7 @@
 #' @param ByGroup  Logical_ If T, show scatterplot for each group for each selection of 3 variables;
 #'                       default is F
 #' @param ptSize  The size of plotted points, default is 5 (a larger value gives larger points)
-#' @param Color A vector with the color(s) of plotted points; default is a vector
+#' @param Colors A vector with the color(s) of plotted points; default is a vector
 #'            red, black, blue, green, purple
 #' @param folder The folder to which one or more files with images will be saved;
 #' default is " " (no files saved)
@@ -154,7 +154,7 @@ ps_3dPlotRotate <-
     if ((GroupVar[1] != " ") & (ByGroup)) { # plot points by group
       if (is.vector(Selections)) {
         for (i in 1:length(groups)) {
-          win.graph()
+          dev.new()
           data_i<-dataUsed[dataUsed[,GroupVar]==groups[i],Selections]
           index_na <- is.na(data_i[, Selections[1]]) | is.na(data_i[,Selections[2]]) |
             is.na(data_i[, Selections[3]])
@@ -168,7 +168,7 @@ ps_3dPlotRotate <-
       if (is.matrix(Selections)) {
         for (i in 1:nrow(Selections)) {
           for (j in 1:length(groups)) {
-            win.graph()
+            dev.new()
             data_j<-dataUsed[dataUsed[,GroupVar]==groups[j],Selections[i,]]
             index_na <- is.na(data_j[, Selections[i,1]]) | is.na(data_j[,Selections[i,2]]) |
               is.na(data_j[, Selections[i,3]])

@@ -8,16 +8,18 @@ ps_boxPlots(doc = "ps_boxPlots", data, GroupVar, Groups, AnalyticVars, Nrow,
   Ncol)
 }
 \arguments{
-\item{doc}{A string documenting use, included in list returned; default value is the function name}
+\item{doc}{A string documenting use, included in list returned;
+default value is the function name}
 
 \item{data}{A data frame or matrix with data to be analyzed}
 
 \item{GroupVar}{The name for the variable defining grouping (required)}
 
-\item{Groups}{A vector of values of group variable for which plots are to be done; if 'All', use all groups:
-if ' ', no grouping}
+\item{Groups}{A vector of values of group variable for which plots are
+to be done; if 'All', use all groups: if ' ', no grouping}
 
-\item{AnalyticVars}{A vector of names (character values) of analytic results to be analyzed}
+\item{AnalyticVars}{A vector of names (character values) of analytic
+results to be analyzed}
 
 \item{Nrow}{The number of rows of plots for each page}
 
@@ -26,11 +28,14 @@ if ' ', no grouping}
 \value{
 A list with the following components:
  \itemize{
-\item{usage:}{  A string with the value of the argument doc, date run, version of R used}
-\item{dataUsed:}{  A data frame with data restricted to data used for the box plots}
-\item{dataNA:}{  A data frame with observations containing a least one missing value
-  for an analysis variable, NA if no missing values}
-\item{params:}{  A list with elements containing the values of the grouping and numeric parameters}
+\item{usage:}{  A string with the value of the argument doc, date run,
+ version of R used}
+\item{dataUsed:}{  A data frame with data restricted to data used for
+ the box plots}
+\item{dataNA:}{  A data frame with observations containing a least one
+ missing value for an analysis variable, NA if no missing values}
+\item{params:}{  A list with elements containing the values of the grouping
+ and numeric parameters}
 \item{analyticVars:}{  A vector with the value of the argument AnalyticVars}
 }
 }
@@ -39,10 +44,11 @@ Box plots of specified analytic values, by specified groups_
 }
 \section{DETAILS}{
 
-If the function creates more than one plot, the code stops after each is displayed; enter c
-(continue) at the prompt to display the next plot.  If Groups specifies only one group, the code
-for that group is not displayed under a plot.  If an observation has a variable value that is
- missing, the variables without missing values are used in the corresponding box plots.
+If the function creates more than one plot, the code stops after each is
+ displayed; enter c (continue) at the prompt to display the next plot.
+ If Groups specifies only one group, the code for that group is not displayed
+ under a plot.  If an observation has a variable value that is missing,
+  the variables without missing values are used in the corresponding box plots.
 }
 
 \examples{
@@ -60,6 +66,7 @@ SourcesCode <- as.vector(ObsidianSources[,"Code"], mode="character")
 ArtifactsCode <- as.vector(paste(Artifacts[,"Code"],"A",sep="_"),mode="character")
 Codes <- c(SourcesCode, ArtifactsCode)
 SourcesArtifacts <- data.frame(rbind(ObsidianSources,Artifacts)[,analyticVars], Code = Codes)
-boxPlots<-ps_boxPlots(data=SourcesArtifacts, GroupVar="Code", Groups="All",AnalyticVars="Rb",Nrow=1,Ncol=1)
+boxPlots<-ps_boxPlots(data=SourcesArtifacts, GroupVar="Code", Groups="All",
+AnalyticVars="Rb",Nrow=1,Ncol=1)
 
 }

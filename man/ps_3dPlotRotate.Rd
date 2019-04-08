@@ -27,14 +27,14 @@ default is F}
 
 \item{ptSize}{The size of plotted points, default is 5 (a larger value gives larger points)}
 
+\item{Colors}{A vector with the color(s) of plotted points; default is a vector
+red, black, blue, green, purple}
+
 \item{folder}{The folder to which one or more files with images will be saved;
 default is " " (no files saved)}
 
 \item{dsFile}{The complete path to a file in folder to which each image will be saved;
 if folder is not " ", this must be a valid path and file name (ends in _pdf for current function)}
-
-\item{Color}{A vector with the color(s) of plotted points; default is a vector
-red, black, blue, green, purple}
 }
 \value{
 A list with the following components:

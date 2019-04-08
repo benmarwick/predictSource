@@ -12,48 +12,62 @@ ps_pca(doc = "ps_pca", data, ID = " ", GroupVar, Groups, AnalyticVars,
   Seed = 11111, folder = " ")
 }
 \arguments{
-\item{doc}{A string with documentation in the list returned, default is the function name}
+\item{doc}{A string with documentation in the list returned, default
+is the function name}
 
 \item{data}{A matrix or data frame containing the data to be analyzed}
 
 \item{ID}{An optional name for an ID, default is " " if no ID}
 
-\item{GroupVar}{The name for variable defining grouping; a variable name is required}
+\item{GroupVar}{The name for variable defining grouping; a variable
+name is required}
 
-\item{Groups}{Character-valued defining the values of the group variable for which plots are
-to be done_  Options are a vector of values; "All" (use all groups)_  One of these is required}
+\item{Groups}{Character-valued defining the values of the group variable
+for which plots are to be done_  Options are a vector of values;
+ "All" (use all groups)_  One of these is required}
 
 \item{AnalyticVars}{A vector of names (character values) of analytic results}
 
 \item{ScreePlot}{Logical, if T create a scree plot, default is F}
 
-\item{BoxPlots}{Logical, if T, create box plots of the first two components, default is F}
+\item{BoxPlots}{Logical, if T, create box plots of the first two components,
+default is F}
 
-\item{pcPlot}{Logical, if T (the default), create the plot of the first two components}
+\item{pcPlot}{Logical, if T (the default), create the plot of the first
+two components}
 
-\item{PlotPoints}{Logical, if T (the default) and pcPlot=T, plot the points for the first two components}
+\item{PlotPoints}{Logical, if T (the default) and pcPlot=T,
+plot the points for the first two components}
 
-\item{PlotEllipses}{Logical, if T (the default), plot the confidence ellipse or ellipses for each group}
+\item{PlotEllipses}{Logical, if T (the default), plot the confidence ellipse
+or ellipses for each group}
 
-\item{PlotHull}{Logical, if T, plot the convex hull for each group, default is F}
+\item{PlotHull}{Logical, if T, plot the convex hull for each group,
+default is F}
 
-\item{PlotMedians}{Logical, if T, plot the symbol for each group at the median point for that group, default is F}
+\item{PlotMedians}{Logical, if T, plot the symbol for each group at the
+median point for that group, default is F}
 
-\item{Ellipses}{A value or vector of proportions for confidence ellipses; default is c(_95,_99) to produce 95\% and 99\% confidence ellipses}
+\item{Ellipses}{A value or vector of proportions for confidence ellipses;
+default is c(_95,_99) to produce 95\% and 99\% confidence ellipses}
 
-\item{PlotColors}{Logical_  If T, use list of colors in Colors for points; if F, plot points as black}
+\item{PlotColors}{Logical_  If T, use list of colors in Colors for points;
+if F, plot points as black}
 
 \item{legendLoc}{Character, location of legend for a plot with points;
-default is "topright", alternatives are combinations of "top", "bottom", "right", "left"}
+default is "topright", alternatives are combinations of "top", "bottom",
+ "right", "left"}
 
 \item{Colors}{A vector of color names; default is a vector with five names}
 
-\item{Identify}{Logical_  If T, the user can identify points of interest in plots; information on these points is saved to a file; default is F}
+\item{Identify}{Logical_  If T, the user can identify points of interest in plots;
+information on these points is saved to a file; default is F}
 
-\item{digits}{The number of significant digits to return in objects in data frames, default is 3}
+\item{digits}{The number of significant digits to return in objects in data frames,
+default is 3}
 
-\item{Seed}{If not NA, the seed for the random number generator used if missing data are
-imputed; default is 11111}
+\item{Seed}{If not NA, the seed for the random number generator used if
+missing data are imputed; default is 11111}
 
 \item{folder}{The path to the folder in which data frames will be saved; default is " "}
 }
@@ -85,14 +99,17 @@ Compute and plot principal components after standardizing the data
 }
 \section{Details}{
 
-If Identify=T, the user must interact with each plot (or pane, if there is more than one pane on a plot).
-To identify a point, place the cursor as close as possible to the point and left click;  repeat if desired.
-To go to the next pane, right click and select "Stop" in base R; click on "Finish" in the plot pane in Rstudio.
+If Identify=T, the user must interact with each plot (or pane,
+ if there is more than one pane on a plot). To identify a point,
+ place the cursor as close as possible to the point and left click;  repeat if desired.
+To go to the next pane, right click and select "Stop" in base R;
+click on "Finish" in the plot pane in Rstudio.
 }
 
 \examples{
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-save_pca <- ps_pca(data=ObsidianSources, ID="ID", GroupVar="Code",Groups="All", AnalyticVars=analyticVars)
+save_pca <- ps_pca(data=ObsidianSources, ID="ID", GroupVar="Code",
+Groups="All", AnalyticVars=analyticVars)
 
 }

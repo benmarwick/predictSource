@@ -1,15 +1,16 @@
 #'  ps_checkData
 #'
-#' Data checks and summaries: duplicate records, negative analytic values, numbers of analytic results, percentiles of results
+#' Data checks and summaries: duplicate records, negative analytic values,
+#'  numbers of analytic results, percentiles of results
 #'
 #' @param doc: a character string written to the output list; default is the function name
 #' @param data: R object (data frame) containing analytic data
 #' @param CheckDupVars: vector with names of identifying variables, typically group and lab ID
-#' @param GroupVar: if there are groups, name of variable defining the groups, default value of " ": no grouping
-#' @param Groups: character vector of groups by which numbers of samples and statistics statistics will be
-#'  tabulated
-#'   default value of " ": tabulations are done for the entire data set
-#'   value = "All": tabulation for each distinct code in GroupVar
+#' @param GroupVar: if there are groups, name of variable defining the groups,
+#'  default value of " ": no grouping
+#' @param Groups: character vector of groups by which numbers of samples and statistics will be
+#'  tabulated.  Default is " ": tabulations are done for the entire data set.
+#'  If value = "All": tabulation for each distinct code in GroupVar
 #' @param ID: name of lab ID, default is " " (no lab ID)
 #' @param AnalyticVars: character vector of names of analytic variables for which tabulations are done
 #' @param folder:  the path to a folder in which data frames will be saved; default is " "
@@ -26,7 +27,8 @@
 #' \item{params:}{  A character vector with the values of CheckDupVars, GroupVar, and Groups}
 #' \item{analyticVars:}{  The vector of names specified by the argument AnalyticVars}
 #' \item{Duplicates:}{  A data frame containing the observations with duplicate values}
-#' \item{NegativeValues:}{  A data frame containing the observations with at least one negative value for a variable in AnalyticVars}
+#' \item{NegativeValues:}{  A data frame containing the observations with at least one negative
+#'  value for a variable in AnalyticVars}
 #' \item{Nvalues:}{  A data frame contain the number of observations with a value for each analytic variable}
 #' \item{statistics:}{  A data frame containing the statistics statistics (by group, if Group is specified)}
 #' \item{location:}{  If folder != " ", the path to the folder in which data frames will be saved}
@@ -132,7 +134,7 @@ ps_checkData <-
         statisticsj <- summary(dataUsed[, AnalyticVars[j]])
         statistics[j, 1:length(statisticsj)] <- statisticsj
       } # end of loop on j
-      statistics_values <- round(statistics, dig = 0)
+      statistics_values <- round(statistics, digits = 0)
       colnames(statistics_values) <- c("min", "Q1", "median",
                                        "mean", "Q3", "max", "n_missing")
       statistics_values[is.na(statistics_values[, 7]), 7] <- 0
@@ -158,7 +160,7 @@ ps_checkData <-
         row <- row + n_groups + 1
       }  # end of loop on i
       }  # end of code for specified groups
-      statistics_values <- round(statistics_values, dig = 0)
+      statistics_values <- round(statistics_values, digits = 0)
       colnames(statistics_values) <- c("min", "Q1", "median",
                                     "mean", "Q3", "max", "n_missing")
       statistics_values[is.na(statistics_values[, 7]), 7] <- 0
@@ -170,7 +172,7 @@ ps_checkData <-
     fcnDateVersion<-c(doc,date(),R.Version()$version.string)
     params<-list(CheckDupVars,GroupVar,Groups)
     names(params)<-c("CheckDupVars","GroupVar","Groups")
-    statistics[,"mean"] <- round(statistics[,"mean"], dig = 0)
+    statistics[,"mean"] <- round(statistics[,"mean"], digits = 0)
   #
  list(usage=fcnDateVersion,
            dataUsed=data,

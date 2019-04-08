@@ -243,7 +243,7 @@ ps_randomForest <-
                   AnalyticVars="sourceProbability", Nrow=1, Ncol=1)
     } # end of code for predictSources == T
     #
-    importance_rf <- round(importance_rf, dig=digitsImportance)
+    importance_rf <- round(importance_rf, digits =digitsImportance)
     #
     if ((artifactID != " ") & (predictSources == T))
       predictions <- predictions[order(predictions[,artifactID]),]

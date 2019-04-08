@@ -168,7 +168,7 @@ ps_2dPlotGauss <- function (doc = "ps_2dPlotGauss",
    # }
   #
   numeric_pvalues<-as.numeric(pvalues)
-  numeric_pvalues<-round(numeric_pvalues,dig=pvalue_digits)
+  numeric_pvalues<-round(numeric_pvalues,digits=pvalue_digits)
   numeric_pvalues[numeric_pvalues < 0] <- NA
   return_pvalues<-matrix(numeric_pvalues,nrow=length(groups),ncol=9)
   dimnames(return_pvalues) <- list(groups, c("n", paste("AD_",AnalyticVars,sep=""), paste("SW_",AnalyticVars,sep=""),

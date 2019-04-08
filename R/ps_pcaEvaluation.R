@@ -10,20 +10,23 @@
 #' @param SourceGroup The name of the variable with the code for a source
 #' @param ArtifactGroup The name of the variable with the code for predicted source
 #' @param known_sources A vector of the source locations to be considered
-#' @param predicted_sources A vector of predicted sources to be considered, not all need be in known_sources
+#' @param predicted_sources A vector of predicted sources to be considered, not all
+#'  need be in known_sources
 #' @param AnalyticVars The elements used in the principal component analyses
 #' @param loc_legend The location of legend added to plots (alternates are "topleft",
 #'    "bottomright","bottomleft")
-#' @param Identify Logical_  If T, the user can identify artifacts of interest and obtain a data set with information on those artifacts
-#'    (default is F)
-#' @param plotAllPoints Logical_  If T (the default), show a plot with two panes: all source points and
+#' @param Identify Logical_  If T, the user can identify artifacts of interest and
+#' obtain a data set with information on those artifacts (default is F)
+#' @param plotAllPoints Logical_  If T (the default), show a plot with two panes:
+#' all source points and
 #'    the convex hulls for the sources, and all unknown points with these source hulls
-#' @param plotHullsOutsidePoints Logical_  If T (the default), show a plot with two panes: all source points and
-#'    the convex hulls for the sources, and the unknown points lying outside of their predicted source
-#'    convex hulls and these hulls
-#' @param plotOutsidePoints Logical_  If T (the default), show a plot with one pane: athe unknown points lying
-#'  outside of their predicted source convex hulls and these hulls (the second pane for
-#'  plotHullsOutsidePoints)
+#' @param plotHullsOutsidePoints Logical_  If T (the default), show a plot with two panes:
+#'  all source points and
+#'    the convex hulls for the sources, and the unknown points lying outside of their
+#'     predicted source convex hulls and these hulls
+#' @param plotOutsidePoints Logical_  If T (the default), show a plot with one pane:
+#' athe unknown points lying outside of their predicted source convex hulls and these
+#'  hulls (the second pane for plotHullsOutsidePoints)
 #'  @param Seed If not NA, a positive integer used to initialize the random number generator
 #'  when missing data are imputed_  Default value is 11111
 #' @param folder  The path to the folder in which data frames will be saved; default is " "
@@ -88,18 +91,22 @@
 #'   known_sources=sources, predicted_sources=sources, AnalyticVars=analyticVars, ID="ID",
 #'   plotAllPoints=T, plotHullsOutsidePoints = T, plotOutsidePoints = T)
 #'
-#' # evaluate predictions from a random forest analysis: plot only points outside the predicted source hull
+#' # evaluate predictions from a random forest analysis:
+#' #     plot only points outside the predicted source hull
 #' data(ObsidianSources)
 #' data(ObsidianArtifacts)
 #' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 #' sources <- unique(ObsidianSources[,"Code"])
-#' save_randomForest <- ps_randomForest(data=ObsidianSources, GroupVar="Code",Groups="All",
-#'   AnalyticVars=analyticVars, artifactID="ID", NvarUsed=3, plotErrorRate=F, plotImportance=F,
+#' save_randomForest <- ps_randomForest(data=ObsidianSources,
+#' GroupVar="Code",Groups="All",
+#'   AnalyticVars=analyticVars, artifactID="ID", NvarUsed=3,
+#'   plotErrorRate=F, plotImportance=F,
 #'   predictSources=T, predictData=ObsidianArtifacts, plotSourceProbs=F)
 #' pca_eval <- ps_pcaEvaluation(SourceData=ObsidianSources,
-#'   ArtifactData=save_randomForest$predictedSources, SourceGroup= "Code", ArtifactGroup="source",
-#'   known_sources=sources, predicted_sources=sources, AnalyticVars=analyticVars, ID="ID",
-#'   plotAllPoints=F, plotHullsOutsidePoints = F, plotOutsidePoints = T)
+#'   ArtifactData=save_randomForest$predictedSources, SourceGroup= "Code",
+#'    ArtifactGroup="source",  known_sources=sources, predicted_sources=sources,
+#'     AnalyticVars=analyticVars, ID="ID", plotAllPoints=F,
+#'      plotHullsOutsidePoints = F, plotOutsidePoints = T)
 #'
 #' @export
 #'
@@ -373,7 +380,7 @@ ps_pcaEvaluation <-function(doc = "ps_pcaEvaluation",
     #  create data frame with data on points outside predicted hull
     #
     pts_outside <- pcaLocationsArtifacts[!pcaLocationsArtifacts[,"in_hull",],]
-    pts_outside_pc <- round(as.matrix(pts_outside[, c("pc1","pc2")], mode = "numeric"), dig=2)
+    pts_outside_pc <- round(as.matrix(pts_outside[, c("pc1","pc2")], mode = "numeric"), digits =2)
     cols_keep <- colnames(pts_outside)[(colnames(pts_outside) != "artifact_group") &
                                        (colnames(pts_outside) != "data_source") &
                                        (colnames(pts_outside) != "pc1") & (colnames(pts_outside) != "pc2")]
@@ -535,7 +542,7 @@ ps_pcaEvaluation <-function(doc = "ps_pcaEvaluation",
     dataCheck<-pts_outside[index,]
     colnames_dataCheck<-colnames(dataCheck)[(colnames(dataCheck)!="index")&(colnames(dataCheck)!="data_source")]
     dataCheck<-dataCheck[,colnames_dataCheck]
-    dataCheck[,c("pc1","pc2")] <- round(as.matrix(dataCheck[,c("pc1","pc2")],mode="numeric"),dig=2)
+    dataCheck[,c("pc1","pc2")] <- round(as.matrix(dataCheck[,c("pc1","pc2")],mode="numeric"),digits =2)
     }
     #
     }   #  end of code for one-panel evaluation plot

@@ -98,7 +98,7 @@ ps_CV_corr <-
       CV <- rep(NA, length(AnalyticVars))
       means <- apply(dataUsed[, AnalyticVars], 2, mean, na.rm=TRUE)
       std <- sqrt(apply(dataUsed[,AnalyticVars], 2, var, na.rm=TRUE))
-      CV <- round(std / means, dig = CV_digits)
+      CV <- round(std / means, digits = CV_digits)
       names(CV) <- AnalyticVars
       #
       #  Spearman correlations
@@ -109,7 +109,7 @@ ps_CV_corr <-
           method = "spearman",
           use = "pairwise.complete.obs"
         ),
-        dig = corr_digits)
+        digits = corr_digits)
       if (plotCorrs) {
         if (Groups[1]=="All")  plotTitle <- "All groups"
         else
@@ -148,7 +148,7 @@ ps_CV_corr <-
         #
         means_i <- apply(data_i[,AnalyticVars], 2, mean, na.rm = TRUE)
         std_i <- sqrt(apply(data_i[,AnalyticVars], 2, var, na.rm = TRUE))
-        compute_CV[i,] <- round(std_i / means_i, dig = CV_digits)
+        compute_CV[i,] <- round(std_i / means_i, digits = CV_digits)
         CV <- data.frame(groups, compute_CV)
         colnames(CV) <- c(GroupVar, AnalyticVars)
         #
@@ -180,7 +180,7 @@ ps_CV_corr <-
             method = "spearman",
             use = "pairwise.complete.obs"
           ),
-          dig = corr_digits)
+          digits = corr_digits)
         # load correlations into Corrs
         Row <- 0  # row in which to load correlations
         for (k in 1:(length(AnalyticVars) - 1)) {

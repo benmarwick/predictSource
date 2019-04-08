@@ -171,7 +171,7 @@ ps_tree <-
       } # end of code for predictSources == T
     #
     nsplit <- CpTable[,"nsplit"]
-    Cp <- round(CpTable[,-2],dig = CpDigits)
+    Cp <- round(CpTable[,-2],digits = CpDigits)
     CpTable <- cbind(nsplit,Cp)
     #
     fcnDateVersion<-paste(doc,date(),R.Version()$version.string)
@@ -185,7 +185,7 @@ ps_tree <-
     params<-list(grouping=params_grouping,logical=params_logical,splitting=params_splitting)
     #
     nsplit <- CpTable[,"nsplit"]
-    Cp <- round(CpTable[,-2],dig = CpDigits)
+    Cp <- round(CpTable[,-2],digits = CpDigits)
     CpTable <- cbind(nsplit,Cp)
     #
     if (!predictSources)

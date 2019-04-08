@@ -2,35 +2,51 @@
 #'
 #'  Compute and plot principal components after standardizing the data
 #'
-#' @param doc A string with documentation in the list returned, default is the function name
+#' @param doc A string with documentation in the list returned, default
+#' is the function name
 #' @param data A matrix or data frame containing the data to be analyzed
 #' @param ID  An optional name for an ID, default is " " if no ID
-#' @param GroupVar The name for variable defining grouping; a variable name is required
-#' @param Groups Character-valued defining the values of the group variable for which plots are
-#'  to be done_  Options are a vector of values; "All" (use all groups)_  One of these is required
+#' @param GroupVar The name for variable defining grouping; a variable
+#' name is required
+#' @param Groups Character-valued defining the values of the group variable
+#'  for which plots are to be done_  Options are a vector of values;
+#'   "All" (use all groups)_  One of these is required
 #' @param AnalyticVars A vector of names (character values) of analytic results
 #' @param ScreePlot  Logical, if T create a scree plot, default is F
-#' @param BoxPlots  Logical, if T, create box plots of the first two components, default is F
-#' @param pcPlot  Logical, if T (the default), create the plot of the first two components
-#' @param PlotPoints  Logical, if T (the default) and pcPlot=T, plot the points for the first two components
-#' @param PlotEllipses Logical, if T (the default), plot the confidence ellipse or ellipses for each group
-#' @param PlotHull  Logical, if T, plot the convex hull for each group, default is F
-#' @param PlotMedians  Logical, if T, plot the symbol for each group at the median point for that group, default is F
-#' @param Ellipses A value or vector of proportions for confidence ellipses; default is c(_95,_99) to produce 95\% and 99\% confidence ellipses
+#' @param BoxPlots  Logical, if T, create box plots of the first two components,
+#'  default is F
+#' @param pcPlot  Logical, if T (the default), create the plot of the first
+#' two components
+#' @param PlotPoints  Logical, if T (the default) and pcPlot=T,
+#' plot the points for the first two components
+#' @param PlotEllipses Logical, if T (the default), plot the confidence ellipse
+#'  or ellipses for each group
+#' @param PlotHull  Logical, if T, plot the convex hull for each group,
+#'  default is F
+#' @param PlotMedians  Logical, if T, plot the symbol for each group at the
+#' median point for that group, default is F
+#' @param Ellipses A value or vector of proportions for confidence ellipses;
+#'  default is c(_95,_99) to produce 95\% and 99\% confidence ellipses
 #' @param legendLoc Character, location of legend for a plot with points;
-#'  default is "topright", alternatives are combinations of "top", "bottom", "right", "left"
-#' @param PlotColors Logical_  If T, use list of colors in Colors for points; if F, plot points as black
+#'  default is "topright", alternatives are combinations of "top", "bottom",
+#'   "right", "left"
+#' @param PlotColors Logical_  If T, use list of colors in Colors for points;
+#'  if F, plot points as black
 #' @param Colors A vector of color names; default is a vector with five names
-#' @param Identify Logical_  If T, the user can identify points of interest in plots; information on these points is saved to a file; default is F
-#' @param digits The number of significant digits to return in objects in data frames, default is 3
-#' @param Seed  If not NA, the seed for the random number generator used if missing data are
-#' imputed; default is 11111
+#' @param Identify Logical_  If T, the user can identify points of interest in plots;
+#'  information on these points is saved to a file; default is F
+#' @param digits The number of significant digits to return in objects in data frames,
+#'  default is 3
+#' @param Seed  If not NA, the seed for the random number generator used if
+#'  missing data are imputed; default is 11111
 #' @param folder  The path to the folder in which data frames will be saved; default is " "
 #'
 #' @section Details:
-#' If Identify=T, the user must interact with each plot (or pane, if there is more than one pane on a plot).
-#' To identify a point, place the cursor as close as possible to the point and left click;  repeat if desired.
-#' To go to the next pane, right click and select "Stop" in base R; click on "Finish" in the plot pane in Rstudio.
+#' If Identify=T, the user must interact with each plot (or pane,
+#'  if there is more than one pane on a plot). To identify a point,
+#'  place the cursor as close as possible to the point and left click;  repeat if desired.
+#' To go to the next pane, right click and select "Stop" in base R;
+#' click on "Finish" in the plot pane in Rstudio.
 #'
 #' @return The function produces a plot of the first two principal components, the contents of which are defined by the arguments PlotPoints, PlotEllipses, PlotHull, and PlotMedians_ A scree plot and box plots are produced if requested_  The function returns a list with the following components:
 #' \itemize{
@@ -59,7 +75,8 @@
 #' @examples
 #' data(ObsidianSources)
 #' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-#' save_pca <- ps_pca(data=ObsidianSources, ID="ID", GroupVar="Code",Groups="All", AnalyticVars=analyticVars)
+#' save_pca <- ps_pca(data=ObsidianSources, ID="ID", GroupVar="Code",
+#' Groups="All", AnalyticVars=analyticVars)
 #'
 #' @export
 #'
@@ -256,11 +273,11 @@ ps_pca <-  function(doc = "ps_pca",
     if (ID != " ") DataPlusPredicted <- DataPlusPredicted[,-(3+length(analyticVars))]
       else  DataPlusPredicted <- DataPlusPredicted[,-(2+length(analyticVars))]#  remove GroupIndex
     pcNames <- colnames(Predicted)[-1]
-    Predicted[,pcNames] <- round(Predicted[,pcNames], dig = digits)
-    DataPlusPredicted[,pcNames] <- round(DataPlusPredicted[,pcNames], dig = digits)
+    Predicted[,pcNames] <- round(Predicted[,pcNames], digits = digits)
+    DataPlusPredicted[,pcNames] <- round(DataPlusPredicted[,pcNames], digits = digits)
     #
-    weights <- round(weights,dig = digits)
-    variances <- round(importance_pca, dig = digits)
+    weights <- round(weights,digits = digits)
+    variances <- round(importance_pca, digits = digits)
     #
     if (sum(dataKeep) < nrow(dataUsed)) dataNA <- dataUsed[!dataKeep,]
     else dataNA <- NA

@@ -14,12 +14,12 @@ ps_checkData(doc = "pc_checkData", data, CheckDupVars, GroupVar = " ",
 
 \item{CheckDupVars:}{vector with names of identifying variables, typically group and lab ID}
 
-\item{GroupVar:}{if there are groups, name of variable defining the groups, default value of " ": no grouping}
+\item{GroupVar:}{if there are groups, name of variable defining the groups,
+default value of " ": no grouping}
 
-\item{Groups:}{character vector of groups by which numbers of samples and statistics statistics will be
-tabulated
- default value of " ": tabulations are done for the entire data set
- value = "All": tabulation for each distinct code in GroupVar}
+\item{Groups:}{character vector of groups by which numbers of samples and statistics will be
+tabulated.  Default is " ": tabulations are done for the entire data set.
+If value = "All": tabulation for each distinct code in GroupVar}
 
 \item{ID:}{name of lab ID, default is " " (no lab ID)}
 
@@ -40,14 +40,16 @@ Four data frames with duplicate observations, observations with negative
 \item{params:}{  A character vector with the values of CheckDupVars, GroupVar, and Groups}
 \item{analyticVars:}{  The vector of names specified by the argument AnalyticVars}
 \item{Duplicates:}{  A data frame containing the observations with duplicate values}
-\item{NegativeValues:}{  A data frame containing the observations with at least one negative value for a variable in AnalyticVars}
+\item{NegativeValues:}{  A data frame containing the observations with at least one negative
+ value for a variable in AnalyticVars}
 \item{Nvalues:}{  A data frame contain the number of observations with a value for each analytic variable}
 \item{statistics:}{  A data frame containing the statistics statistics (by group, if Group is specified)}
 \item{location:}{  If folder != " ", the path to the folder in which data frames will be saved}
   }
 }
 \description{
-Data checks and summaries: duplicate records, negative analytic values, numbers of analytic results, percentiles of results
+Data checks and summaries: duplicate records, negative analytic values,
+ numbers of analytic results, percentiles of results
 }
 \section{Detail}{
 

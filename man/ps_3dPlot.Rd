@@ -9,38 +9,47 @@ ps_3dPlot(doc = "ps_3dPlot", data, GroupVar, Groups, AnalyticVars, Selections,
   "green", "purple"), SymbolSize = 0.7)
 }
 \arguments{
-\item{doc}{A string documenting use written to the output list; default is the function name}
+\item{doc}{A string documenting use written to the output list;
+default is the function name}
 
 \item{data}{A matrix or data frame containing the data to be analyzed}
 
-\item{GroupVar}{The name for variable defining grouping; can be " " if no grouping_}
+\item{GroupVar}{The name for variable defining grouping;
+can be " " if no grouping_}
 
-\item{Groups}{A vector of values of group variable for which plots are to be done;
-if "All", use all groups; if " ", no grouping}
+\item{Groups}{A vector of values of group variable for which plots
+are to be done; if "All", use all groups; if " ", no grouping}
 
 \item{AnalyticVars}{A vector of names (character values) of the analytic variables}
 
-\item{Selections}{A vector of length 3, or data frame with 3 columns, with the combinations
-of the analytic variables to be plotted}
+\item{Selections}{A vector of length 3, or data frame with 3 columns,
+with the combinations of the analytic variables to be plotted}
 
-\item{ByGroup}{Logical_  If T, show scatterplot for each group for each selection of 3 variables;
-if F (the default), all specified groups are on one plot}
+\item{ByGroup}{Logical_  If T, show scatterplot for each group
+for each selection of 3 variables; if F (the default),
+ all specified groups are on one plot}
 
-\item{PlotMedians}{Logical_  If T, plot only the medians in each group (the points are not plotted)
+\item{PlotMedians}{Logical_  If T, plot only the medians in each group
+ (the points are not plotted)
 if F (the default), the median locations are not plotted}
 
-\item{Colors}{A vector with the colors of plotted points, used sequentially for the groups}
+\item{Colors}{A vector with the colors of plotted points,
+used sequentially for the groups}
 
-\item{SymbolSize}{A value at most 1, a smaller value gives smaller diameter points}
+\item{SymbolSize}{A value at most 1, a smaller value gives
+smaller diameter points}
 }
 \value{
 A list with the following components:
  \itemize{
-\item{usage:}{  A string with the contents of the argument doc, the date run, the version of R used}
-\item{dataUsed:}{  The contents of the argument data restricted to the groups used}
-\item{dataNA:}{  A data frame with observations containing a least one missing value
-  for an analysis variable, NA if no missing values}
-\item{params:}{  A list with the values of the grouping, logical, numeric and Color arguments}
+\item{usage:}{  A string with the contents of the argument doc,
+the date run, the version of R used}
+\item{dataUsed:}{  The contents of the argument data restricted
+to the groups used}
+\item{dataNA:}{  A data frame with observations containing at
+least one missing value for an analysis variable, NA if no missing values}
+\item{params:}{  A list with the values of the grouping, logical,
+ numeric and Color arguments}
 \item{analyticVars:}{  A vector with the value of the argument AnalyticVars}
 }
 }
@@ -51,8 +60,9 @@ If this function is run using Rstudio, each plot appears in a separate window, n
 }
 \section{Details}{
 
- See the vignette for more information: visualizing each plot, specification of the argument
- Selections as a matrix or data frame, and use of colors.  If the plot or plots are not by group,
+ See the vignette for more information: visualizing each plot,
+ specification of the argument Selections as a matrix or data frame,
+  and use of colors.  If the plot or plots are not by group,
   all points have the color of the first element in Colors.
   If PlotMedians = T, the value of ByGroup is not used.
 }
@@ -61,12 +71,13 @@ If this function is run using Rstudio, each plot appears in a separate window, n
 #  show points from several groups on one plot
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-plot3d<-ps_3dPlot(data=ObsidianSources, GroupVar="Code", Groups=c("A","B"), AnalyticVars=analyticVars,
-                  Selections=rbind(analyticVars[1:3],analyticVars[2:4]))
+plot3d<-ps_3dPlot(data=ObsidianSources, GroupVar="Code",
+Groups=c("A","B"), AnalyticVars=analyticVars,
+Selections=rbind(analyticVars[1:3],analyticVars[2:4]))
 
 #  plots with one group per plot
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-plot3d<-ps_3dPlot(data=ObsidianSources, GroupVar="Code", Groups=c("A","B"), ByGroup=T, AnalyticVars=analyticVars,
-                  Selections=analyticVars[1:3])
+plot3d<-ps_3dPlot(data=ObsidianSources, GroupVar="Code", Groups=c("A","B"),
+ ByGroup=T, AnalyticVars=analyticVars, Selections=analyticVars[1:3])
 }
