@@ -5,11 +5,11 @@
 \title{ps_pca}
 \usage{
 ps_pca(doc = "ps_pca", data, ID = " ", GroupVar, Groups, AnalyticVars,
-  ScreePlot = F, BoxPlots = F, pcPlot = T, PlotPoints = T,
-  PlotEllipses = T, PlotHull = F, PlotMedians = F, Ellipses = c(0.95,
-  0.99), PlotColors = T, legendLoc = "topright", Colors = c("red",
-  "black", "blue", "green", "purple"), Identify = F, digits = 3,
-  Seed = 11111, folder = " ")
+  ScreePlot = FALSE, BoxPlots = FALSE, pcPlot = TRUE, PlotPoints = TRUE,
+  PlotEllipses = TRUE, PlotHull = FALSE, PlotMedians = FALSE,
+  Ellipses = c(0.95, 0.99), PlotColors = T, legendLoc = "topright",
+  Colors = c("red", "black", "blue", "green", "purple"), Identify = FALSE,
+  digits = 3, Seed = 11111, folder = " ")
 }
 \arguments{
 \item{doc}{A string with documentation in the list returned, default
@@ -23,35 +23,35 @@ is the function name}
 name is required}
 
 \item{Groups}{Character-valued defining the values of the group variable
-for which plots are to be done_  Options are a vector of values;
- "All" (use all groups)_  One of these is required}
+for which plots are to be done.  Options are a vector of values;
+ "All" (use all groups).  One of these is required}
 
 \item{AnalyticVars}{A vector of names (character values) of analytic results}
 
-\item{ScreePlot}{Logical, if T create a scree plot, default is F}
+\item{ScreePlot}{Logical, if TRUE create a scree plot, default is FALSE}
 
-\item{BoxPlots}{Logical, if T, create box plots of the first two components,
-default is F}
+\item{BoxPlots}{Logical, if TRUE, create box plots of the first two components,
+default is FALSE}
 
-\item{pcPlot}{Logical, if T (the default), create the plot of the first
+\item{pcPlot}{Logical, if TRUE (the default), create the plot of the first
 two components}
 
-\item{PlotPoints}{Logical, if T (the default) and pcPlot=T,
+\item{PlotPoints}{Logical, if TRUE (the default) and pcPlot=T,
 plot the points for the first two components}
 
 \item{PlotEllipses}{Logical, if T (the default), plot the confidence ellipse
 or ellipses for each group}
 
-\item{PlotHull}{Logical, if T, plot the convex hull for each group,
+\item{PlotHull}{Logical, if TRUE, plot the convex hull for each group,
 default is F}
 
-\item{PlotMedians}{Logical, if T, plot the symbol for each group at the
-median point for that group, default is F}
+\item{PlotMedians}{Logical, if TRUE, plot the symbol for each group at the
+median point for that group, default is FALSE}
 
 \item{Ellipses}{A value or vector of proportions for confidence ellipses;
 default is c(_95,_99) to produce 95\% and 99\% confidence ellipses}
 
-\item{PlotColors}{Logical_  If T, use list of colors in Colors for points;
+\item{PlotColors}{Logical.  If TRUE, use list of colors in Colors for points;
 if F, plot points as black}
 
 \item{legendLoc}{Character, location of legend for a plot with points;
@@ -60,8 +60,8 @@ default is "topright", alternatives are combinations of "top", "bottom",
 
 \item{Colors}{A vector of color names; default is a vector with five names}
 
-\item{Identify}{Logical_  If T, the user can identify points of interest in plots;
-information on these points is saved to a file; default is F}
+\item{Identify}{Logical.  If TRUE, the user can identify points of interest in plots;
+information on these points is saved to a file; default is FALSE}
 
 \item{digits}{The number of significant digits to return in objects in data frames,
 default is 3}
@@ -89,7 +89,7 @@ The function produces a plot of the first two principal components, the contents
    plus the value of Groups and an integer GroupIndex (with values 1:number of Groups)}
   \item{DataPlusPredicted:}{  A data frame with the data used to compute the principal components,
    plus GroupIndex (as defined above) and predicted values for each principal component}
-  \item{dataCheck:}{  If Identify=T, a data frame with the observations in dataUsed
+  \item{dataCheck:}{  If Identify=TRUE, a data frame with the observations in dataUsed
    identified as of interest}
   \item{location:}{  The value of the parameter folder}
  }
@@ -99,7 +99,7 @@ Compute and plot principal components after standardizing the data
 }
 \section{Details}{
 
-If Identify=T, the user must interact with each plot (or pane,
+If Identify=TRUE, the user must interact with each plot (or pane,
  if there is more than one pane on a plot). To identify a point,
  place the cursor as close as possible to the point and left click;  repeat if desired.
 To go to the next pane, right click and select "Stop" in base R;

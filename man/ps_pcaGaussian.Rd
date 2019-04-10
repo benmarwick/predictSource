@@ -5,29 +5,29 @@
 \title{ps_pcaGaussian}
 \usage{
 ps_pcaGaussian(doc = "ps_pcaGaussian", data, GroupVar, Groups,
-  gaussID = " ", AnalyticVars, qqPlot = T, gaussIdentify = F,
+  gaussID = " ", AnalyticVars, qqPlot = TRUE, gaussIdentify = FALSE,
   folder = " ")
 }
 \arguments{
-\item{doc}{documentation for the analysis, default if the function name}
+\item{doc}{Documentation for the analysis, default if the function name}
 
-\item{data}{R matrix or data frame containing the data to be analyzed}
+\item{data}{An R matrix or data frame containing the data to be analyzed}
 
-\item{GroupVar}{name for variable defining grouping; a group variable is required}
+\item{GroupVar}{The name for variable defining grouping; a group variable is required}
 
-\item{Groups}{vector of values of group variable for which plots are to be done;
+\item{Groups}{A vector of values of group variable for which plots are to be done;
 if "All"', use all groups}
 
-\item{AnalyticVars}{vector of names (character values) of analytic results}
+\item{gaussID}{An optional name for an ID, default is " " if no ID}
+
+\item{AnalyticVars}{A vector of names (character values) of analytic results}
 
 \item{qqPlot}{Logical, should Q-Q plots (univariate with the bootstrap envelope, multivariate)
-be shown; default is T}
+be shown; default is TRUE}
 
-\item{gaussIdentify}{Logical, should user identify points of interest, default is F}
+\item{gaussIdentify}{Logical, should user identify points of interest, default is FALSE}
 
 \item{folder}{The path to the folder in which data frames will be saved; default is " "}
-
-\item{gaussID:}{optional name for an ID, default is " " if no ID}
 }
 \value{
 The function returns a list with the following components:

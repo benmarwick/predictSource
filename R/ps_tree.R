@@ -9,15 +9,15 @@
 #' @param AnalyticVars  A vector with the names (character values) of the analytic variables
 #' @param wts Option to weight the observations, if used, vector with length nrow(data); if NA (the default), assume equal weights
 #' @param CpDigits  The number of significant digits to display in the Cp table, default value is 3
-#' @param plotTree Logical_  If T (true, the default), plot the recursive partitioning tree
-#' @param plotCp  Logical_  If T (tree, the default), plot the Cp table values
+#' @param plotTree Logical.  If TRUE (the default), plot the recursive partitioning tree
+#' @param plotCp  Logical.  If TRUE (the default), plot the Cp table values
 #' @param Model  A character string containing the names of the variables (characters) considered
 #'  separated by + signs
 #' @param ModelTitle  The parameter Model as a single character value
 #' @param minSplit  The minimum size of a group for splitting, default is 20 (the default in rpart())
 #' @param cP  The required improvement in Cp for a group to be split, default is _01 (the default in rpart())
-#' @param predictSources  Logical: if T, use the tree to predict sources for observations
-#'  in predictData; default is F
+#' @param predictSources  Logical: if TRUE, use the tree to predict sources for observations
+#'  in predictData; default is FALSE
 #' @param predictData  Data frame with data used to predict sources, must contain all variables
 #'  in AnalyticVars
 #' @param ID  If not " " (the default), the name of a variable identifying a sample in predictData
@@ -58,8 +58,8 @@
 #' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 #' save_tree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
 #'      Model = "Sr"+ "Nb" + "Rb" + "Y"+"Zr", ModelTitle = "Sr + Nb + Rb + Y + Zr",
-#'      predictSources=T, predictData=ObsidianArtifacts, ID="ID",
-#'      plotTree=F, plotCp=F)
+#'      predictSources=TRUE, predictData=ObsidianArtifacts, ID="ID",
+#'      plotTree=FALSE, plotCp=FALSE)
 #'
 #' @import rpart partykit Formula
 #'
@@ -73,13 +73,13 @@ ps_tree <-
            AnalyticVars ,
            wts = NA,
            CpDigits = 3,
-           plotTree = T,
-           plotCp = T,
+           plotTree = TRUE,
+           plotCp = TRUE,
            Model,
            ModelTitle,
            minSplit = 20,
            cP = 0.01,
-           predictSources = F,
+           predictSources = FALSE,
            predictData,
            ID = " ",
            folder = " ")

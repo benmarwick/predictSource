@@ -9,32 +9,32 @@
 #' @param GroupVar The name for variable defining grouping; a variable
 #' name is required
 #' @param Groups Character-valued defining the values of the group variable
-#'  for which plots are to be done_  Options are a vector of values;
-#'   "All" (use all groups)_  One of these is required
+#'  for which plots are to be done.  Options are a vector of values;
+#'   "All" (use all groups).  One of these is required
 #' @param AnalyticVars A vector of names (character values) of analytic results
-#' @param ScreePlot  Logical, if T create a scree plot, default is F
-#' @param BoxPlots  Logical, if T, create box plots of the first two components,
-#'  default is F
-#' @param pcPlot  Logical, if T (the default), create the plot of the first
+#' @param ScreePlot  Logical, if TRUE create a scree plot, default is FALSE
+#' @param BoxPlots  Logical, if TRUE, create box plots of the first two components,
+#'  default is FALSE
+#' @param pcPlot  Logical, if TRUE (the default), create the plot of the first
 #' two components
-#' @param PlotPoints  Logical, if T (the default) and pcPlot=T,
+#' @param PlotPoints  Logical, if TRUE (the default) and pcPlot=T,
 #' plot the points for the first two components
 #' @param PlotEllipses Logical, if T (the default), plot the confidence ellipse
 #'  or ellipses for each group
-#' @param PlotHull  Logical, if T, plot the convex hull for each group,
+#' @param PlotHull  Logical, if TRUE, plot the convex hull for each group,
 #'  default is F
-#' @param PlotMedians  Logical, if T, plot the symbol for each group at the
-#' median point for that group, default is F
+#' @param PlotMedians  Logical, if TRUE, plot the symbol for each group at the
+#' median point for that group, default is FALSE
 #' @param Ellipses A value or vector of proportions for confidence ellipses;
 #'  default is c(_95,_99) to produce 95\% and 99\% confidence ellipses
 #' @param legendLoc Character, location of legend for a plot with points;
 #'  default is "topright", alternatives are combinations of "top", "bottom",
 #'   "right", "left"
-#' @param PlotColors Logical_  If T, use list of colors in Colors for points;
+#' @param PlotColors Logical.  If TRUE, use list of colors in Colors for points;
 #'  if F, plot points as black
 #' @param Colors A vector of color names; default is a vector with five names
-#' @param Identify Logical_  If T, the user can identify points of interest in plots;
-#'  information on these points is saved to a file; default is F
+#' @param Identify Logical.  If TRUE, the user can identify points of interest in plots;
+#'  information on these points is saved to a file; default is FALSE
 #' @param digits The number of significant digits to return in objects in data frames,
 #'  default is 3
 #' @param Seed  If not NA, the seed for the random number generator used if
@@ -42,7 +42,7 @@
 #' @param folder  The path to the folder in which data frames will be saved; default is " "
 #'
 #' @section Details:
-#' If Identify=T, the user must interact with each plot (or pane,
+#' If Identify=TRUE, the user must interact with each plot (or pane,
 #'  if there is more than one pane on a plot). To identify a point,
 #'  place the cursor as close as possible to the point and left click;  repeat if desired.
 #' To go to the next pane, right click and select "Stop" in base R;
@@ -65,7 +65,7 @@
 #'    plus the value of Groups and an integer GroupIndex (with values 1:number of Groups)}
 #'   \item{DataPlusPredicted:}{  A data frame with the data used to compute the principal components,
 #'    plus GroupIndex (as defined above) and predicted values for each principal component}
-#'   \item{dataCheck:}{  If Identify=T, a data frame with the observations in dataUsed
+#'   \item{dataCheck:}{  If Identify=TRUE, a data frame with the observations in dataUsed
 #'    identified as of interest}
 #'   \item{location:}{  The value of the parameter folder}
 #'  }
@@ -86,18 +86,18 @@ ps_pca <-  function(doc = "ps_pca",
                     GroupVar,
                     Groups,
                     AnalyticVars,
-                    ScreePlot = F,
-                    BoxPlots = F,
-                    pcPlot = T,
-                    PlotPoints = T,
-                    PlotEllipses = T,
-                    PlotHull = F,
-                    PlotMedians = F,
+                    ScreePlot = FALSE,
+                    BoxPlots = FALSE,
+                    pcPlot = TRUE,
+                    PlotPoints = TRUE,
+                    PlotEllipses = TRUE,
+                    PlotHull = FALSE,
+                    PlotMedians = FALSE,
                     Ellipses = c(.95, .99),
                     PlotColors = T,
                     legendLoc="topright",
                     Colors = c("red","black","blue","green","purple"),
-                    Identify = F,
+                    Identify = FALSE,
                     digits=3,
                     Seed=11111,
                     folder = " ")

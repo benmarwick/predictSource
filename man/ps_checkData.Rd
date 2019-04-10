@@ -8,24 +8,24 @@ ps_checkData(doc = "pc_checkData", data, CheckDupVars, GroupVar = " ",
   Groups, ID = " ", AnalyticVars, folder = " ")
 }
 \arguments{
-\item{doc:}{a character string written to the output list; default is the function name}
+\item{doc}{A character string written to the output list; default is the function name}
 
-\item{data:}{R object (data frame) containing analytic data}
+\item{data}{An R object (data frame) containing analytic data}
 
-\item{CheckDupVars:}{vector with names of identifying variables, typically group and lab ID}
+\item{CheckDupVars}{A vector with names of identifying variables, typically group and lab ID}
 
-\item{GroupVar:}{if there are groups, name of variable defining the groups,
+\item{GroupVar}{If there are groups, name of variable defining the groups,
 default value of " ": no grouping}
 
-\item{Groups:}{character vector of groups by which numbers of samples and statistics will be
+\item{Groups}{A character vector of groups by which numbers of samples and statistics will be
 tabulated.  Default is " ": tabulations are done for the entire data set.
 If value = "All": tabulation for each distinct code in GroupVar}
 
-\item{ID:}{name of lab ID, default is " " (no lab ID)}
+\item{ID}{The name of lab ID, default is " " (no lab ID)}
 
-\item{AnalyticVars:}{character vector of names of analytic variables for which tabulations are done}
+\item{AnalyticVars}{A character vector of names of analytic variables for which tabulations are done}
 
-\item{folder:}{the path to a folder in which data frames will be saved; default is " "
+\item{folder}{The path to a folder in which data frames will be saved; default is " "
 #``}
 }
 \value{

@@ -10,8 +10,8 @@
 #'    "All": use all groups;" ": no grouping
 #' @param AnalyticVars A vector of names (character values) of analytic results
 #' @param Selections A vector of length 3, or data frame with 3 columns, with combinations to be plotted
-#' @param ByGroup  Logical_ If T, show scatterplot for each group for each selection of 3 variables;
-#'                       default is F
+#' @param ByGroup  Logical. If TRUE, show scatterplot for each group for each selection of 3 variables;
+#'                       default is FALSE
 #' @param ptSize  The size of plotted points, default is 5 (a larger value gives larger points)
 #' @param Colors A vector with the color(s) of plotted points; default is a vector
 #'            red, black, blue, green, purple
@@ -25,7 +25,7 @@
 #' @section: Details:
 #' See the vignette for details on the use of colors.  The rotated 3d plot can be saved to a file
 #' located at dsFile.  The code saves a file as a pdf; see the documentation for the function
-#' rgl_postscript() for changing the format to postscript, eps, tex, or others.  Point sizes may
+#' rgl.postscript() for changing the format to postscript, eps, tex, or others.  Point sizes may
 #' appear much larger in a saved file than on the monitor.
 #'
 #' @return A list with the following components:
@@ -44,7 +44,7 @@
 #' data(ObsidianSources)
 #' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 #' plot_3d_rotate<-ps_3dPlotRotate(data=ObsidianSources, GroupVar="Code", Groups=c("A","B"),
-#'               AnalyticVars = analyticVars, Selections=analyticVars[1:3],ByGroup=T)
+#'               AnalyticVars = analyticVars, Selections=analyticVars[1:3],ByGroup=TRUE)
 #' # two plots
 #' data(ObsidianSources)
 #' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
@@ -60,7 +60,7 @@ ps_3dPlotRotate <-
            Groups,
            AnalyticVars,
            Selections,
-           ByGroup = F,
+           ByGroup = FALSE,
            ptSize = 5,
            Colors = c("red","black","blue","green","purple"),
            folder = " ",

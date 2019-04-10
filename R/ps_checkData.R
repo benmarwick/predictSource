@@ -3,17 +3,17 @@
 #' Data checks and summaries: duplicate records, negative analytic values,
 #'  numbers of analytic results, percentiles of results
 #'
-#' @param doc: a character string written to the output list; default is the function name
-#' @param data: R object (data frame) containing analytic data
-#' @param CheckDupVars: vector with names of identifying variables, typically group and lab ID
-#' @param GroupVar: if there are groups, name of variable defining the groups,
+#' @param doc A character string written to the output list; default is the function name
+#' @param data  An R object (data frame) containing analytic data
+#' @param CheckDupVars  A vector with names of identifying variables, typically group and lab ID
+#' @param GroupVar  If there are groups, name of variable defining the groups,
 #'  default value of " ": no grouping
-#' @param Groups: character vector of groups by which numbers of samples and statistics will be
+#' @param Groups  A character vector of groups by which numbers of samples and statistics will be
 #'  tabulated.  Default is " ": tabulations are done for the entire data set.
 #'  If value = "All": tabulation for each distinct code in GroupVar
-#' @param ID: name of lab ID, default is " " (no lab ID)
-#' @param AnalyticVars: character vector of names of analytic variables for which tabulations are done
-#' @param folder:  the path to a folder in which data frames will be saved; default is " "
+#' @param ID  The name of lab ID, default is " " (no lab ID)
+#' @param AnalyticVars  A character vector of names of analytic variables for which tabulations are done
+#' @param folder  The path to a folder in which data frames will be saved; default is " "
 #' #``
 #' @return
 #'   Four data frames with duplicate observations, observations with negative

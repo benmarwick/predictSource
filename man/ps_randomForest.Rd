@@ -6,9 +6,9 @@
 \usage{
 ps_randomForest(doc = "ps_randomForest", data, GroupVar, Groups = "All",
   AnalyticVars, sourceID = " ", Ntrees = 500, NvarUsed = NA,
-  Seed = 11111, digitsImportance = 1, plotErrorRate = T,
-  plotImportance = T, predictSources = F, predictData = NA,
-  artifactID = " ", plotSourceProbs = T, folder = " ")
+  Seed = 11111, digitsImportance = 1, plotErrorRate = TRUE,
+  plotImportance = TRUE, predictSources = FALSE, predictData = NA,
+  artifactID = " ", plotSourceProbs = TRUE, folder = " ")
 }
 \arguments{
 \item{doc}{Documentation for the function use added to model usage, default value is the function name}
@@ -34,11 +34,11 @@ default value is 11111}
 
 \item{digitsImportance}{The number of significant digits for the importance measure, default is 1}
 
-\item{plotErrorRate}{Logical, whether to show the error rate plot, default is T}
+\item{plotErrorRate}{Logical, whether to show the error rate plot, default is TRUE}
 
-\item{plotImportance}{Logical, whether to show the plot of variable importance, default is T}
+\item{plotImportance}{Logical, whether to show the plot of variable importance, default is TRUE}
 
-\item{predictSources}{Logical; if T, predict sources for the data in predictData; default is F}
+\item{predictSources}{Logical; if T, predict sources for the data in predictData; default is FALSE}
 
 \item{predictData}{A data frame or matrix with data used to predict sources for observations,
 must contain all variables in AnalyticVars_}
@@ -46,7 +46,7 @@ must contain all variables in AnalyticVars_}
 \item{artifactID}{if not " " (the default), the name of the variable with the sample ID for
 artifact data}
 
-\item{plotSourceProbs}{Logical, if T (the default) and predictSources=T, show box plots of source
+\item{plotSourceProbs}{Logical, if TRUE (the default) and predictSources=TRUE, show box plots of source
 probabilities}
 
 \item{folder}{The path to the folder in which data frames will be saved; default is " "}
@@ -97,14 +97,14 @@ If predictSources = T and plotSourceProbs is T, the function creates two box plo
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 save_randomForest <- ps_randomForest(data=ObsidianSources, GroupVar="Code",Groups="All",
-  sourceID="ID", AnalyticVars=analyticVars, NvarUsed=3, plotSourceProbs=F)
+  sourceID="ID", AnalyticVars=analyticVars, NvarUsed=3, plotSourceProbs=FALSE)
 #
 # predicted sources for artifacts
 data(ObsidianSources)
 data(ObsidianArtifacts)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 save_randomForest <- ps_randomForest(data=ObsidianSources, GroupVar="Code",Groups="All",
-AnalyticVars=analyticVars, sourceID="ID", NvarUsed=3, plotErrorRate=F, plotImportance=F,
-predictSources=T, predictData=ObsidianArtifacts, artifactID="ID", plotSourceProbs=T)
+AnalyticVars=analyticVars, sourceID="ID", NvarUsed=3, plotErrorRate=FALSE, plotImportance=FALSE,
+predictSources=T, predictData=ObsidianArtifacts, artifactID="ID", plotSourceProbs=TRUE)
 
 }

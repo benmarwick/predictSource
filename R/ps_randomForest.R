@@ -15,14 +15,14 @@
 #' @param Seed If not NA, a random number generator seed to produce reproducible results;
 #' default value is 11111
 #' @param digitsImportance  The number of significant digits for the importance measure, default is 1
-#' @param plotErrorRate Logical, whether to show the error rate plot, default is T
-#' @param plotImportance Logical, whether to show the plot of variable importance, default is T
-#' @param predictSources Logical; if T, predict sources for the data in predictData; default is F
+#' @param plotErrorRate Logical, whether to show the error rate plot, default is TRUE
+#' @param plotImportance Logical, whether to show the plot of variable importance, default is TRUE
+#' @param predictSources Logical; if T, predict sources for the data in predictData; default is FALSE
 #' @param predictData A data frame or matrix with data used to predict sources for observations,
 #'    must contain all variables in AnalyticVars_
 #' @param artifactID if not " " (the default), the name of the variable with the sample ID for
 #'  artifact data
-#' @param plotSourceProbs Logical, if T (the default) and predictSources=T, show box plots of source
+#' @param plotSourceProbs Logical, if TRUE (the default) and predictSources=TRUE, show box plots of source
 #'    probabilities
 #' @param folder  The path to the folder in which data frames will be saved; default is " "
 #'
@@ -67,15 +67,15 @@
 #' data(ObsidianSources)
 #' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 #' save_randomForest <- ps_randomForest(data=ObsidianSources, GroupVar="Code",Groups="All",
-#'   sourceID="ID", AnalyticVars=analyticVars, NvarUsed=3, plotSourceProbs=F)
+#'   sourceID="ID", AnalyticVars=analyticVars, NvarUsed=3, plotSourceProbs=FALSE)
 #' #
 #' # predicted sources for artifacts
 #' data(ObsidianSources)
 #' data(ObsidianArtifacts)
 #' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 #' save_randomForest <- ps_randomForest(data=ObsidianSources, GroupVar="Code",Groups="All",
-#' AnalyticVars=analyticVars, sourceID="ID", NvarUsed=3, plotErrorRate=F, plotImportance=F,
-#' predictSources=T, predictData=ObsidianArtifacts, artifactID="ID", plotSourceProbs=T)
+#' AnalyticVars=analyticVars, sourceID="ID", NvarUsed=3, plotErrorRate=FALSE, plotImportance=FALSE,
+#' predictSources=T, predictData=ObsidianArtifacts, artifactID="ID", plotSourceProbs=TRUE)
 #'
 #' @import  MASS randomForest  missForest rpart
 #'
@@ -92,12 +92,12 @@ ps_randomForest <-
            NvarUsed = NA,
            Seed = 11111,
            digitsImportance = 1,
-           plotErrorRate = T,
-           plotImportance = T,
-           predictSources = F,
+           plotErrorRate = TRUE,
+           plotImportance = TRUE,
+           predictSources = FALSE,
            predictData = NA,
            artifactID = " ",
-           plotSourceProbs=T,
+           plotSourceProbs=TRUE,
            folder = " "
            )
 {

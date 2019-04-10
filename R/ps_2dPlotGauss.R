@@ -10,11 +10,11 @@
 #'    if "All", use all groups; if " ", no grouping
 #' @param AnalyticVars  A vector of length two with the names of two analytic variables
 #'  to be shown in the plots
-#' @param scatterPlot  Logical (default is T): specify whether to show scatter plots when qqPlot = F
-#' @param qqPlot  Logical (default is T): specify whether to show the q-q plots with the bootstrap
+#' @param scatterPlot  Logical (default is TRUE): specify whether to show scatter plots when qqPlot = FALSE
+#' @param qqPlot  Logical (default is TRUE): specify whether to show the q-q plots with the bootstrap
 #' envelopes and multivariate plots
 #' @param pvalue_digits  Numeric (default is 3): number of significant digits retained in tests for normality
-#' @param Identify  Logical(default is F): if T, user can identify points of interest in the plots
+#' @param Identify  Logical(default is FALSE): if TRUE, user can identify points of interest in the plots
 #' @param folder  The path to the folder in which data frames will be saved; default is " "
 #'
 #' @return   A list with the following components:
@@ -32,10 +32,10 @@
 #' }
 #'
 #' @section Details:
-#'  If qqPlot = T, by default each page has panes in two rows and three columns
+#'  If qqPlot = TRUE, by default each page has panes in two rows and three columns
 #'  (but there is a new page for successive groups). The function stops after producing each row
 #'   of each plot.  Enter c ("continue") at the prompt to get the next plot.
-#'   If qqPlot = F, only the standard qq plots are shown, and the function stops after producing each
+#'   If qqPlot = FALSE, only the standard qq plots are shown, and the function stops after producing each
 #'   page.
 #'   See the vignette for more information: visualizing each plot, the information obtained
 #'    by using the package qqtest, the tests for bivariate normality, and identifying points of interest.
@@ -55,10 +55,10 @@ ps_2dPlotGauss <- function (doc = "ps_2dPlotGauss",
                              ID,
                              Groups,
                              AnalyticVars,
-                             scatterPlot=T,
-                             qqPlot = T,
+                             scatterPlot=TRUE,
+                             qqPlot = TRUE,
                              pvalue_digits=3,
-                             Identify=F,
+                             Identify=FALSE,
                              folder=" "
                             )
 {

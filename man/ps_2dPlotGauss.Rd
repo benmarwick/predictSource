@@ -5,8 +5,8 @@
 \title{Plot and check specified pairs of analysis variables for bivariate normality.}
 \usage{
 ps_2dPlotGauss(doc = "ps_2dPlotGauss", data, GroupVar, ID, Groups,
-  AnalyticVars, scatterPlot = T, qqPlot = T, pvalue_digits = 3,
-  Identify = F, folder = " ")
+  AnalyticVars, scatterPlot = TRUE, qqPlot = TRUE, pvalue_digits = 3,
+  Identify = FALSE, folder = " ")
 }
 \arguments{
 \item{doc}{A string documenting use written to the output list; default is the function name}
@@ -23,14 +23,14 @@ if "All", use all groups; if " ", no grouping}
 \item{AnalyticVars}{A vector of length two with the names of two analytic variables
 to be shown in the plots}
 
-\item{scatterPlot}{Logical (default is T): specify whether to show scatter plots when qqPlot = F}
+\item{scatterPlot}{Logical (default is TRUE): specify whether to show scatter plots when qqPlot = FALSE}
 
-\item{qqPlot}{Logical (default is T): specify whether to show the q-q plots with the bootstrap
+\item{qqPlot}{Logical (default is TRUE): specify whether to show the q-q plots with the bootstrap
 envelopes and multivariate plots}
 
 \item{pvalue_digits}{Numeric (default is 3): number of significant digits retained in tests for normality}
 
-\item{Identify}{Logical(default is F): if T, user can identify points of interest in the plots}
+\item{Identify}{Logical(default is FALSE): if TRUE, user can identify points of interest in the plots}
 
 \item{folder}{The path to the folder in which data frames will be saved; default is " "}
 }
@@ -54,10 +54,10 @@ Plot and check specified pairs of analysis variables for bivariate normality.
 }
 \section{Details}{
 
- If qqPlot = T, by default each page has panes in two rows and three columns
+ If qqPlot = TRUE, by default each page has panes in two rows and three columns
  (but there is a new page for successive groups). The function stops after producing each row
   of each plot.  Enter c ("continue") at the prompt to get the next plot.
-  If qqPlot = F, only the standard qq plots are shown, and the function stops after producing each
+  If qqPlot = FALSE, only the standard qq plots are shown, and the function stops after producing each
   page.
   See the vignette for more information: visualizing each plot, the information obtained
    by using the package qqtest, the tests for bivariate normality, and identifying points of interest.

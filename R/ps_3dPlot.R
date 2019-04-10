@@ -14,10 +14,10 @@
 #' @param AnalyticVars A vector of names (character values) of the analytic variables
 #' @param Selections A vector of length 3, or data frame with 3 columns,
 #'  with the combinations of the analytic variables to be plotted
-#' @param ByGroup Logical_  If T, show scatterplot for each group
-#'  for each selection of 3 variables; if F (the default),
+#' @param ByGroup Logical_  If TRUE, show scatterplot for each group
+#'  for each selection of 3 variables; if FALSE (the default),
 #'   all specified groups are on one plot
-#' @param PlotMedians  Logical_  If T, plot only the medians in each group
+#' @param PlotMedians  Logical.  If TRUE, plot only the medians in each group
 #'  (the points are not plotted)
 #' if F (the default), the median locations are not plotted
 #' @param Colors A vector with the colors of plotted points,
@@ -69,8 +69,8 @@ ps_3dPlot <-
            Groups,
            AnalyticVars,
            Selections,
-           ByGroup = F,
-           PlotMedians = F,
+           ByGroup = FALSE,
+           PlotMedians = FALSE,
            Colors = c("red","black","blue","green","purple"),
            SymbolSize = 0.7) {
 

@@ -5,8 +5,8 @@
 \title{ps_3dPlotRotate}
 \usage{
 ps_3dPlotRotate(doc = "ps_3dPlotRotate", data, GroupVar, Groups, AnalyticVars,
-  Selections, ByGroup = F, ptSize = 5, Colors = c("red", "black", "blue",
-  "green", "purple"), folder = " ", dsFile)
+  Selections, ByGroup = FALSE, ptSize = 5, Colors = c("red", "black",
+  "blue", "green", "purple"), folder = " ", dsFile)
 }
 \arguments{
 \item{doc}{A string documenting usage written to the list return, default is the function name}
@@ -22,8 +22,8 @@ ps_3dPlotRotate(doc = "ps_3dPlotRotate", data, GroupVar, Groups, AnalyticVars,
 
 \item{Selections}{A vector of length 3, or data frame with 3 columns, with combinations to be plotted}
 
-\item{ByGroup}{Logical_ If T, show scatterplot for each group for each selection of 3 variables;
-default is F}
+\item{ByGroup}{Logical. If TRUE, show scatterplot for each group for each selection of 3 variables;
+default is FALSE}
 
 \item{ptSize}{The size of plotted points, default is 5 (a larger value gives larger points)}
 
@@ -56,7 +56,7 @@ Create 3-dimensional data plot(s) that can be rotated
  Details:
 See the vignette for details on the use of colors.  The rotated 3d plot can be saved to a file
 located at dsFile.  The code saves a file as a pdf; see the documentation for the function
-rgl_postscript() for changing the format to postscript, eps, tex, or others.  Point sizes may
+rgl.postscript() for changing the format to postscript, eps, tex, or others.  Point sizes may
 appear much larger in a saved file than on the monitor.
 }
 
@@ -64,7 +64,7 @@ appear much larger in a saved file than on the monitor.
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 plot_3d_rotate<-ps_3dPlotRotate(data=ObsidianSources, GroupVar="Code", Groups=c("A","B"),
-              AnalyticVars = analyticVars, Selections=analyticVars[1:3],ByGroup=T)
+              AnalyticVars = analyticVars, Selections=analyticVars[1:3],ByGroup=TRUE)
 # two plots
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")

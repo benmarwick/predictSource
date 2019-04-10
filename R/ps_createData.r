@@ -35,7 +35,12 @@
 #'
 #' @export
 
-ps_createData <- function(doc="ps_createData", data, Group,Subset,ID,AnalyticVars){
+ps_createData <- function(doc="ps_createData",
+                          data,
+                          Group,
+                          Subset,
+                          ID,
+                          AnalyticVars){
   dataCode <- rep(Group, nrow(data))  # create a vector with the specified code
   #
   if (length(Subset) == nrow(data))  dataSubset <- Subset  # use specified subsets

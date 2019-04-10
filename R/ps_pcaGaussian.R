@@ -2,16 +2,16 @@
 #'
 #' Check whether first two principal components are Gaussian
 #'
-#' @param doc  documentation for the analysis, default if the function name
-#' @param data  R matrix or data frame containing the data to be analyzed
-#' @param GroupVar  name for variable defining grouping; a group variable is required
-#' @param Groups  vector of values of group variable for which plots are to be done;
+#' @param doc  Documentation for the analysis, default if the function name
+#' @param data  An R matrix or data frame containing the data to be analyzed
+#' @param GroupVar  The name for variable defining grouping; a group variable is required
+#' @param Groups  A vector of values of group variable for which plots are to be done;
 #' if "All"', use all groups
-#' @param gaussID: optional name for an ID, default is " " if no ID
-#' @param AnalyticVars  vector of names (character values) of analytic results
+#' @param gaussID An optional name for an ID, default is " " if no ID
+#' @param AnalyticVars  A vector of names (character values) of analytic results
 #' @param qqPlot  Logical, should Q-Q plots (univariate with the bootstrap envelope, multivariate)
-#'  be shown; default is T
-#' @param gaussIdentify  Logical, should user identify points of interest, default is F
+#'  be shown; default is TRUE
+#' @param gaussIdentify  Logical, should user identify points of interest, default is FALSE
 #' @param folder  The path to the folder in which data frames will be saved; default is " "
 #'
 #' @section  Details:
@@ -55,8 +55,8 @@ ps_pcaGaussian <-
            Groups,
            gaussID = " ",
            AnalyticVars,
-           qqPlot = T,
-           gaussIdentify = F,
+           qqPlot = TRUE,
+           gaussIdentify = FALSE,
            folder = " ")
     {
     # restrict to desired set of groups

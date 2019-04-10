@@ -5,9 +5,9 @@
 \title{ps_tree}
 \usage{
 ps_tree(doc = "ps_tree", data, GroupVar, Groups = "All", AnalyticVars,
-  wts = NA, CpDigits = 3, plotTree = T, plotCp = T, Model, ModelTitle,
-  minSplit = 20, cP = 0.01, predictSources = F, predictData, ID = " ",
-  folder = " ")
+  wts = NA, CpDigits = 3, plotTree = TRUE, plotCp = TRUE, Model,
+  ModelTitle, minSplit = 20, cP = 0.01, predictSources = FALSE,
+  predictData, ID = " ", folder = " ")
 }
 \arguments{
 \item{doc}{A string with documentation added to defintion of usage, default is ps_tree (the function name)}
@@ -24,9 +24,9 @@ ps_tree(doc = "ps_tree", data, GroupVar, Groups = "All", AnalyticVars,
 
 \item{CpDigits}{The number of significant digits to display in the Cp table, default value is 3}
 
-\item{plotTree}{Logical_  If T (true, the default), plot the recursive partitioning tree}
+\item{plotTree}{Logical.  If TRUE (the default), plot the recursive partitioning tree}
 
-\item{plotCp}{Logical_  If T (tree, the default), plot the Cp table values}
+\item{plotCp}{Logical.  If TRUE (the default), plot the Cp table values}
 
 \item{Model}{A character string containing the names of the variables (characters) considered
 separated by + signs}
@@ -37,8 +37,8 @@ separated by + signs}
 
 \item{cP}{The required improvement in Cp for a group to be split, default is _01 (the default in rpart())}
 
-\item{predictSources}{Logical: if T, use the tree to predict sources for observations
-in predictData; default is F}
+\item{predictSources}{Logical: if TRUE, use the tree to predict sources for observations
+in predictData; default is FALSE}
 
 \item{predictData}{Data frame with data used to predict sources, must contain all variables
 in AnalyticVars}
@@ -87,7 +87,7 @@ data(ObsidianArtifacts)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 save_tree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
      Model = "Sr"+ "Nb" + "Rb" + "Y"+"Zr", ModelTitle = "Sr + Nb + Rb + Y + Zr",
-     predictSources=T, predictData=ObsidianArtifacts, ID="ID",
-     plotTree=F, plotCp=F)
+     predictSources=TRUE, predictData=ObsidianArtifacts, ID="ID",
+     plotTree=FALSE, plotCp=FALSE)
 
 }

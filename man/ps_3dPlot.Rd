@@ -5,7 +5,7 @@
 \title{ps_3dPlot}
 \usage{
 ps_3dPlot(doc = "ps_3dPlot", data, GroupVar, Groups, AnalyticVars, Selections,
-  ByGroup = F, PlotMedians = F, Colors = c("red", "black", "blue",
+  ByGroup = FALSE, PlotMedians = FALSE, Colors = c("red", "black", "blue",
   "green", "purple"), SymbolSize = 0.7)
 }
 \arguments{
@@ -25,11 +25,11 @@ are to be done; if "All", use all groups; if " ", no grouping}
 \item{Selections}{A vector of length 3, or data frame with 3 columns,
 with the combinations of the analytic variables to be plotted}
 
-\item{ByGroup}{Logical_  If T, show scatterplot for each group
-for each selection of 3 variables; if F (the default),
+\item{ByGroup}{Logical_  If TRUE, show scatterplot for each group
+for each selection of 3 variables; if FALSE (the default),
  all specified groups are on one plot}
 
-\item{PlotMedians}{Logical_  If T, plot only the medians in each group
+\item{PlotMedians}{Logical.  If TRUE, plot only the medians in each group
  (the points are not plotted)
 if F (the default), the median locations are not plotted}
 

@@ -12,21 +12,23 @@
 #'    if "All", use all groups; grouping is required (cannot be " ")_
 #' @param AnalyticVars The names of two analytic variables to be shown in the plots, vector of length 2
 #'  or matrix with 2 columns; if a matrix, the set of plots is produced for each row_
-#' @param PlotByGroup Logical_  The default is T; if F, all groups are on each plot for a pair of variables
-#' @param PlotPoints Logical_  If T (the default), all points are plotted; if F, no points are plotted
-#' @param LowessLine Logical_ If T, a lowess line is plotted for each group; if F, no line is plotted
+#' @param PlotByGroup Logical.  The default is TRUE; if FALSE, all groups are on each plot for a pair of variables
+#' @param PlotPoints Logical.  If TRUE (the default), all points are plotted; if FALSE, no points are plotted
+#' @param LowessLine Logical. If TRUE, a lowess line is plotted for each group; if FALSE, no line is plotted
 #' @param Lowess_f parameter for lowess() less than or equal to 1, defining the range of x-values used;
 #'     if NA (the default), uses the default value of 0_67
-#' @param KernelSmooth Logical_  If T, a kernel smooth is plotted for each group; if F (the default), no kernel smooth is plotted
+#' @param KernelSmooth Logical.  If TRUE, a kernel smooth is plotted for each group; if F (the default), no kernel smooth is plotted
 #' @param KernelWidth the proportion of the range of x-values used in the kernel smooth; default is 0_3
-#' @param PlotEllipses Logical_  If T, Gaussian confidence ellipses are plotted for each group;
+#' @param PlotEllipses Logical.  If TRUE, Gaussian confidence ellipses are plotted for each group;
 #' if F (the default), no ellipses are plotted
 #' @param Ellipses single value or vector of values with confidence values for the ellipses; default is c(0_95,0_99)
-#' @param PlotHulls if T, the convex hull is drawn for each set of points; if F (the default), no hulls are drawn
-#' @param PlotMedians if T, the code for each group is plotted at the median of the values for that group; default is F
-#' @param Identify if T, user can identify points of interest in the plots; default is F
-#' @param PlotColors  ZLogical_  If T, colors are assigned to the groups
-#' @param Colors single value or vector of color names; if PlotByGroup = F, the vector must have the same number of colors as the number of groups
+#' @param PlotHulls if TRUE, the convex hull is drawn for each set of points; if FALSE (the default), no hulls are drawn
+#' @param PlotMedians if TRUE, the code for each group is plotted at the median of the values
+#'  for that group; default is FALSE
+#' @param Identify if TRUE, user can identify points of interest in the plots; default is FALSE
+#' @param PlotColors  Logical.  If TRUE, colors are assigned to the groups
+#' @param Colors single value or vector of color names; if PlotByGroup = FALSE,
+#' the vector must have the same number of colors as the number of groups
 #' @param legendLoc Character, location of legend for a plot with points;
 #' default is "topright", alternatives are combinations of "top", "bottom", "right", "left"
 #' @param folder  The path to the folder in which data frames will be saved; default is " "
@@ -40,14 +42,14 @@
 #' \item{params: }{ A list with the values of the grouping, logical and numeric arguments}
 #' \item{analyticVars: }{ The value of the argument AnalyticVars}
 #' \item{colors:}{  A vector with the value of the argument Color}
-#' \item{dataCheck: }{ If Identify = T, a data frame with the information on user-identified points
+#' \item{dataCheck: }{ If Identify = TRUE, a data frame with the information on user-identified points
 #'  of interest; value is c(NA,NA) if no points are identified}
 #' \item{location:}{ The path to a folder in which results will be saved}
 #'  }
 #'
 #' @section Details:
 #'  See the vignette for more information: visualizing each plot, use of colors, and
-#'   identifying points of interest.  If Identify=T, execution stops after creating each
+#'   identifying points of interest.  If Identify=TRUE, execution stops after creating each
 #'   bivariate plot for the user to identify any points of interest.
 #'
 #' @examples
@@ -58,15 +60,15 @@
 #' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 #' plotVars<-rbind(analyticVars[1:2], analyticVars[c(1,5)])
 #' plot_2d <- ps_2dPlot(data = ObsidianSources, GroupVar = "Code", ID = "ID", Groups = c("A","B"),
-#'           AnalyticVars=plotVars, PlotByGroup=T, PlotColors=T, PlotEllipses=T,
-#'           LowessLine=T)
+#'           AnalyticVars=plotVars, PlotByGroup=TRUE, PlotColors=TRUE, PlotEllipses=TRUE,
+#'           LowessLine=TRUE)
 #' #
 #' #  plot one pair of variables with all sources on one plot
 #' data(ObsidianSources)
 #' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 #' plot_2d <- ps_2dPlot(data = ObsidianSources, GroupVar = "Code", ID = "ID", Groups = "All",
-#'           AnalyticVars =analyticVars[1:2], PlotByGroup=F, PlotColors=T, PlotEllipses=T,
-#'           LowessLine=T)
+#'           AnalyticVars =analyticVars[1:2], PlotByGroup=FALSE, PlotColors=TRUE, PlotEllipses=TRUE,
+#'           LowessLine=TRUE)
 #'
 #' @import MASS  ellipse
 #'
@@ -78,15 +80,15 @@ ps_2dPlot <- function (doc = "ps_2dPlot",
                        ID,
                        Groups,
                        AnalyticVars,
-                       PlotByGroup=T,
-                       PlotPoints = T,
-                       LowessLine=F,
+                       PlotByGroup=TRUE,
+                       PlotPoints = TRUE,
+                       LowessLine=FALSE,
                        Lowess_f=NA,
-                       KernelSmooth=F,
+                       KernelSmooth=FALSE,
                        KernelWidth=0.3,
-                       PlotEllipses = F,
-                       PlotHulls = F,
-                       PlotMedians = F,
+                       PlotEllipses = FALSE,
+                       PlotHulls = FALSE,
+                       PlotMedians = FALSE,
                        Ellipses = c(0.95, 0.99),
                        Identify=F,
                        PlotColors = F,

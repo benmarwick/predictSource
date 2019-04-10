@@ -6,9 +6,9 @@
 \usage{
 ps_pcaEvaluation(doc = "ps_pcaEvaluation", SourceData, ArtifactData,
   ID = " ", SourceGroup, ArtifactGroup, known_sources, predicted_sources,
-  AnalyticVars, Identify = F, loc_legend = "topright", plotAllPoints = T,
-  plotHullsOutsidePoints = T, plotOutsidePoints = T, Seed = 11111,
-  folder = " ")
+  AnalyticVars, Identify = FALSE, loc_legend = "topright",
+  plotAllPoints = TRUE, plotHullsOutsidePoints = TRUE,
+  plotOutsidePoints = TRUE, Seed = 11111, folder = " ")
 }
 \arguments{
 \item{doc}{A string with documentation, default is the function name}
@@ -31,22 +31,22 @@ need be in known_sources}
 
 \item{AnalyticVars}{The elements used in the principal component analyses}
 
-\item{Identify}{Logical_  If T, the user can identify artifacts of interest and
-obtain a data set with information on those artifacts (default is F)}
+\item{Identify}{Logical.  If TRUE, the user can identify artifacts of interest and
+obtain a data set with information on those artifacts (default is FALSE)}
 
 \item{loc_legend}{The location of legend added to plots (alternates are "topleft",
 "bottomright","bottomleft")}
 
-\item{plotAllPoints}{Logical_  If T (the default), show a plot with two panes:
+\item{plotAllPoints}{Logical.  If TRUE (the default), show a plot with two panes:
 all source points and
    the convex hulls for the sources, and all unknown points with these source hulls}
 
-\item{plotHullsOutsidePoints}{Logical_  If T (the default), show a plot with two panes:
+\item{plotHullsOutsidePoints}{Logical.  If TRUE (the default), show a plot with two panes:
 all source points and
   the convex hulls for the sources, and the unknown points lying outside of their
    predicted source convex hulls and these hulls}
 
-\item{plotOutsidePoints}{Logical_  If T (the default), show a plot with one pane:
+\item{plotOutsidePoints}{Logical.  If TRUE (the default), show a plot with one pane:
 athe unknown points lying outside of their predicted source convex hulls and these
  hulls (the second pane for plotHullsOutsidePoints)
  @param Seed If not NA, a positive integer used to initialize the random number generator
@@ -59,7 +59,7 @@ Create principal component plots to evaluate the predicted artifact sources
 }
 \details{
 See the vignette for instructions for identifying points of interest using the paramter
-Identify = T.
+Identify = TRUE.
 
 .@return The function produces two plots: the convex hulls of the first two principal components
 of the source data, and a plot with those convex hulls and the artifact data (this plot uses a
@@ -84,7 +84,7 @@ The function returns a list with the following components:
   outside of each predicted source location}
   \item{ptsOutside:}  {  A data frame with the data for artifact points located outside of the
    predicted source}
-  \item{dataCheck:}{  If Identify=T, a data frame with the observations in dataUsed identified
+  \item{dataCheck:}{  If Identify=TRUE, a data frame with the observations in dataUsed identified
    as of interest; value is c(NA,NA) if no points are identified}
   \item{location:}{  The value of the parameter folder}
    }
@@ -98,10 +98,10 @@ sources <- unique(ObsidianSources[,"Code"])
 pca_eval <- ps_pcaEvaluation(SourceData=ObsidianSources,
   ArtifactData=ObsidianArtifacts, SourceGroup= "Code", ArtifactGroup="Code",
   known_sources=sources, predicted_sources=sources, AnalyticVars=analyticVars, ID="ID",
-  plotAllPoints=T, plotHullsOutsidePoints = T, plotOutsidePoints = T)
+  plotAllPoints=TRUE, plotHullsOutsidePoints = TRUE, plotOutsidePoints = TRUE)
 
 # evaluate predictions from a tree model; this may need to be run twice
-(save_tree is created but may not be available for ps_pcaEvaluation)
+# (save_tree is created but may not be available for ps_pcaEvaluation)
 data(ObsidianSources)
 data(ObsidianArtifacts)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
@@ -109,11 +109,11 @@ sources <- unique(ObsidianSources[,"Code"])
 save_tree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All",
  AnalyticVars=analyticVars, ID="ID", Model = "Rb"+"Sr"+"Y"+"Zr"+"Nb",
   ModelTitle="Rb + Sr + Y + Zr + Nb", predictSources=T, predictData=ObsidianArtifacts,
-  plotTree=T, plotCp=F)
+  plotTree=TRUE, plotCp=FALSE)
 pca_eval <- ps_pcaEvaluation(SourceData=ObsidianSources,
   ArtifactData=save_tree$predictedSources, SourceGroup= "Code", ArtifactGroup="source",
   known_sources=sources, predicted_sources=sources, AnalyticVars=analyticVars, ID="ID",
-  plotAllPoints=T, plotHullsOutsidePoints = T, plotOutsidePoints = T)
+  plotAllPoints=TRUE, plotHullsOutsidePoints = TRUE, plotOutsidePoints = TRUE)
 
 # evaluate predictions from a random forest analysis:
 #     plot only points outside the predicted source hull
@@ -124,12 +124,12 @@ sources <- unique(ObsidianSources[,"Code"])
 save_randomForest <- ps_randomForest(data=ObsidianSources,
 GroupVar="Code",Groups="All",
   AnalyticVars=analyticVars, artifactID="ID", NvarUsed=3,
-  plotErrorRate=F, plotImportance=F,
-  predictSources=T, predictData=ObsidianArtifacts, plotSourceProbs=F)
+  plotErrorRate=FALSE, plotImportance=F,
+  predictSources=TRUE, predictData=ObsidianArtifacts, plotSourceProbs=FALSE)
 pca_eval <- ps_pcaEvaluation(SourceData=ObsidianSources,
   ArtifactData=save_randomForest$predictedSources, SourceGroup= "Code",
    ArtifactGroup="source",  known_sources=sources, predicted_sources=sources,
-    AnalyticVars=analyticVars, ID="ID", plotAllPoints=F,
-     plotHullsOutsidePoints = F, plotOutsidePoints = T)
+    AnalyticVars=analyticVars, ID="ID", plotAllPoints=FALSE,
+     plotHullsOutsidePoints = FALSE, plotOutsidePoints = TRUE)
 
 }
