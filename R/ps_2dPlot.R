@@ -17,12 +17,14 @@
 #' @param LowessLine Logical. If TRUE, a lowess line is plotted for each group; if FALSE, no line is plotted
 #' @param Lowess_f parameter for lowess() less than or equal to 1, defining the range of x-values used;
 #'     if NA (the default), uses the default value of 0_67
-#' @param KernelSmooth Logical.  If TRUE, a kernel smooth is plotted for each group; if F (the default), no kernel smooth is plotted
+#' @param KernelSmooth Logical.  If TRUE, a kernel smooth is plotted for each group;
+#' if FALSE (the default), no kernel smooth is plotted
 #' @param KernelWidth the proportion of the range of x-values used in the kernel smooth; default is 0_3
 #' @param PlotEllipses Logical.  If TRUE, Gaussian confidence ellipses are plotted for each group;
 #' if F (the default), no ellipses are plotted
 #' @param Ellipses single value or vector of values with confidence values for the ellipses; default is c(0_95,0_99)
-#' @param PlotHulls if TRUE, the convex hull is drawn for each set of points; if FALSE (the default), no hulls are drawn
+#' @param PlotHulls if TRUE, the convex hull is drawn for each set of points; if FALSE (the default),
+#' no hulls are drawn
 #' @param PlotMedians if TRUE, the code for each group is plotted at the median of the values
 #'  for that group; default is FALSE
 #' @param Identify if TRUE, user can identify points of interest in the plots; default is FALSE
@@ -90,8 +92,8 @@ ps_2dPlot <- function (doc = "ps_2dPlot",
                        PlotHulls = FALSE,
                        PlotMedians = FALSE,
                        Ellipses = c(0.95, 0.99),
-                       Identify=F,
-                       PlotColors = F,
+                       Identify=FALSE,
+                       PlotColors = FALSE,
                        Colors=c("black","red","blue","green","purple"),
                        legendLoc = "topright",
                        folder=" ")
@@ -156,7 +158,7 @@ ps_2dPlot <- function (doc = "ps_2dPlot",
           rangeX<-range(rangeX,Ellipse[,1])
           rangeY<-range(rangeY,Ellipse[,2])
         }
-      } # end of code for PlotEllipses=T
+      } # end of code for PlotEllipses=TRUE
       #
       #  set up plot for specified pair of variables and group
       #
@@ -173,7 +175,7 @@ ps_2dPlot <- function (doc = "ps_2dPlot",
                              npoints = 200)
           lines(Ellipse, lty=1)
         }
-      }  # end of code for PlotEllipses=T
+      }  # end of code for PlotEllipses=TRUE
       #
       if (PlotPoints) {
         points(temp[,AnalyticVars[group_j,]])
@@ -307,7 +309,7 @@ ps_2dPlot <- function (doc = "ps_2dPlot",
         dataCheck<-dataCheck[index_ID,]
         }
       } # end of code for nrow(dataCheck) > 1
-    } # end of code for Identify = T
+    } # end of code for Identify = TRUE
   #
   fcnDateVersion<-paste(doc,date(),R.Version()$version.string)
   #

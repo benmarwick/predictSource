@@ -30,8 +30,8 @@ for each selection of 3 variables; if FALSE (the default),
  all specified groups are on one plot}
 
 \item{PlotMedians}{Logical.  If TRUE, plot only the medians in each group
- (the points are not plotted)
-if F (the default), the median locations are not plotted}
+ (the points are not plotted).
+If FALSE (the default), the median locations are not plotted}
 
 \item{Colors}{A vector with the colors of plotted points,
 used sequentially for the groups}
@@ -64,7 +64,7 @@ If this function is run using Rstudio, each plot appears in a separate window, n
  specification of the argument Selections as a matrix or data frame,
   and use of colors.  If the plot or plots are not by group,
   all points have the color of the first element in Colors.
-  If PlotMedians = T, the value of ByGroup is not used.
+  If PlotMedians = TRUE, the value of ByGroup is not used.
 }
 
 \examples{
@@ -79,5 +79,5 @@ Selections=rbind(analyticVars[1:3],analyticVars[2:4]))
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 plot3d<-ps_3dPlot(data=ObsidianSources, GroupVar="Code", Groups=c("A","B"),
- ByGroup=T, AnalyticVars=analyticVars, Selections=analyticVars[1:3])
+ ByGroup=TRUE, AnalyticVars=analyticVars, Selections=analyticVars[1:3])
 }

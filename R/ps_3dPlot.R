@@ -18,8 +18,8 @@
 #'  for each selection of 3 variables; if FALSE (the default),
 #'   all specified groups are on one plot
 #' @param PlotMedians  Logical.  If TRUE, plot only the medians in each group
-#'  (the points are not plotted)
-#' if F (the default), the median locations are not plotted
+#'  (the points are not plotted).
+#' If FALSE (the default), the median locations are not plotted
 #' @param Colors A vector with the colors of plotted points,
 #' used sequentially for the groups
 #' @param SymbolSize A value at most 1, a smaller value gives
@@ -43,7 +43,7 @@
 #'  specification of the argument Selections as a matrix or data frame,
 #'   and use of colors.  If the plot or plots are not by group,
 #'   all points have the color of the first element in Colors.
-#'   If PlotMedians = T, the value of ByGroup is not used.
+#'   If PlotMedians = TRUE, the value of ByGroup is not used.
 #'
 #' @import MASS scatterplot3d
 #'
@@ -59,7 +59,7 @@
 #' data(ObsidianSources)
 #' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 #' plot3d<-ps_3dPlot(data=ObsidianSources, GroupVar="Code", Groups=c("A","B"),
-#'  ByGroup=T, AnalyticVars=analyticVars, Selections=analyticVars[1:3])
+#'  ByGroup=TRUE, AnalyticVars=analyticVars, Selections=analyticVars[1:3])
 #' @export
 
 ps_3dPlot <-
@@ -98,7 +98,7 @@ ps_3dPlot <-
     #
     #  check for number of colors specified
     #
-    if (!ByGroup)
+    if (!ByGroup)  #  FALSE
       if (length(Colors) < length(groups))  stop("too few colors specified")
     #
     #  sort dataUsed on grouping variable to assign colors to points
@@ -117,9 +117,9 @@ ps_3dPlot <-
       dataUsed<-cbind(dataUsed,group_index=group_index)
     }
     #
-    if (!PlotMedians) {
+    if (!PlotMedians) {  #  FALSE
       #  plot points
-      if ((GroupVar[1] == " ") | (ByGroup == F)) {
+      if ((GroupVar[1] == " ") | (!ByGroup)) {
         if (is.vector(Selections)) {
           index <- is.na(dataUsed[, Selections[1]]) | is.na(dataUsed[,Selections[2]]) |
                       is.na(dataUsed[, Selections[3]])

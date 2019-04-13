@@ -98,7 +98,7 @@ ps_2dPlotGauss <- function (doc = "ps_2dPlotGauss",
       qqnorm_pts<-qqnorm(temp1, main = paste(AnalyticVars[1],"source", groups[i_group]))
       qqline(temp1)
     }
-    else if (scatterPlot) {
+    else if (scatterPlot) {  # TRUE
       qqnorm_pts<-qqnorm(temp1, main = paste(AnalyticVars[1],"source", groups[i_group]))
       qqline(temp1)
       }
@@ -151,21 +151,17 @@ ps_2dPlotGauss <- function (doc = "ps_2dPlotGauss",
   if (qqPlot)  par(mfrow = c(2,3))
   else par(mfrow = c(2,2))
   #
-  iPlot<-0 # counter used when qqPlot=F
+  iPlot<-0 # counter used when qqPlot=FALSE
   #
   for (i_group in 1:length(groups)) {
     iPlot <- iPlot+1
     pvalues[i_group, ] <- fnPlot() # plot for this group and compute p-values
-    if (qqPlot==T)  {
+    if (qqPlot)  {  #  TRUE
       plot.new() # blank plot so next group starts in new window
     }
-    # two plots per frame if qqPlot=F
-    if ((qqPlot==F) & (floor(i_group/2)==i_group/2))  browser()
+    # two plots per frame if qqPlot=FALSE
+    if ((!qqPlot) & (floor(i_group/2)==i_group/2))  browser()
   } # end of loop on i_group
-#     if ((qqPlot==F) & (as.integer(i_group/2)==i_group/2)) {
- #       plot.new() # blank plots so next group starts in new window
-  #    pvalues[i_group, ] <- fnPlot()
-   # }
   #
   numeric_pvalues<-as.numeric(pvalues)
   numeric_pvalues<-round(numeric_pvalues,digits=pvalue_digits)

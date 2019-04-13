@@ -48,7 +48,10 @@
 #' To go to the next pane, right click and select "Stop" in base R;
 #' click on "Finish" in the plot pane in Rstudio.
 #'
-#' @return The function produces a plot of the first two principal components, the contents of which are defined by the arguments PlotPoints, PlotEllipses, PlotHull, and PlotMedians_ A scree plot and box plots are produced if requested_  The function returns a list with the following components:
+#' @return The function produces a plot of the first two principal components,
+#' the contents of which are defined by the arguments PlotPoints, PlotEllipses, PlotHull,
+#'  and PlotMedians. A scree plot and box plots are produced if requested.
+#'  The function returns a list with the following components:
 #' \itemize{
 #'   \item{usage:}{  A string with the contents of the argument doc, the date run, the version of R used}
 #'   \item{dataUsed:}{  The contents of the argument data restricted to the groups used}
@@ -167,7 +170,7 @@ ps_pca <-  function(doc = "ps_pca",
     #  principal components analysis
     #
     pca <- prcomp(dataUsed[, AnalyticVars], scale = TRUE)
-    if (ScreePlot == T) {
+    if (ScreePlot) {  # TRUE
       plot(pca, main = "Scree plot", xlab = "Principal component")
       browser()
     }
@@ -204,19 +207,19 @@ ps_pca <-  function(doc = "ps_pca",
       #
       if (Identify == F) dataCheck <- c(NA, NA) #  dummy value if no points identified
       #
-      if (BoxPlots == T) {
+      if (BoxPlots) {  # TRUE
         par(mfrow = c(1, 2))
         plot(Predicted[, c("group", "PC1")], notch = T, main = "Box plots by group: first PC")
         plot(Predicted[, c("group", "PC2")], notch = T, main = "Box plots by group: second PC")
         browser()
       }
-      if (pcPlot == T) {
+      if (pcPlot) {  #  TRUE
       par(mfrow=c(1,1))
       #  set up plot with axis ranges
-      if (PlotEllipses == F)
+      if (!PlotEllipses)  #  FALSE
         plot(x = range(Predicted[, "PC1"]), y = range(Predicted[,"PC2"]), type = "n", xlab = "first PC",
              ylab = "second PC", main = "Principal components plot")
-      if (PlotEllipses == T) {
+      if (PlotEllipses) {  #  TRUE
         subtext <- paste("Ellipsoid content:", Ellipses[1])
         if (length(Ellipses) > 1) {
           for (i in 2:length(Ellipses))
@@ -228,27 +231,27 @@ ps_pca <-  function(doc = "ps_pca",
              sub=subtext)
       }  # end of code for PlotEllipses=T
       #
-      if (PlotPoints == T) {
-        if (PlotColors == T)
+      if (PlotPoints) {   #  TRUE
+        if (PlotColors)
           points(x = Predicted[, "PC1"], y = Predicted[,
                                                        "PC2"], pch = (Predicted[, "GroupIndex"] -
                                                                         1), col = Colors[Predicted[, "GroupIndex"]])
         else points(x = Predicted[, "PC1"], y = Predicted[,
                                             "PC2"], pch = (Predicted[, "GroupIndex"] - 1))
         }  # end of code for PlotPoints=T
-      if (PlotHull == T) {
+      if (PlotHull) {  #  TRUE
         for (i in 1:length(groups)) fnConvexHull(Code = groups[i])
       }
-      if (PlotEllipses == T)
+      if (PlotEllipses)
         fnEllipses()
-      if (PlotMedians == F) {
-        if (PlotColors == T)
+      if (!PlotMedians) {
+        if (PlotColors)
           legend(x = legendLoc, legend = groups, pch = 0:(length(groups) -
                                                             1), col = Colors, bty = "n")
         else legend(x = legendLoc, legend = groups, pch = 0:(length(groups) -
                                                                1), bty = "n")
       }  # end of code for PlotMedians=F
-      if (PlotMedians == T) {
+      if (PlotMedians) {
         medians <- matrix(NA, nrow = length(groups), ncol = 2)
         for (i in 1:length(groups)) {
           temp <- Predicted[Predicted[, "group"] == groups[i],
@@ -261,7 +264,7 @@ ps_pca <-  function(doc = "ps_pca",
         text(x = medians[, "PC1"], y = medians[, "PC2"],
              labels = groups, cex = 0.75, adj = 0.5)
       } # end of code for PlotMedians=T
-        if ((Identify==T) & ((PlotPoints==T) | (PlotMedians==T)))  {
+        if ((Identify) & ((PlotPoints) | (PlotMedians)))  {
           index<-identify(x = Predicted[,"PC1"], y = Predicted[,"PC2"])
           dataCheck<-dataUsed[index,]
         }

@@ -8,7 +8,7 @@ ps_2dPlot(doc = "ps_2dPlot", data, GroupVar, ID, Groups, AnalyticVars,
   PlotByGroup = TRUE, PlotPoints = TRUE, LowessLine = FALSE,
   Lowess_f = NA, KernelSmooth = FALSE, KernelWidth = 0.3,
   PlotEllipses = FALSE, PlotHulls = FALSE, PlotMedians = FALSE,
-  Ellipses = c(0.95, 0.99), Identify = F, PlotColors = F,
+  Ellipses = c(0.95, 0.99), Identify = FALSE, PlotColors = FALSE,
   Colors = c("black", "red", "blue", "green", "purple"),
   legendLoc = "topright", folder = " ")
 }
@@ -36,14 +36,16 @@ or matrix with 2 columns; if a matrix, the set of plots is produced for each row
 \item{Lowess_f}{parameter for lowess() less than or equal to 1, defining the range of x-values used;
 if NA (the default), uses the default value of 0_67}
 
-\item{KernelSmooth}{Logical.  If TRUE, a kernel smooth is plotted for each group; if F (the default), no kernel smooth is plotted}
+\item{KernelSmooth}{Logical.  If TRUE, a kernel smooth is plotted for each group;
+if FALSE (the default), no kernel smooth is plotted}
 
 \item{KernelWidth}{the proportion of the range of x-values used in the kernel smooth; default is 0_3}
 
 \item{PlotEllipses}{Logical.  If TRUE, Gaussian confidence ellipses are plotted for each group;
 if F (the default), no ellipses are plotted}
 
-\item{PlotHulls}{if TRUE, the convex hull is drawn for each set of points; if FALSE (the default), no hulls are drawn}
+\item{PlotHulls}{if TRUE, the convex hull is drawn for each set of points; if FALSE (the default),
+no hulls are drawn}
 
 \item{PlotMedians}{if TRUE, the code for each group is plotted at the median of the values
 for that group; default is FALSE}

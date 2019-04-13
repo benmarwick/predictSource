@@ -55,7 +55,7 @@ Check whether first two principal components are Gaussian
 This function uses the function ps_2dPlotGauss().  The function produces p-values
  from univariate and multivariate tests of normality.  It produces Q-Q plots
  of the first two principal components for each group, as well as those plots with bootstrap
- envelopes and the bivariate Q-Q plot if qqPlot=T.
+ envelopes and the bivariate Q-Q plot if qqPlot=TRUE.
 }
 
 \examples{

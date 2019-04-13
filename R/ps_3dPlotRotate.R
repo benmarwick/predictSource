@@ -88,7 +88,7 @@ ps_3dPlotRotate <-
     #
     #  check for number of colors specified
     #
-    if (!ByGroup)
+    if (!ByGroup)  #  FALSE
       if (length(Colors) < length(groups))  stop("too few cols specified")
     #
     #  sort dataUsed on grouping variable to assign cols to points

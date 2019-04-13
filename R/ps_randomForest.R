@@ -167,14 +167,14 @@ ps_randomForest <-
       browser()
     }
 #
-    if (predictSources == F) {
+    if (!predictSources) {  # predictSources is FALSE
       predictedTotals <- NA
       predictions <- NA
       predictNA <- NA
       impError <- NA
     }   # dummy values
     #
-    if (predictSources == T)  {
+    if (predictSources)  {  # predictSources is TRUE
       #
       #  vector with F if row contains missing analytic variable
       #
@@ -241,11 +241,11 @@ ps_randomForest <-
       if (plotSourceProbs)
         ps_boxPlots(data = probNotSource, GroupVar="source", Groups="All",
                   AnalyticVars="sourceProbability", Nrow=1, Ncol=1)
-    } # end of code for predictSources == T
+    } # end of code for predictSources == TRUE
     #
     importance_rf <- round(importance_rf, digits =digitsImportance)
     #
-    if ((artifactID != " ") & (predictSources == T))
+    if ((artifactID != " ") & (predictSources))
       predictions <- predictions[order(predictions[,artifactID]),]
     #
     fcnDateVersion<-paste(doc,date(),R.Version()$version.string)

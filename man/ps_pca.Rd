@@ -72,7 +72,10 @@ missing data are imputed; default is 11111}
 \item{folder}{The path to the folder in which data frames will be saved; default is " "}
 }
 \value{
-The function produces a plot of the first two principal components, the contents of which are defined by the arguments PlotPoints, PlotEllipses, PlotHull, and PlotMedians_ A scree plot and box plots are produced if requested_  The function returns a list with the following components:
+The function produces a plot of the first two principal components,
+the contents of which are defined by the arguments PlotPoints, PlotEllipses, PlotHull,
+ and PlotMedians. A scree plot and box plots are produced if requested.
+ The function returns a list with the following components:
 \itemize{
   \item{usage:}{  A string with the contents of the argument doc, the date run, the version of R used}
   \item{dataUsed:}{  The contents of the argument data restricted to the groups used}

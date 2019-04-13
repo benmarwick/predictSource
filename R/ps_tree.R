@@ -125,7 +125,7 @@ ps_tree <-
             method = "class",
             minsplit=minSplit,
             cp=cP)
-    if (plotTree == T) {
+    if (plotTree) {  #  plotTree is TRUE
       plot(as.party(Tree), tp_args = list(id = FALSE), main=paste("model:",ModelTitle))
       browser()
       }

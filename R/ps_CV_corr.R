@@ -92,7 +92,7 @@ ps_CV_corr <-
     #
      # no grouping
     #
-    if (!ByGroup) {
+    if (!ByGroup) {  #  FALSE
       #
       #  coefficient of variation
       #
@@ -128,7 +128,7 @@ ps_CV_corr <-
     #  grouping
     #
     else {
-      # ByGroup = T
+      # ByGroup = TRUE
       #
       if (Groups[1] == "All")
         groups <- unique(dataUsed[, GroupVar])

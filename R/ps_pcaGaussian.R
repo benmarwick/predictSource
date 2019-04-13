@@ -18,7 +18,7 @@
 #' This function uses the function ps_2dPlotGauss().  The function produces p-values
 #'  from univariate and multivariate tests of normality.  It produces Q-Q plots
 #'  of the first two principal components for each group, as well as those plots with bootstrap
-#'  envelopes and the bivariate Q-Q plot if qqPlot=T.
+#'  envelopes and the bivariate Q-Q plot if qqPlot=TRUE.
 #'
 #' @return  The function returns a list with the following components:
 #'
@@ -138,7 +138,7 @@ ps_pcaGaussian <-
     params_logical<-c(qqPlot, gaussIdentify)
     names(params_logical)<-c("qqPlot","gaussIdentify")
     #
-    if (gaussIdentify == T) {
+    if (gaussIdentify) {  # TRUE
     if (gaussID == " ") dataCheck<-outGauss$dataCheck[,c(GroupVar, AnalyticVars)]
     else  dataCheck<-outGauss$dataCheck[,c(GroupVar, gaussID, AnalyticVars)]
     }
