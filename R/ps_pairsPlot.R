@@ -5,11 +5,11 @@
 #' @param doc A string documenting use added to the output list, default is the function name
 #' @param data A matrix or data frame containing the data to be analyzed
 #' @param GroupVar The name for variable defining grouping (required)
-#' @param Groups A vector of values of group variable for which plots are to be done_
+#' @param Groups A vector of values of group variable for which plots are to be done;
 #'    if "All": use all groups; if " ": no grouping
 #' @param AnalyticVars A vector of names (character values) of analytic results
-#' @param Span A value >0, <=1 defining the proportion of data used to estimate the lowess smooth_
-#' The default value (2/3) is the default value for the lowess function_
+#' @param Span A value >0, <=1 defining the proportion of data used to estimate the lowess smooth.
+#' The default value (2/3) is the default value for the lowess function.
 #'
 #' @section  DETAILS:
 #'  The function produces a pairs plot with a lowess smooth through the scatter plot for

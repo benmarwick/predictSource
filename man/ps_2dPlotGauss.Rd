@@ -2,7 +2,7 @@
 % Please edit documentation in R/ps_2dPlotGauss.R
 \name{ps_2dPlotGauss}
 \alias{ps_2dPlotGauss}
-\title{Plot and check specified pairs of analysis variables for bivariate normality.}
+\title{ps_2dPlotGauss}
 \usage{
 ps_2dPlotGauss(doc = "ps_2dPlotGauss", data, GroupVar, ID, Groups,
   AnalyticVars, scatterPlot = TRUE, qqPlot = TRUE, pvalue_digits = 3,

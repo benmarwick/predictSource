@@ -1,4 +1,5 @@
 #'
+#' ps_2dPlotGauss
 #'
 #' Plot and check specified pairs of analysis variables for bivariate normality.
 #'

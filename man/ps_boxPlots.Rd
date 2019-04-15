@@ -40,7 +40,7 @@ A list with the following components:
 }
 }
 \description{
-Box plots of specified analytic values, by specified groups_
+Box plots of specified analytic values, by specified groups.
 }
 \section{DETAILS}{
 

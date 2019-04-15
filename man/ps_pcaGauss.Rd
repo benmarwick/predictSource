@@ -5,7 +5,7 @@
 \title{ps_pcaGauss}
 \usage{
 ps_pcaGauss(doc = "fn_pca_Gauss", data, GroupVar, Groups, gaussID = " ",
-  AnalyticVars, qqPlot = T, gaussIdentify = F, folder = " ")
+  AnalyticVars, qqPlot = TRUE, gaussIdentify = FALSE, folder = " ")
 }
 \arguments{
 \item{doc}{documentation for the analysis, default if the function name}
@@ -20,9 +20,9 @@ if "All"', use all groups}
 \item{AnalyticVars}{vector of names (character values) of analytic results}
 
 \item{qqPlot}{Logical, should Q-Q plots (univariate with the bootstrap envelope, multivariate)
-be shown; default is T}
+be shown; default is TRUE}
 
-\item{gaussIdentify}{Logical, should user identify points of interest, default is F}
+\item{gaussIdentify}{Logical, should user identify points of interest, default is FALSE}
 
 \item{folder}{The path to the folder in which data frames will be saved; default is " "}
 
@@ -53,7 +53,7 @@ Check whether first two principal components are Gaussian
 This function uses the function ps_2dPlotGauss().  The function produces p-values
  from univariate and multivariate tests of normality.  It produces Q-Q plots
  of the first two principal components for each group, as well as those plots with bootstrap
- envelopes and the bivariate Q-Q plot if qqPlot=T.
+ envelopes and the bivariate Q-Q plot if qqPlot=TRUE.
 }
 
 \examples{

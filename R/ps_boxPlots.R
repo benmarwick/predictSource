@@ -1,6 +1,6 @@
 #' ps_boxPlots
 #'
-#' Box plots of specified analytic values, by specified groups_
+#' Box plots of specified analytic values, by specified groups.
 #'
 #' @param doc A string documenting use, included in list returned;
 #' default value is the function name

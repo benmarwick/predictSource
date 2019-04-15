@@ -36,20 +36,20 @@ default is FALSE}
 \item{pcPlot}{Logical, if TRUE (the default), create the plot of the first
 two components}
 
-\item{PlotPoints}{Logical, if TRUE (the default) and pcPlot=T,
+\item{PlotPoints}{Logical, if TRUE (the default) and pcPlot=TRUE,
 plot the points for the first two components}
 
-\item{PlotEllipses}{Logical, if T (the default), plot the confidence ellipse
+\item{PlotEllipses}{Logical, if TRUE (the default), plot the confidence ellipse
 or ellipses for each group}
 
 \item{PlotHull}{Logical, if TRUE, plot the convex hull for each group,
-default is F}
+default is FALSE}
 
 \item{PlotMedians}{Logical, if TRUE, plot the symbol for each group at the
 median point for that group, default is FALSE}
 
 \item{Ellipses}{A value or vector of proportions for confidence ellipses;
-default is c(_95,_99) to produce 95\% and 99\% confidence ellipses}
+default is c(.95,.99) to produce 95\% and 99\% confidence ellipses}
 
 \item{PlotColors}{Logical.  If TRUE, use list of colors in Colors for points;
 if F, plot points as black}

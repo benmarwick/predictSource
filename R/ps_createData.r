@@ -1,6 +1,6 @@
 #' ps_createData
 #'
-#'  Create data frame with data to be analyzed, columns in specified order
+#' Create data frame with data to be analyzed, columns in specified order
 #'
 #' @param doc Documentation, default is the function name
 #' @param data Data frame containing the data for one group
@@ -17,11 +17,11 @@
 #' \item{dataOut:}{  The data frame created by the function, with Group, Subset (if specified), ID, and analytic variables}
 #'}
 #' @section Details:
-#' This function creates a data frame with columns in a specified order_  It is useful
-#' for combining multiple data frames into one analysis object using rbind()_  The name
+#' This function creates a data frame with columns in a specified order.  It is useful
+#' for combining multiple data frames into one analysis object using rbind().  The name
 #' for a specified variable must be the same in each file used in the argument data; a
 #' space after a variable name in an excel file imported into R yields the variable name
-#' followed by a period_
+#' followed by a period.
 #'
 #' @examples
 #' # create example data set by restricting to one group, removing column with group code,

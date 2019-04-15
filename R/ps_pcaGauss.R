@@ -10,15 +10,15 @@
 #' @param gaussID: optional name for an ID, default is " " if no ID
 #' @param AnalyticVars  vector of names (character values) of analytic results
 #' @param qqPlot  Logical, should Q-Q plots (univariate with the bootstrap envelope, multivariate)
-#'  be shown; default is T
-#' @param gaussIdentify  Logical, should user identify points of interest, default is F
+#'  be shown; default is TRUE
+#' @param gaussIdentify  Logical, should user identify points of interest, default is FALSE
 #' @param folder  The path to the folder in which data frames will be saved; default is " "
 #'
 #' @section  Details:
 #' This function uses the function ps_2dPlotGauss().  The function produces p-values
 #'  from univariate and multivariate tests of normality.  It produces Q-Q plots
 #'  of the first two principal components for each group, as well as those plots with bootstrap
-#'  envelopes and the bivariate Q-Q plot if qqPlot=T.
+#'  envelopes and the bivariate Q-Q plot if qqPlot=TRUE.
 #'
 #' @return  The function returns a list with the following components:
 #'
@@ -54,8 +54,8 @@ ps_pcaGauss <-
            Groups,
            gaussID = " ",
            AnalyticVars,
-           qqPlot = T,
-           gaussIdentify = F,
+           qqPlot = TRUE,
+           gaussIdentify = FALSE,
            folder = " ")
     {
     # restrict to desired set of groups

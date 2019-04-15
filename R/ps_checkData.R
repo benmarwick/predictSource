@@ -14,12 +14,12 @@
 #' @param ID  The name of lab ID, default is " " (no lab ID)
 #' @param AnalyticVars  A character vector of names of analytic variables for which tabulations are done
 #' @param folder  The path to a folder in which data frames will be saved; default is " "
-#' #``
+#'
 #' @return
 #'   Four data frames with duplicate observations, observations with negative
 #'       values for one or more analytic variables, numbers of observations for each analytic
-#'       variable, and statistics statistics (quartiles and number missing)
-#'       if Groups != " ", numbers of observations and statistics statistics are by group
+#'       variable, and statistics statistics (quartiles and number missing).
+#'       If Groups != " ", numbers of observations and statistics statistics are by group
 #'   A list with the following components:
 #'   \itemize{
 #' \item{usage:}{  A string with the contents of the argument doc, date run, R version used}
@@ -35,8 +35,8 @@
 #'   }
 #'
 #' @section Detail:
-#' AnalyticVars must be a vector of length at least 2_  If Groups specifies selected groups (is
-#' not equal to "All" or " "), if must be a vector of length at least 2_
+#' AnalyticVars must be a vector of length at least 2.  If Groups specifies selected groups (is
+#' not equal to "All" or " "), it must be a vector of length at least 2.
 #'
 #' @examples
 #' data(ObsidianSources)

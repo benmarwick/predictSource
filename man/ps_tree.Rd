@@ -10,17 +10,20 @@ ps_tree(doc = "ps_tree", data, GroupVar, Groups = "All", AnalyticVars,
   predictData, ID = " ", folder = " ")
 }
 \arguments{
-\item{doc}{A string with documentation added to defintion of usage, default is ps_tree (the function name)}
+\item{doc}{A string with documentation added to defintion of usage,
+default is ps_tree (the function name)}
 
 \item{data}{A data frame with the data to be analyzed}
 
 \item{GroupVar}{The name of the variable defining groups, grouping is required}
 
-\item{Groups}{A vector of codes for groups to be used, 'All' (the default) if use all groups}
+\item{Groups}{A vector of codes for groups to be used, 'All' (the default)
+if use all groups}
 
 \item{AnalyticVars}{A vector with the names (character values) of the analytic variables}
 
-\item{wts}{Option to weight the observations, if used, vector with length nrow(data); if NA (the default), assume equal weights}
+\item{wts}{Option to weight the observations, if used, vector with length nrow(data);
+if NA (the default), assume equal weights}
 
 \item{CpDigits}{The number of significant digits to display in the Cp table, default value is 3}
 
@@ -33,9 +36,11 @@ separated by + signs}
 
 \item{ModelTitle}{The parameter Model as a single character value}
 
-\item{minSplit}{The minimum size of a group for splitting, default is 20 (the default in rpart())}
+\item{minSplit}{The minimum size of a group for splitting, default is 20
+(the default in rpart())}
 
-\item{cP}{The required improvement in Cp for a group to be split, default is _01 (the default in rpart())}
+\item{cP}{The required improvement in Cp for a group to be split,
+default is .01 (the default in rpart())}
 
 \item{predictSources}{Logical: if TRUE, use the tree to predict sources for observations
 in predictData; default is FALSE}
@@ -78,16 +83,17 @@ The function fits a classification tree model us the R function rpart().
  importance from a random forst analysis
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-save_tree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
-  Model = "Rb"+"Sr"+"Y"+"Zr"+"Nb", ModelTitle = "Sr + Nb + Rb + Y + Zr")
+save_tree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All",
+AnalyticVars=analyticVars, Model = "Rb"+"Sr"+"Y"+"Zr"+"Nb",
+ ModelTitle = "Sr + Nb + Rb + Y + Zr")
 
  #  Predict the sources of artifacts
 data(ObsidianSources)
 data(ObsidianArtifacts)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-save_tree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
-     Model = "Sr"+ "Nb" + "Rb" + "Y"+"Zr", ModelTitle = "Sr + Nb + Rb + Y + Zr",
-     predictSources=TRUE, predictData=ObsidianArtifacts, ID="ID",
-     plotTree=FALSE, plotCp=FALSE)
+save_tree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All",
+AnalyticVars=analyticVars, Model = "Sr"+ "Nb" + "Rb" + "Y"+"Zr",
+ModelTitle = "Sr + Nb + Rb + Y + Zr", predictSources=TRUE, predictData=ObsidianArtifacts,
+ ID="ID", plotTree=FALSE, plotCp=FALSE)
 
 }

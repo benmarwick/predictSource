@@ -27,7 +27,7 @@
 #' @param plotOutsidePoints Logical.  If TRUE (the default), show a plot with one pane:
 #' athe unknown points lying outside of their predicted source convex hulls and these
 #'  hulls (the second pane for plotHullsOutsidePoints)
-#'  @param Seed If not NA, a positive integer used to initialize the random number generator
+#' @param Seed If not NA, a positive integer used to initialize the random number generator
 #'  when missing data are imputed_  Default value is 11111
 #' @param folder  The path to the folder in which data frames will be saved; default is " "
 #'

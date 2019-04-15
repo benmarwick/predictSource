@@ -85,7 +85,7 @@ Implements a random forest analysis of source data, and predicts sources of unkn
 }
 \details{
 The function implements a random forest analysis using the R function randomForest().
-If predictSources = T and plotSourceProbs is T, the function creates two box plots.
+If predictSources and plotSourceProbs are TRUE, the function creates two box plots.
   The first plot shows, for each source,  the set of probabilities of assignment to that source
    for the observations assigned to that source (all of these probabilities should be large).
    The second plot shows, for each source, the set of probabilities of assignment to that source
@@ -104,7 +104,8 @@ data(ObsidianSources)
 data(ObsidianArtifacts)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 save_randomForest <- ps_randomForest(data=ObsidianSources, GroupVar="Code",Groups="All",
-AnalyticVars=analyticVars, sourceID="ID", NvarUsed=3, plotErrorRate=FALSE, plotImportance=FALSE,
-predictSources=T, predictData=ObsidianArtifacts, artifactID="ID", plotSourceProbs=TRUE)
+AnalyticVars=analyticVars, sourceID="ID", NvarUsed=3, plotErrorRate=FALSE,
+plotImportance=FALSE, predictSources=TRUE, predictData=ObsidianArtifacts, artifactID="ID",
+ plotSourceProbs=TRUE)
 
 }

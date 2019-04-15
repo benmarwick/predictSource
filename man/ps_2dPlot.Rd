@@ -22,7 +22,7 @@ ps_2dPlot(doc = "ps_2dPlot", data, GroupVar, ID, Groups, AnalyticVars,
 \item{ID}{The name for the variable with a lab ID, " " if no lab ID is used}
 
 \item{Groups}{A vector of values of the group variable for which plots are to be done;
-if "All", use all groups; grouping is required (cannot be " ")_}
+if "All", use all groups; grouping is required (cannot be " ").}
 
 \item{AnalyticVars}{The names of two analytic variables to be shown in the plots, vector of length 2
 or matrix with 2 columns; if a matrix, the set of plots is produced for each row_}
@@ -34,12 +34,13 @@ or matrix with 2 columns; if a matrix, the set of plots is produced for each row
 \item{LowessLine}{Logical. If TRUE, a lowess line is plotted for each group; if FALSE, no line is plotted}
 
 \item{Lowess_f}{parameter for lowess() less than or equal to 1, defining the range of x-values used;
-if NA (the default), uses the default value of 0_67}
+if NA (the default), uses the default value of 0.67}
 
 \item{KernelSmooth}{Logical.  If TRUE, a kernel smooth is plotted for each group;
 if FALSE (the default), no kernel smooth is plotted}
 
-\item{KernelWidth}{the proportion of the range of x-values used in the kernel smooth; default is 0_3}
+\item{KernelWidth}{the proportion of the range of x-values used in the kernel smooth;
+default is 0.3}
 
 \item{PlotEllipses}{Logical.  If TRUE, Gaussian confidence ellipses are plotted for each group;
 if F (the default), no ellipses are plotted}

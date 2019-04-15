@@ -25,7 +25,7 @@ are to be done; if "All", use all groups; if " ", no grouping}
 \item{Selections}{A vector of length 3, or data frame with 3 columns,
 with the combinations of the analytic variables to be plotted}
 
-\item{ByGroup}{Logical_  If TRUE, show scatterplot for each group
+\item{ByGroup}{Logical.  If TRUE, show scatterplot for each group
 for each selection of 3 variables; if FALSE (the default),
  all specified groups are on one plot}
 

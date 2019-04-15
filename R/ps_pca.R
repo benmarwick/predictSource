@@ -17,16 +17,16 @@
 #'  default is FALSE
 #' @param pcPlot  Logical, if TRUE (the default), create the plot of the first
 #' two components
-#' @param PlotPoints  Logical, if TRUE (the default) and pcPlot=T,
+#' @param PlotPoints  Logical, if TRUE (the default) and pcPlot=TRUE,
 #' plot the points for the first two components
-#' @param PlotEllipses Logical, if T (the default), plot the confidence ellipse
+#' @param PlotEllipses Logical, if TRUE (the default), plot the confidence ellipse
 #'  or ellipses for each group
 #' @param PlotHull  Logical, if TRUE, plot the convex hull for each group,
-#'  default is F
+#'  default is FALSE
 #' @param PlotMedians  Logical, if TRUE, plot the symbol for each group at the
 #' median point for that group, default is FALSE
 #' @param Ellipses A value or vector of proportions for confidence ellipses;
-#'  default is c(_95,_99) to produce 95\% and 99\% confidence ellipses
+#'  default is c(.95,.99) to produce 95\% and 99\% confidence ellipses
 #' @param legendLoc Character, location of legend for a plot with points;
 #'  default is "topright", alternatives are combinations of "top", "bottom",
 #'   "right", "left"

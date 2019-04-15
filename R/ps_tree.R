@@ -2,20 +2,25 @@
 #'
 #' Fit a recursive partitioning model (classification tree) to data from sources
 #'
-#' @param doc A string with documentation added to defintion of usage, default is ps_tree (the function name)
+#' @param doc A string with documentation added to defintion of usage,
+#' default is ps_tree (the function name)
 #' @param data  A data frame with the data to be analyzed
 #' @param GroupVar  The name of the variable defining groups, grouping is required
-#' @param Groups  A vector of codes for groups to be used, 'All' (the default) if use all groups
+#' @param Groups  A vector of codes for groups to be used, 'All' (the default)
+#'  if use all groups
 #' @param AnalyticVars  A vector with the names (character values) of the analytic variables
-#' @param wts Option to weight the observations, if used, vector with length nrow(data); if NA (the default), assume equal weights
+#' @param wts Option to weight the observations, if used, vector with length nrow(data);
+#'  if NA (the default), assume equal weights
 #' @param CpDigits  The number of significant digits to display in the Cp table, default value is 3
 #' @param plotTree Logical.  If TRUE (the default), plot the recursive partitioning tree
 #' @param plotCp  Logical.  If TRUE (the default), plot the Cp table values
 #' @param Model  A character string containing the names of the variables (characters) considered
 #'  separated by + signs
 #' @param ModelTitle  The parameter Model as a single character value
-#' @param minSplit  The minimum size of a group for splitting, default is 20 (the default in rpart())
-#' @param cP  The required improvement in Cp for a group to be split, default is _01 (the default in rpart())
+#' @param minSplit  The minimum size of a group for splitting, default is 20
+#' (the default in rpart())
+#' @param cP  The required improvement in Cp for a group to be split,
+#' default is .01 (the default in rpart())
 #' @param predictSources  Logical: if TRUE, use the tree to predict sources for observations
 #'  in predictData; default is FALSE
 #' @param predictData  Data frame with data used to predict sources, must contain all variables
@@ -49,17 +54,18 @@
 #'  importance from a random forst analysis
 #' data(ObsidianSources)
 #' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-#' save_tree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
-#'   Model = "Rb"+"Sr"+"Y"+"Zr"+"Nb", ModelTitle = "Sr + Nb + Rb + Y + Zr")
+#' save_tree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All",
+#' AnalyticVars=analyticVars, Model = "Rb"+"Sr"+"Y"+"Zr"+"Nb",
+#'  ModelTitle = "Sr + Nb + Rb + Y + Zr")
 #'
 #'  #  Predict the sources of artifacts
 #' data(ObsidianSources)
 #' data(ObsidianArtifacts)
 #' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-#' save_tree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
-#'      Model = "Sr"+ "Nb" + "Rb" + "Y"+"Zr", ModelTitle = "Sr + Nb + Rb + Y + Zr",
-#'      predictSources=TRUE, predictData=ObsidianArtifacts, ID="ID",
-#'      plotTree=FALSE, plotCp=FALSE)
+#' save_tree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All",
+#' AnalyticVars=analyticVars, Model = "Sr"+ "Nb" + "Rb" + "Y"+"Zr",
+#' ModelTitle = "Sr + Nb + Rb + Y + Zr", predictSources=TRUE, predictData=ObsidianArtifacts,
+#'  ID="ID", plotTree=FALSE, plotCp=FALSE)
 #'
 #' @import rpart partykit Formula
 #'

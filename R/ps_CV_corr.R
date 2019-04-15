@@ -64,7 +64,7 @@ ps_CV_corr <-
            ByGroup=TRUE,
            ID = " ",
            AnalyticVars,
-           Transpose = T,
+           Transpose = TRUE,
            CV_digits = 2,
            corr_digits = 2,
            plotCorrs = TRUE,

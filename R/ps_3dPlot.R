@@ -14,7 +14,7 @@
 #' @param AnalyticVars A vector of names (character values) of the analytic variables
 #' @param Selections A vector of length 3, or data frame with 3 columns,
 #'  with the combinations of the analytic variables to be plotted
-#' @param ByGroup Logical_  If TRUE, show scatterplot for each group
+#' @param ByGroup Logical.  If TRUE, show scatterplot for each group
 #'  for each selection of 3 variables; if FALSE (the default),
 #'   all specified groups are on one plot
 #' @param PlotMedians  Logical.  If TRUE, plot only the medians in each group
