@@ -184,24 +184,24 @@ ps_2dPlot <- function (doc = "ps_2dPlot",
           index<-identify(x=temp[,AnalyticVars[group_j,1]],y=temp[,AnalyticVars[group_j,2]] ) # row numbers identified
           dataCheck<-rbind(dataCheck,temp[index,])  # add these rows to dataCheck
         }
-      }
+      }  # end of code for PlotPoints = TRUE
       if (LowessLine) {
         if (is.na(Lowess_f)) lowess_fit<-lowess(temp[,AnalyticVars[group_j,]])
         else  lowess_fit<-lowess(temp[,AnalyticVars[group_j,]],f=Lowess_f)
         lines(lowess_fit)
-      }
+      } # end of code for LowessLine = TRUE
       if (KernelSmooth) {
         kernel_fit<-ksmooth(x=temp[,AnalyticVars[group_j,1]],y=temp[,AnalyticVars[group_j,2]],"normal",
                             bandwidth=sum(range(temp[,AnalyticVars[group_j,]][,1])*c(-1,1))*KernelWidth)
         lines(kernel_fit)
-      }
+      } # end of code for KernelSmooth = TRUE
       if (PlotHulls)  {
         hull_pts <- chull(temp[,AnalyticVars[group_j],])
         hull_pts <- c(hull_pts, hull_pts[1])
         lines(temp[hull_pts,])
-      }
+      }  # end of code for KernelSmooth = TRUE
       if (Identify)  dataCheck  # return data frame dataCheck with identified points
-    }
+    }  # end of code for fnPlot
     par(mfrow = c(2, 2))
     for (i_group in 1:length(groups)) {
       i_plot<-0  # initialize counter for number of plot panes
