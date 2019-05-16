@@ -145,7 +145,7 @@ ps_pca <-  function(doc = "ps_pca",
     #  redefine data_Keep if some analysis variables are missing by imputing missing values
     #
     if (sum(dataKeep) < nrow(dataUsed)) {
-      if (!na(Seed))  set_seed(Seed)
+      if (!na(Seed))  set.seed(Seed)
       dataNA <- dataUsed[!dataKeep,]
       temp<-rfImpute(dataUsed[,GroupVar] ~ ., dataUsed[,AnalyticVars])
       if (ID == " ") dataUsed <- data.frame(dataUsed[,GroupVar],temp)
