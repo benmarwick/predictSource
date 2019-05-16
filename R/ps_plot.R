@@ -6,7 +6,10 @@
 #' @param groupVar The name for the variable defining grouping
 #' @param analyticVars The names of two analytic variables to be shown in the plots, vector of length 2
 #'  or matrix with 2 columns; if a matrix, the set of plots is produced for each row_
-#' @param plotByGroup Logical.  The default is TRUE; if FALSE, all groups are on each plot for a pair of variables
+#' @param ps_groups
+#' @param ps_group
+#' @param ps_group_j
+#' @param groupName
 #' @param plotPoints Logical.  If TRUE (the default), all points are plotted; if FALSE, no points are plotted
 #' @param lowessLine Logical. If TRUE, a lowess line is plotted for each group; if FALSE, no line is plotted
 #' @param lowess_f parameter for lowess() less than or equal to 1, defining the range of x-values used;
@@ -17,12 +20,10 @@
 #' default is 0.3
 #' @param plotEllipses Logical.  If TRUE, Gaussian confidence ellipses are plotted for each group;
 #' if F (the default), no ellipses are plotted
-#' @param ellipses single value or vector of values with confidence values for the ellipses; default is c(0_95,0_99)
+#' @param ps_ellipses single value or vector of values with confidence values for the ellipses; default is c(0_95,0_99)
 #' @param plotHulls if TRUE, the convex hull is drawn for each set of points; if FALSE (the default),
 #' no hulls are drawn
-#' @param PlotMedians if TRUE, the code for each group is plotted at the median of the values
-#'  for that group; default is FALSE
-#' @param identify if TRUE, user can identify points of interest in the plots; default is FALSE
+#' @param ps_identify if TRUE, user can identify points of interest in the plots; default is FALSE
 #'
 #' @return   If the user identifies points of interest:
 #'  \itemize{
@@ -32,10 +33,6 @@
 #'
 #' @section Details:
 #'  This function is used internally by the functions ps_2dPlot and
-#'
-#' @examples
-
-#'
 #'
 #' @import MASS  ellipse
 #'

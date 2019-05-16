@@ -30,6 +30,8 @@ or matrix with 2 columns; if a matrix, the set of plots is produced for each row
 \item{plotEllipses}{Logical.  If TRUE, Gaussian confidence ellipses are plotted for each group;
 if F (the default), no ellipses are plotted}
 
+\item{ps_ellipses}{single value or vector of values with confidence values for the ellipses; default is c(0_95,0_99)}
+
 \item{plotPoints}{Logical.  If TRUE (the default), all points are plotted; if FALSE, no points are plotted}
 
 \item{lowessLine}{Logical. If TRUE, a lowess line is plotted for each group; if FALSE, no line is plotted}
@@ -45,6 +47,8 @@ default is 0.3}
 
 \item{plotHulls}{if TRUE, the convex hull is drawn for each set of points; if FALSE (the default),
 no hulls are drawn}
+
+\item{ps_identify}{if TRUE, user can identify points of interest in the plots; default is FALSE}
 
 \item{plotByGroup}{Logical.  The default is TRUE; if FALSE, all groups are on each plot for a pair of variables}
 
@@ -62,8 +66,6 @@ for that group; default is FALSE}
 \item{analyticVars}{The names of two analytic variables to be shown in the plots, vector of length 2
 or matrix with 2 columns; if a matrix, the set of plots is produced for each row_}
 
-\item{plotByGroup}{Logical.  The default is TRUE; if FALSE, all groups are on each plot for a pair of variables}
-
 \item{plotPoints}{Logical.  If TRUE (the default), all points are plotted; if FALSE, no points are plotted}
 
 \item{lowessLine}{Logical. If TRUE, a lowess line is plotted for each group; if FALSE, no line is plotted}
@@ -80,15 +82,8 @@ default is 0.3}
 \item{plotEllipses}{Logical.  If TRUE, Gaussian confidence ellipses are plotted for each group;
 if F (the default), no ellipses are plotted}
 
-\item{ellipses}{single value or vector of values with confidence values for the ellipses; default is c(0_95,0_99)}
-
 \item{plotHulls}{if TRUE, the convex hull is drawn for each set of points; if FALSE (the default),
 no hulls are drawn}
-
-\item{PlotMedians}{if TRUE, the code for each group is plotted at the median of the values
-for that group; default is FALSE}
-
-\item{identify}{if TRUE, user can identify points of interest in the plots; default is FALSE}
 }
 \value{
 If the user identifies points of interest:
@@ -117,8 +112,6 @@ Create 2-dimensional scatter plot for one group: used by ps_2dPlot().
 }
 
 \examples{
-
-
 
 
 }

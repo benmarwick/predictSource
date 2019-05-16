@@ -7,7 +7,7 @@
 #' @param GroupVar  name for variable defining grouping; a group variable is required
 #' @param Groups  vector of values of group variable for which plots are to be done;
 #' if "All"', use all groups
-#' @param gaussID: optional name for an ID, default is " " if no ID
+#' @param gaussID  Optional name for an ID, default is " " if no ID
 #' @param AnalyticVars  vector of names (character values) of analytic results
 #' @param qqPlot  Logical, should Q-Q plots (univariate with the bootstrap envelope, multivariate)
 #'  be shown; default is TRUE

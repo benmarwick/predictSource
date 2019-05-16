@@ -80,7 +80,7 @@ The function fits a classification tree model us the R function rpart().
 }
 \examples{
 # Analyze the obsidian source data with variables in the model statement in order of
- importance from a random forst analysis
+# importance from a random forst analysis
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 save_tree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All",
