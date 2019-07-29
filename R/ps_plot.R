@@ -6,10 +6,9 @@
 #' @param groupVar The name for the variable defining grouping
 #' @param analyticVars The names of two analytic variables to be shown in the plots, vector of length 2
 #'  or matrix with 2 columns; if a matrix, the set of plots is produced for each row_
-#' @param ps_groups
-#' @param ps_group
-#' @param ps_group_j
-#' @param groupName
+#' @param ps_group  The groups of interest
+#' @param ps_group_j  The jth group defined by the calling function
+#' @param groupName  The name of the group
 #' @param plotPoints Logical.  If TRUE (the default), all points are plotted; if FALSE, no points are plotted
 #' @param lowessLine Logical. If TRUE, a lowess line is plotted for each group; if FALSE, no line is plotted
 #' @param lowess_f parameter for lowess() less than or equal to 1, defining the range of x-values used;

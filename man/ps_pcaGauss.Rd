@@ -17,6 +17,8 @@ ps_pcaGauss(doc = "fn_pca_Gauss", data, GroupVar, Groups, gaussID = " ",
 \item{Groups}{vector of values of group variable for which plots are to be done;
 if "All"', use all groups}
 
+\item{gaussID}{Optional name for an ID, default is " " if no ID}
+
 \item{AnalyticVars}{vector of names (character values) of analytic results}
 
 \item{qqPlot}{Logical, should Q-Q plots (univariate with the bootstrap envelope, multivariate)
@@ -25,8 +27,6 @@ be shown; default is TRUE}
 \item{gaussIdentify}{Logical, should user identify points of interest, default is FALSE}
 
 \item{folder}{The path to the folder in which data frames will be saved; default is " "}
-
-\item{gaussID:}{optional name for an ID, default is " " if no ID}
 }
 \value{
 The function returns a list with the following components:
