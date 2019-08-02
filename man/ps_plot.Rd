@@ -4,49 +4,38 @@
 \alias{ps_plot}
 \title{ps_plot}
 \usage{
-ps_plot(data = dataUsed, groupVar = GroupVar, analyticVars = AnalyticVars,
-  ps_groups = groups, ps_group, ps_group_j, groupName,
+ps_plot(data, useVars, plotPoints = PlotPoints, lowessLine = LowessLine,
+  lowess_f = Lowess_f, kernelSmooth = KernelSmooth,
+  kernelWidth = Kernelwidth, plotHulls = PlotHulls,
   plotEllipses = PlotEllipses, ps_ellipses = Ellipses,
-  plotPoints = PlotPoints, lowessLine = LowessLine, lowess_f = Lowess_f,
-  kernelSmooth = KernelSmooth, kernelWidth = Kernelwidth,
-  plotHulls = PlotHulls, ps_identify = Identify)
+  ps_identify = Identify)
 }
 \arguments{
-\item{data}{A matrix or data frame containing the data to be analyzed}
+\item{data}{A data frame containing the data to be analyzed}
 
-\item{groupVar}{The name for the variable defining grouping}
+\item{useVars}{A vector of length 2: the names of two analytic variables to
+be shown in the plots}
 
-\item{analyticVars}{The names of two analytic variables to be shown in the plots, vector of length 2
-or matrix with 2 columns; if a matrix, the set of plots is produced for each row_}
-
-\item{ps_group}{The groups of interest}
-
-\item{ps_group_j}{The jth group defined by the calling function}
-
-\item{groupName}{The name of the group}
-
-\item{plotEllipses}{Logical.  If TRUE, Gaussian confidence ellipses are plotted for each group;
-if F (the default), no ellipses are plotted}
-
-\item{ps_ellipses}{single value or vector of values with confidence values for the ellipses; default is c(0_95,0_99)}
-
-\item{plotPoints}{Logical.  If TRUE (the default), all points are plotted; if FALSE, no points are plotted}
+\item{plotPoints}{Logical.  If TRUE, all points are plotted; if FALSE, no points are plotted}
 
 \item{lowessLine}{Logical. If TRUE, a lowess line is plotted for each group; if FALSE, no line is plotted}
 
-\item{lowess_f}{parameter for lowess() less than or equal to 1, defining the range of x-values used;
-if NA (the default), uses the default value of 0.67}
+\item{lowess_f}{A parameter for lowess() less than or equal to 1, defining the range of x-values used}
 
-\item{kernelSmooth}{Logical.  If TRUE, a kernel smooth is plotted for each group;
-if FALSE (the default), no kernel smooth is plotted}
+\item{kernelSmooth}{Logical.  If TRUE, a kernel smooth is plotted for each group
+if FALSE, no kernel smooth is plotted}
 
-\item{kernelWidth}{the proportion of the range of x-values used in the kernel smooth;
-default is 0.3}
+\item{kernelWidth}{the proportion of the range of x-values used in the kernel smooth}
 
-\item{plotHulls}{if TRUE, the convex hull is drawn for each set of points; if FALSE (the default),
+\item{plotHulls}{if TRUE, the convex hull is drawn for each set of points; if FALSE,
 no hulls are drawn}
 
-\item{ps_identify}{if TRUE, user can identify points of interest in the plots; default is FALSE}
+\item{plotEllipses}{Logical.  If TRUE, Gaussian confidence ellipses are plotted for each group;
+if FALSE, no ellipses are plotted}
+
+\item{ps_ellipses}{single value or vector of values with confidence values for the ellipses}
+
+\item{ps_identify}{if TRUE, user can identify points of interest in the plots}
 }
 \value{
 If the user identifies points of interest:
@@ -60,6 +49,8 @@ Create 2-dimensional scatter plot for one group: used by ps_2dPlot().
 }
 \section{Details}{
 
- This function is used internally by the functions ps_2dPlot and
+ This function is used internally by the function ps_2dPlot.  The default values are those
+ from ps_2dPlot.  data will contain a group code, a lab ID (if used in the data set), and all
+ analytic variables, for display if the user identifies points of interest.
 }
 
