@@ -6,18 +6,20 @@
 #' default is the function name
 #' @param data A matrix or data frame containing the data to be analyzed
 #' @param GroupVar The name for the variable defining grouping; can be " " if no grouping
-#' @param Groups A vector of values of group variable for which plots
+#' @param AnalyticVars The names of analytic variables to be used
+#' @param ID The character value of the name of a lab ID, "none" (the default) if none
+#' @param Groups A vector of values of GroupVar for which plots
 #'  are to be done; if "All", use all groups; if " ", no grouping
 #' @param ByGroup Logical.  If TRUE, show scatterplot for each group
-#'  for each selection of 3 variables; if FALSE (the default),
+#'  for each selection of 2 variables; if FALSE (the default),
 #'   all specified groups are on one plot
-#' @param AnalyticVars The names of two analytic variables to be shown in the plots, vector of length 2
-#'  or matrix with 2 columns; if a matrix, the set of plots is produced for each row_
-#' @param PlotByGroup Logical.  The default is TRUE; if FALSE, all groups are on each plot for a pair of variables
+#' @param VariablePairs The names of two analytic variables to be shown in the plots, vector of length 2
+#'  or matrix with 2 columns; if a matrix, the set of plots is produced for each row.
 #' @param PlotPoints Logical.  If TRUE (the default), all points are plotted; if FALSE, no points are plotted
 #' @param LowessLine Logical. If TRUE, a lowess line is plotted for each group; if FALSE, no line is plotted
-#' @param Lowess_f parameter for lowess() less than or equal to 1, defining the range of x-values used;
+#' @param Lowess_f A parameter for lowess() less than or equal to 1, defining the range of x-values used;
 #'     if NA (the default), uses the default value of 0.67
+#' @param PlotMedians Logical.  If TRUE, plot the median of each group; default if FALSE
 #' @param KernelSmooth Logical.  If TRUE, a kernel smooth is plotted for each group;
 #' if FALSE (the default), no kernel smooth is plotted
 #' @param KernelWidth the proportion of the range of x-values used in the kernel smooth;
@@ -60,30 +62,44 @@
 #'
 #' @export
 #'
-ps_2dplot <- function(doc = "ps_2dPlot",
+ps_2dPlot <- function(doc = "ps_2dPlot",
                       data,
                       GroupVar,
                       AnalyticVars,
+                      ID = "none",
                       Groups,
-                      ByGroup = "FALSE",
-                      PlotEllipses = FALSE,
-                      Ellipses = c(0.95, 0.99),
+                      ByGroup = FALSE,
+                      VariablePairs,
                       PlotPoints = TRUE,
                       LowessLine = TRUE,
                       Lowess_f = NA,
+                      PlotMedians = FALSE,
+                      PlotEllipses = FALSE,
+                      Ellipses = c(0.95, 0.99),
                       KernelSmooth = FALSE,
                       Kernelwidth = 0.3,
                       PlotHulls = FALSE,
                       Colors = c("red","black","blue","green","purple"),
                       Identify = FALSE) {
   #
+  #  use a subset of the groups
+  #
   if ((Groups[1] != " ") & (Groups[1] != "All")) {
     Use_rows <- (data[, GroupVar] %in% Groups)
-    dataUsed <- data[Use_rows, c(GroupVar, AnalyticVars)]
+    if (ID == "none") dataUsed <- data[Use_rows, c(GroupVar, AnalyticVars)]
+       else  dataUsed <- data[Use_rows, c(GroupVar, ID, AnalyticVars)]
   }
-  else if (GroupVar[1] == " ")
-    dataUsed <- data[, AnalyticVars]
-  else dataUsed <- data[, c(GroupVar, AnalyticVars)]
+  #
+  #  no grouping
+  #
+  if (ID == "none") {
+     if (GroupVar[1] == " ") dataUsed <- data[, AnalyticVars]  # groups not shown
+     if (Groups[1] == "All") dataUsed <- data[, c(GroupVar, AnalyticVars)] # groups shown
+  }
+  if (ID != "none") {
+    if (GroupVar[1] == " ") dataUsed <- data[,c(ID, AnalyticVars)]  # groups not shown
+    if (Groups[1] == "All") dataUsed <- data[, c(GroupVar, ID, AnalyticVars)] # groups shown
+  }
   #
   #  vector to contain indices for observations with no missing values
   #
@@ -98,7 +114,7 @@ ps_2dplot <- function(doc = "ps_2dPlot",
   #
   #  check for number of colors specified
   #
-  if (!ByGroup)  #  FALSE
+  if (!ByGroup)  # FALSE
     if (length(Colors) < length(groups))  stop("too few colors specified")
   #
   #  sort dataUsed on grouping variable to assign colors to points
@@ -117,26 +133,48 @@ ps_2dplot <- function(doc = "ps_2dPlot",
     dataUsed<-cbind(dataUsed,group_index=group_index)
   }
   #
+  # set up data frame to store identified points
+  if (Identify) dataCheck<-dataUsed[1,]
+  else  dataCheck <- c(NA, NA)
+  #
+  # create plots
+  #
+  if (is.matrix(VariablePairs)) {
+    if (!ByGroup) {
+      ps_plot(data = dataUsed,
+              useVars = variablePairs,
+              ps_byGroup = ByGroup,
+              plotEllipses = PlotEllipses,
+              ps_ellipses = Ellipses,
+              plotPoints = PlotPoints,
+              lowessLine = LowessLine,
+              lowess_f = Lowess_f,
+              kernelSmooth = KernelSmooth,
+              kernelWidth = Kernelwidth,
+              plotHulls = PlotHulls,
+              ps_identify = Identify)
+    }
+  }
+
+  #
   fcnDateVersion<-c(doc,date(),R.Version()$version.string)
   #
   params_grouping<-list(GroupVar,Groups)
   names(params_grouping)<-c("GroupVar","Groups")
   params_logical<-c(ByGroup,PlotMedians)
   names(params_logical)<-c("ByGroup","PlotMedians")
-  params_numeric<-SymbolSize
-  names(params_numeric)<-"SymbolSize"
-  params<-list(grouping=params_grouping,logical=params_logical,numeric=params_numeric,colors=Colors)
+  params<-list(grouping=params_grouping,logical=params_logical,colors=Colors)
   #
   if (sum(dataKeep) < nrow(dataUsed)) dataNA <- dataUsed[!dataKeep]
   else dataNA <- NA
   #
-  if (!Itemize)
+  if (!Identify)
     out<-list(usage=fcnDateVersion,
             dataUsed=dataUsed,
             dataNA=dataNA,
             params=params,
             analyticVars=AnalyticVars)
-  if (Itemize)
+  if (Identify)
     out<-list(usage=fcnDateVersion,
               dataUsed=dataUsed,
               dataNA=dataNA,
@@ -144,5 +182,4 @@ ps_2dplot <- function(doc = "ps_2dPlot",
               analyticVars=AnalyticVars,
               dataCheck=dataCheck)
   out
-    invisible()
     }

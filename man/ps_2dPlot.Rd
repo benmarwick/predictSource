@@ -4,11 +4,12 @@
 \alias{ps_2dPlot}
 \title{ps_2dPlot}
 \usage{
-ps_2dPlot(doc = "ps_2dPlot", data, GroupVar, AnalyticVars, Groups,
-  ByGroup = "FALSE", VariablePairs, PlotPoints = TRUE, LowessLine = TRUE,
-  Lowess_f = NA, PlotEllipses = FALSE, Ellipses = c(0.95, 0.99),
-  KernelSmooth = FALSE, Kernelwidth = 0.3, PlotHulls = FALSE,
-  Colors = c("red", "black", "blue", "green", "purple"), Identify = FALSE)
+ps_2dPlot(doc = "ps_2dPlot", data, GroupVar, AnalyticVars, ID = "none",
+  Groups, ByGroup = FALSE, VariablePairs, PlotPoints = TRUE,
+  LowessLine = TRUE, Lowess_f = NA, PlotMedians = FALSE,
+  PlotEllipses = FALSE, Ellipses = c(0.95, 0.99), KernelSmooth = FALSE,
+  Kernelwidth = 0.3, PlotHulls = FALSE, Colors = c("red", "black", "blue",
+  "green", "purple"), Identify = FALSE)
 }
 \arguments{
 \item{doc}{A string documenting use written to the output list;
@@ -19,6 +20,8 @@ default is the function name}
 \item{GroupVar}{The name for the variable defining grouping; can be " " if no grouping}
 
 \item{AnalyticVars}{The names of analytic variables to be used}
+
+\item{ID}{The character value of the name of a lab ID, "none" (the default) if none}
 
 \item{Groups}{A vector of values of GroupVar for which plots
 are to be done; if "All", use all groups; if " ", no grouping}
@@ -34,8 +37,10 @@ or matrix with 2 columns; if a matrix, the set of plots is produced for each row
 
 \item{LowessLine}{Logical. If TRUE, a lowess line is plotted for each group; if FALSE, no line is plotted}
 
-\item{Lowess_f}{parameter for lowess() less than or equal to 1, defining the range of x-values used;
+\item{Lowess_f}{A parameter for lowess() less than or equal to 1, defining the range of x-values used;
 if NA (the default), uses the default value of 0.67}
+
+\item{PlotMedians}{Logical.  If TRUE, plot the median of each group; default if FALSE}
 
 \item{PlotEllipses}{Logical.  If TRUE, Gaussian confidence ellipses are plotted for each group;
 if F (the default), no ellipses are plotted}
