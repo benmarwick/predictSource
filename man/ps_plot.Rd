@@ -4,14 +4,19 @@
 \alias{ps_plot}
 \title{ps_plot}
 \usage{
-ps_plot(data, useVars, plotPoints = PlotPoints, lowessLine = LowessLine,
-  lowess_f = Lowess_f, kernelSmooth = KernelSmooth,
-  kernelWidth = Kernelwidth, plotHulls = PlotHulls,
-  plotEllipses = PlotEllipses, ps_ellipses = Ellipses,
-  ps_identify = Identify)
+ps_plot(data = plotData, ps_groupVar = GroupVar, ps_byGroup = ByGroup,
+  useVars, plotPoints = PlotPoints, lowessLine = LowessLine,
+  lowess_f = Lowess_f, plotMedians = PlotMedians,
+  kernelSmooth = KernelSmooth, kernelWidth = Kernelwidth,
+  plotHulls = PlotHulls, plotEllipses = PlotEllipses,
+  ps_ellipses = Ellipses, ps_identify = Identify)
 }
 \arguments{
 \item{data}{A data frame containing the data to be analyzed}
+
+\item{ps_groupVar}{Character.  Optional name of the grouping variable.}
+
+\item{ps_byGroup}{Logical.  If TRUE, plots are being created by group.}
 
 \item{useVars}{A vector of length 2: the names of two analytic variables to
 be shown in the plots}
@@ -22,12 +27,14 @@ be shown in the plots}
 
 \item{lowess_f}{A parameter for lowess() less than or equal to 1, defining the range of x-values used}
 
-\item{kernelSmooth}{Logical.  If TRUE, a kernel smooth is plotted for each group
+\item{plotMedians}{Logical.  If TRUE, plot the median in each group; if FALSE, medians are not plotted.  I}
+
+\item{kernelSmooth}{Logical.  If TRUE, a kernel smooth is plotted for each group;
 if FALSE, no kernel smooth is plotted}
 
 \item{kernelWidth}{the proportion of the range of x-values used in the kernel smooth}
 
-\item{plotHulls}{if TRUE, the convex hull is drawn for each set of points; if FALSE,
+\item{plotHulls}{Logical. If TRUE, the convex hull is drawn for each set of points; if FALSE,
 no hulls are drawn}
 
 \item{plotEllipses}{Logical.  If TRUE, Gaussian confidence ellipses are plotted for each group;
@@ -35,7 +42,7 @@ if FALSE, no ellipses are plotted}
 
 \item{ps_ellipses}{single value or vector of values with confidence values for the ellipses}
 
-\item{ps_identify}{if TRUE, user can identify points of interest in the plots}
+\item{ps_identify}{Logical. If TRUE, user can identify points of interest in the plots}
 }
 \value{
 If the user identifies points of interest:
@@ -54,3 +61,11 @@ Create 2-dimensional scatter plot for one group: used by ps_2dPlot().
  analytic variables, for display if the user identifies points of interest.
 }
 
+\examples{
+
+data(ObsidianSources)
+analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+ps_plot(data=ObsidianSources,useVars=c("Rb","Nb"),plotPoints=TRUE,lowessLine=TRUE,lowess_f=NA, plotMedians=FALSE,
+kernelSmooth=FALSE,kernelWidth=0.3,plotHulls=FALSE,plotEllipses=TRUE,ps_ellipses=0.95,ps_identify=FALSE)
+
+}

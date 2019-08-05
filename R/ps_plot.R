@@ -5,18 +5,21 @@
 #' @param data A data frame containing the data to be analyzed
 #' @param useVars A vector of length 2: the names of two analytic variables to
 #'  be shown in the plots
+#' @param ps_groupVar Character.  Optional name of the grouping variable.
+#' @param ps_byGroup Logical.  If TRUE, plots are being created by group.
 #' @param plotPoints Logical.  If TRUE, all points are plotted; if FALSE, no points are plotted
 #' @param lowessLine Logical. If TRUE, a lowess line is plotted for each group; if FALSE, no line is plotted
 #' @param lowess_f A parameter for lowess() less than or equal to 1, defining the range of x-values used
-#' @param kernelSmooth Logical.  If TRUE, a kernel smooth is plotted for each group
+#' @param plotMedians Logical.  If TRUE, plot the median in each group; if FALSE, medians are not plotted.  I
+#' @param kernelSmooth Logical.  If TRUE, a kernel smooth is plotted for each group;
 #' if FALSE, no kernel smooth is plotted
 #' @param kernelWidth the proportion of the range of x-values used in the kernel smooth
 #' @param plotEllipses Logical.  If TRUE, Gaussian confidence ellipses are plotted for each group;
 #' if FALSE, no ellipses are plotted
 #' @param ps_ellipses single value or vector of values with confidence values for the ellipses
-#' @param plotHulls if TRUE, the convex hull is drawn for each set of points; if FALSE,
+#' @param plotHulls  Logical. If TRUE, the convex hull is drawn for each set of points; if FALSE,
 #' no hulls are drawn
-#' @param ps_identify if TRUE, user can identify points of interest in the plots
+#' @param ps_identify Logical. If TRUE, user can identify points of interest in the plots
 #'
 #' @return   If the user identifies points of interest:
 #'  \itemize{
@@ -31,13 +34,23 @@
 #'
 #' @import MASS  ellipse
 #'
+#' @examples
+#'
+#' data(ObsidianSources)
+#' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+#' ps_plot(data=ObsidianSources,useVars=c("Rb","Nb"),plotPoints=TRUE,lowessLine=TRUE,lowess_f=NA, plotMedians=FALSE,
+#' kernelSmooth=FALSE,kernelWidth=0.3,plotHulls=FALSE,plotEllipses=TRUE,ps_ellipses=0.95,ps_identify=FALSE)
+#'
 #' @export
 #'
-ps_plot <- function(   data,
+ps_plot <- function(   data = plotData,
+                       ps_groupVar = GroupVar,
+                       ps_byGroup = ByGroup,
                        useVars,
                        plotPoints = PlotPoints,
                        lowessLine = LowessLine,
                        lowess_f = Lowess_f,
+                       plotMedians = PlotMedians,
                        kernelSmooth = KernelSmooth,
                        kernelWidth = Kernelwidth,
                        plotHulls = PlotHulls,
@@ -46,8 +59,8 @@ ps_plot <- function(   data,
                        ps_identify = Identify) {
       #
       # set up plot
-      rangeX<-range(data[,useVars[,1]])
-      rangeY<-range(data[,useVars[,2]])
+      rangeX<-range(data[,useVars[1]])
+      rangeY<-range(data[,useVars[2]])
       #
       #  modify ranges if necessary to account for plotting of confidence ellipses
       #
@@ -63,8 +76,9 @@ ps_plot <- function(   data,
       #
       #  set up plot for specified pair of variables and group
       #
-      plot(type="n", x=rangeX, y=rangeY,xlab=useVars[1],
-           ylab=useVars[2], main=paste("group",groupName))
+      if (!ps_byGroup) plot(type="n", x=rangeX, y=rangeY, xlab=useVars[1], ylab=useVars[2])
+      if ( ps_byGroup) plot(type="n", x=rangeX, y=rangeY, xlab=useVars[1], ylab=useVars[2],
+                            main=paste("Group",data[1,ps_groupVar]))
       #
       #  if specified, plot confidence ellipses
       #
@@ -79,10 +93,15 @@ ps_plot <- function(   data,
       #
       if (plotPoints) {
         points(data[,useVars])
-        if (ps_identify)  {
-          index<-identify(x=data[,useVars],y=data[,useVars] )
+        if (ps_identify)  {  # show lowess line to help identify points of interest
+          if (lowessLine) {
+             if (is.na(lowess_f)) lowess_fit<-lowess(data[,useVars])
+             else  lowess_fit<-lowess(data[,useVars],f=lowess_f)
+             lines(lowess_fit)
+             }  # end of code for lowessLine = TRUE
+          index<-identify(x=data[,useVars[1]],y=data[,useVars[2]] )
             # row numbers identified
-          dataCheck<-rbind(dataCheck,data[index,])  # add these rows to dataCheck
+          ps_dataCheck<-data[index,]  # identified points
         }
       }  # end of code for plotPoints = TRUE
       if (lowessLine) {
@@ -101,6 +120,6 @@ ps_plot <- function(   data,
         hull_pts <- c(hull_pts, hull_pts[1])
         lines(data[hull_pts,useVars])
       } #  end of code for plotHulls = TRUE
-      if (ps_identify)  dataCheck  # return data frame dataCheck with identified points
+      if (ps_identify)  ps_dataCheck  # return data frame dataCheck with identified points
          else  invisible()
     }

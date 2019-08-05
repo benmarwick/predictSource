@@ -8,14 +8,14 @@ ps_2dPlot(doc = "ps_2dPlot", data, GroupVar, AnalyticVars, ID = "none",
   Groups, ByGroup = FALSE, VariablePairs, PlotPoints = TRUE,
   LowessLine = TRUE, Lowess_f = NA, PlotMedians = FALSE,
   PlotEllipses = FALSE, Ellipses = c(0.95, 0.99), KernelSmooth = FALSE,
-  Kernelwidth = 0.3, PlotHulls = FALSE, Colors = c("red", "black", "blue",
-  "green", "purple"), Identify = FALSE)
+  Kernelwidth = 0.3, PlotHulls = FALSE, parRowsCols = c(2, 2),
+  Colors = c("red", "black", "blue", "green", "purple"), Identify = FALSE)
 }
 \arguments{
 \item{doc}{A string documenting use written to the output list;
 default is the function name}
 
-\item{data}{A matrix or data frame containing the data to be analyzed}
+\item{data}{A data frame containing the data to be analyzed}
 
 \item{GroupVar}{The name for the variable defining grouping; can be " " if no grouping}
 
@@ -52,6 +52,9 @@ if FALSE (the default), no kernel smooth is plotted}
 
 \item{PlotHulls}{if TRUE, the convex hull is drawn for each set of points; if FALSE (the default),
 no hulls are drawn}
+
+\item{parRowsCols}{A vector of length 2, with the numbers of rows and columns for a plot
+when plots are shown by group; default is c(2,2)}
 
 \item{Colors}{A vector with the colors of plotted points,
 used sequentially for the groups}

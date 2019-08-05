@@ -4,7 +4,7 @@
 #'
 #' @param doc A string documenting use written to the output list;
 #' default is the function name
-#' @param data A matrix or data frame containing the data to be analyzed
+#' @param data A data frame containing the data to be analyzed
 #' @param GroupVar The name for the variable defining grouping; can be " " if no grouping
 #' @param AnalyticVars The names of analytic variables to be used
 #' @param ID The character value of the name of a lab ID, "none" (the default) if none
@@ -33,6 +33,8 @@
 #'  for that group; default is FALSE
 #' @param Colors A vector with the colors of plotted points,
 #' used sequentially for the groups
+#' @param parRowsCols A vector of length 2, with the numbers of rows and columns for a plot
+#' when plots are shown by group; default is c(2,2)
 #' @param Identify if TRUE, user can identify points of interest in the plots; default is FALSE
 #'
 #' @return
@@ -79,6 +81,7 @@ ps_2dPlot <- function(doc = "ps_2dPlot",
                       KernelSmooth = FALSE,
                       Kernelwidth = 0.3,
                       PlotHulls = FALSE,
+                      parRowsCols = c(2,2),
                       Colors = c("red","black","blue","green","purple"),
                       Identify = FALSE) {
   #
@@ -132,29 +135,89 @@ ps_2dPlot <- function(doc = "ps_2dPlot",
     }
     dataUsed<-cbind(dataUsed,group_index=group_index)
   }
+  if (ByGroup | (Groups[1] == " ")) dataUsed<-cbind(dataUsed,group_index=rep(1,nrow(dataUsed)))
   #
   # set up data frame to store identified points
   if (Identify) dataCheck<-dataUsed[1,]
-  else  dataCheck <- c(NA, NA)
   #
   # create plots
   #
-  if (is.matrix(VariablePairs)) {
+  if (is.vector(VariablePairs)) {
     if (!ByGroup) {
-      ps_plot(data = dataUsed,
-              useVars = variablePairs,
+      plotData <- dataUsed
+      if (!Identify)
+      ps_plot(data = plotData,
+              ps_groupVar = GroupVar,
               ps_byGroup = ByGroup,
+              useVars = VariablePairs,
               plotEllipses = PlotEllipses,
               ps_ellipses = Ellipses,
               plotPoints = PlotPoints,
               lowessLine = LowessLine,
               lowess_f = Lowess_f,
+              plotMedians= PlotMedians,
               kernelSmooth = KernelSmooth,
               kernelWidth = Kernelwidth,
               plotHulls = PlotHulls,
               ps_identify = Identify)
-    }
-  }
+      if (Identify)
+        dataCheck<-ps_plot(data = plotData,
+                ps_groupVar = GroupVar,
+                ps_byGroup = ByGroup,
+                useVars = VariablePairs,
+                plotEllipses = PlotEllipses,
+                ps_ellipses = Ellipses,
+                plotPoints = PlotPoints,
+                lowessLine = LowessLine,
+                lowess_f = Lowess_f,
+                plotMedians= PlotMedians,
+                kernelSmooth = KernelSmooth,
+                kernelWidth = Kernelwidth,
+                plotHulls = PlotHulls,
+                ps_identify = Identify)
+    }  # end of loop for ByGroup = FALSE
+    if (ByGroup) {
+      groupCodes <- unique(dataUsed[,GroupVar])
+      if (Identify)  dataCheck<-dataUsed[1,]
+      par(mfrow=parRowsCols)
+      for (i in 1:length(groupCodes)) {
+         plotData<-dataUsed[(dataUsed[,GroupVar]==groupCodes[i]),]
+         if (!Identify)
+         ps_plot(data = plotData,
+                 ps_groupVar = GroupVar,
+                 ps_byGroup = ByGroup,
+                 useVars = VariablePairs,
+                 plotEllipses = PlotEllipses,
+                 ps_ellipses = Ellipses,
+                 plotPoints = PlotPoints,
+                 lowessLine = LowessLine,
+                 lowess_f = Lowess_f,
+                 plotMedians = PlotMedians,
+                 kernelSmooth = KernelSmooth,
+                 kernelWidth = Kernelwidth,
+                 plotHulls = PlotHulls,
+                 ps_identify = Identify)
+         if (Identify) {
+           identified<-ps_plot(data = plotData,
+                   ps_groupVar = GroupVar,
+                   ps_byGroup = ByGroup,
+                   useVars = VariablePairs,
+                   plotEllipses = PlotEllipses,
+                   ps_ellipses = Ellipses,
+                   plotPoints = PlotPoints,
+                   lowessLine = LowessLine,
+                   lowess_f = Lowess_f,
+                   plotMedians = PlotMedians,
+                   kernelSmooth = KernelSmooth,
+                   kernelWidth = Kernelwidth,
+                   plotHulls = PlotHulls,
+                   ps_identify = Identify)
+           dataCheck <- rbind(dataCheck,identified)
+         }  # end of code for Identify = TRUE
+      }  # end of loop on i
+      if (Identify)  dataCheck<-dataCheck[-1,]  # remove dummy first row
+    }  # end of code for ByGroup = TRUE
+  }  # end of code for variablePairs as a matrix
 
   #
   fcnDateVersion<-c(doc,date(),R.Version()$version.string)
@@ -175,6 +238,8 @@ ps_2dPlot <- function(doc = "ps_2dPlot",
             params=params,
             analyticVars=AnalyticVars)
   if (Identify)
+    if (ID == "none")  dataCheck<-dataCheck[,c(GroupVar,AnalyticVars)]
+        else  dataCheck<-dataCheck[,c(GroupVar, ID, AnalyticVars)]
     out<-list(usage=fcnDateVersion,
               dataUsed=dataUsed,
               dataNA=dataNA,
