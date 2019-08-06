@@ -19,6 +19,8 @@
 #' @param ps_ellipses single value or vector of values with confidence values for the ellipses
 #' @param plotHulls  Logical. If TRUE, the convex hull is drawn for each set of points; if FALSE,
 #' no hulls are drawn
+#' @param plotMedians  Logical. If TRUE, the median value for each group is plotted with the
+#' code for the group
 #' @param ps_identify Logical. If TRUE, user can identify points of interest in the plots
 #'
 #' @return   If the user identifies points of interest:
@@ -119,6 +121,16 @@ ps_plot <- function(   data = plotData,
         hull_pts <- chull(data[,useVars])
         hull_pts <- c(hull_pts, hull_pts[1])
         lines(data[hull_pts,useVars])
+      } #  end of code for plotHulls = TRUE
+      if (plotMedians)  {
+         groups <- unique(data[,ps_groupVar])
+         for (i in 1:length(groups)) {
+           data_i <- data[data[,ps_groupVar]==groups[i], ]
+           median_i <- apply(data_i[,useVars],2,median)
+           points(median_i)
+           text(groups[i])
+           browser()
+         }
       } #  end of code for plotHulls = TRUE
       if (ps_identify)  ps_dataCheck  # return data frame dataCheck with identified points
          else  invisible()

@@ -145,6 +145,7 @@ ps_2dPlot <- function(doc = "ps_2dPlot",
   if (is.vector(VariablePairs)) {
     if (!ByGroup) {
       plotData <- dataUsed
+      par(mfrow=c(1,1))  # require that the single plot be a full page
       if (!Identify)
       ps_plot(data = plotData,
               ps_groupVar = GroupVar,
@@ -179,7 +180,7 @@ ps_2dPlot <- function(doc = "ps_2dPlot",
     if (ByGroup) {
       groupCodes <- unique(dataUsed[,GroupVar])
       if (Identify)  dataCheck<-dataUsed[1,]
-      par(mfrow=parRowsCols)
+      par(mfrow=parRowsCols)  # specify number of plots per page
       for (i in 1:length(groupCodes)) {
          plotData<-dataUsed[(dataUsed[,GroupVar]==groupCodes[i]),]
          if (!Identify)
@@ -214,11 +215,99 @@ ps_2dPlot <- function(doc = "ps_2dPlot",
                    ps_identify = Identify)
            dataCheck <- rbind(dataCheck,identified)
          }  # end of code for Identify = TRUE
+         #  pause to save plot after a page is full
+         if (i %% (parRowsCols[1]*parRowsCols[2]) == 0)  browser()
       }  # end of loop on i
       if (Identify)  dataCheck<-dataCheck[-1,]  # remove dummy first row
     }  # end of code for ByGroup = TRUE
+  }  # end of code for variablePairs as a vector
+  #
+  #  code for a matrix of variable pairs
+  #
+  if (is.matrix(VariablePairs)) {
+    for (i_row in 1:nrow(VariablePairs)) {
+       if (!ByGroup) {
+         plotData <- dataUsed
+         if (!Identify)
+            ps_plot(data = plotData,
+                ps_groupVar = GroupVar,
+                ps_byGroup = ByGroup,
+                useVars = VariablePairs[i_row,],
+                plotEllipses = PlotEllipses,
+                ps_ellipses = Ellipses,
+                plotPoints = PlotPoints,
+                lowessLine = LowessLine,
+                lowess_f = Lowess_f,
+                plotMedians= PlotMedians,
+                kernelSmooth = KernelSmooth,
+                kernelWidth = Kernelwidth,
+                plotHulls = PlotHulls,
+                ps_identify = Identify)
+         if (Identify)
+           dataCheck<-ps_plot(data = plotData,
+                           ps_groupVar = GroupVar,
+                           ps_byGroup = ByGroup,
+                           useVars = VariablePairs[i_row],
+                           plotEllipses = PlotEllipses,
+                           ps_ellipses = Ellipses,
+                           plotPoints = PlotPoints,
+                           lowessLine = LowessLine,
+                           lowess_f = Lowess_f,
+                           plotMedians= PlotMedians,
+                           kernelSmooth = KernelSmooth,
+                           kernelWidth = Kernelwidth,
+                           plotHulls = PlotHulls,
+                           ps_identify = Identify)
+         if (i_row < nrow(VariablePairs))  {
+           browser()  #  pause to save plot
+           plot.new()  #  next plot on a new page
+         }
+       }  # end of code for ByGroup = FALSE
+       if (ByGroup) {
+         groupCodes <- unique(dataUsed[,GroupVar])
+         if (Identify)  dataCheck<-dataUsed[1,]
+         par(mfrow=parRowsCols)
+         for (i in 1:length(groupCodes)) {
+            plotData<-dataUsed[(dataUsed[,GroupVar]==groupCodes[i]),]
+            if (!Identify)
+            ps_plot(data = plotData,
+                  ps_groupVar = GroupVar,
+                  ps_byGroup = ByGroup,
+                  useVars = VariablePairs[i_row,],
+                  plotEllipses = PlotEllipses,
+                  ps_ellipses = Ellipses,
+                  plotPoints = PlotPoints,
+                  lowessLine = LowessLine,
+                  lowess_f = Lowess_f,
+                  plotMedians = PlotMedians,
+                  kernelSmooth = KernelSmooth,
+                  kernelWidth = Kernelwidth,
+                  plotHulls = PlotHulls,
+                  ps_identify = Identify)
+           if (Identify) {
+             identified<-ps_plot(data = plotData,
+                              ps_groupVar = GroupVar,
+                              ps_byGroup = ByGroup,
+                              useVars = VariablePairs[i_row,],
+                              plotEllipses = PlotEllipses,
+                              ps_ellipses = Ellipses,
+                              plotPoints = PlotPoints,
+                              lowessLine = LowessLine,
+                              lowess_f = Lowess_f,
+                              plotMedians = PlotMedians,
+                              kernelSmooth = KernelSmooth,
+                              kernelWidth = Kernelwidth,
+                              plotHulls = PlotHulls,
+                              ps_identify = Identify)
+             dataCheck <- rbind(dataCheck,identified)
+             }  # end of code for Identify = TRUE
+            if (i %% (parRowsCols[1]*parRowsCols[2]) == 0)  browser()
+         }  # end of code for ByGroup = TRUE
+      }  #  end of loop on i
+    if (i_row < nrow(VariablePairs))  plot.new()  #  start a new page for the next set of variable pairs
+    }  # end of loop on i_row
+    if (Identify)  dataCheck<-dataCheck[-1,]  # remove dummy first row
   }  # end of code for variablePairs as a matrix
-
   #
   fcnDateVersion<-c(doc,date(),R.Version()$version.string)
   #
@@ -237,7 +326,7 @@ ps_2dPlot <- function(doc = "ps_2dPlot",
             dataNA=dataNA,
             params=params,
             analyticVars=AnalyticVars)
-  if (Identify)
+  if (Identify) {
     if (ID == "none")  dataCheck<-dataCheck[,c(GroupVar,AnalyticVars)]
         else  dataCheck<-dataCheck[,c(GroupVar, ID, AnalyticVars)]
     out<-list(usage=fcnDateVersion,
@@ -246,5 +335,6 @@ ps_2dPlot <- function(doc = "ps_2dPlot",
               params=params,
               analyticVars=AnalyticVars,
               dataCheck=dataCheck)
+  }
   out
     }

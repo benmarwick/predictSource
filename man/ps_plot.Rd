@@ -43,6 +43,9 @@ if FALSE, no ellipses are plotted}
 \item{ps_ellipses}{single value or vector of values with confidence values for the ellipses}
 
 \item{ps_identify}{Logical. If TRUE, user can identify points of interest in the plots}
+
+\item{plotMedians}{Logical. If TRUE, the median value for each group is plotted with the
+code for the group}
 }
 \value{
 If the user identifies points of interest:
