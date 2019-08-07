@@ -32,7 +32,8 @@
 #' @section Details:
 #'  This function is used internally by the function ps_2dPlot.  The default values are those
 #'  from ps_2dPlot.  data will contain a group code, a lab ID (if used in the data set), and all
-#'  analytic variables, for display if the user identifies points of interest.
+#'  analytic variables, for display if the user identifies points of interest.  If plotMedians is TRUE,
+#'  the convex hull and median of the points are plotted for each group.
 #'
 #' @import MASS  ellipse
 #'
@@ -117,21 +118,25 @@ ps_plot <- function(   data = plotData,
                             bandwidth=sum(range(data[,useVars[1]])*c(-1,1))*kernelWidth)
         lines(kernel_fit)
       }
-      if (plotHulls)  {
+      if (plotHulls & (!plotMedians))  {  # plot hulls but not medians
         hull_pts <- chull(data[,useVars])
         hull_pts <- c(hull_pts, hull_pts[1])
         lines(data[hull_pts,useVars])
       } #  end of code for plotHulls = TRUE
-      if (plotMedians)  {
-         groups <- unique(data[,ps_groupVar])
+      if (plotMedians)  {  # draw hulls for each group and plot median in group
+         groups <- unique(data[,ps_groupVar])  # unique group codes
          for (i in 1:length(groups)) {
-           data_i <- data[data[,ps_groupVar]==groups[i], ]
+           data_i <- data[data[,ps_groupVar]==groups[i], ]  # data for group i
            median_i <- apply(data_i[,useVars],2,median)
-           points(median_i)
-           text(groups[i])
-           browser()
-         }
-      } #  end of code for plotHulls = TRUE
+           #
+           hull_pts_i <- chull(data_i[,useVars])
+           hull_pts_i <- c(hull_pts_i, hull_pts_i[1])  # indices of rows defining the convex hull
+           lines(data_i[hull_pts_i,useVars])
+           if (i == 1)  medians <- median_i
+             else  medians <- rbind(medians, median_i)
+         }  # end of loop on i
+         text(x=medians[,useVars[1]], y=medians[,useVars[2]],labels=groups)
+      } #  end of code for plotMedians = TRUE
       if (ps_identify)  ps_dataCheck  # return data frame dataCheck with identified points
          else  invisible()
     }

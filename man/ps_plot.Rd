@@ -61,7 +61,8 @@ Create 2-dimensional scatter plot for one group: used by ps_2dPlot().
 
  This function is used internally by the function ps_2dPlot.  The default values are those
  from ps_2dPlot.  data will contain a group code, a lab ID (if used in the data set), and all
- analytic variables, for display if the user identifies points of interest.
+ analytic variables, for display if the user identifies points of interest.  If plotMedians is TRUE,
+ the convex hull and median of the points are plotted for each group.
 }
 
 \examples{
