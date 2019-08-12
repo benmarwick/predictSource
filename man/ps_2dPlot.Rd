@@ -5,11 +5,12 @@
 \title{ps_2dPlot}
 \usage{
 ps_2dPlot(doc = "ps_2dPlot", data, GroupVar, AnalyticVars, ID = "none",
-  Groups, ByGroup = FALSE, VariablePairs, PlotPoints = TRUE,
-  LowessLine = TRUE, Lowess_f = NA, PlotMedians = FALSE,
-  PlotEllipses = FALSE, Ellipses = c(0.95, 0.99), KernelSmooth = FALSE,
-  Kernelwidth = 0.3, PlotHulls = FALSE, parRowsCols = c(2, 2),
-  Colors = c("red", "black", "blue", "green", "purple"), Identify = FALSE)
+  Groups, ByGroup = FALSE, PlotAllGroups = FALSE, VariablePairs,
+  PlotPoints = TRUE, LowessLine = TRUE, Lowess_f = NA,
+  PlotMedians = FALSE, PlotEllipses = FALSE, Ellipses = c(0.95, 0.99),
+  KernelSmooth = FALSE, Kernelwidth = 0.3, PlotHulls = FALSE,
+  parRowsCols = c(2, 2), Colors = c("red", "black", "blue", "green",
+  "purple"), Identify = FALSE)
 }
 \arguments{
 \item{doc}{A string documenting use written to the output list;
@@ -29,6 +30,9 @@ are to be done; if "All", use all groups; if " ", no grouping}
 \item{ByGroup}{Logical.  If TRUE, show scatterplot for each group
 for each selection of 2 variables; if FALSE (the default),
  all specified groups are on one plot}
+
+\item{PlotAllGroups}{Logical.  If TRUE (default is FALSE), all groups are one one plot, with
+group membership shown.  If PlotEllipses is TRUE, confidence ellipses are also shown.}
 
 \item{VariablePairs}{The names of two analytic variables to be shown in the plots, vector of length 2
 or matrix with 2 columns; if a matrix, the set of plots is produced for each row.}

@@ -5,8 +5,8 @@
 \title{ps_plot}
 \usage{
 ps_plot(data = plotData, ps_groupVar = GroupVar, ps_byGroup = ByGroup,
-  useVars, plotPoints = PlotPoints, lowessLine = LowessLine,
-  lowess_f = Lowess_f, plotMedians = PlotMedians,
+  ps_plotAllGroups = PlotAllGroups, useVars, plotPoints = PlotPoints,
+  lowessLine = LowessLine, lowess_f = Lowess_f, plotMedians = PlotMedians,
   kernelSmooth = KernelSmooth, kernelWidth = Kernelwidth,
   plotHulls = PlotHulls, plotEllipses = PlotEllipses,
   ps_ellipses = Ellipses, ps_identify = Identify)
@@ -17,6 +17,8 @@ ps_plot(data = plotData, ps_groupVar = GroupVar, ps_byGroup = ByGroup,
 \item{ps_groupVar}{Character.  Optional name of the grouping variable.}
 
 \item{ps_byGroup}{Logical.  If TRUE, plots are being created by group.}
+
+\item{ps_plotAllGroups}{Logical.  If TRUE, all groups are one one plot, with identifying information}
 
 \item{useVars}{A vector of length 2: the names of two analytic variables to
 be shown in the plots}

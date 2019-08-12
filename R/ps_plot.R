@@ -7,6 +7,7 @@
 #'  be shown in the plots
 #' @param ps_groupVar Character.  Optional name of the grouping variable.
 #' @param ps_byGroup Logical.  If TRUE, plots are being created by group.
+#' @param ps_plotAllGroups  Logical.  If TRUE, all groups are one one plot, with identifying information
 #' @param plotPoints Logical.  If TRUE, all points are plotted; if FALSE, no points are plotted
 #' @param lowessLine Logical. If TRUE, a lowess line is plotted for each group; if FALSE, no line is plotted
 #' @param lowess_f A parameter for lowess() less than or equal to 1, defining the range of x-values used
@@ -49,6 +50,7 @@
 ps_plot <- function(   data = plotData,
                        ps_groupVar = GroupVar,
                        ps_byGroup = ByGroup,
+                       ps_plotAllGroups = PlotAllGroups,
                        useVars,
                        plotPoints = PlotPoints,
                        lowessLine = LowessLine,
@@ -64,6 +66,8 @@ ps_plot <- function(   data = plotData,
       # set up plot
       rangeX<-range(data[,useVars[1]])
       rangeY<-range(data[,useVars[2]])
+      #
+      if (!ps_plotAllGroups) { # plot does not identify groups on a single plot
       #
       #  modify ranges if necessary to account for plotting of confidence ellipses
       #
@@ -137,6 +141,87 @@ ps_plot <- function(   data = plotData,
          }  # end of loop on i
          text(x=medians[,useVars[1]], y=medians[,useVars[2]],labels=groups)
       } #  end of code for plotMedians = TRUE
+      }  # end of code for ps_plotAllGroups = FALSE
+      #
+      if (ps_plotAllGroups) { # plot identifies groups on a single plot
+        #
+        groups <- unique(data[,ps_groupVar])  # unique group codes
+        #
+        #  modify ranges if necessary to account for plotting of confidence ellipses
+        #
+        if (plotEllipses) {
+          for (i in 1:length(groups)) {
+            data_i <- data[data[,ps_groupVar]== groups[i],]
+            for (j in 1:length(ps_ellipses)) {
+              Covar <- var(data_i[,useVars])
+              Ellipse <- ellipse(x = Covar, centre = apply(data_i[,useVars], 2, mean, na.rm = T),
+                               level = ps_ellipses[j], npoints = 200)
+              rangeX<-range(rangeX,Ellipse[,1])
+              rangeY<-range(rangeY,Ellipse[,2])
+          }
+        }
+        } # end of code for PlotEllipses=TRUE
+        #
+        #  set up plot for specified pair of variables
+        #
+        plot(type="n", x=rangeX, y=rangeY, xlab=useVars[1], ylab=useVars[2])
+        #
+        #  if specified, plot confidence ellipses
+        #
+        if (plotEllipses) {
+          for (i in 1:length(groups)) {
+            data_i<-data[data[,ps_groupVar]==groups[i],]
+            Covar <- var(data_i[,useVars])
+            for (j in 1:length(ps_ellipses)) {
+              Ellipse <- ellipse(x = Covar, centre = apply(data_i[,useVars],2, mean, na.rm = T),
+                               level = ps_ellipses[j], npoints = 200)
+            lines(Ellipse, lty=1)
+            }
+          }
+        }  # end of code for plotEllipses=TRUE
+        #
+        if (plotPoints) {
+          points(data[,useVars])
+          if (ps_identify)  {  # show lowess lines to help identify points of interest
+            if (lowessLine) {
+              for (i in 1:length(groups)) {
+                data_i<-data[data[,ps_groupVar]==groups[i],]
+                if (is.na(lowess_f)) lowess_fit<-lowess(data_i[,useVars])
+                else  lowess_fit<-lowess(data_i[,useVars],f=lowess_f)
+                lines(lowess_fit)
+                }
+              }  # end of code for lowessLine = TRUE
+            index<-identify(x=data[,useVars[1]],y=data[,useVars[2]] )
+            # row numbers identified
+            ps_dataCheck<-data[index,]  # identified points
+          }
+        }  # end of code for plotPoints = TRUE
+        if (lowessLine) {
+          for (i in length(groups)) {
+            data_i<-data[data[,ps_groupVar]==groups[i],]
+            if (is.na(lowess_f)) lowess_fit<-lowess(data_i[,useVars])
+            else  lowess_fit<-lowess(data_i[,useVars],f=lowess_f)
+            lines(lowess_fit)
+            }
+          }  # end of code for lowessLine = TRUE
+        if (kernelSmooth) {
+          for (i in 1:length(groups)) {
+            data_i<-data[data[,ps_groupVar]==groups[i],]
+            kernel_fit<-ksmooth(x=data_i[,useVars[1]],
+                              y=data_i[,useVars[2]],"normal",
+                              bandwidth=sum(range(data_i[,useVars[1]])*c(-1,1))*kernelWidth)
+            lines(kernel_fit)
+            }
+          }
+        if (plotHulls)  {  # plot hulls
+          for (i in length(groups)) {
+            data_i<-data[data[,ps_groupVar]==groups[i],]
+            hull_pts <- chull(data_i[,useVars])
+            hull_pts <- c(hull_pts, hull_pts[1])
+            lines(data_i[hull_pts,useVars])
+            }
+          } #  end of code for plotHulls = TRUE
+       }  # end of code for ps_plotAllGroups = TRUE
       if (ps_identify)  ps_dataCheck  # return data frame dataCheck with identified points
          else  invisible()
     }
