@@ -35,6 +35,8 @@
 #'  for that group; default is FALSE
 #' @param Colors A vector with the colors of plotted points,
 #' used sequentially for the groups
+#' @param legendLoc  Character.  Identifies the location of the legend for a plot showing all groups
+#' on one plot.  Default is "topleft"; alternatives are "bottomleft", "topright", "bottomright"
 #' @param parRowsCols A vector of length 2, with the numbers of rows and columns for a plot
 #' when plots are shown by group; default is c(2,2)
 #' @param Identify if TRUE, user can identify points of interest in the plots; default is FALSE
@@ -86,6 +88,7 @@ ps_2dPlot <- function(doc = "ps_2dPlot",
                       PlotHulls = FALSE,
                       parRowsCols = c(2,2),
                       Colors = c("red","black","blue","green","purple"),
+                      legendLoc="topleft",
                       Identify = FALSE) {
   #
   #  use a subset of the groups
@@ -164,6 +167,9 @@ ps_2dPlot <- function(doc = "ps_2dPlot",
               kernelSmooth = KernelSmooth,
               kernelWidth = Kernelwidth,
               plotHulls = PlotHulls,
+              groupIndex = group_index,
+              ps_colors = Colors,
+              ps_legend = legendLoc,
               ps_identify = Identify)
       if (Identify)
         dataCheck<-ps_plot(data = plotData,
@@ -180,6 +186,9 @@ ps_2dPlot <- function(doc = "ps_2dPlot",
                 kernelSmooth = KernelSmooth,
                 kernelWidth = Kernelwidth,
                 plotHulls = PlotHulls,
+                groupIndex = group_index,
+                ps_colors = Colors,
+                ps_legend = legendLoc,
                 ps_identify = Identify)
     }  # end of loop for ByGroup = FALSE
     if (ByGroup) {
@@ -203,6 +212,9 @@ ps_2dPlot <- function(doc = "ps_2dPlot",
                  kernelSmooth = KernelSmooth,
                  kernelWidth = Kernelwidth,
                  plotHulls = PlotHulls,
+                 groupIndex = group_index,
+                 ps_colors = Colors,
+                 ps_legend = legendLoc,
                  ps_identify = Identify)
          if (Identify) {
            identified<-ps_plot(data = plotData,
@@ -219,6 +231,9 @@ ps_2dPlot <- function(doc = "ps_2dPlot",
                    kernelSmooth = KernelSmooth,
                    kernelWidth = Kernelwidth,
                    plotHulls = PlotHulls,
+                   groupIndex = group_index,
+                   ps_colors = Colors,
+                   ps_legend = legendLoc,
                    ps_identify = Identify)
            dataCheck <- rbind(dataCheck,identified)
          }  # end of code for Identify = TRUE
@@ -250,6 +265,8 @@ ps_2dPlot <- function(doc = "ps_2dPlot",
                 kernelSmooth = KernelSmooth,
                 kernelWidth = Kernelwidth,
                 plotHulls = PlotHulls,
+                groupIndex = group_index,
+                ps_legend = legendLoc,
                 ps_identify = Identify)
          if (Identify)
            dataCheck<-ps_plot(data = plotData,
@@ -266,6 +283,9 @@ ps_2dPlot <- function(doc = "ps_2dPlot",
                            kernelSmooth = KernelSmooth,
                            kernelWidth = Kernelwidth,
                            plotHulls = PlotHulls,
+                           groupIndex = group_index,
+                           ps_colors = Colors,
+                           ps_legend = legendLoc,
                            ps_identify = Identify)
          if (i_row < nrow(VariablePairs))  {
            browser()  #  pause to save plot
@@ -293,6 +313,9 @@ ps_2dPlot <- function(doc = "ps_2dPlot",
                   kernelSmooth = KernelSmooth,
                   kernelWidth = Kernelwidth,
                   plotHulls = PlotHulls,
+                  groupIndex = group_index,
+                  ps_colors = Colors,
+                  ps_legend = legendLoc,
                   ps_identify = Identify)
            if (Identify) {
              identified<-ps_plot(data = plotData,
@@ -309,6 +332,9 @@ ps_2dPlot <- function(doc = "ps_2dPlot",
                               kernelSmooth = KernelSmooth,
                               kernelWidth = Kernelwidth,
                               plotHulls = PlotHulls,
+                              groupIndex = group_index,
+                              ps_colors = Colors,
+                              ps_legend = legendLoc,
                               ps_identify = Identify)
              dataCheck <- rbind(dataCheck,identified)
              }  # end of code for Identify = TRUE

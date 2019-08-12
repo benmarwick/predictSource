@@ -10,7 +10,7 @@ ps_2dPlot(doc = "ps_2dPlot", data, GroupVar, AnalyticVars, ID = "none",
   PlotMedians = FALSE, PlotEllipses = FALSE, Ellipses = c(0.95, 0.99),
   KernelSmooth = FALSE, Kernelwidth = 0.3, PlotHulls = FALSE,
   parRowsCols = c(2, 2), Colors = c("red", "black", "blue", "green",
-  "purple"), Identify = FALSE)
+  "purple"), legendLoc = "topleft", Identify = FALSE)
 }
 \arguments{
 \item{doc}{A string documenting use written to the output list;
@@ -62,6 +62,9 @@ when plots are shown by group; default is c(2,2)}
 
 \item{Colors}{A vector with the colors of plotted points,
 used sequentially for the groups}
+
+\item{legendLoc}{Character.  Identifies the location of the legend for a plot showing all groups
+on one plot.  Default is "topleft"; alternatives are "bottomleft", "topright", "bottomright"}
 
 \item{Identify}{if TRUE, user can identify points of interest in the plots; default is FALSE}
 

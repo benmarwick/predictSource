@@ -9,7 +9,8 @@ ps_plot(data = plotData, ps_groupVar = GroupVar, ps_byGroup = ByGroup,
   lowessLine = LowessLine, lowess_f = Lowess_f, plotMedians = PlotMedians,
   kernelSmooth = KernelSmooth, kernelWidth = Kernelwidth,
   plotHulls = PlotHulls, plotEllipses = PlotEllipses,
-  ps_ellipses = Ellipses, ps_identify = Identify)
+  ps_ellipses = Ellipses, groupIndex = group_index, ps_colors = Colors,
+  ps_legend = legendLoc, ps_identify = Identify)
 }
 \arguments{
 \item{data}{A data frame containing the data to be analyzed}
@@ -43,6 +44,13 @@ no hulls are drawn}
 if FALSE, no ellipses are plotted}
 
 \item{ps_ellipses}{single value or vector of values with confidence values for the ellipses}
+
+\item{groupIndex}{Integer.  Used to specify the plotting character and color for multiple
+groups shown on one plot.}
+
+\item{ps_colors}{Character vector of plotting colors for multiple groups shown on one plot}
+
+\item{ps_legend}{Character, specifying location of legend with multiple groups shown on one plot}
 
 \item{ps_identify}{Logical. If TRUE, user can identify points of interest in the plots}
 

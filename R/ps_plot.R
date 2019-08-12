@@ -22,6 +22,10 @@
 #' no hulls are drawn
 #' @param plotMedians  Logical. If TRUE, the median value for each group is plotted with the
 #' code for the group
+#' @param groupIndex  Integer.  Used to specify the plotting character and color for multiple
+#' groups shown on one plot.
+#' @param ps_colors  Character vector of plotting colors for multiple groups shown on one plot
+#' @param ps_legend  Character, specifying location of legend with multiple groups shown on one plot
 #' @param ps_identify Logical. If TRUE, user can identify points of interest in the plots
 #'
 #' @return   If the user identifies points of interest:
@@ -61,6 +65,9 @@ ps_plot <- function(   data = plotData,
                        plotHulls = PlotHulls,
                        plotEllipses = PlotEllipses,
                        ps_ellipses = Ellipses,
+                       groupIndex = group_index,
+                       ps_colors = Colors,
+                       ps_legend = legendLoc,
                        ps_identify = Identify) {
       #
       # set up plot
@@ -181,8 +188,11 @@ ps_plot <- function(   data = plotData,
         }  # end of code for plotEllipses=TRUE
         #
         if (plotPoints) {
-          points(data[,useVars])
-          if (ps_identify)  {  # show lowess lines to help identify points of interest
+          for (i in 1:length(groups)) {
+            data_i<-data[data[,ps_groupVar]==groups[i],]
+            points(data_i[,useVars], pch=i, col=ps_colors[i])
+          }
+            if (ps_identify)  {  # show lowess lines to help identify points of interest
             if (lowessLine) {
               for (i in 1:length(groups)) {
                 data_i<-data[data[,ps_groupVar]==groups[i],]
@@ -221,6 +231,7 @@ ps_plot <- function(   data = plotData,
             lines(data_i[hull_pts,useVars])
             }
           } #  end of code for plotHulls = TRUE
+        legend(ps_legend,bty="n",legend=groups, pch=1:length(groups), col=ps_colors)
        }  # end of code for ps_plotAllGroups = TRUE
       if (ps_identify)  ps_dataCheck  # return data frame dataCheck with identified points
          else  invisible()
