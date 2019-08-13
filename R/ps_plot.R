@@ -191,7 +191,7 @@ ps_plot <- function(   data = plotData,
           for (i in 1:length(groups)) {
             data_i<-data[data[,ps_groupVar]==groups[i],]
             points(data_i[,useVars], pch=i, col=ps_colors[i])
-          }
+            }
             if (ps_identify)  {  # show lowess lines to help identify points of interest
             if (lowessLine) {
               for (i in 1:length(groups)) {
@@ -204,7 +204,7 @@ ps_plot <- function(   data = plotData,
             index<-identify(x=data[,useVars[1]],y=data[,useVars[2]] )
             # row numbers identified
             ps_dataCheck<-data[index,]  # identified points
-          }
+          }  # end of code for ps_identify = TRUE
         }  # end of code for plotPoints = TRUE
         if (lowessLine) {
           for (i in length(groups)) {

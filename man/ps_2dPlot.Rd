@@ -49,7 +49,7 @@ if NA (the default), uses the default value of 0.67}
 \item{PlotEllipses}{Logical.  If TRUE, Gaussian confidence ellipses are plotted for each group;
 if F (the default), no ellipses are plotted}
 
-\item{Ellipses}{single value or vector of values with confidence values for the ellipses; default is c(0_95,0_99)}
+\item{Ellipses}{single value or vector of values with confidence values for the ellipses; default is c(0.95,0.99)}
 
 \item{KernelSmooth}{Logical.  If TRUE, a kernel smooth is plotted for each group;
 if FALSE (the default), no kernel smooth is plotted}
@@ -85,9 +85,8 @@ least one missing value for an analysis variable, NA if no missing values}
 \item{params:}{  A list with the values of the grouping, logical,
  numeric and Color arguments}
 \item{analyticVars:}{  A vector with the value of the argument AnalyticVars}
-    If the user identifies points of interest:
 \item{dataCheck: }{ If ps_identify = TRUE, a data frame with the information on user-identified points
- of interest; value is c(NA,NA) if no points are identified}
+ of interest}
  }
 }
 \description{
@@ -95,10 +94,30 @@ Create 2-dimensional scatter plots, using ps_Plot().
 }
 \section{Details}{
 
+With multiple plots, execution halts after each page is complete; enter c (continue) at
+the prompt to continue execution.  For a plot of the labelled convex hulls of the groups,
+see the example code for the required combination of logical arguments.
 }
 
 \examples{
 
+# All Jemez obsidian sources on one plot
+data(ObsidianSources)
+analyticVars<-c("Rb","Nb","Zr","Y","Sr")
+temp<-ps_2dPlot(data=ObsidianSources,GroupVar="Code",Groups="All",ByGroup=FALSE,
+AnalyticVars=analyticVars,VariablePairs=c("Rb","Nb"),PlotEllipses=TRUE,PlotAllGroups=TRUE)
 
+# Plots of obsidian source data for each source with confidence ellipses and lowess lines
+data(ObsidianSources)
+analyticVars<-c("Rb","Nb","Zr","Y","Sr")
+temp<-ps_2dPlot(data=ObsidianSources,GroupVar="Code",Groups="All",ByGroup=TRUE,
+AnalyticVars=analyticVars,VariablePairs=c("Rb","Nb"),PlotEllipses=TRUE,PlotAllGroups=FALSE)
+
+# Plot of the labelled convex hulls of the obsidian source data for each source
+data(ObsidianSources)
+analyticVars<-c("Rb","Nb","Zr","Y","Sr")
+temp<-ps_2dPlot(data=ObsidianSources,GroupVar="Code",Groups="All",ByGroup=FALSE,
+AnalyticVars=analyticVars,VariablePairs=c("Rb","Nb"),PlotEllipses=FALSE,LowessLine=FALSE,
+PlotHulls=TRUE,PlotMedians=TRUE,PlotPoints=FALSE)
 
 }
