@@ -4,15 +4,15 @@
 \alias{ps_plotGauss}
 \title{ps_plotGauss}
 \usage{
-ps_plotGauss(data, ps_groupVar, analyticVars, ps_scatterplot, ps_qqPlot,
-  ps_identify)
+ps_plotGauss(data, ps_groupVar, analysisVars, ps_analyticVars, ps_scatterplot,
+  ps_qqPlot, ps_identify)
 }
 \arguments{
 \item{data}{A matrix or data frame containing the data to be analyzed}
 
 \item{ps_groupVar}{The name for the variable defining grouping, " " if no grouping}
 
-\item{analyticVars}{A vector of length two with the names of two analytic variables
+\item{ps_analyticVars}{A vector of length two with the names of two analytic variables
 to be shown in the plots}
 
 \item{ps_qqPlot}{Logical (default is TRUE): specify whether to show the q-q plots with the bootstrap
@@ -26,7 +26,7 @@ envelopes and multivariate plots}
 \item{dataCheck}{ If ps_identify = TRUE, a data frame with the information on user-identified points of interest}
 }}
 
-\item{ps_scatterPlot}{Logical (default is TRUE): specify whether to show scatter plots when qqPlot = FALSE}
+\item{ps_scatterPlot}{Logical (default is TRUE): specify whether to show scatter plots when ps_qqPlot = FALSE}
 }
 \description{
 Function to plot and check a specified pair of analysis variables for bivariate normality.
