@@ -5,7 +5,7 @@
 \title{ps_2dPlotGauss}
 \usage{
 ps_2dPlotGauss(doc = "ps_2dPlotGauss", data, GroupVar, ID, Groups,
-  AnalyticVars, analysisVars, scatterPlot = TRUE, QQPlot = TRUE,
+  AnalyticVars, analysisPair, scatterplot = TRUE, QQPlot = TRUE,
   pvalue_digits = 3, Identify = FALSE, folder = " ")
 }
 \arguments{
@@ -22,9 +22,9 @@ if "All", use all groups; if " ", no grouping}
 
 \item{AnalyticVars}{A vector with the names of all analytic variables of interest}
 
-\item{analysisVars}{A vector of length 2 with the names of the variables to be shown in the plots}
+\item{analysisPair}{A vector of length 2 with the names of the variables to be shown in the plots}
 
-\item{scatterPlot}{Logical (default is TRUE): specify whether to show scatter plots when QQPlot = FALSE}
+\item{scatterplot}{Logical (default is TRUE): specify whether to show scatter plots when QQPlot = FALSE}
 
 \item{QQPlot}{Logical (default is TRUE): specify whether to show the q-q plots with the bootstrap
 envelopes and multivariate plots}
@@ -34,6 +34,21 @@ envelopes and multivariate plots}
 \item{Identify}{Logical(default is FALSE): if TRUE, user can identify points of interest in the plots}
 
 \item{folder}{The path to the folder in which data frames will be saved; default is " "}
+}
+\value{
+A list with the following components:
+ \itemize{
+\item{usage:}{  String with the contents of the argument doc, the date run, the version of R used}
+\item{dataUsed:}{ The contents of the argument data restricted to the groups used}
+\item{dataNA:}{  A data frame with observations containing a least one missing value
+  for an analysis variable, NA if no missing values}
+\item{analyticVars:}{  A vector with the contents of the argument analyticVars}
+\item{analysisPair:}{  A vector with the contents of the argument analysisPair}
+\item{params:}{  A list with the values of grouping, logical, and numberic arguments}
+\item{pvalues:}{  A data frame with the p-values for univariate and bivariate tests of normality}
+\item{dataCheck:}{ If Identify=TRUE, a data frame with the information on user-identified points of interest}
+\item{location:}{ The value of the parameter folder}
+}
 }
 \description{
 Plot and check specified pairs of analysis variables for bivariate normality.
@@ -53,6 +68,6 @@ Plot and check specified pairs of analysis variables for bivariate normality.
 data(ObsidianSources)
 analyticVars<-c("Rb","Nb","Zr","Y","Sr")
 plot_2d_Gauss<-ps_2dPlotGauss(data=ObsidianSources, GroupVar="Code", ID="ID", Groups=c("A","B"),
-   AnalyticVars= analyticVars, analysisVars=c("Rb","Zr"))
+   AnalyticVars= analyticVars, analysisPair=c("Rb","Zr"))
 
 }

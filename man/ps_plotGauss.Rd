@@ -4,29 +4,29 @@
 \alias{ps_plotGauss}
 \title{ps_plotGauss}
 \usage{
-ps_plotGauss(data, ps_groupVar, analysisVars, ps_analyticVars, ps_scatterplot,
-  ps_qqPlot, ps_identify)
+ps_plotGauss(data, ps_groupVar, ps_pair, ps_scatterplot, ps_qqPlot, ps_identify)
 }
 \arguments{
 \item{data}{A matrix or data frame containing the data to be analyzed}
 
 \item{ps_groupVar}{The name for the variable defining grouping, " " if no grouping}
 
-\item{ps_analyticVars}{A vector of length two with the names of two analytic variables
+\item{ps_pair}{A vector of length two with the names of two analytic variables
 to be shown in the plots}
 
-\item{ps_qqPlot}{Logical (default is TRUE): specify whether to show the q-q plots with the bootstrap
+\item{ps_scatterplot}{Logical: specify whether to show scatter plots when ps_qqPlot = FALSE}
+
+\item{ps_qqPlot}{Logical: specify whether to show the q-q plots with the bootstrap
 envelopes and multivariate plots}
 
-\item{ps_identify}{Logical(default is FALSE): if TRUE, user can identify points of interest in the plots
+\item{ps_identify}{Logical: if TRUE, user can identify points of interest in the plots
 
 #' @return   A data frame if ps_identify = FALSE) or list with the following components:
  \itemize{
 \item{pvalues}{ A data frame with the p-values for univariate and bivariate tests of normality}
-\item{dataCheck}{ If ps_identify = TRUE, a data frame with the information on user-identified points of interest}
+\item{dataCheck}{ If ps_identify = TRUE, a data frame with the information on user-identified points of interest;
+otherwise, NA}
 }}
-
-\item{ps_scatterPlot}{Logical (default is TRUE): specify whether to show scatter plots when ps_qqPlot = FALSE}
 }
 \description{
 Function to plot and check a specified pair of analysis variables for bivariate normality.
