@@ -340,7 +340,7 @@ library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 plot2dGauss<-ps_2dPlotGauss(data=ObsidianSources, GroupVar="Code", ID="ID", Groups="A",
-    AnalyticVars=c("Rb","Zr"), qqPlot=T)
+    AnalyticVars=analyticVars, variablePair=c("Rb","Zr"), qqPlot=TRUE)
 
 ```
 
@@ -349,7 +349,7 @@ library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 plot2dGauss<-ps_2dPlotGauss(data=ObsidianSources, GroupVar="Code", ID="ID", Groups="B",
-    AnalyticVars=c("Rb","Zr"))
+    AnalyticVars=analyticVars,variablePair=c("Rb","Zr"))
     
 ```
 
@@ -358,22 +358,21 @@ library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 plot2dGauss<-ps_2dPlotGauss(data=ObsidianSources, GroupVar="Code", ID="ID", Groups=c("A","B"),
-    AnalyticVars=c("Rb","Nb"), qqPlot=F)
+    AnalyticVars=analyticVars, variablePair=c("Rb","Nb"), qqPlot=F)
 
 ```
 
 ```{r}
-plot2dGauss<-ps_2dPlotGauss(data=ObsidianSources, GroupVar="Code", ID="ID", Groups="All",
-    AnalyticVars=c("Rb","Zr"),qqPlot=F, scatterPlot=F)
-library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")    
+plot2dGauss<-ps_2dPlotGauss(data=ObsidianSources, GroupVar="Code", ID="ID", Groups="All",
+    AnalyticVars=analyticVars, variablePair=c("Rb","Zr"), qqPlot=F, scatterPlot=F)
 knitr::kable(plot2dGauss$pvalues,caption="Table 4.5:  P-values from test statistics for a bivariate Rb/Zr distribution at the Jemez obsidian sources.")
 
 ```
 ```{r}
 plot2dGauss<-ps_2dPlotGauss(data=ObsidianSources, GroupVar="Code", ID="ID", Groups="All",
-    AnalyticVars=c("Rb","Nb"),qqPlot=F, scatterPlot=F)
+    AnalyticVars=analyticVars, variablePair=c("Rb","Nb"),qqPlot=F, scatterPlot=F)
 knitr::kable(plot2dGauss$pvalues,caption="Table 4.6:  Samples sizes and p-values from test statistics for a bivariate Rb/Nb distribution at the Jemez obsidian sources.")
 
 ```

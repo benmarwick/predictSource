@@ -10,7 +10,7 @@
 #' @param Groups  A vector of values of the group variable for which plots are to be done;
 #'    if "All", use all groups; if " ", no grouping
 #' @param AnalyticVars  A vector with the names of all analytic variables of interest
-#' @param analysisPair A vector of length 2 with the names of the variables to be shown in the plots
+#' @param variablePair A vector of length 2 with the names of the variables to be shown in the plots
 #' @param scatterplot  Logical (default is TRUE): specify whether to show scatter plots when QQPlot = FALSE
 #' @param QQPlot  Logical (default is TRUE): specify whether to show the q-q plots with the bootstrap
 #' envelopes and multivariate plots
@@ -25,7 +25,7 @@
 #' \item{dataNA:}{  A data frame with observations containing a least one missing value
 #'   for an analysis variable, NA if no missing values}
 #' \item{analyticVars:}{  A vector with the contents of the argument analyticVars}
-#' \item{analysisPair:}{  A vector with the contents of the argument analysisPair}
+#' \item{variablePair:}{  A vector with the contents of the argument variablePair}
 #' \item{params:}{  A list with the values of grouping, logical, and numberic arguments}
 #' \item{pvalues:}{  A data frame with the p-values for univariate and bivariate tests of normality}
 #' \item{dataCheck:}{ If Identify=TRUE, a data frame with the information on user-identified points of interest}
@@ -47,7 +47,7 @@
 #' data(ObsidianSources)
 #' analyticVars<-c("Rb","Nb","Zr","Y","Sr")
 #' plot_2d_Gauss<-ps_2dPlotGauss(data=ObsidianSources, GroupVar="Code", ID="ID", Groups=c("A","B"),
-#'    AnalyticVars= analyticVars, analysisPair=c("Rb","Zr"))
+#'    AnalyticVars= analyticVars, variablePair=c("Rb","Zr"))
 #'
 #' @export
 #'
@@ -57,7 +57,7 @@ ps_2dPlotGauss <- function (doc = "ps_2dPlotGauss",
                              ID,
                              Groups,
                              AnalyticVars,
-                             analysisPair,
+                             variablePair,
                              scatterplot=TRUE,
                              QQPlot = TRUE,
                              pvalue_digits=3,
@@ -65,7 +65,7 @@ ps_2dPlotGauss <- function (doc = "ps_2dPlotGauss",
                              folder=" "
                             )
 {
-  if (length(analysisPair)!=2)  stop("length of AnalyticVars must be 2")
+  if (length(variablePair)!=2)  stop("length of AnalyticVars must be 2")
   #
   if (Groups[1] != "All") {
     Use_rows <- (data[, GroupVar] %in% Groups)
@@ -102,7 +102,7 @@ ps_2dPlotGauss <- function (doc = "ps_2dPlotGauss",
     temp_i <- ps_plotGauss(
                  data = data_i,
                  ps_groupVar = GroupVar,
-                 ps_pair = analysisPair,
+                 ps_pair = variablePair,
                  ps_scatterplot = scatterplot,
                  ps_qqPlot = QQPlot,
                  ps_identify = Identify
@@ -118,7 +118,7 @@ ps_2dPlotGauss <- function (doc = "ps_2dPlotGauss",
     if (((i %% 2)==0) & !QQPlot) browser()  # no QQ plot
       } # end of loop on i
   #
-  colnames(pvalues) <- c("n", paste("AD_",analysisPair,sep=""), paste("SW_",analysisPair,sep=""),
+  colnames(pvalues) <- c("n", paste("AD_",variablePair,sep=""), paste("SW_",variablePair,sep=""),
                                              "maridaSkew", "mardiaKurtosis", "HZ", "Royston")
   pvalues <- data.frame(group=groups,pvalues)
   #
@@ -154,7 +154,7 @@ ps_2dPlotGauss <- function (doc = "ps_2dPlotGauss",
                       dataUsed=dataUsed,
                       dataNA=dataNA,
                       analyticVars=AnalyticVars,
-                      analysisPair=analysisPair,
+                      variablePair=variablePair,
                       params=params,
                       pvalues=pvalues,
                       dataCheck=dataCheck,
