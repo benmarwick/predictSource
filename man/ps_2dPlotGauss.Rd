@@ -5,7 +5,7 @@
 \title{ps_2dPlotGauss}
 \usage{
 ps_2dPlotGauss(doc = "ps_2dPlotGauss", data, GroupVar, ID, Groups,
-  AnalyticVars, analysisPair, scatterplot = TRUE, QQPlot = TRUE,
+  AnalyticVars, variablePair, scatterplot = TRUE, QQPlot = TRUE,
   pvalue_digits = 3, Identify = FALSE, folder = " ")
 }
 \arguments{
@@ -22,7 +22,7 @@ if "All", use all groups; if " ", no grouping}
 
 \item{AnalyticVars}{A vector with the names of all analytic variables of interest}
 
-\item{analysisPair}{A vector of length 2 with the names of the variables to be shown in the plots}
+\item{variablePair}{A vector of length 2 with the names of the variables to be shown in the plots}
 
 \item{scatterplot}{Logical (default is TRUE): specify whether to show scatter plots when QQPlot = FALSE}
 
@@ -43,7 +43,7 @@ A list with the following components:
 \item{dataNA:}{  A data frame with observations containing a least one missing value
   for an analysis variable, NA if no missing values}
 \item{analyticVars:}{  A vector with the contents of the argument analyticVars}
-\item{analysisPair:}{  A vector with the contents of the argument analysisPair}
+\item{variablePair:}{  A vector with the contents of the argument variablePair}
 \item{params:}{  A list with the values of grouping, logical, and numberic arguments}
 \item{pvalues:}{  A data frame with the p-values for univariate and bivariate tests of normality}
 \item{dataCheck:}{ If Identify=TRUE, a data frame with the information on user-identified points of interest}
@@ -68,6 +68,6 @@ Plot and check specified pairs of analysis variables for bivariate normality.
 data(ObsidianSources)
 analyticVars<-c("Rb","Nb","Zr","Y","Sr")
 plot_2d_Gauss<-ps_2dPlotGauss(data=ObsidianSources, GroupVar="Code", ID="ID", Groups=c("A","B"),
-   AnalyticVars= analyticVars, analysisPair=c("Rb","Zr"))
+   AnalyticVars= analyticVars, variablePair=c("Rb","Zr"))
 
 }
