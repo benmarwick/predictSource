@@ -285,15 +285,15 @@ ps_pcaEvaluation <-function(doc = "ps_pcaEvaluation",
     #
     #  convex hulls for source data
     #
-      fcnConvexHull <- function(hull_group) {
-        locations <- pcaLocationsSources[pcaLocationsSources[, "group"] == hull_group, c("pc1", "pc2")]
-        chull <- chull(x = locations[, "pc1"], y = locations[, "pc2"])
-        chull <- c(chull, chull[1])
-        hull_pts <-
-          locations[chull, c("pc1", "pc2")]  # points in order defining hull
-        lines(x = hull_pts[, "pc1"], y = hull_pts[, "pc2"])
-        hull_pts
-      }  # end of fcnConvexHull
+ #     fcnConvexHull <- function(hull_group) {
+#        locations <- pcaLocationsSources[pcaLocationsSources[, "group"] == hull_group, c("pc1", "pc2")]
+#        chull <- chull(x = locations[, "pc1"], y = locations[, "pc2"])
+#        chull <- c(chull, chull[1])
+#        hull_pts <-
+#          locations[chull, c("pc1", "pc2")]  # points in order defining hull
+#        lines(x = hull_pts[, "pc1"], y = hull_pts[, "pc2"])
+#        hull_pts
+#     }  # end of fcnConvexHull
       #
     #  set up size of plot
     plot(
@@ -312,8 +312,13 @@ ps_pcaEvaluation <-function(doc = "ps_pcaEvaluation",
       pch = pcaLocationsSources[, "index"]
     )
     # plot convex hulls
-    for (i in 1:length(known_sources))
-      plotData[[i]] <- fcnConvexHull(hull_group = known_sources[i])
+    for (i in 1:length(known_sources)) {
+      pts_i<-ps_convexHull(
+               data=pcaLocationsSources,
+               groupVar="group",
+               hullGroup = known_sources[i])
+      lines(pts_i)
+    }
     legend(
       x = loc_legend,
       legend = known_sources,
@@ -333,8 +338,13 @@ ps_pcaEvaluation <-function(doc = "ps_pcaEvaluation",
     )
     #
     # convex hulls of source data
-    for (i in 1:length(known_sources))
-      lines(plotData[[i]])
+    for (i in 1:length(known_sources)) {
+      pts_i<-ps_convexHull(
+        data=pcaLocationsSources,
+        groupVar="group",
+        hullGroup = known_sources[i])
+      lines(pts_i)
+    }
     #  plot artifact points
     points(x = pcaLocationsArtifacts[, "pc1"],
            y = pcaLocationsArtifacts[, "pc2"],
