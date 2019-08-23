@@ -365,24 +365,19 @@ ps_pcaEvaluation <-function(doc = "ps_pcaEvaluation",
     #
     #   convex hulls for source data
     #
-    fcnConvexHull <- function(hull_group) {
-      locations <- pcaLocationsSources[pcaLocationsSources[, "group"] == hull_group, c("pc1", "pc2")]
-      chull <- chull(x = locations[, "pc1"], y = locations[, "pc2"])
-      chull <- c(chull, chull[1])
-      hull_pts <-
-        locations[chull, c("pc1", "pc2")]  # points in order defining hull
-      lines(x = hull_pts[, "pc1"], y = hull_pts[, "pc2"])
-      hull_pts
-    }  # end of fcnConvexHull
-    #
     for (i in 1:length(known_sources)) {
-      plotData[[i]] <- fcnConvexHull(hull_group = known_sources[i])
+      pts_i<-ps_convexHull(
+        data=pcaLocationsSources,
+        groupVar="group",
+        hullGroup = known_sources[i])
+      lines(pts_i)
+#
       index_i <- (known_sources[pcaLocationsArtifacts[, "index"]] == known_sources[i]) # rows with data prediced from this source
       if (sum(index_i) > 0) {
         # at least one artifact from source i
         temp_i <- pcaLocationsArtifacts[index_i,]
-        hull_i <- plotData[[i]]  # convex hull for this source
-        artifact_in_hull[index_i] <- in.out(bnd = as.matrix(hull_i, mode="numeric"), x = as.matrix(temp_i[, c("pc1", "pc2")],mode="numeric"))
+        artifact_in_hull[index_i] <- in.out(bnd = as.matrix(pts_i, mode="numeric"),
+                                            x = as.matrix(temp_i[, c("pc1", "pc2")],mode="numeric"))
       }  # end of loop for sum(index_i) > 0
     }  # end of loop on i
     pcaLocationsArtifacts <- data.frame(pcaLocationsArtifacts, in_hull = artifact_in_hull)
@@ -423,17 +418,7 @@ ps_pcaEvaluation <-function(doc = "ps_pcaEvaluation",
     #
     #  convex hulls for source data
     #
-      fcnConvexHull <- function(hull_group) {
-        locations <- pcaLocationsSources[pcaLocationsSources[, "group"] == hull_group, c("pc1", "pc2")]
-        chull <- chull(x = locations[, "pc1"], y = locations[, "pc2"])
-        chull <- c(chull, chull[1])
-        hull_pts <-
-          locations[chull, c("pc1", "pc2")]  # points in order defining hull
-        lines(x = hull_pts[, "pc1"], y = hull_pts[, "pc2"])
-        hull_pts
-      }  # end of fcnConvexHull
-      #
-      if (plotAllPoints == F)  plot.new()
+    if (plotAllPoints == F)  plot.new()
     par(mfrow = c(1, 2))
     #  set up plot
     plot(
@@ -447,8 +432,13 @@ ps_pcaEvaluation <-function(doc = "ps_pcaEvaluation",
     #
     #  plot convex hulls of sources
     #
-    for (i in 1:length(known_sources))
-      lines(plotData[[i]])
+    for (i in 1:length(known_sources)) {
+      pts_i<-ps_convexHull(
+        data=pcaLocationsSources,
+        groupVar="group",
+        hullGroup = known_sources[i])
+      lines(pts_i)
+    }
     #  add ID for each group at the median of the observed values
     groups <- known_sources
     medians <-
@@ -483,8 +473,13 @@ ps_pcaEvaluation <-function(doc = "ps_pcaEvaluation",
     #
     # plot source convex hulls
     #
-    for (i in 1:length(known_sources))
-      lines(plotData[[i]])
+    for (i in 1:length(known_sources)) {
+      pts_i<-ps_convexHull(
+        data=pcaLocationsSources,
+        groupVar="group",
+        hullGroup = known_sources[i])
+      lines(pts_i)
+    }
     legend(
       x = loc_legend,
       legend = known_sources,
@@ -508,16 +503,6 @@ ps_pcaEvaluation <-function(doc = "ps_pcaEvaluation",
     #
     #  convex hulls for source data
     #
-      fcnConvexHull <- function(hull_group) {
-        locations <- pcaLocationsSources[pcaLocationsSources[, "group"] == hull_group, c("pc1", "pc2")]
-        chull <- chull(x = locations[, "pc1"], y = locations[, "pc2"])
-        chull <- c(chull, chull[1])
-        hull_pts <-
-          locations[chull, c("pc1", "pc2")]  # points in order defining hull
-        lines(x = hull_pts[, "pc1"], y = hull_pts[, "pc2"])
-        hull_pts
-      }  # end of fcnConvexHull
-      #
     if ((plotAllPoints == F) & (plotHullsOutsidePoints == F))  plot.new()
     par(mfrow=c(1,1))
     plot(
@@ -531,9 +516,13 @@ ps_pcaEvaluation <-function(doc = "ps_pcaEvaluation",
     #
     # plot source convex hulls
     #
-    for (i in 1:length(known_sources))
-      plotData[[i]] <- fcnConvexHull(hull_group = known_sources[i])
-      lines(plotData[[i]])
+    for (i in 1:length(known_sources)) {
+      pts_i<-ps_convexHull(
+        data=pcaLocationsSources,
+        groupVar="group",
+        hullGroup = known_sources[i])
+      lines(pts_i)
+    }
     legend(
       x = loc_legend,
       legend = known_sources,
