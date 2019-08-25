@@ -269,9 +269,16 @@ ps_pcaEvaluation <-function(doc = "ps_pcaEvaluation",
     range_pc1 <- range(pcaLocations[, "pc1"])
     range_pc2 <- range(pcaLocations[, "pc2"])
 
+    #  store vertices of source convex hulls
+    hullVertices <- vector("list", length(known_sources))
+    names(hullVertices) <- as.character(1:length(known_sources))
     #
-    plotData <-
-      list(rep(NA, length(known_sources))) # save convex hull data for second plot
+    for (i in 1:length(known_sources)) {
+      locations <- pcaLocationsSources[pcaLocationsSources[, "group"] == known_sources[i], c("pc1", "pc2")]
+      chull <- chull(x = locations[, "pc1"], y = locations[, "pc2"])
+      chull <- c(chull, chull[1])
+      hullVertices[[i]] <- locations[chull, c("pc1", "pc2")]  # points in order defining hull
+     }
     #
     # code for first two panel plot: source points and convex hulls, and all artifact poins with hulls
     #
@@ -282,19 +289,6 @@ ps_pcaEvaluation <-function(doc = "ps_pcaEvaluation",
     #  second plot is convex hulls and artifacts lying outside of predicted hull
     #
     #  first plot: convex hulls and all source data
-    #
-    #  convex hulls for source data
-    #
- #     fcnConvexHull <- function(hull_group) {
-#        locations <- pcaLocationsSources[pcaLocationsSources[, "group"] == hull_group, c("pc1", "pc2")]
-#        chull <- chull(x = locations[, "pc1"], y = locations[, "pc2"])
-#        chull <- c(chull, chull[1])
-#        hull_pts <-
-#          locations[chull, c("pc1", "pc2")]  # points in order defining hull
-#        lines(x = hull_pts[, "pc1"], y = hull_pts[, "pc2"])
-#        hull_pts
-#     }  # end of fcnConvexHull
-      #
     #  set up size of plot
     plot(
       type = "n",
@@ -312,13 +306,8 @@ ps_pcaEvaluation <-function(doc = "ps_pcaEvaluation",
       pch = pcaLocationsSources[, "index"]
     )
     # plot convex hulls
-    for (i in 1:length(known_sources)) {
-      pts_i<-ps_convexHull(
-               data=pcaLocationsSources,
-               groupVar="group",
-               hullGroup = known_sources[i])
-      lines(pts_i)
-    }
+    for (i in 1:length(known_sources))
+       lines(hullVertices[[i]])
     legend(
       x = loc_legend,
       legend = known_sources,
@@ -338,13 +327,8 @@ ps_pcaEvaluation <-function(doc = "ps_pcaEvaluation",
     )
     #
     # convex hulls of source data
-    for (i in 1:length(known_sources)) {
-      pts_i<-ps_convexHull(
-        data=pcaLocationsSources,
-        groupVar="group",
-        hullGroup = known_sources[i])
-      lines(pts_i)
-    }
+    for (i in 1:length(known_sources))
+      lines(hullVertices[[i]])
     #  plot artifact points
     points(x = pcaLocationsArtifacts[, "pc1"],
            y = pcaLocationsArtifacts[, "pc2"],
@@ -366,17 +350,13 @@ ps_pcaEvaluation <-function(doc = "ps_pcaEvaluation",
     #   convex hulls for source data
     #
     for (i in 1:length(known_sources)) {
-      pts_i<-ps_convexHull(
-        data=pcaLocationsSources,
-        groupVar="group",
-        hullGroup = known_sources[i])
-      lines(pts_i)
-#
+      lines(hullVertices[[i]])
+      #
       index_i <- (known_sources[pcaLocationsArtifacts[, "index"]] == known_sources[i]) # rows with data prediced from this source
       if (sum(index_i) > 0) {
         # at least one artifact from source i
         temp_i <- pcaLocationsArtifacts[index_i,]
-        artifact_in_hull[index_i] <- in.out(bnd = as.matrix(pts_i, mode="numeric"),
+        artifact_in_hull[index_i] <- in.out(bnd = as.matrix(hullVertices[[i]], mode="numeric"),
                                             x = as.matrix(temp_i[, c("pc1", "pc2")],mode="numeric"))
       }  # end of loop for sum(index_i) > 0
     }  # end of loop on i
@@ -432,13 +412,8 @@ ps_pcaEvaluation <-function(doc = "ps_pcaEvaluation",
     #
     #  plot convex hulls of sources
     #
-    for (i in 1:length(known_sources)) {
-      pts_i<-ps_convexHull(
-        data=pcaLocationsSources,
-        groupVar="group",
-        hullGroup = known_sources[i])
-      lines(pts_i)
-    }
+    for (i in 1:length(known_sources))
+       lines(hullVertices[[i]])
     #  add ID for each group at the median of the observed values
     groups <- known_sources
     medians <-
@@ -473,14 +448,9 @@ ps_pcaEvaluation <-function(doc = "ps_pcaEvaluation",
     #
     # plot source convex hulls
     #
-    for (i in 1:length(known_sources)) {
-      pts_i<-ps_convexHull(
-        data=pcaLocationsSources,
-        groupVar="group",
-        hullGroup = known_sources[i])
-      lines(pts_i)
-    }
-    legend(
+    for (i in 1:length(known_sources))
+     lines(hullVertices[[i]])
+     legend(
       x = loc_legend,
       legend = known_sources,
       pch = 1:length(known_sources),
@@ -516,13 +486,8 @@ ps_pcaEvaluation <-function(doc = "ps_pcaEvaluation",
     #
     # plot source convex hulls
     #
-    for (i in 1:length(known_sources)) {
-      pts_i<-ps_convexHull(
-        data=pcaLocationsSources,
-        groupVar="group",
-        hullGroup = known_sources[i])
-      lines(pts_i)
-    }
+    for (i in 1:length(known_sources))
+       lines(hullVertices[[i]])
     legend(
       x = loc_legend,
       legend = known_sources,
