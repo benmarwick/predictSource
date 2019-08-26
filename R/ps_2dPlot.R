@@ -21,7 +21,6 @@
 #' @param LowessLine Logical. If TRUE, a lowess line is plotted for each group; if FALSE, no line is plotted
 #' @param Lowess_f A parameter for lowess() less than or equal to 1, defining the range of x-values used;
 #'     if NA (the default), uses the default value of 0.67
-#' @param PlotMedians Logical.  If TRUE, plot the median of each group; default if FALSE
 #' @param KernelSmooth Logical.  If TRUE, a kernel smooth is plotted for each group;
 #' if FALSE (the default), no kernel smooth is plotted
 #' @param Kernelwidth the proportion of the range of x-values used in the kernel smooth;

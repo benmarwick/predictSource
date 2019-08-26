@@ -13,6 +13,8 @@
 #' @return  The function returns a matrix with the points defining the corners of the
 #' convex hull.
 #'
+#' @import graphics
+#'
 #' @export
 #'
 

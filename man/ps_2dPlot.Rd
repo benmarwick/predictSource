@@ -44,7 +44,8 @@ or matrix with 2 columns; if a matrix, the set of plots is produced for each row
 \item{Lowess_f}{A parameter for lowess() less than or equal to 1, defining the range of x-values used;
 if NA (the default), uses the default value of 0.67}
 
-\item{PlotMedians}{Logical.  If TRUE, plot the median of each group; default if FALSE}
+\item{PlotMedians}{if TRUE, the code for each group is plotted at the median of the values
+for that group; default is FALSE}
 
 \item{PlotEllipses}{Logical.  If TRUE, Gaussian confidence ellipses are plotted for each group;
 if F (the default), no ellipses are plotted}
@@ -70,9 +71,6 @@ used sequentially for the groups}
 on one plot.  Default is "topleft"; alternatives are "bottomleft", "topright", "bottomright"}
 
 \item{Identify}{if TRUE, user can identify points of interest in the plots; default is FALSE}
-
-\item{PlotMedians}{if TRUE, the code for each group is plotted at the median of the values
-for that group; default is FALSE}
 }
 \value{
 \itemize{

@@ -133,7 +133,7 @@ ps_3dPlotRotate <-
                xlab = Selections[1], ylab = Selections[2], zlab = Selections[3],
                col = Colors[dataUsed[!index,"group_index"]],
                pch = 16, main=header)
-        if (folder != " ") rgl_postscript(filename=dsFile, fmt="pdf")
+        if (folder != " ") rgl.postscript(filename=dsFile, fmt="pdf")
        }  # end of code for Selections as vector
       #
       if (is.matrix(Selections)) {
@@ -154,7 +154,7 @@ ps_3dPlotRotate <-
     if ((GroupVar[1] != " ") & (ByGroup)) { # plot points by group
       if (is.vector(Selections)) {
         for (i in 1:length(groups)) {
-          dev.new()
+          plot.new()
           data_i<-dataUsed[dataUsed[,GroupVar]==groups[i],Selections]
           index_na <- is.na(data_i[, Selections[1]]) | is.na(data_i[,Selections[2]]) |
             is.na(data_i[, Selections[3]])
@@ -168,7 +168,7 @@ ps_3dPlotRotate <-
       if (is.matrix(Selections)) {
         for (i in 1:nrow(Selections)) {
           for (j in 1:length(groups)) {
-            dev.new()
+            plot.new()
             data_j<-dataUsed[dataUsed[,GroupVar]==groups[j],Selections[i,]]
             index_na <- is.na(data_j[, Selections[i,1]]) | is.na(data_j[,Selections[i,2]]) |
               is.na(data_j[, Selections[i,3]])

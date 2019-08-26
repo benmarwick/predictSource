@@ -145,7 +145,7 @@ ps_pca <-  function(doc = "ps_pca",
     #  redefine data_Keep if some analysis variables are missing by imputing missing values
     #
     if (sum(dataKeep) < nrow(dataUsed)) {
-      if (!na(Seed))  set.seed(Seed)
+      if (!is.na(Seed))  set.seed(Seed)
       dataNA <- dataUsed[!dataKeep,]
       temp<-rfImpute(dataUsed[,GroupVar] ~ ., dataUsed[,AnalyticVars])
       if (ID == " ") dataUsed <- data.frame(dataUsed[,GroupVar],temp)
@@ -273,8 +273,8 @@ ps_pca <-  function(doc = "ps_pca",
     #
 
     Predicted <- Predicted[,-2]  # remove GroupIndex
-    if (ID != " ") DataPlusPredicted <- DataPlusPredicted[,-(3+length(analyticVars))]
-      else  DataPlusPredicted <- DataPlusPredicted[,-(2+length(analyticVars))]#  remove GroupIndex
+    if (ID != " ") DataPlusPredicted <- DataPlusPredicted[,-(3+length(AnalyticVars))]
+      else  DataPlusPredicted <- DataPlusPredicted[,-(2+length(AnalyticVars))]#  remove GroupIndex
     pcNames <- colnames(Predicted)[-1]
     Predicted[,pcNames] <- round(Predicted[,pcNames], digits = digits)
     DataPlusPredicted[,pcNames] <- round(DataPlusPredicted[,pcNames], digits = digits)

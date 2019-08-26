@@ -63,7 +63,7 @@
 #'   \item{location:}{  The value of the parameter folder}
 #'    }
 #'
-#' @import mgcv graphics stats
+#' @import graphics stats  mgcv
 #'
 #' @examples
 #' # Evaluate sources of artifacts predicted from scatterplots

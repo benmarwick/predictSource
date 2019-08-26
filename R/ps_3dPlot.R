@@ -60,6 +60,7 @@
 #' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 #' plot3d<-ps_3dPlot(data=ObsidianSources, GroupVar="Code", Groups=c("A","B"),
 #'  ByGroup=TRUE, AnalyticVars=analyticVars, Selections=analyticVars[1:3])
+#'
 #' @export
 
 ps_3dPlot <-
@@ -123,7 +124,8 @@ ps_3dPlot <-
         if (is.vector(Selections)) {
           index <- is.na(dataUsed[, Selections[1]]) | is.na(dataUsed[,Selections[2]]) |
                       is.na(dataUsed[, Selections[3]])
-          scatterplot3d(dataUsed[!index, Selections[1]], dataUsed[!index, Selections[2]],
+          scatterplot3d::scatterplot3d(
+                        dataUsed[!index, Selections[1]], dataUsed[!index, Selections[2]],
                         dataUsed[!index, Selections[3]], xlab = Selections[1],
                         ylab = Selections[2], zlab = Selections[3],
                         pch = 16, cex_symbols = SymbolSize,
@@ -137,7 +139,8 @@ ps_3dPlot <-
               subtitle<-paste(subtitle,groups[j],": ",Colors[j],"  ",sep="")
               index_na <- is.na(dataUsed[, Selections[i,1]]) | is.na(dataUsed[,Selections[i,2]]) |
               is.na(dataUsed[, Selections[i,3]])
-              scatterplot3d(dataUsed[!index_na, Selections[i, 1]],dataUsed[!index_na, Selections[i, 2]],
+              scatterplot3d::scatterplot3d(
+                          dataUsed[!index_na, Selections[i, 1]],dataUsed[!index_na, Selections[i, 2]],
                           dataUsed[!index_na, Selections[i, 3]], xlab = Selections[i, 1],
                           ylab = Selections[i, 2], zlab = Selections[i, 3],
                           color = Colors[group_index], pch = 16, cex_symbols = SymbolSize,
@@ -155,7 +158,8 @@ ps_3dPlot <-
             data_i<-dataUsed[dataUsed[,GroupVar]==groups[i],Selections]
             index_na <- is.na(data_i[, Selections[1]]) | is.na(data_i[,Selections[2]]) |
               is.na(data_i[, Selections[3]])
-            scatterplot3d(data_i[!index_na,], xlab = Selections[1], ylab = Selections[2], zlab = Selections[3],
+            scatterplot3d::scatterplot3d(
+                          data_i[!index_na,], xlab = Selections[1], ylab = Selections[2], zlab = Selections[3],
                           color = Colors[1], pch = 16, cex_symbols = SymbolSize,
                           main = paste(groups[i],": ",Selections[1]," ,", Selections[2], ",", Selections[3],sep=""))
             browser()
@@ -168,8 +172,9 @@ ps_3dPlot <-
               data_j<-dataUsed[dataUsed[,GroupVar]==groups[j],Selections[i,], index]
               index_na <- is.na(data_j[, Selections[i,1]]) | is.na(data_j[,Selections[i,2]]) |
                 is.na(data_j[, Selections[i,3]])
-              scatterplot3d(data_j[!index_na,], xlab = Selections[i, 1], ylab = Selections[i, 2],
-                            zlab = Selections[i,3], color = Colors[1], pch = 16, cex_symbols = SymbolSize,
+              scatterplot3d::scatterplot3d(
+                            data_j[!index_na,], xlab = Selections[i, 1], ylab = Selections[i, 2],
+                            zlab = Selections[i,3], pch = 16, cex_symbols = SymbolSize,
                             main = paste(groups[i],": ",Selections[i, 1], ",", Selections[i,2], ",",
                                          Selections[i, 3]), color = Colors[index])
               browser()
@@ -189,7 +194,8 @@ ps_3dPlot <-
             is.na(data_i[, Selections[3]])
           medians[i,]<-apply(data_i[!index_na,],2,median)
         }
-        scatterplot3d(medians, xlab = Selections[1],
+        scatterplot3d::scatterplot3d(
+                      medians, xlab = Selections[1],
                       ylab = Selections[2], zlab = Selections[3],
                       color = "black", pch = groups, cex_symbols = SymbolSize,
                       main = paste("group medians:",Selections[1], ",", Selections[2], ",", Selections[3]))
@@ -204,10 +210,11 @@ ps_3dPlot <-
             medians[j,]<-apply(data_j[!index_na,],2,median)
           }
           dev.new()
-          scatterplot3d(medians, xlab = Selections[i, 1], ylab = Selections[i, 2],
+          scatterplot3d::scatterplot3d(
+                        medians, xlab = Selections[i, 1], ylab = Selections[i, 2],
                         zlab = Selections[i, 3], color = "black",
                         pch = groups, cex_symbols = SymbolSize, main = paste("group medians:",
-                              Selections[i,1], ",", Selections[i,2], ",", Selections[i,3]))
+                        Selections[i,1], ",", Selections[i,2], ",", Selections[i,3]))
           browser()
         }
       }

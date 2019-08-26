@@ -7,7 +7,7 @@
 zirconium versus rubidium for Jemez source data.}
 \format{A data frame with 5 rows and 7 variables:
 \describe{
-  \item{group}{A character with the code for the source.}
+  \item{Code}{A character with the code for the source.}
   \item{ID}{The laboratory ID for the artifact.}
   \item{Rb}{A vector with the rubidium values.}
   \item{Sr}{A vector with the strontium values.}

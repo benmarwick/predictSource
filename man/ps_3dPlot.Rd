@@ -80,4 +80,5 @@ data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 plot3d<-ps_3dPlot(data=ObsidianSources, GroupVar="Code", Groups=c("A","B"),
  ByGroup=TRUE, AnalyticVars=analyticVars, Selections=analyticVars[1:3])
+
 }

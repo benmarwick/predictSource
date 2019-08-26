@@ -11,7 +11,6 @@
 #' @param plotPoints Logical.  If TRUE, all points are plotted; if FALSE, no points are plotted
 #' @param lowessLine Logical. If TRUE, a lowess line is plotted for each group; if FALSE, no line is plotted
 #' @param lowess_f A parameter for lowess() less than or equal to 1, defining the range of x-values used
-#' @param plotMedians Logical.  If TRUE, plot the median in each group; if FALSE, medians are not plotted.  I
 #' @param kernelSmooth Logical.  If TRUE, a kernel smooth is plotted for each group;
 #' if FALSE, no kernel smooth is plotted
 #' @param kernelWidth the proportion of the range of x-values used in the kernel smooth
@@ -40,7 +39,7 @@
 #'  analytic variables, for display if the user identifies points of interest.  If plotMedians is TRUE,
 #'  the convex hull and median of the points are plotted for each group.
 #'
-#' @import MASS ellipse graphics stats
+#' @import MASS ellipse graphics stats  grDevices
 #'
 #' @examples
 #'
@@ -52,24 +51,24 @@
 #'
 #' @export
 #'
-ps_plot <- function(   data = plotData,
-                       ps_groupVar = GroupVar,
-                       ps_byGroup = ByGroup,
-                       ps_plotAllGroups = PlotAllGroups,
+ps_plot <- function(   data,
+                       ps_groupVar,
+                       ps_byGroup,
+                       ps_plotAllGroups,
                        useVars,
-                       plotPoints = PlotPoints,
-                       lowessLine = LowessLine,
-                       lowess_f = Lowess_f,
-                       plotMedians = PlotMedians,
-                       kernelSmooth = KernelSmooth,
-                       kernelWidth = Kernelwidth,
-                       plotHulls = PlotHulls,
-                       plotEllipses = PlotEllipses,
-                       ps_ellipses = Ellipses,
-                       groupIndex = group_index,
-                       ps_colors = Colors,
-                       ps_legend = legendLoc,
-                       ps_identify = Identify) {
+                       plotPoints,
+                       lowessLine,
+                       lowess_f,
+                       plotMedians,
+                       kernelSmooth,
+                       kernelWidth,
+                       plotHulls,
+                       plotEllipses,
+                       ps_ellipses,
+                       groupIndex,
+                       ps_colors,
+                       ps_legend,
+                       ps_identify) {
       #
       # set up plot
       rangeX<-range(data[,useVars[1]])

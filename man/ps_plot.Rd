@@ -4,13 +4,9 @@
 \alias{ps_plot}
 \title{ps_plot}
 \usage{
-ps_plot(data = plotData, ps_groupVar = GroupVar, ps_byGroup = ByGroup,
-  ps_plotAllGroups = PlotAllGroups, useVars, plotPoints = PlotPoints,
-  lowessLine = LowessLine, lowess_f = Lowess_f, plotMedians = PlotMedians,
-  kernelSmooth = KernelSmooth, kernelWidth = Kernelwidth,
-  plotHulls = PlotHulls, plotEllipses = PlotEllipses,
-  ps_ellipses = Ellipses, groupIndex = group_index, ps_colors = Colors,
-  ps_legend = legendLoc, ps_identify = Identify)
+ps_plot(data, ps_groupVar, ps_byGroup, ps_plotAllGroups, useVars, plotPoints,
+  lowessLine, lowess_f, plotMedians, kernelSmooth, kernelWidth, plotHulls,
+  plotEllipses, ps_ellipses, groupIndex, ps_colors, ps_legend, ps_identify)
 }
 \arguments{
 \item{data}{A data frame containing the data to be analyzed}
@@ -30,7 +26,8 @@ be shown in the plots}
 
 \item{lowess_f}{A parameter for lowess() less than or equal to 1, defining the range of x-values used}
 
-\item{plotMedians}{Logical.  If TRUE, plot the median in each group; if FALSE, medians are not plotted.  I}
+\item{plotMedians}{Logical. If TRUE, the median value for each group is plotted with the
+code for the group}
 
 \item{kernelSmooth}{Logical.  If TRUE, a kernel smooth is plotted for each group;
 if FALSE, no kernel smooth is plotted}
@@ -53,9 +50,6 @@ groups shown on one plot.}
 \item{ps_legend}{Character, specifying location of legend with multiple groups shown on one plot}
 
 \item{ps_identify}{Logical. If TRUE, user can identify points of interest in the plots}
-
-\item{plotMedians}{Logical. If TRUE, the median value for each group is plotted with the
-code for the group}
 }
 \value{
 If the user identifies points of interest:
