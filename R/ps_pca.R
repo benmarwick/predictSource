@@ -73,7 +73,7 @@
 #'   \item{location:}{  The value of the parameter folder}
 #'  }
 #'
-#' @import  MASS ellipse  randomForest
+#' @import  MASS ellipse  randomForest graphics stats
 #'
 #' @examples
 #' data(ObsidianSources)

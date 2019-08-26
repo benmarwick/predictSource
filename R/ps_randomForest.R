@@ -78,7 +78,7 @@
 #' plotImportance=FALSE, predictSources=TRUE, predictData=ObsidianArtifacts, artifactID="ID",
 #'  plotSourceProbs=TRUE)
 #'
-#' @import  MASS randomForest  missForest rpart
+#' @import  MASS randomForest missForest rpart graphics stats
 #'
 #' @export
 

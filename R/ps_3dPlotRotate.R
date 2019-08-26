@@ -20,7 +20,7 @@
 #' @param dsFile The complete path to a file in folder to which each image will be saved;
 #' if folder is not " ", this must be a valid path and file name (ends in _pdf for current function)
 #`
-#' @import MASS rgl scatterplot3d
+#' @import MASS rgl scatterplot3d graphics
 #'
 #' @section: Details:
 #' See the vignette for details on the use of colors.  The rotated 3d plot can be saved to a file

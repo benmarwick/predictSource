@@ -54,6 +54,9 @@ if F (the default), no ellipses are plotted}
 \item{KernelSmooth}{Logical.  If TRUE, a kernel smooth is plotted for each group;
 if FALSE (the default), no kernel smooth is plotted}
 
+\item{Kernelwidth}{the proportion of the range of x-values used in the kernel smooth;
+default is 0.3}
+
 \item{PlotHulls}{if TRUE, the convex hull is drawn for each set of points; if FALSE (the default),
 no hulls are drawn}
 
@@ -67,9 +70,6 @@ used sequentially for the groups}
 on one plot.  Default is "topleft"; alternatives are "bottomleft", "topright", "bottomright"}
 
 \item{Identify}{if TRUE, user can identify points of interest in the plots; default is FALSE}
-
-\item{KernelWidth}{the proportion of the range of x-values used in the kernel smooth;
-default is 0.3}
 
 \item{PlotMedians}{if TRUE, the code for each group is plotted at the median of the values
 for that group; default is FALSE}

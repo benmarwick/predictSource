@@ -45,7 +45,7 @@
 #'   all points have the color of the first element in Colors.
 #'   If PlotMedians = TRUE, the value of ByGroup is not used.
 #'
-#' @import MASS scatterplot3d
+#' @import MASS scatterplot3d graphics stats
 #'
 #' @examples
 #' #  show points from several groups on one plot

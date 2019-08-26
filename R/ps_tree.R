@@ -67,7 +67,7 @@
 #' ModelTitle = "Sr + Nb + Rb + Y + Zr", predictSources=TRUE, predictData=ObsidianArtifacts,
 #'  ID="ID", plotTree=FALSE, plotCp=FALSE)
 #'
-#' @import rpart partykit Formula
+#' @import rpart partykit Formula graphics stats
 #'
 #' @export
 

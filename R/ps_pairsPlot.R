@@ -39,6 +39,8 @@
 #' pairsPlot <- ps_pairsPlot(data=ObsidianSources, GroupVar="Code", Groups="All",
 #' AnalyticVars=analyticVars)
 #'
+#' @import graphics
+#'
 #' @export
 
 ps_pairsPlot <-

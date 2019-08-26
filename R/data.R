@@ -119,7 +119,7 @@
 #'   \item{Nb}{A vector with with the niobium values.}
 #'   \item{pc1}{A vector with the values of the first principal component
 #'   of the principal component plot of the Jemez sources and the artifacts.}
-#'   \item{pc1}{A vector with the values of the second principal component
+#'   \item{pc2}{A vector with the values of the second principal component
 #'   of the principal component plot of the Jemez sources and the artifacts.}
 #'   }
 #' @source  The data frame was obtained from the function ps_pcaEvaluation()
@@ -131,15 +131,13 @@
 #' Data for sources identified as potentially of interest in a plot of
 #' zirconium versus rubidium for Jemez source data.
 #'
-#' A data set containing the predicted source code, lab ID, and element values.
-#'
 #' @format  A data frame with 5 rows and 7 variables:
 #' \describe{
-#'   \item{Code}{A character with the code for the source.}
+#'   \item{group}{A character with the code for the source.}
 #'   \item{ID}{The laboratory ID for the artifact.}
 #'   \item{Rb}{A vector with the rubidium values.}
-#'   \item{Sr}{A vector with with the strontium values.}
-#'   \item{Y}{A vector with the ytterbium values.}
+#'   \item{Sr}{A vector with the strontium values.}
+#'   \item{Y}{A vector with the yttrium values.}
 #'   \item{Zr}{A vector with the zirconium values.}
 #'   \item{Nb}{A vector with with the niobium values.}
 #'   }

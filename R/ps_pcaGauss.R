@@ -2,7 +2,7 @@
 #'
 #' Check whether first two principal components are Gaussian
 #'
-#' @param doc  documentation for the analysis, default if the function name
+#' @param doc  documentation for the analysis, default is the function name
 #' @param data  R matrix or data frame containing the data to be analyzed
 #' @param GroupVar  name for variable defining grouping; a group variable is required
 #' @param Groups  vector of values of group variable for which plots are to be done;
@@ -36,7 +36,7 @@
 #'   \item{location:}{ The value of the parameter folder}
 #'  }
 #'
-#' @import MASS nortest qqtest MVN
+#' @import MASS nortest qqtest MVN graphics stats
 #'
 #' @examples
 #' data(ObsidianSources)
@@ -126,9 +126,15 @@ ps_pcaGauss <-
     pc_qqPlot <- qqPlot
     pc_digits <- 3
     #
-    outGauss <- ps_2dPlotGauss(data=DataPlusPredicted, GroupVar=pc_GroupVar, Groups=pc_Groups,
-                           AnalyticVars=c("PC1", "PC2"), ID=gaussID, qqPlot=pc_qqPlot, pvalue_digits=pc_digits,
-                           Identify=gaussIdentify)
+    outGauss <- ps_2dPlotGauss(data=DataPlusPredicted,
+                               GroupVar=pc_GroupVar,
+                               Groups=pc_Groups,
+                               AnalyticVars=AnalyticVars,
+                               variablePair=c("PC1", "PC2"),
+                               ID=gaussID,
+                               QQPlot=pc_qqPlot,
+                               pvalue_digits=pc_digits,
+                               Identify=gaussIdentify)
     browser()
     #
     fcnDateVersion<-paste(doc,date(),R.Version()$version.string)

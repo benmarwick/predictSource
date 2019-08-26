@@ -40,14 +40,15 @@
 #'  analytic variables, for display if the user identifies points of interest.  If plotMedians is TRUE,
 #'  the convex hull and median of the points are plotted for each group.
 #'
-#' @import MASS  ellipse
+#' @import MASS ellipse graphics stats
 #'
 #' @examples
 #'
 #' data(ObsidianSources)
 #' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-#' ps_plot(data=ObsidianSources,useVars=c("Rb","Nb"),plotPoints=TRUE,lowessLine=TRUE,lowess_f=NA, plotMedians=FALSE,
-#' kernelSmooth=FALSE,kernelWidth=0.3,plotHulls=FALSE,plotEllipses=TRUE,ps_ellipses=0.95,ps_identify=FALSE)
+#' ps_plot(data=ObsidianSources,useVars=c("Rb","Nb"),plotPoints=TRUE,lowessLine=TRUE,
+#' lowess_f=NA, plotMedians=FALSE, kernelSmooth=FALSE,kernelWidth=0.3,plotHulls=FALSE,
+#' plotEllipses=TRUE,ps_ellipses=0.95,ps_identify=FALSE)
 #'
 #' @export
 #'

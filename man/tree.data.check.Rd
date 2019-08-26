@@ -16,7 +16,7 @@ by a classifiication tree model.}
   \item{Nb}{A vector with with the niobium values.}
   \item{pc1}{A vector with the values of the first principal component
   of the principal component plot of the Jemez sources and the artifacts.}
-  \item{pc1}{A vector with the values of the second principal component
+  \item{pc2}{A vector with the values of the second principal component
   of the principal component plot of the Jemez sources and the artifacts.}
   }}
 \source{

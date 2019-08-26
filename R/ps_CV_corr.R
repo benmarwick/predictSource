@@ -52,7 +52,7 @@
 #' CV_corr<-ps_CV_corr(data = ObsidianSources, GroupVar="Code", Groups = c("A","B"),
 #'  AnalyticVars=analyticVars, ByGroup=TRUE)
 #'
-#' @import  corrplot
+#' @import  corrplot stats
 #'
 #' @export
 

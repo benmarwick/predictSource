@@ -8,7 +8,7 @@ ps_pcaGauss(doc = "fn_pca_Gauss", data, GroupVar, Groups, gaussID = " ",
   AnalyticVars, qqPlot = TRUE, gaussIdentify = FALSE, folder = " ")
 }
 \arguments{
-\item{doc}{documentation for the analysis, default if the function name}
+\item{doc}{documentation for the analysis, default is the function name}
 
 \item{data}{R matrix or data frame containing the data to be analyzed}
 

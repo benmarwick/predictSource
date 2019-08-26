@@ -19,6 +19,10 @@
 #' otherwise, NA}
 #' }
 #'
+#' @import  stats  graphics
+#'
+#' @export
+#'
 ps_plotGauss <- function(
   data,
   ps_groupVar,

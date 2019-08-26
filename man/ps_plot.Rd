@@ -79,7 +79,8 @@ Create 2-dimensional scatter plot for one group: used by ps_2dPlot().
 
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-ps_plot(data=ObsidianSources,useVars=c("Rb","Nb"),plotPoints=TRUE,lowessLine=TRUE,lowess_f=NA, plotMedians=FALSE,
-kernelSmooth=FALSE,kernelWidth=0.3,plotHulls=FALSE,plotEllipses=TRUE,ps_ellipses=0.95,ps_identify=FALSE)
+ps_plot(data=ObsidianSources,useVars=c("Rb","Nb"),plotPoints=TRUE,lowessLine=TRUE,
+lowess_f=NA, plotMedians=FALSE, kernelSmooth=FALSE,kernelWidth=0.3,plotHulls=FALSE,
+plotEllipses=TRUE,ps_ellipses=0.95,ps_identify=FALSE)
 
 }

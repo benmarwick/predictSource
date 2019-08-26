@@ -7,11 +7,11 @@
 zirconium versus rubidium for Jemez source data.}
 \format{A data frame with 5 rows and 7 variables:
 \describe{
-  \item{Code}{A character with the code for the source.}
+  \item{group}{A character with the code for the source.}
   \item{ID}{The laboratory ID for the artifact.}
   \item{Rb}{A vector with the rubidium values.}
-  \item{Sr}{A vector with with the strontium values.}
-  \item{Y}{A vector with the ytterbium values.}
+  \item{Sr}{A vector with the strontium values.}
+  \item{Y}{A vector with the yttrium values.}
   \item{Zr}{A vector with the zirconium values.}
   \item{Nb}{A vector with with the niobium values.}
   }}
@@ -23,6 +23,7 @@ using Identify=TRUE.
 sources.data.check
 }
 \description{
-A data set containing the predicted source code, lab ID, and element values.
+Data for sources identified as potentially of interest in a plot of
+zirconium versus rubidium for Jemez source data.
 }
 \keyword{datasets}

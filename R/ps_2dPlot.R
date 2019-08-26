@@ -24,7 +24,7 @@
 #' @param PlotMedians Logical.  If TRUE, plot the median of each group; default if FALSE
 #' @param KernelSmooth Logical.  If TRUE, a kernel smooth is plotted for each group;
 #' if FALSE (the default), no kernel smooth is plotted
-#' @param KernelWidth the proportion of the range of x-values used in the kernel smooth;
+#' @param Kernelwidth the proportion of the range of x-values used in the kernel smooth;
 #' default is 0.3
 #' @param PlotEllipses Logical.  If TRUE, Gaussian confidence ellipses are plotted for each group;
 #' if F (the default), no ellipses are plotted
