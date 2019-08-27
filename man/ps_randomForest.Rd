@@ -8,7 +8,7 @@ ps_randomForest(doc = "ps_randomForest", data, GroupVar, Groups = "All",
   AnalyticVars, sourceID = " ", Ntrees = 500, NvarUsed = NA,
   Seed = 11111, digitsImportance = 1, plotErrorRate = TRUE,
   plotImportance = TRUE, predictSources = FALSE, predictData = NA,
-  artifactID = " ", plotSourceProbs = TRUE, folder = " ")
+  unknownID = " ", plotSourceProbs = TRUE, folder = " ")
 }
 \arguments{
 \item{doc}{Documentation for the function use added to model usage, default value is the function name}
@@ -43,7 +43,7 @@ default value is 11111}
 \item{predictData}{A data frame or matrix with data used to predict sources for observations,
 must contain all variables in AnalyticVars_}
 
-\item{artifactID}{if not " " (the default), the name of the variable with the sample ID for
+\item{unknownID}{if not " " (the default), the name of the variable with the sample ID for
 artifact data}
 
 \item{plotSourceProbs}{Logical, if TRUE (the default) and predictSources=TRUE, show box plots of source
@@ -105,7 +105,7 @@ data(ObsidianArtifacts)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 save_randomForest <- ps_randomForest(data=ObsidianSources, GroupVar="Code",Groups="All",
 AnalyticVars=analyticVars, sourceID="ID", NvarUsed=3, plotErrorRate=FALSE,
-plotImportance=FALSE, predictSources=TRUE, predictData=ObsidianArtifacts, artifactID="ID",
+plotImportance=FALSE, predictSources=TRUE, predictData=ObsidianArtifacts, unknownID="ID",
  plotSourceProbs=TRUE)
 
 }

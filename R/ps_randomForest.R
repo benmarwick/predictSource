@@ -20,7 +20,7 @@
 #' @param predictSources Logical; if T, predict sources for the data in predictData; default is FALSE
 #' @param predictData A data frame or matrix with data used to predict sources for observations,
 #'    must contain all variables in AnalyticVars_
-#' @param artifactID if not " " (the default), the name of the variable with the sample ID for
+#' @param unknownID if not " " (the default), the name of the variable with the sample ID for
 #'  artifact data
 #' @param plotSourceProbs Logical, if TRUE (the default) and predictSources=TRUE, show box plots of source
 #'    probabilities
@@ -75,7 +75,7 @@
 #' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 #' save_randomForest <- ps_randomForest(data=ObsidianSources, GroupVar="Code",Groups="All",
 #' AnalyticVars=analyticVars, sourceID="ID", NvarUsed=3, plotErrorRate=FALSE,
-#' plotImportance=FALSE, predictSources=TRUE, predictData=ObsidianArtifacts, artifactID="ID",
+#' plotImportance=FALSE, predictSources=TRUE, predictData=ObsidianArtifacts, unknownID="ID",
 #'  plotSourceProbs=TRUE)
 #'
 #' @import  MASS randomForest missForest rpart graphics stats
@@ -97,7 +97,7 @@ ps_randomForest <-
            plotImportance = TRUE,
            predictSources = FALSE,
            predictData = NA,
-           artifactID = " ",
+           unknownID = " ",
            plotSourceProbs=TRUE,
            folder = " "
            )
@@ -189,8 +189,8 @@ ps_randomForest <-
         predictNA <- predictData[!predictKeep,]
         temp<-missForest(xmis=predictData[,AnalyticVars],variablewise=F)
         impError <- temp$OOBerror
-        if (artifactID == " ") predictData <- data.frame(predictData[,GroupVar],temp$ximp)
-        else  predictData <- data.frame(predictData[,c(GroupVar, artifactID)],temp$ximp)
+        if (unknownID == " ") predictData <- data.frame(predictData[,GroupVar],temp$ximp)
+        else  predictData <- data.frame(predictData[,c(GroupVar, unknownID)],temp$ximp)
         }
       else {
         predictNA <- NA
@@ -203,12 +203,12 @@ ps_randomForest <-
       pred_probs <- apply(probMatrix,2,sum)
       predictedTotals <- rbind(pred_source, pred_probs)
       rownames(predictedTotals) <- c("source", "sum probabilities")
-      if (artifactID == " ")
+      if (unknownID == " ")
         predictions <- data.frame(source=as.character(response), as.matrix(probMatrix),
                                   predictData[,AnalyticVars])
-      if (artifactID != " ")
+      if (unknownID != " ")
          predictions <- data.frame(source=as.character(response), as.matrix(probMatrix),
-                                predictData[,c(artifactID,AnalyticVars)])
+                                predictData[,c(unknownID,AnalyticVars)])
       #
       #  box plots of source probabilities
       # probFrame <- data.frame(source=response, probMatrix)
@@ -246,8 +246,8 @@ ps_randomForest <-
     #
     importance_rf <- round(importance_rf, digits =digitsImportance)
     #
-    if ((artifactID != " ") & (predictSources))
-      predictions <- predictions[order(predictions[,artifactID]),]
+    if ((unknownID != " ") & (predictSources))
+      predictions <- predictions[order(predictions[,unknownID]),]
     #
     fcnDateVersion<-paste(doc,date(),R.Version()$version.string)
     #

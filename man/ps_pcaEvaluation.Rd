@@ -4,8 +4,8 @@
 \alias{ps_pcaEvaluation}
 \title{ps_pcaEvaluation}
 \usage{
-ps_pcaEvaluation(doc = "ps_pcaEvaluation", SourceData, ArtifactData,
-  ID = " ", SourceGroup, ArtifactGroup, known_sources, predicted_sources,
+ps_pcaEvaluation(doc = "ps_pcaEvaluation", SourceData, unknownData,
+  ID = " ", SourceGroup, unknownGroup, known_sources, predicted_sources,
   AnalyticVars, Identify = FALSE, loc_legend = "topright",
   plotAllPoints = TRUE, plotHullsOutsidePoints = TRUE,
   plotOutsidePoints = TRUE, Seed = 11111, folder = " ")
@@ -16,13 +16,13 @@ ps_pcaEvaluation(doc = "ps_pcaEvaluation", SourceData, ArtifactData,
 \item{SourceData}{A data frame with the data from known sources,
 including a code for location and element analyses}
 
-\item{ArtifactData}{The corresponding data from artifacts}
+\item{unknownData}{The corresponding data from unknowns}
 
-\item{ID}{The name of the ID for samples (artifacts), " " if none (default value)}
+\item{ID}{The name of the ID for samples (unknowns), " " if none (default value)}
 
 \item{SourceGroup}{The name of the variable with the code for a source}
 
-\item{ArtifactGroup}{The name of the variable with the code for predicted source}
+\item{unknownGroup}{The name of the variable with the code for predicted source}
 
 \item{known_sources}{A vector of the source locations to be considered}
 
@@ -31,8 +31,8 @@ need be in known_sources}
 
 \item{AnalyticVars}{The elements used in the principal component analyses}
 
-\item{Identify}{Logical.  If TRUE, the user can identify artifacts of interest and
-obtain a data set with information on those artifacts (default is FALSE)}
+\item{Identify}{Logical.  If TRUE, the user can identify unknowns of interest and
+obtain a data set with information on those unknowns (default is FALSE)}
 
 \item{loc_legend}{The location of legend added to plots (alternates are "topleft",
 "bottomright","bottomleft")}
@@ -56,15 +56,15 @@ when missing data are imputed_  Default value is 11111}
 \item{folder}{The path to the folder in which data frames will be saved; default is " "}
 }
 \description{
-Create principal component plots to evaluate the predicted artifact sources
+Create principal component plots to evaluate the predicted sources of unknowns.
 }
 \details{
 See the vignette for instructions for identifying points of interest using the paramter
 Identify = TRUE.
 
 .@return The function produces two plots: the convex hulls of the first two principal components
-of the source data, and a plot with those convex hulls and the artifact data (this plot uses a
-principal component analysis of both the source and artifact data).
+of the source data, and a plot with those convex hulls and the unknown data (this plot uses a
+principal component analysis of both the source and unknown data).
 The function returns a list with the following components:
 
 \itemize{
@@ -73,17 +73,17 @@ The function returns a list with the following components:
   \item{sourceData:}{  The contents of the argument SourceData restricted to knownSources}
   \item{sourcesNA:}{ A data frame with source observations with missing data for analytic
   variables; NA if no missing data}
-  \item{artifactData:}{  The contents of the argument ArtifactData restricted to predictedSources}
-  \item{artifactsNA:}{ A data frame with artifact observations with missing data for analytic
+  \item{unknownData:}{  The contents of the argument unknownData restricted to predictedSources}
+  \item{unknownsNA:}{ A data frame with unknown observations with missing data for analytic
   variables; NA if no missing data}
   \item{impError}{  Normalized root mean square error estimate for imputed data;
   NA if no missing data}
   \item{params:}{  A list with the values of the grouping and source arguments and
   values of the logical arguments}
   \item{analyticVars:}{  A vector with the value of the argument AnalyticVars}
-  \item{tableInOut:} {  A data frame with counts of the numbers of artifacts inside and
+  \item{tableInOut:} {  A data frame with counts of the numbers of unknowns inside and
   outside of each predicted source location}
-  \item{ptsOutside:}  {  A data frame with the data for artifact points located outside of the
+  \item{ptsOutside:}  {  A data frame with the data for unknown points located outside of the
    predicted source}
   \item{dataCheck:}{  If Identify=TRUE, a data frame with the observations in dataUsed identified
    as of interest; value is c(NA,NA) if no points are identified}
@@ -91,13 +91,13 @@ The function returns a list with the following components:
    }
 }
 \examples{
-# Evaluate sources of artifacts predicted from scatterplots
+# Evaluate sources of obsidian artifacts predicted from scatterplots
 data(ObsidianSources)
 data(ObsidianArtifacts)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 sources <- unique(ObsidianSources[,"Code"])
 pca_eval <- ps_pcaEvaluation(SourceData=ObsidianSources,
-  ArtifactData=ObsidianArtifacts, SourceGroup= "Code", ArtifactGroup="Code",
+  unknownData=ObsidianArtifacts, SourceGroup= "Code", unknownGroup="Code",
   known_sources=sources, predicted_sources=sources, AnalyticVars=analyticVars, ID="ID",
   plotAllPoints=TRUE, plotHullsOutsidePoints = TRUE, plotOutsidePoints = TRUE)
 
@@ -112,7 +112,7 @@ save_tree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All",
   ModelTitle="Rb + Sr + Y + Zr + Nb", predictSources=T, predictData=ObsidianArtifacts,
   plotTree=TRUE, plotCp=FALSE)
 pca_eval <- ps_pcaEvaluation(SourceData=ObsidianSources,
-  ArtifactData=save_tree$predictedSources, SourceGroup= "Code", ArtifactGroup="source",
+  unknownData=save_tree$predictedSources, SourceGroup= "Code", unknownGroup="source",
   known_sources=sources, predicted_sources=sources, AnalyticVars=analyticVars, ID="ID",
   plotAllPoints=TRUE, plotHullsOutsidePoints = TRUE, plotOutsidePoints = TRUE)
 
@@ -124,12 +124,12 @@ analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 sources <- unique(ObsidianSources[,"Code"])
 save_randomForest <- ps_randomForest(data=ObsidianSources,
 GroupVar="Code",Groups="All",
-  AnalyticVars=analyticVars, artifactID="ID", NvarUsed=3,
+  AnalyticVars=analyticVars, unknownID="ID", NvarUsed=3,
   plotErrorRate=FALSE, plotImportance=F,
   predictSources=TRUE, predictData=ObsidianArtifacts, plotSourceProbs=FALSE)
 pca_eval <- ps_pcaEvaluation(SourceData=ObsidianSources,
-  ArtifactData=save_randomForest$predictedSources, SourceGroup= "Code",
-   ArtifactGroup="source",  known_sources=sources, predicted_sources=sources,
+  unknownData=save_randomForest$predictedSources, SourceGroup= "Code",
+   unknownGroup="source",  known_sources=sources, predicted_sources=sources,
     AnalyticVars=analyticVars, ID="ID", plotAllPoints=FALSE,
      plotHullsOutsidePoints = FALSE, plotOutsidePoints = TRUE)
 
