@@ -283,6 +283,7 @@ ps_2dPlot <- function(doc = "ps_2dPlot",
                 kernelWidth = Kernelwidth,
                 plotHulls = PlotHulls,
                 groupIndex = group_index,
+                ps_colors = Colors,
                 ps_legend = legendLoc,
                 ps_identify = Identify)
          if (Identify)

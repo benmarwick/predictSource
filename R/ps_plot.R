@@ -106,7 +106,7 @@ ps_plot <- function(   data,
       }  # end of code for plotEllipses=TRUE
       #
       if (plotPoints) {
-        points(data[,useVars])
+        points(data[,useVars], pch=data[,"group_index"], col=ps_colors[data[,"group_index"]])
         if (ps_identify)  {  # show lowess line to help identify points of interest
           if (lowessLine) {
              if (is.na(lowess_f)) lowess_fit<-lowess(data[,useVars])
