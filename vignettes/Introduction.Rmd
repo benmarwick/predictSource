@@ -31,7 +31,7 @@ After creating analysis files and carrying out standard data quality and descrip
 
 The data used to illustrate these procedures are five elements from five obsidian sources in the Jemez caldera in central New Mexico (the sources are coded A through E) and obsidian artifacts from a valley east of that caldera (see the next section).  The classification tree for separating the Jemez obsidian sources is in Figure 1.1.  Of the five candidate elements, only strontium, rubidium, and ytterbium are needed to perfectly predict a source (the two elements not used are niobium and zirconium).  A principal component plot for predicting the source of artifacts using this classification tree (rather than from the random forest analysis) is in Figure 1.2.  It shows that some artifacts predicted to be from source C are likely in fact from source B.  We will see that the corresponding plot of the random forest predictions identifies no likely misclassifications.  
 
-```{r  echo=FALSE, results='hide',message=FALSE, fig.cap="Figure 1.1: Classification tree analysis for the Jemez obsidian sources."}
+```{r results='hide',message=FALSE, fig.cap="Figure 1.1: Classification tree analysis for the Jemez obsidian sources."}
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
@@ -40,7 +40,7 @@ tree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars
 
 ```
 
-```{r  echo=FALSE, results='hide', message=FALSE, fig.keep='last', fig.cap="Figure 1.2 Principal components plot with Jemez obsidian source convex hulls and obsidian artifacts with points outside the convex hull predicted from a classification tree model."}
+```{r results='hide', message=FALSE, fig.keep='last', fig.cap="Figure 1.2 Principal components plot with Jemez obsidian source convex hulls and obsidian artifacts with points outside the convex hull predicted from a classification tree model."}
 data(ObsidianSources)
 data(ObsidianArtifacts)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
@@ -158,7 +158,7 @@ the boxes
 
 From Figure 4.1, below, we see immediately that there is little variation among the values of an element at a source. There are a few outliers, but they are not far from the range of adjacent values.  
 
-```{r echo=FALSE, results='hide',message=FALSE, fig.cap="Figure 4.1: Box plots for the Jemez obsidian source data."} 
+```{r results='hide',message=FALSE, fig.cap="Figure 4.1: Box plots for the Jemez obsidian source data."} 
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Nb")
@@ -168,7 +168,7 @@ boxPlots<-ps_boxPlots(data=ObsidianSources, GroupVar="Code",                Grou
 
 We can also create side-by-side box plots of the sources and the artifacts assigned to the sources, in order to see how well the distributions of the elements from artifacts correspond to the distributions of the corresponding sources.  The plot below shows this comparison for rubidium and niobium; the code for the artifact is .A added to the code for the assigned source (e.g., the artifacts assigned to source x have the code x.a).  We see that, for the artifacts assigned to sources A and E, the artifact values for rubidium are larger than the corresponding source values and also are more variable.  For one artifact assigned to source D, the niobium value is a clear outlier, suggesting a misclassified artifact.  For the artifacts assigned to source E, the upper quartile for niobium is only slightly larger than the median, resulting in the unusual appearance of the box.
 
-```{r echo=FALSE, results='hide',message=FALSE, fig.cap="Figure 4.2: Box plots for rubidium and niobium comparing the Jemez obsidian sources and the obsidian artifacts assigned to those sources by Steve Shackley.  x.a labels the artifacts assigned to source x." } 
+```{r results='hide',message=FALSE, fig.cap="Figure 4.2: Box plots for rubidium and niobium comparing the Jemez obsidian sources and the obsidian artifacts assigned to those sources by Steve Shackley.  x.a labels the artifacts assigned to source x." } 
 library(karon)
 data(ObsidianSources)
 data(ObsidianArtifacts)
@@ -193,7 +193,7 @@ The plot is obtained with the function ps_pairsPlot() and the arguments data, Gr
 
 The plot below of the relations between elements at source A shows that the relationships between rubidium and ytterbium, and between rubidium and zirconium, are roughly linear, but that, roughly, there is no relation between the values of strontium and those of ytterbium and zirconium.  Note that it is necessary to look at both scatterplots of the relation between a pair of variables, as limited variation in one variable and dependence of the location of the largest and smallest values of one variable can make there seem to be a relationship (see the plots of strontium as the ordinate versus ytterbium or zirconium).  
 
-```{r echo=FALSE, results='hide',message=FALSE, fig.cap="FIgure 4.3: Pairs plots of the Jemez obsidian source data." } 
+```{r results='hide',message=FALSE, fig.cap="FIgure 4.3: Pairs plots of the Jemez obsidian source data." } 
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
@@ -220,7 +220,6 @@ by group.")
 ```
 
 ```{r } 
-library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 CV_corr<-ps_CV_corr(data = ObsidianSources, GroupVar="Code", Groups="All", AnalyticVars=analyticVars, ByGroup=FALSE, plotCorrs=FALSE)
@@ -230,8 +229,7 @@ knitr::kable(CV_corr$corr, caption="Table 4.2: Spearman correlations among pairs
 
 Figure 4.4 contains a graphical display of these correlations.  The slope of the semi-major axis of each ellipse indicates whether the corresponding correlation is positive or negative; the width of the ellipse (the length of the semi-minor axis) indicates the magnitude of the correlation (a shorter axis [narrower ellipse] indicates stronger correlation) as does the color of the ellipse. 
 
-```{r echo=FALSE, results='hide',message=FALSE, fig.cap="Figure 4.4: Graphical display of the correlations between the Jemez obsidian source analysis variables with all groups combined."} 
-library(karon)
+```{r results='hide',message=FALSE, fig.cap="Figure 4.4: Graphical display of the correlations between the Jemez obsidian source analysis variables with all groups combined."} 
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 CV_corr<-ps_CV_corr(data = ObsidianSources, GroupVar="Code", Groups = "All", AnalyticVars=analyticVars, ByGroup=FALSE, plotCorrs=TRUE)
@@ -240,7 +238,6 @@ CV_corr<-ps_CV_corr(data = ObsidianSources, GroupVar="Code", Groups = "All", Ana
 Table 4.3 shows the coefficients of variation for each element at each source.  Each standard deviation is small compared to the corresponding mean (each coefficient of variation is at most 0.11, and most are 0.05 or less) except for strontium at sources C and D.  The relatively large values of the coefficient of variation for strontium at those sources is a result of the small mean strontium values at those sources: the table of descriptive statistics (not shown) gives mean values for strontium of 5 and 10, at C and D, respectively, with ranges of 0 to 8 and 2 to 11, respectively.
 
 ```{r } 
-library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 CV_corr<-ps_CV_corr(data = ObsidianSources, GroupVar="Code", Groups = "All", AnalyticVars=analyticVars, ByGroup=TRUE, plotCorrs=FALSE)
@@ -258,36 +255,32 @@ The next two plots show examples of all sources on one plot for zirconium versus
 
 The confidence ellipses provide information on whether the distributions of a pair of elements differ between or among sources.  If a bivariate distribution is Gaussian and 99% confidence ellipses do not overlap between or among sources, it is plausible that the distributions of a pair of elements between or among sources do not overlap.  The function fn.2dPlot.Gauss(), discussed below, provides plots and tests to evaluate the hypothesis that a bivariate distribution is Gaussian.  To anticipate, we find that the rubidium/zirconium distribution is likely to be Gaussian at source A but not at source B.  Note that the source values roughly fill the 95% confidence ellipse at source A, but those values tend to cluster at source B, and two lie approximately on the boundary of the 99% confidence ellipse.  
 
-```{r echo=FALSE, results='hide',message=FALSE, fig.cap="Figure 4.5: Example of scatterplots for the obsidian Jemez source data with confidence ellipses and robust lowess smoothing lines."} 
-library(karon)
+```{r results='hide',message=FALSE, fig.cap="Figure 4.5: Example of scatterplots for the obsidian Jemez source data with confidence ellipses and robust lowess smoothing lines."} 
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 plot_2d <- ps_2dPlot(data = ObsidianSources, GroupVar = "Code", ID = "ID", Groups = c("A","B","C","D"),
-                AnalyticVars = analyticVars, VariablePairs=rbind(analyticVars[c(1,4)],analyticVars[c(1,5)]), PlotEllipses=TRUE, LowessLine=TRUE, ByGroup=TRUE)
+                AnalyticVars = analyticVars, VariablePairs=analyticVars[c(1,4)], PlotEllipses=TRUE, LowessLine=TRUE,                    ByGroup=TRUE)
 ```
 
-```{r echo=FALSE, results='hide',message=FALSE, fig.cap="Figure 4.6: Example of a scatterplot for obsidian Jemez source data with confidence ellipses and kernel smoothing lines."} 
-library(karon)
+```{r results='hide',message=FALSE, fig.cap="Figure 4.6: Example of a scatterplot for obsidian Jemez source data with confidence ellipses and kernel smoothing lines."} 
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 plot_2d <- ps_2dPlot(data = ObsidianSources, GroupVar = "Code", ID = "ID", Groups = c("A", "B", "C", "D"),
-          AnalyticVars = analyticVars, VariablePair=rbind(analyticVars[c(1,4)], analyticVars[c(1,5)]), PlotEllipses=TRUE, KernelSmooth=TRUE, LowessLine=FALSE)
+          AnalyticVars = analyticVars, VariablePairs=analyticVars[c(1,4)], PlotEllipses=TRUE, KernelSmooth=TRUE,                  LowessLine=FALSE, ByGroup=TRUE)
 ```
 
-```{r echo=FALSE, results='hide',message=FALSE, fig.cap="Figure 4.7: Example of a scatterplot for obsidian Jemez source data with the median values of and convex hulls of the points at each source."} 
-library(karon)
+```{r results='hide',message=FALSE, fig.cap="Figure 4.7: Example of a scatterplot for obsidian Jemez source data with the median values of and convex hulls of the points at each source."} 
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 plot_2d <- ps_2dPlot(data = ObsidianSources, GroupVar = "Code", ID = "ID", Groups = "All", 
-          AnalyticVars = analyticVars, VariablePairs=analyticVars[1:2], ByGroup=FALSE, PlotPoints=FALSE, PlotMedians=TRUE, PlotHulls=TRUE, LowessLine=FALSE)
+          AnalyticVars = analyticVars, VariablePairs=analyticVars[1:2], ByGroup=FALSE, PlotPoints=FALSE,                         PlotMedians=TRUE, PlotHulls=TRUE, LowessLine=FALSE)
 ```
 
-```{r echo=FALSE, results='hide',message=FALSE, fig.cap="Figure 4.8: Example of a scatterplot for obsidian Jemez source data with data for all sources combined, confidence ellipses, and robust lowess smoothing lines."}
-library(karon)
+```{r results='hide',message=FALSE, fig.cap="Figure 4.8: Example of a scatterplot for obsidian Jemez source data with data for all sources, with confidence ellipses and robust lowess smoothing lines."}
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 plot_2d <- ps_2dPlot(data = ObsidianSources, GroupVar = "Code", ID = "ID", Groups = "All",
-          AnalyticVars = analyticVars, VariablePairs=analyticVars[c(1,4)], ByGroup = FALSE, PlotEllipses=TRUE, LowessLine=TRUE)
+          AnalyticVars = analyticVars, VariablePairs=analyticVars[c(1,4)], ByGroup = FALSE, PlotEllipses=TRUE,                    LowessLine=TRUE, PlotAllGroups=TRUE)
 ```
 
 ```{r}
@@ -300,7 +293,7 @@ The function ps_3dPlot() creates one or more three-dimensional scatterplots.  If
 
 file:///C:/Consulting/Sourcing/Vignette/scatterRbSrY.doc
 
-```{r echo=FALSE, results='hide',message=FALSE, fig.cap="Figure 4.9: Example of a three-dimensional plot showing data from three Jemez obsidian sources."}
+```{r results='hide',message=FALSE, fig.cap="Figure 4.9: Example of a three-dimensional plot showing data from three Jemez obsidian sources."}
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
@@ -335,7 +328,7 @@ From the previous discussion, we know that rubidium has a Gaussian distribution 
 Since niobium has many samples with equal values, it is clear that niobium does not have a Gaussian distribution (this is confirmed by the p-values from the univariate tests).  The Henze-Zirkler and Royston tests properly reject bivariate normality, even though the Mardia tests do not.  The same phenomenon occurs at sources C, D, and E.  This reinforces the preference for these tests.
 
 
-```{r echo=FALSE, results='hide',message=FALSE, fig.cap="Figure 4.10a: Q-Q plots of rubidium and zirconium, including the bivariate Q-Q plot, for the Jemez obsidian source data from source A." } 
+```{r results='hide',message=FALSE, fig.cap="Figure 4.10a: Q-Q plots of rubidium and zirconium, including the bivariate Q-Q plot, for the Jemez obsidian source data from source A." } 
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
@@ -344,7 +337,7 @@ plot2dGauss<-ps_2dPlotGauss(data=ObsidianSources, GroupVar="Code", ID="ID", Grou
 
 ```
 
-```{r echo=FALSE, results='hide',message=FALSE, fig.cap="Figure 4.10b: Q-Q plots of rubidium and zirconium, including the bivariate Q-Q plot, for the Jemez obsidian source data from source B." } 
+```{r results='hide',message=FALSE, fig.cap="Figure 4.10b: Q-Q plots of rubidium and zirconium, including the bivariate Q-Q plot, for the Jemez obsidian source data from source B." } 
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
@@ -353,7 +346,7 @@ plot2dGauss<-ps_2dPlotGauss(data=ObsidianSources, GroupVar="Code", ID="ID", Grou
     
 ```
 
-```{r echo=FALSE, results='hide',message=FALSE, fig.cap="Figure 4.10c: Q-Q plots of rubidium and niobium for the Jemez obsidian source data from sources A and B." } 
+```{r results='hide',message=FALSE, fig.cap="Figure 4.10c: Q-Q plots of rubidium and niobium for the Jemez obsidian source data from sources A and B." } 
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
@@ -362,7 +355,7 @@ plot2dGauss<-ps_2dPlotGauss(data=ObsidianSources, GroupVar="Code", ID="ID", Grou
 
 ```
 
-```{r}
+```{r echo=FALSE, message=FALSE}
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")    
 plot2dGauss<-ps_2dPlotGauss(data=ObsidianSources, GroupVar="Code", ID="ID", Groups="All",
@@ -370,7 +363,7 @@ plot2dGauss<-ps_2dPlotGauss(data=ObsidianSources, GroupVar="Code", ID="ID", Grou
 knitr::kable(plot2dGauss$pvalues,caption="Table 4.5:  P-values from test statistics for a bivariate Rb/Zr distribution at the Jemez obsidian sources.")
 
 ```
-```{r}
+```{r echo=FALSE, message=FALSE}
 plot2dGauss<-ps_2dPlotGauss(data=ObsidianSources, GroupVar="Code", ID="ID", Groups="All",
     AnalyticVars=analyticVars, variablePair=c("Rb","Nb"),QQPlot=FALSE, scatterplot=FALSE)
 knitr::kable(plot2dGauss$pvalues,caption="Table 4.6:  Samples sizes and p-values from test statistics for a bivariate Rb/Nb distribution at the Jemez obsidian sources.")
@@ -401,21 +394,18 @@ The table of weights (Table 5.2) shows that the first principal component is ess
 
 Figure 5.2 contains the plot of the first two principal components by group with 95% and 99% confidence ellipses.  The groups are very well separated, so the fact that the confidence ellipses do not overlap is not necessary to conclude that we can separate the sources based on the principal components analysis (we would need to be concerned about the validity of the assumption that the bivariate distribution is Gaussian at each source if we wanted to use the confidence ellipses).  Note that sources A and D do overlap with respect to the first component, as predicted by the box plot, and that A and E nearly overlap, as shown by that plot.
 
-```{r  echo=FALSE, results='hide',message=FALSE, fig.cap="Figure 5.1: The scree plot from the principal components analysis of the Jemez obsidian source data."}
-library(karon)
+```{r results='hide',message=FALSE, fig.cap="Figure 5.1: The scree plot from the principal components analysis of the Jemez obsidian source data."}
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 save_pca <- ps_pca(data=ObsidianSources, ID="ID", GroupVar="Code",Groups="All", AnalyticVars=analyticVars, pcPlot=FALSE, ScreePlot=TRUE)
 ```
 
-```{r  echo=FALSE, results='hide',message=FALSE, fig.cap="Figure 5.2: Box plots of the first two principal components from the principal components analysis of the Jemez obsidian source data."}
-library(karon)
+```{r results='hide',message=FALSE, fig.cap="Figure 5.2: Box plots of the first two principal components from the principal components analysis of the Jemez obsidian source data."}
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 save_pca <- ps_pca(data=ObsidianSources, ID="ID", GroupVar="Code",Groups="All", AnalyticVars=analyticVars, pcPlot=FALSE, BoxPlots=TRUE)
 ```
-```{r  echo=FALSE, results='hide',message=FALSE}
-library(karon)
+```{r results='hide',message=FALSE}
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 save_pca <- ps_pca(data=ObsidianSources, ID="ID", GroupVar="Code",Groups="All", AnalyticVars=analyticVars) 
@@ -474,7 +464,7 @@ Figure 6.1 shows the classification tree using the obsidian source data (this is
 
 
 
-```{r  echo=FALSE, results='hide',message=FALSE, fig.cap="Figure 6.1: The classification tree for the Jemez obsidian source data based on five potential elements as predictors."}
+```{r results='hide',message=FALSE, fig.cap="Figure 6.1: The classification tree for the Jemez obsidian source data based on five potential elements as predictors."}
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
@@ -486,8 +476,7 @@ To understand the structure of the tree and the decision splits, compare this tr
 
 Figure 6.2 shows the reduction in the crossvalidation error estimate with an increasing number of nodes.  If there are a large number of splits, the plot may show an horizontal asymptote with an increasing number of splits; this can be useful in deciding to reduce the number of splits.  By default, a decrease of 0.01 in Cp is required for a node to be split; the user can change this using the argument cP.  It is not clear why the error reduction with three splits is not shown in the plot.   
 
-```{r  echo=FALSE, results='hide',message=FALSE, fig.cap="Figure 6.2: Plot of the reduction in the crossvalidation error with an increasing number of nodes in the classification tree for the Jemez obsidian source data based on five potential elements as predictors."}
-library(karon)
+```{r results='hide',message=FALSE, fig.cap="Figure 6.2: Plot of the reduction in the crossvalidation error with an increasing number of nodes in the classification tree for the Jemez obsidian source data based on five potential elements as predictors."}
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 tree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
@@ -497,8 +486,7 @@ tree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars
 If the tree is too complex to display, the description of the tree is contained in the component Tree in the list produced by ps_tree().  For the obsidian sources, this object (an R list) is displayed below.  The text above the information [node), split, n, loss, yval, (yprob)] describes what is displayed: the node number, the split criterion, the number of observations at that node, a measure of loss, the predicted group membership at that node, and the proportions in each of the groups at that node.  The predicted group membership is the group with the highest proportion.  It is helpful to compare this display with the plot showing the tree.  Observe that, for a node below the root, the first indented line describes a path to the left in the split, and the value of "node)" is twice the value of "node)" in the node that has been split. The value of "node)" for the path to the right is one greater than the value for the path to the left.  This object is displayed below (for much greater detail, we encourage the reader to use the command summary(tree$Tree) after running the example code):
 
 
-```{r  echo=FALSE, message=FALSE, fig.cap="Display 6.1: Full description of the classification tree for the Jemez obsidian source data using five elements as predictors."}
-library(karon)
+```{r message=FALSE, fig.cap="Display 6.1: Full description of the classification tree for the Jemez obsidian source data using five elements as predictors."}
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 tree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
@@ -509,7 +497,7 @@ tree$Tree
 
 The component classification in the list produced by ps_tree() contains a table with the predicted sources for the data used to create the tree.  The results for the Jemez obsidian source data are in Table y.  These results reproduce the information in Figure 6.1.  Note that, in Figure 6.1, the terminal nodes from left to right (1 to 5) contain the observations from sources B, A, D, C, and E, in that order, which is different from the row order in Table 6.2.
 
-```{r, echo=FALSE, message=FALSE  }
+```{r, message=FALSE  }
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
@@ -521,7 +509,7 @@ knitr::kable(tree$classification, caption = "Table 6.2:  Classification tree pre
 
 Table 6.3 contains the improvement in predicted group purity, as measured by Cp, and the estimated relative error rates and their standard errors obtained from cross-validation from the tree procedure using the Jemez obsidian source data. 
 
-```{r, echo=FALSE, message=FALSE }
+```{r, message=FALSE }
 library(karon)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
@@ -533,8 +521,7 @@ knitr::kable(tree$CpTable, caption = "Table 6.3:  Cp table from the classificati
 
 The ps_tree() function will predict sources of unknowns when the parameter predictSources is T and the parameter predictData specifies the data on the unknowns.  The member of the list produced by the function named predictedSources (a data frame) contains the predicted source for each observation, the analytic variables, and, if specified, a sample ID.  An example using the obsidian artifact data is in Table 6.4.  The member of the list named predictedTotals is a vector with the number of unknowns predicted to be from each source; Table 6.5 contains the results using the obsidian data.
 
-```{r, echo=FALSE, message=FALSE }
-library(karon)
+```{r, message=FALSE }
 data(ObsidianSources)
 data(ObsidianArtifacts)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
@@ -544,8 +531,7 @@ knitr::kable(save_tree$predictedSources[1:5,], caption = "Table 6.4: An example 
 
 ```
 
-```{r, echo=FALSE, message=FALSE }
-library(karon)
+```{r, message=FALSE }
 data(ObsidianSources)
 data(ObsidianArtifacts)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
@@ -558,8 +544,7 @@ from each source based on the classification tree for the Jemez obsidian sources
 
 The locations of the artifact points on a principal components plot with symbols for their predicted sources may be useful in evaluating the reliability of these predictions.  Figure 6.3 shows this plot for the predictions from the classification tree analysis using the function ps_pca() (the artifact from source A was removed, as it is far from the other artifacts).  The first two principal components explain 91% of the variance.  One artifact that is predicted to be from source C appears to be from source D; twelve artifacts predicted to be from source C appear to be from source B.  A data frame containing the data generating these points could be obtained by setting the parameter Identify equal to T in the call to ps_pca().
 
-```{r, echo=FALSE, message=FALSE, fig.cap="Figure 6.3: Principal components plot of the locations of artifact sources from classification tree model predictions."  }
-library(karon)
+```{r, message=FALSE, fig.cap="Figure 6.3: Principal components plot of the locations of artifact sources from classification tree model predictions."  }
 data(ObsidianSources)
 data(ObsidianArtifacts)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
@@ -585,7 +570,7 @@ Although the R function randomForest() uses classification trees, this function 
 
 The ps_randomForest() function produces two plots, the estimated error rate as a function of the number of bootstrap samples, and the importance of each variable based on the mean decrease in the Gini index as a result of the split on that variable.  The error rate plot is shown below in Figure 7.1.  For the Jemez source data, fewer than 100 samples are required to obtain the estimated out of bag error rate.  For a set of sources that are harder to differentiate, the required number of samples is likely to be much higher.
 
-```{r  echo=FALSE, results='hide',message=FALSE, fig.cap="Figure 7.1: Error rates from a random forest analysis of the Jemez obsidian source data."}
+```{r  results='hide',message=FALSE, fig.cap="Figure 7.1: Error rates from a random forest analysis of the Jemez obsidian source data."}
 data(ObsidianSources)
  analyticVars<-c("Rb","Sr","Y","Zr","Nb")
  saveRandomForest <- ps_randomForest(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars, NvarUsed=3, plotImportance=FALSE)
@@ -594,14 +579,14 @@ data(ObsidianSources)
 
 The variable importance plot is shown in Figure 7.2, and the corresponding table saved in the component named "importance" by the function is in Table 7.1.  The corresponding estimates of variable importance using the summary() function on the Tree component of the list produced by ps_tree() are quite different: in the order of the variables in Table 7.1, those are 24, 21, 16, 17, 23.  Note that these sum to 101, and so are normalized, whereas those estimates in Table 7.1 sum to 86. Although the magnitudes are not necessarily comparable, the ordering is different: random forests estimates strontium to be most important, while it is third most important in the ps_tree() estimate; rubidium is of modest importance using the random forests estimate, while it is most important based on the ps_tree() estimate. 
 
-```{r  echo=FALSE, results='hide',message=FALSE, fig.cap="Figure 7.2: Variable importance for separating the Jemez obsidian sources using a random forest analysis."}
+```{r  results='hide',message=FALSE, fig.cap="Figure 7.2: Variable importance for separating the Jemez obsidian sources using a random forest analysis."}
 data(ObsidianSources)
  analyticVars<-c("Rb","Sr","Y","Zr","Nb")
  saveRandomForest <- ps_randomForest(data=ObsidianSources, GroupVar="Code",Groups="All",   AnalyticVars=analyticVars, NvarUsed=3, plotErrorRate=FALSE)
  
 ```
 
-```{r  echo=FALSE, message=FALSE}
+```{r  message=FALSE}
 data(ObsidianSources)
  analyticVars<-c("Rb","Sr","Y","Zr","Nb")
  saveRandomForest <- ps_randomForest(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars, NvarUsed=3, plotImportance=FALSE, plotErrorRate=FALSE)
@@ -611,7 +596,7 @@ knitr::kable(saveRandomForest$importance, caption="Table 7.1: Relative variable 
 
 The accuracy of classification from the random forest analysis is reported in the component named "confusion" returned by ps_randomForest().  Table 7.2 shows the result for the Jemez obsidian source data.  This is the same matrix as the "classification" object from ps_tree().
 
-```{r  echo=FALSE, message=FALSE}
+```{r  message=FALSE}
 data(ObsidianSources)
  analyticVars<-c("Rb","Sr","Y","Zr","Nb")
  saveRandomForest <- ps_randomForest(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars, NvarUsed=3, plotImportance=FALSE, plotErrorRate=FALSE)
@@ -621,7 +606,7 @@ knitr::kable(saveRandomForest$confusion, caption="Table 7.2: The confusion matri
 
 Setting the parameter predictSources to T and specifying the data frame with information on the unknowns (artifacts) in the parameter predictData yields the predicted sources for the unknowns from a random forest analysis. Detailed information for each unknown is in the member predictedSources of the list returned by the function.  A sample of the information in this data frame is in Table 7.3. The predicted source, in the variable "source", is the source with the greatest origin probability; the data frame also includes the estimated probability of each source as origin.  Each probability is calculated as the number of trees predicting the unknown to be from that source, divided by the number of trees grown (by default, 500).  The data frame predictedTotals in the list returned by the function has two rows (Table 7.4).  The first row tabulates the number of unknowns predicted to be from each source (using the variable "source"); the second row contains the sum of the probabilities for each potential source. Note that the predictions in the first row agree with the estimates from the classification tree model in Table 7.5 for sources A and D but are different for B and C: 23 and 30 for B, from the tree and random forest predictions respectively, and 38 and 31 for C.  Recall that the principal component plot in Figure xxx using the predicted sources obtained from the tree model suggested that one artifact predicted to be from B was in fact from C, and eight artifacts predicted to be from C were in fact from B.  With these changes, the predictions from the tree model would agree with the predictions from the random forest analysis.    
 
-```{r  echo=FALSE, message=FALSE}
+```{r  message=FALSE}
 data(ObsidianSources)
 data(ObsidianArtifacts)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
@@ -639,7 +624,7 @@ The first plot uses only the probability for the predicted source for each unkno
 
 The second plot shows that there are a few relatively large probabilities for unknowns incorrectly assigned to sources B and C.  Table 7.3 displays the data from the data frame predictedSources yielding the probabilities between 0.19 and 0.30 (note that a single point on the plot can represent more than one unknown).  The unknown yielding the large probability in Figure 7.3b for source B was predicted to be from source C; the eight unknowns yielding the large probabilities for source C were predicted to be from source B; these artifacts are likely to correspond to the apparent misclassifications by the tree model (this could be verified by creating a data frame containing the data generating those points by setting Identify equal to T when using ps_pca() to generate Figure 8.2c).  Figure 8.3 shows a principal components plot (using ps_pca()) of the artifacts predicted to be from sources B, C, and D (the artifact from A was eliminated, as its point is far from the others); the first two principal components also explain 91% of the variance in this plot  Comparison with Figure 6.3 for the analysis of the predictions from the tree model show that the artifacts apparently misclassified by that model may be assigned the correct source by the random forest analysis.  
 
-```{r  echo=FALSE, results='hide',message=FALSE, fig.cap="Figure 7.3a: Box plots of the estimated probabilities for the predicted sources for the obsidian artifacts.", fig.keep='first'}
+```{r  results='hide',message=FALSE, fig.cap="Figure 7.3a: Box plots of the estimated probabilities for the predicted sources for the obsidian artifacts.", fig.keep='first'}
 data(ObsidianSources)
 data(ObsidianArtifacts)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
@@ -647,7 +632,7 @@ saveRandomForest <- ps_randomForest(data=ObsidianSources, GroupVar="Code",Groups
 
 ```
 
-```{r  echo=FALSE, results='hide',message=FALSE, fig.cap="Figure 7.3b: Box plots of the estimated probabilities of sources other than the predicted sources for the obsidian artifacts.", fig.keep='last'}
+```{r  results='hide',message=FALSE, fig.cap="Figure 7.3b: Box plots of the estimated probabilities of sources other than the predicted sources for the obsidian artifacts.", fig.keep='last'}
 data(ObsidianSources)
 data(ObsidianArtifacts)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
@@ -655,7 +640,7 @@ saveRandomForest <- ps_randomForest(data=ObsidianSources, GroupVar="Code",Groups
 
 ```
 
-```{r  echo=FALSE, message=FALSE}
+```{r  message=FALSE}
 data(ObsidianSources)
 data(ObsidianArtifacts)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
@@ -669,7 +654,7 @@ knitr::kable(checkC[orderedRows,], caption="Table 7.3:  Rows with relative large
              misclassification to source C.")
 ```
 
-```{r  echo=FALSE, results='hide', message=FALSE, fig.cap="Figure 7.4: Principal components plot of the predicted sources of the obsidian artifacts from a random forests analysis."}
+```{r  results='hide', message=FALSE, fig.cap="Figure 7.4: Principal components plot of the predicted sources of the obsidian artifacts from a random forests analysis."}
 data(ObsidianSources)
 data(ObsidianArtifacts)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
@@ -685,8 +670,7 @@ save_pca <- ps_pca(data=predictedSources, ID="source", GroupVar="source",Groups=
 
 We suggest two analyses for evaluating whether predicted sources for artifacts are correct: box plots similar to Figure 4.2 (Figure 8.1), and principal components plots. It is clear from the plots for ytterbium and niobium in Figure 8.1 that the tree analysis improperly assigned some artifacts to source C (one of which seems likely to be from source D), and perhaps one artifact is improperly assigned to source B.  The function generating principal components plots will allow us to identify the data generating these suspect assignments.  
 
-```{r echo=FALSE, results='hide',message=FALSE, fig.cap="Figure 8.1: Box plots for ytterbium and niobium comparing the Jemez obsidian sources and the obsidian artifacts assigned to those sources by a classification tree analysis.  The plot for x.a is the artifacts assigned to source x." } 
-library(karon)
+```{r results='hide',message=FALSE, fig.cap="Figure 8.1: Box plots for ytterbium and niobium comparing the Jemez obsidian sources and the obsidian artifacts assigned to those sources by a classification tree analysis.  The plot for x.a is the artifacts assigned to source x." } 
 data(ObsidianSources)
 data(ObsidianArtifacts)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
@@ -710,7 +694,7 @@ Because a principal components analysis cannot use an observation with missing d
 The evaluation function can produce three plots, shown in Figures 8.2a, 8.2b, and 8.2c, below (parameters in the call to the function allow the user to specify which plots to produce). The plots in these figures use the predictions from the classification tree obtained from ps_tree() with the model "Sr"+"Nb"+"Rb"+"Y"+"Zr".   Each plot is the plot of the first two principal components, obtained from a principal component analysis of all sources and all unknowns used in the analysis.  The first plot has two panels: the left panel plots the source points and the convex hulls for the sources; the right panel plots all unknowns with the convex hulls for the sources.  The second plot also has two panels: the left panel plots the source convex hulls labeled with the code for the source located at the median of all the source points; the right panel plots the source hulls and all unknown points that lie outside the predicted source hull.  The third plot is the right panel of the second plot; this plot is useful for identifying points of interest generated by unknowns.  This plot will be produced if Identify = T. The data frame checkData in the list returned by the function contains the data generating points identified to be of interest, as well as the first two principal component values for these points.
 
 
-```{r  echo=FALSE, results='hide', message=FALSE, fig.keep='first', fig.cap="Figure 8.2a: Principal components plots of the Jemez obsidian source convex hulls with the source points (left panel) and obsidian artifact points (right panel).  The artifacts are labeled with their predicted source from a classification tree analysis."}
+```{r  results='hide', message=FALSE, fig.keep='first', fig.cap="Figure 8.2a: Principal components plots of the Jemez obsidian source convex hulls with the source points (left panel) and obsidian artifact points (right panel).  The artifacts are labeled with their predicted source from a classification tree analysis."}
 data(ObsidianSources)
 data(ObsidianArtifacts)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
@@ -724,7 +708,7 @@ pcaEval <- ps_pcaEvaluation(SourceData=ObsidianSources, unknownData=saveTree$pre
   
 ```
 
-```{r  echo=FALSE, results='hide', message=FALSE, fig.keep='last', fig.cap="Figure 8.2b: Principal components plots of the Jemez obsidian source convex hulls with the source point medians (left panel) and obsidian artifact points outside the predicted source hulls (right panel).  The artifacts are labeled with their predicted source from a classification tree analysis."}
+```{r  results='hide', message=FALSE, fig.keep='last', fig.cap="Figure 8.2b: Principal components plots of the Jemez obsidian source convex hulls with the source point medians (left panel) and obsidian artifact points outside the predicted source hulls (right panel).  The artifacts are labeled with their predicted source from a classification tree analysis."}
 data(ObsidianSources)
 data(ObsidianArtifacts)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
@@ -737,7 +721,7 @@ pcaEval <- ps_pcaEvaluation(SourceData=ObsidianSources, unknownData=saveTree$pre
   
 ```
 
-```{r  echo=FALSE, results='hide', message=FALSE, fig.keep='last', fig.cap="Figure 8.2c: Principal components plot with Jemez obsidian source convex hulls and obsidian artifacts with points outside the convex hull predicted from a classification tree model."}
+```{r  results='hide', message=FALSE, fig.keep='last', fig.cap="Figure 8.2c: Principal components plot with Jemez obsidian source convex hulls and obsidian artifacts with points outside the convex hull predicted from a classification tree model."}
 data(ObsidianSources)
 data(ObsidianArtifacts)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
@@ -752,7 +736,7 @@ pcaEval <- ps_pcaEvaluation(SourceData=ObsidianSources, unknownData=saveTree$pre
 
 Eleven artifacts predicted to be from source C are close to or closer to the hull from source B in Figure 8.1c, as well as one such point near the right corner of the hull for source D. Table 8.1 contains the data generating eleven such points.  Since two pairs of these points are very close to each other, it is difficult to identify all of them.   
 
-```{r  echo=FALSE, message=FALSE}
+```{r  message=FALSE}
 data(tree.data.check)
 knitr::kable(tree.data.check, caption="Table 8.1: Artifacts which may have misidentified sources identified by using Identify=T in ps_pcaEvaluation() after fitting a tree model.  The variable group is the predicted source from the model.")
 
@@ -760,7 +744,7 @@ knitr::kable(tree.data.check, caption="Table 8.1: Artifacts which may have misid
 
 In contrast, in the corresponding plot based on the random forest analysis, these artifacts are predicted to come from the sources generating the convex hulls to which they are closest: see Figure 8.3.   
 
-```{r  echo=FALSE, results='hide', message=FALSE, fig.keep='last', fig.cap="Figure 8.3: Principal components plot of the Jemez obsidian source convex hulls and obsidian artifacts with points outside the convex hull predicted from a random forests analysis."}
+```{r  results='hide', message=FALSE, fig.keep='last', fig.cap="Figure 8.3: Principal components plot of the Jemez obsidian source convex hulls and obsidian artifacts with points outside the convex hull predicted from a random forests analysis."}
 data(ObsidianSources)
 data(ObsidianArtifacts)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
@@ -777,7 +761,7 @@ saveRandomForest <- ps_randomForest(data=ObsidianSources, GroupVar="Code",Groups
 
 Finally, to demonstrate the utility of using a principal component plot to verify source predictions made using 2- and 3-dimensional scatterplots, Figure 8.4 performs this evaluation using Steve Shackley's artifact source predictions.  We see one artifact predicted to be from source D that falls inside the convex hull for source C.  Using Identify=T in the call to ps_pcaEvaluation(), we find that this is artifact A17; its values of rubidium (225), ytterbium (65), and niobium (96) all clearly agree with the corresponding values from source C rather than source D in Table 3.2.
 
-```{r  echo=FALSE, results='hide', message=FALSE, fig.keep='last', fig.cap="Figure 8.4: Principal components plot with Jemez obsidian source convex hulls and obsidian artifacts with points outside the convex hull labeled with Steve Shackley's source predictions."}
+```{r  results='hide', message=FALSE, fig.keep='last', fig.cap="Figure 8.4: Principal components plot with Jemez obsidian source convex hulls and obsidian artifacts with points outside the convex hull labeled with Steve Shackley's source predictions."}
 data(ObsidianSources)
 data(ObsidianArtifacts)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
@@ -790,7 +774,7 @@ pcaEval <- ps_pcaEvaluation(SourceData=ObsidianSources, unknownData=ObsidianArti
 
 Table 8.2 contains the source assignment probability estimates from the random forests analysis for the artifacts tabulated in Table 8.1, all of which were assigned to source C by the classification tree analysis.  As we can see from the value of pc2, artifact A22 is close to the hull for source D; the remaining artifacts are close to the hull for source B.  All of these artifacts have probabilities of arising from source C of 0.21 to 0.29; their probabilities of arising from the "correct"" source are 0.71 to 0.79. We can use the descriptive statistics in Table 3.2 to verify that the random forest assignments for these artifacts are correct.  Based on the niobium values, these artifacts clearly are not from source C.  The ytterbium value for A22 agrees with those from source D, and the values for the remaining artifacts match the ytterbium values from source B.  Thus, the random forest source assignments appear to be correct, and a relatively large probability of assignment to a source other than the source with the greatest probability identifies an artifact that may warrant a more careful evaluation of source assignment.  
 
-```{r  echo=FALSE, message=FALSE}
+```{r  message=FALSE}
 data(ObsidianSources)
 data(ObsidianArtifacts)
 data(tree.data.check)
