@@ -3,3 +3,6 @@
 .RData
 .Ruserdata
 inst/doc
+karon.Rcheck/
+karon*.tar.gz
+karon*.tgz

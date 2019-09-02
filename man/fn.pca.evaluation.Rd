@@ -6,9 +6,9 @@
 \usage{
 fn.pca.evaluation(doc = "fn.pca.evaluation", SourceData, ArtifactData,
   ID = " ", SourceGroup, ArtifactGroup, known.sources, predicted.sources,
-  AnalyticVars, Identify = F, loc.legend = "topright", plotAllPoints = T,
-  plotHullsOutsidePoints = T, plotOutsidePoints = T, Seed = 11111,
-  folder = " ")
+  AnalyticVars, Identify = F, loc.legend = "topright",
+  plotAllPoints = T, plotHullsOutsidePoints = T,
+  plotOutsidePoints = T, Seed = 11111, folder = " ")
 }
 \arguments{
 \item{doc}{A string with documentation, default is the function name}

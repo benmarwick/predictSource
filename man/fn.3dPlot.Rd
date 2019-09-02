@@ -4,9 +4,9 @@
 \alias{fn.3dPlot}
 \title{fn.3dPlot}
 \usage{
-fn.3dPlot(doc = "fn.3dPlot", data, GroupVar, Groups, AnalyticVars, Selections,
-  ByGroup = F, PlotMedians = F, Colors = c("red", "black", "blue",
-  "green", "purple"), SymbolSize = 0.7)
+fn.3dPlot(doc = "fn.3dPlot", data, GroupVar, Groups, AnalyticVars,
+  Selections, ByGroup = F, PlotMedians = F, Colors = c("red",
+  "black", "blue", "green", "purple"), SymbolSize = 0.7)
 }
 \arguments{
 \item{doc}{A string documenting use written to the output list; default is the function name}

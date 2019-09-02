@@ -4,9 +4,9 @@
 \alias{ps_3dPlot}
 \title{ps_3dPlot}
 \usage{
-ps_3dPlot(doc = "ps_3dPlot", data, GroupVar, Groups, AnalyticVars, Selections,
-  ByGroup = FALSE, PlotMedians = FALSE, Colors = c("red", "black", "blue",
-  "green", "purple"), SymbolSize = 0.7)
+ps_3dPlot(doc = "ps_3dPlot", data, GroupVar, Groups, AnalyticVars,
+  Selections, ByGroup = FALSE, PlotMedians = FALSE, Colors = c("red",
+  "black", "blue", "green", "purple"), SymbolSize = 0.7)
 }
 \arguments{
 \item{doc}{A string documenting use written to the output list;

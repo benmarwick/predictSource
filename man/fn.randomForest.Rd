@@ -4,11 +4,12 @@
 \alias{fn.randomForest}
 \title{fn.randomForest}
 \usage{
-fn.randomForest(doc = "fn.randomForest", data, GroupVar, Groups = "All",
-  AnalyticVars, sourceID = " ", Ntrees = 500, NvarUsed = NA,
-  Seed = 11111, digitsImportance = 1, plotErrorRate = T,
-  plotImportance = T, predictSources = F, predictData = NA,
-  artifactID = " ", plotSourceProbs = T, folder = " ")
+fn.randomForest(doc = "fn.randomForest", data, GroupVar,
+  Groups = "All", AnalyticVars, sourceID = " ", Ntrees = 500,
+  NvarUsed = NA, Seed = 11111, digitsImportance = 1,
+  plotErrorRate = T, plotImportance = T, predictSources = F,
+  predictData = NA, artifactID = " ", plotSourceProbs = T,
+  folder = " ")
 }
 \arguments{
 \item{doc}{Documentation for the function use added to model usage, default value is the function name}

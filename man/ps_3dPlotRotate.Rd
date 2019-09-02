@@ -4,9 +4,10 @@
 \alias{ps_3dPlotRotate}
 \title{ps_3dPlotRotate}
 \usage{
-ps_3dPlotRotate(doc = "ps_3dPlotRotate", data, GroupVar, Groups, AnalyticVars,
-  Selections, ByGroup = FALSE, ptSize = 5, Colors = c("red", "black",
-  "blue", "green", "purple"), folder = " ", dsFile)
+ps_3dPlotRotate(doc = "ps_3dPlotRotate", data, GroupVar, Groups,
+  AnalyticVars, Selections, ByGroup = FALSE, ptSize = 5,
+  Colors = c("red", "black", "blue", "green", "purple"), folder = " ",
+  dsFile)
 }
 \arguments{
 \item{doc}{A string documenting usage written to the list return, default is the function name}

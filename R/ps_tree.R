@@ -133,7 +133,7 @@ ps_tree <-
             cp=cP)
     if (plotTree) {  #  plotTree is TRUE
       plot(as.party(Tree), tp_args = list(id = FALSE), main=paste("model:",ModelTitle))
-      browser()
+
       }
     # classification
     classification <- table(Tree$y, Sources)
