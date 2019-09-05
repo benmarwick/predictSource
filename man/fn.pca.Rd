@@ -6,10 +6,10 @@
 \usage{
 fn.pca(doc = "fn.pca", data, ID = " ", GroupVar, Groups, AnalyticVars,
   ScreePlot = F, BoxPlots = F, pcPlot = T, PlotPoints = T,
-  PlotEllipses = T, PlotHull = F, PlotMedians = F, Ellipses = c(0.95,
-  0.99), PlotColors = T, legendLoc = "topright", Colors = c("red",
-  "black", "blue", "green", "purple"), Identify = F, digits = 3,
-  Seed = 11111, folder = " ")
+  PlotEllipses = T, PlotHull = F, PlotMedians = F,
+  Ellipses = c(0.95, 0.99), PlotColors = T, legendLoc = "topright",
+  Colors = c("red", "black", "blue", "green", "purple"), Identify = F,
+  digits = 3, Seed = 11111, folder = " ")
 }
 \arguments{
 \item{doc}{A string with documentation in the list returned, default is the function name}

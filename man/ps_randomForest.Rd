@@ -4,11 +4,12 @@
 \alias{ps_randomForest}
 \title{ps_randomForest}
 \usage{
-ps_randomForest(doc = "ps_randomForest", data, GroupVar, Groups = "All",
-  AnalyticVars, sourceID = " ", Ntrees = 500, NvarUsed = NA,
-  Seed = 11111, digitsImportance = 1, plotErrorRate = TRUE,
-  plotImportance = TRUE, predictSources = FALSE, predictData = NA,
-  unknownID = " ", plotSourceProbs = TRUE, folder = " ")
+ps_randomForest(doc = "ps_randomForest", data, GroupVar,
+  Groups = "All", AnalyticVars, sourceID = " ", Ntrees = 500,
+  NvarUsed = NA, Seed = 11111, digitsImportance = 1,
+  plotErrorRate = TRUE, plotImportance = TRUE,
+  predictSources = FALSE, predictData = NA, unknownID = " ",
+  plotSourceProbs = TRUE, folder = " ")
 }
 \arguments{
 \item{doc}{Documentation for the function use added to model usage, default value is the function name}

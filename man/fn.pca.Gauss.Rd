@@ -4,8 +4,9 @@
 \alias{fn.pca.Gauss}
 \title{fn.pca.Gauss}
 \usage{
-fn.pca.Gauss(doc = "fn.pca.Gauss", data, GroupVar, Groups, gaussID = " ",
-  AnalyticVars, qqPlot = T, gaussIdentify = F, folder = " ")
+fn.pca.Gauss(doc = "fn.pca.Gauss", data, GroupVar, Groups,
+  gaussID = " ", AnalyticVars, qqPlot = T, gaussIdentify = F,
+  folder = " ")
 }
 \arguments{
 \item{doc}{documentation for the analysis, default if the function name}

@@ -5,8 +5,8 @@
 \title{fn.CV.corr}
 \usage{
 fn.CV.corr(doc = "fn.CV.corr", data, GroupVar, Groups = "All",
-  ByGroup = T, ID = " ", AnalyticVars, Transpose = T, CV.digits = 2,
-  corr.digits = 2, plotCorrs = T, folder = " ")
+  ByGroup = T, ID = " ", AnalyticVars, Transpose = T,
+  CV.digits = 2, corr.digits = 2, plotCorrs = T, folder = " ")
 }
 \arguments{
 \item{doc}{A string with documentation, default is the function name}

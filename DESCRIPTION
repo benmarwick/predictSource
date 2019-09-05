@@ -7,15 +7,23 @@ Authors@R: c(person("Ben", "Marwick", email = "benmarwick@gmail.com", role = c("
              person("Steven", "Shakley", email = "shackley@berkeley.edu", role = c("aut"))
              )
 Maintainer: Ben Marwick <benmarwick@gmail.com>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Description: A package to analyze data used to determine whether samples from multiple sources 
+can be separated, to predict the sources of samples from unknown
+sources, and to evaluation the validity of those predictions. Sample data can include both
+quantitative and qualitative data. The package includes functions for creating an analysis file
+from multiple files and exploratory data analysis, as well as multivariate statistical methods to
+determine source separation, predict sources of unknown samples, and evaluate the validity of the predictions
+(principal components, classification trees, and random forests).
 License: MIT + file LICENSE
 Imports: MVN, MASS, scatterplot3d, rgl, mgcv, randomForest, rpart, partykit, Formula, ellipse, qqtest,corrplot,missForest,nortest
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 6.0.1
-Suggests: knitr,
+RoxygenNote: 6.1.1
+Suggests: 
+    knitr,
     rmarkdown,
     here,
     testthat
+=======
+    testthat (>= 2.1.0)
 VignetteBuilder: knitr

@@ -6,10 +6,10 @@
 \usage{
 fn.2dPlot(doc = "fn.2dPlot", data, GroupVar, ID, Groups, AnalyticVars,
   PlotByGroup = T, PlotPoints = T, LowessLine = F, Lowess.f = NA,
-  KernelSmooth = F, KernelWidth = 0.3, PlotEllipses = F, PlotHulls = F,
-  PlotMedians = F, Ellipses = c(0.95, 0.99), Identify = F,
-  PlotColors = F, Colors = c("black", "red", "blue", "green", "purple"),
-  legendLoc = "topright", folder = " ")
+  KernelSmooth = F, KernelWidth = 0.3, PlotEllipses = F,
+  PlotHulls = F, PlotMedians = F, Ellipses = c(0.95, 0.99),
+  Identify = F, PlotColors = F, Colors = c("black", "red", "blue",
+  "green", "purple"), legendLoc = "topright", folder = " ")
 }
 \arguments{
 \item{doc}{A string documenting use written to the output list; default is the function name}

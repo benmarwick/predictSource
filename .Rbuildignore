@@ -1,3 +1,6 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^README\.Rmd$
+^karon\.Rcheck$
+^karon.*\.tar\.gz$
+^karon.*\.tgz$
