@@ -56,6 +56,51 @@ ps_checkData <-
            AnalyticVars,
            folder = " ") {
     #
+    #  check for correct parameter types
+    #
+    errorFlag <- 0   # change to 1 if an error
+    #
+    if (!is.data.frame(data)) {
+      errorFlag <- 1
+      error <- "error in paramater type: parameter(s)  data"
+    }
+    if (!is.logical(CheckDupVars)) {
+      if (errorFlag == 1)  error <- paste(error,"CheckDupVars",sep="  ")
+      if (errorFlag == 0){
+        error <- "error in paramater type: parameter(s)  CheckDupVars"
+        errorFlag <- 1
+      }
+    }
+    if (!is.character(GroupVar)) {
+      if (errorFlag == 1)  error <- paste(error,"GroupVar",sep="  ")
+      if (errorFlag == 0){
+        error <- "error in paramater type: parameter(s)  GroupVar"
+        errorFlag <- 1
+      }
+    }
+    if (!is.character(Groups)) {
+      if (errorFlag == 1)  error <- paste(error,"Groups",sep="  ")
+      if (errorFlag == 0){
+        error <- "error in paramater type: parameter(s)  Groups"
+        errorFlag <- 1
+      }
+    }
+    if (!is.character(ID)) {
+      if (errorFlag == 1)  error <- paste(error,"ID",sep="  ")
+      if (errorFlag == 0){
+        error <- "error in paramater type: parameter(s)  ID"
+        errorFlag <- 1
+      }
+    }
+    if ((!is.character(AnalyticVars)) | (!is.vector(AnalyticVars))) {
+      if (errorFlag == 1)  error <- paste(error,"AnalyticVars",sep="  ")
+      if (errorFlag == 0){
+        error <- "error in paramater type: parameter(s)  AnalyticVars"
+        errorFlag <- 1
+      }
+    }
+    if (errorFlag == 1)  stop(error)
+    #
     #  restrict data if specified
     #
     if ((Groups[1] != " ") & (Groups[1] != "All")) {

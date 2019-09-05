@@ -51,7 +51,7 @@
 #' boxPlots<-ps_boxPlots(data=SourcesArtifacts, GroupVar="Code", Groups="All",
 #' AnalyticVars="Rb",Nrow=1,Ncol=1)
 #'
-#' @import  graphics
+#' @import  graphics  assertthat
 #'
 #' @export
 #'
@@ -63,7 +63,18 @@ ps_boxPlots <-
            AnalyticVars,
            Nrow,
            Ncol) {
-
+    #
+    #  check for valid parameters
+    #
+    assert_that(is.data.frame(data), msg="parameter data not a data.frame")
+    assert_that(is.character(GroupVar), msg="paramter GroupVar not character")
+    assert_that(is.character(Groups), msg="parameter Groups not character")
+    assert_that(is.vector(AnalyticVars)&is.character(AnalyticVars),
+                msg="parameter AnalyticVars not character vector")
+    # Nrow, Ncol are stored as type "double"
+    assert_that((round(Nrow,0)==Nrow)&(Nrow > 0), msg="Nrow not a positive integer")
+    assert_that((round(Ncol,0)==Ncol)&(Ncol > 0), msg="Ncol not a positive integer")
+    #
     if ((Groups[1] != " ") & (Groups[1] != "All")) {
       BP_rows <- (data[, GroupVar] %in% Groups)
       dataBP <- data[BP_rows, c(GroupVar, AnalyticVars)]

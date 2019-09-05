@@ -4,8 +4,7 @@
 \alias{ps_plotGauss}
 \title{ps_plotGauss}
 \usage{
-ps_plotGauss(data, ps_groupVar, ps_pair, ps_scatterplot, ps_qqPlot,
-  ps_identify)
+ps_plotGauss(data, ps_groupVar, ps_pair, ps_scatterplot, ps_qqPlot, ps_identify)
 }
 \arguments{
 \item{data}{A matrix or data frame containing the data to be analyzed}
