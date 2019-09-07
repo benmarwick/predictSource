@@ -13,7 +13,7 @@
 #'  If value = "All": tabulation for each distinct code in GroupVar
 #' @param ID  The name of lab ID, default is " " (no lab ID)
 #' @param AnalyticVars  A character vector of names of analytic variables for which tabulations are done
-#' @param folder  The path to a folder in which data frames will be saved; default is " "
+#' @param folder  The path to the folder in which data frames will be saved; default is " ": no path
 #'
 #' @return
 #'   Four data frames with duplicate observations, observations with negative
@@ -31,8 +31,8 @@
 #'  value for a variable in AnalyticVars}
 #' \item{Nvalues:}{  A data frame contain the number of observations with a value for each analytic variable}
 #' \item{statistics:}{  A data frame containing the statistics statistics (by group, if Group is specified)}
-#' \item{location:}{  If folder != " ", the path to the folder in which data frames will be saved}
-#'   }
+#' \item{location:}{  The value of the parameter folder}
+#   }
 #'
 #' @section Detail:
 #' AnalyticVars must be a vector of length at least 2.  If Groups specifies selected groups (is
@@ -55,51 +55,6 @@ ps_checkData <-
            ID = " ",
            AnalyticVars,
            folder = " ") {
-    #
-    #  check for correct parameter types
-    #
-    errorFlag <- 0   # change to 1 if an error
-    #
-    if (!is.data.frame(data)) {
-      errorFlag <- 1
-      error <- "error in paramater type: parameter(s)  data"
-    }
-    if (!is.logical(CheckDupVars)) {
-      if (errorFlag == 1)  error <- paste(error,"CheckDupVars",sep="  ")
-      if (errorFlag == 0){
-        error <- "error in paramater type: parameter(s)  CheckDupVars"
-        errorFlag <- 1
-      }
-    }
-    if (!is.character(GroupVar)) {
-      if (errorFlag == 1)  error <- paste(error,"GroupVar",sep="  ")
-      if (errorFlag == 0){
-        error <- "error in paramater type: parameter(s)  GroupVar"
-        errorFlag <- 1
-      }
-    }
-    if (!is.character(Groups)) {
-      if (errorFlag == 1)  error <- paste(error,"Groups",sep="  ")
-      if (errorFlag == 0){
-        error <- "error in paramater type: parameter(s)  Groups"
-        errorFlag <- 1
-      }
-    }
-    if (!is.character(ID)) {
-      if (errorFlag == 1)  error <- paste(error,"ID",sep="  ")
-      if (errorFlag == 0){
-        error <- "error in paramater type: parameter(s)  ID"
-        errorFlag <- 1
-      }
-    }
-    if ((!is.character(AnalyticVars)) | (!is.vector(AnalyticVars))) {
-      if (errorFlag == 1)  error <- paste(error,"AnalyticVars",sep="  ")
-      if (errorFlag == 0){
-        error <- "error in paramater type: parameter(s)  AnalyticVars"
-        errorFlag <- 1
-      }
-    }
-    if (errorFlag == 1)  stop(error)
     #
     #  restrict data if specified
     #

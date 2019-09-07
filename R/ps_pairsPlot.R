@@ -51,6 +51,15 @@ ps_pairsPlot <-
            AnalyticVars,
            Span = 2 / 3) {
     #
+    #  check for valid parameters
+    #
+    assert_that(is.data.frame(data), msg="parameter data not a data.frame")
+    assert_that(is.character(GroupVar), msg="paramter GroupVar not character")
+    assert_that(is.character(Groups), msg="parameter Groups not character")
+    assert_that(is.vector(AnalyticVars)&is.character(AnalyticVars),
+                msg="parameter AnalyticVars not a character vector")
+    assert_that(is.numeric(Span) & (Span > 0) & (Span < 1), msg="invalid value of parameter Span")
+    #
     if ((Groups[1] != " ") & (Groups[1] != "All")) {
       Plot_rows <- (data[, GroupVar] %in% Groups)
       dataPlot <- data[Plot_rows, c(GroupVar, AnalyticVars)]

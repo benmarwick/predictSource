@@ -108,6 +108,40 @@ ps_2dPlot <- function(doc = "ps_2dPlot",
                       legendLoc="topleft",
                       Identify = FALSE) {
   #
+  #  check for valid parameters
+  #
+  assert_that(is.data.frame(data), msg="parameter data not a data.frame")
+  assert_that(is.character(GroupVar), msg="paramter GroupVar not character")
+  assert_that(is.character(Groups), msg="parameter Groups not character")
+  assert_that(is.logical(ByGroup), msg="parameter ByGroup not logical")
+  assert_that(is.logical(PlotAllGroups), msg="parameter PlotAllGroups not logical")
+  assert_that(is.vector(AnalyticVars)&is.character(AnalyticVars),
+              msg="parameter AnalyticVars not a character vector")
+  assert_that(is.character(ID), msg="parameter ID not a character name")
+  assert_that(is.character(VariablePairs), msg="type of parameter VariablePairs not character")
+  assert_that((is.vector(VariablePairs) & (length(VariablePairs)==2))|
+              (!is.vector(VariablePairs) & is.matrix(VariablePairs)),
+              msg="parameter VariablePairs not a vector of length 2 or matrix with 2 columns")
+  assert_that(is.logical(PlotPoints), msg="parameter PlotPoints not logical")
+  assert_that(is.logical(LowessLine), msg="parameter LowessLine not logical")
+  assert_that(is.na(Lowess_f) |(is.numeric(Lowess_f) & (Lowess_f > 0) & (Lowess_f <= 1)),
+          msg="invalid value for parameter Lowess_f")
+  assert_that(is.logical(PlotMedians), msg="type of parameter PlotMedians not logical")
+  assert_that(is.logical(PlotEllipses), msg="type of parameter PlotEllipses not logical")
+  assert_that(is.numeric(Ellipses), msg="parameter Ellipses not numeric")
+  assert_that((min(Ellipses) > 0) & (max(Ellipses) < 1), msg="values of parameter Ellipses not between 0 and 1")
+  assert_that(is.logical(KernelSmooth), msg="type of parameter KernelSmooth not logical")
+  assert_that(is.numeric(Kernelwidth) & (Kernelwidth > 0), msg="parameter KernelWidth must be numeric and positive")
+  assert_that(is.logical(PlotHulls), msg="type of parameter PlotHulls not logical")
+  assert_that(is.vector(parRowsCols) & (length(parRowsCols) == 2),
+              msg="parameter parRowsCols not a vector of length 2")
+  assert_that((round(parRowsCols[1],0)==parRowsCols[1])&
+                (round(parRowsCols[1],0)==parRowsCols[1]) &
+                (min(parRowsCols) >= 1), msg="values in parRowsCols not positive integers")
+  assert_that(is.character(Colors), msg="parameter Colors not character")
+  assert_that(is.character(legendLoc), msg="parameter legendLoc not character")
+  assert_that(is.logical(Identify), msg="type of parameter Identify is not logical")
+  #
   #  use a subset of the groups
   #
   if ((Groups[1] != " ") & (Groups[1] != "All")) {

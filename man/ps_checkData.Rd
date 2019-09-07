@@ -25,26 +25,7 @@ If value = "All": tabulation for each distinct code in GroupVar}
 
 \item{AnalyticVars}{A character vector of names of analytic variables for which tabulations are done}
 
-\item{folder}{The path to a folder in which data frames will be saved; default is " "}
-}
-\value{
-Four data frames with duplicate observations, observations with negative
-      values for one or more analytic variables, numbers of observations for each analytic
-      variable, and statistics statistics (quartiles and number missing).
-      If Groups != " ", numbers of observations and statistics statistics are by group
-  A list with the following components:
-  \itemize{
-\item{usage:}{  A string with the contents of the argument doc, date run, R version used}
-\item{dataUsed:}{  The data frame specified by the argument data and GroupVar}|
-\item{params:}{  A character vector with the values of CheckDupVars, GroupVar, and Groups}
-\item{analyticVars:}{  The vector of names specified by the argument AnalyticVars}
-\item{Duplicates:}{  A data frame containing the observations with duplicate values}
-\item{NegativeValues:}{  A data frame containing the observations with at least one negative
- value for a variable in AnalyticVars}
-\item{Nvalues:}{  A data frame contain the number of observations with a value for each analytic variable}
-\item{statistics:}{  A data frame containing the statistics statistics (by group, if Group is specified)}
-\item{location:}{  If folder != " ", the path to the folder in which data frames will be saved}
-  }
+\item{folder}{The path to the folder in which data frames will be saved; default is " ": no path}
 }
 \description{
 Data checks and summaries: duplicate records, negative analytic values,

@@ -70,6 +70,21 @@ ps_CV_corr <-
            plotCorrs = TRUE,
            folder = " ")
     {
+    #
+    #  check for valid parameters
+    #
+    assert_that(is.data.frame(data), msg="parameter data not a data.frame")
+    assert_that(is.character(GroupVar), msg="paramter GroupVar not character")
+    assert_that(is.character(Groups), msg="parameter Groups not character")
+    assert_that(is.logical(ByGroup), msg="parameter ByGroup not logical")
+    assert_that(is.vector(AnalyticVars)&is.character(AnalyticVars),
+                msg="parameter AnalyticVars not a character vector")
+    assert_that(is.character(ID), msg="ID not a character name")
+    assert_that(is.logical(Transpose), msg="parameter Transpose not logical")
+    assert_that(is.logical(plotCorrs), msg="parameter plotCorrs not logical")
+    assert_that((round(CV_digits,0)==CV_digits)&(CV_digits > 0), msg="CV_digits not a positive integer")
+    assert_that((round(corr_digits,0)==corr_digits)&(corr_digits > 0), msg="corr_digits not a positive integer")
+    #
     if ((Groups[1] != " ") & (Groups[1] != "All")) {
       Use_rows <- (data[, GroupVar] %in% Groups)
       dataUsed <- data[Use_rows, ]
