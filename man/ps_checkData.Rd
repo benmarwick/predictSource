@@ -34,7 +34,11 @@ Data checks and summaries: duplicate records, negative analytic values,
 \section{Detail}{
 
 AnalyticVars must be a vector of length at least 2.  If Groups specifies selected groups (is
-not equal to "All" or " "), it must be a vector of length at least 2.
+not equal to "All" or " "), it must be a vector of length at least 2.  The function returns a list
+with four data frames: duplicate observations, observations with negative
+      values for one or more analytic variables, numbers of observations for each analytic
+      variable, and statistics statistics (quartiles and number missing).
+      If Groups != " ", numbers of observations and statistics statistics are by group.
 }
 
 \examples{

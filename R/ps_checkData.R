@@ -16,14 +16,9 @@
 #' @param folder  The path to the folder in which data frames will be saved; default is " ": no path
 #'
 #' @return
-#'   Four data frames with duplicate observations, observations with negative
-#'       values for one or more analytic variables, numbers of observations for each analytic
-#'       variable, and statistics statistics (quartiles and number missing).
-#'       If Groups != " ", numbers of observations and statistics statistics are by group
-#'   A list with the following components:
-#'   \itemize{
+#'  \itemize{
 #' \item{usage:}{  A string with the contents of the argument doc, date run, R version used}
-#' \item{dataUsed:}{  The data frame specified by the argument data and GroupVar}|
+#' \item{dataUsed:}{  The data frame specified by the argument data and GroupVar}
 #' \item{params:}{  A character vector with the values of CheckDupVars, GroupVar, and Groups}
 #' \item{analyticVars:}{  The vector of names specified by the argument AnalyticVars}
 #' \item{Duplicates:}{  A data frame containing the observations with duplicate values}
@@ -36,7 +31,13 @@
 #'
 #' @section Detail:
 #' AnalyticVars must be a vector of length at least 2.  If Groups specifies selected groups (is
-#' not equal to "All" or " "), it must be a vector of length at least 2.
+#' not equal to "All" or " "), it must be a vector of length at least 2.  The function returns a list
+#' with four data frames: duplicate observations, observations with negative
+#'       values for one or more analytic variables, numbers of observations for each analytic
+#'       variable, and statistics statistics (quartiles and number missing).
+#'       If Groups != " ", numbers of observations and statistics statistics are by group.
+#'
+#' @import  assertthat
 #'
 #' @examples
 #' data(ObsidianSources)

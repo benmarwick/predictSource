@@ -12,7 +12,7 @@
 #' @param Groups A vector of values of group variable for which plots
 #'  are to be done; if "All", use all groups; if " ", no grouping
 #' @param AnalyticVars A vector of names (character values) of the analytic variables
-#' @param Selections A vector of length 3, or data frame with 3 columns,
+#' @param Selections A vector of length 3, or matrix or data frame with 3 columns,
 #'  with the combinations of the analytic variables to be plotted
 #' @param ByGroup Logical.  If TRUE, show scatterplot for each group
 #'  for each selection of 3 variables; if FALSE (the default),
@@ -45,7 +45,7 @@
 #'   all points have the color of the first element in Colors.
 #'   If PlotMedians = TRUE, the value of ByGroup is not used.
 #'
-#' @import MASS scatterplot3d graphics stats
+#' @import MASS scatterplot3d graphics stats assertthat
 #'
 #' @examples
 #' #  show points from several groups on one plot
@@ -77,6 +77,24 @@ ps_3dPlot <-
 
     library(scatterplot3d)
 #    library(rgl)
+    #
+    #  check for valid parameters
+    #
+    assert_that(is.data.frame(data), msg="parameter data not a data.frame")
+    assert_that(is.character(GroupVar), msg="paramter GroupVar not character")
+    assert_that(is.character(Groups), msg="parameter Groups not character")
+    assert_that(is.logical(ByGroup), msg="type of parameter ByGroup not logical")
+    assert_that(is.vector(AnalyticVars)&is.character(AnalyticVars),
+                msg="parameter AnalyticVars not a character vector")
+    assert_that(is.character(Selections), msg="type of parameter Selections not character")
+    assert_that(is.vector(Selections) | is.matrix(Selections),
+                msg="parameter VariablePairs must be a vector or matrix")
+    if (is.vector(Selections))  assert_that(length(Selections)==3, msg="vector Selections not of length 3")
+    if (is.matrix(Selections))  assert_that(ncol(Selections)==3,
+                                               msg="number of columns of matrix Selections not 3")
+    assert_that(is.logical(PlotMedians), msg="type of parameter PlotMedians not logical")
+    assert_that(is.character(Colors), msg="parameter Colors not character")
+    assert_that(is.numeric(SymbolSize)&(SymbolSize > 0), msg="parameter SymbolSize not positive and numeric")
     #
     if ((Groups[1] != " ") & (Groups[1] != "All")) {
       Use_rows <- (data[, GroupVar] %in% Groups)
@@ -128,7 +146,7 @@ ps_3dPlot <-
                         dataUsed[!index, Selections[1]], dataUsed[!index, Selections[2]],
                         dataUsed[!index, Selections[3]], xlab = Selections[1],
                         ylab = Selections[2], zlab = Selections[3],
-                        pch = 16, cex_symbols = SymbolSize,
+                        pch = 16, cex.symbols = SymbolSize,
                         main = paste(Selections[1], ",", Selections[2], ",", Selections[3]))
         }
         if (is.matrix(Selections)) {
@@ -143,7 +161,7 @@ ps_3dPlot <-
                           dataUsed[!index_na, Selections[i, 1]],dataUsed[!index_na, Selections[i, 2]],
                           dataUsed[!index_na, Selections[i, 3]], xlab = Selections[i, 1],
                           ylab = Selections[i, 2], zlab = Selections[i, 3],
-                          color = Colors[group_index], pch = 16, cex_symbols = SymbolSize,
+                          color = Colors[group_index], pch = 16, cex.symbols = SymbolSize,
                           main = paste(Selections[i, 1], ",", Selections[i,2], ",", Selections[i, 3]),
                           sub=subtitle)
             browser()
@@ -160,7 +178,7 @@ ps_3dPlot <-
               is.na(data_i[, Selections[3]])
             scatterplot3d::scatterplot3d(
                           data_i[!index_na,], xlab = Selections[1], ylab = Selections[2], zlab = Selections[3],
-                          color = Colors[1], pch = 16, cex_symbols = SymbolSize,
+                          color = Colors[1], pch = 16, cex.symbols = SymbolSize,
                           main = paste(groups[i],": ",Selections[1]," ,", Selections[2], ",", Selections[3],sep=""))
             browser()
           }
@@ -174,7 +192,7 @@ ps_3dPlot <-
                 is.na(data_j[, Selections[i,3]])
               scatterplot3d::scatterplot3d(
                             data_j[!index_na,], xlab = Selections[i, 1], ylab = Selections[i, 2],
-                            zlab = Selections[i,3], pch = 16, cex_symbols = SymbolSize,
+                            zlab = Selections[i,3], pch = 16, cex.symbols = SymbolSize,
                             main = paste(groups[i],": ",Selections[i, 1], ",", Selections[i,2], ",",
                                          Selections[i, 3]), color = Colors[index])
               browser()
@@ -197,7 +215,7 @@ ps_3dPlot <-
         scatterplot3d::scatterplot3d(
                       medians, xlab = Selections[1],
                       ylab = Selections[2], zlab = Selections[3],
-                      color = "black", pch = groups, cex_symbols = SymbolSize,
+                      color = "black", pch = groups, cex.symbols = SymbolSize,
                       main = paste("group medians:",Selections[1], ",", Selections[2], ",", Selections[3]))
       }
       if (is.matrix(Selections) | is.data.frame(Selections)) {
@@ -213,7 +231,7 @@ ps_3dPlot <-
           scatterplot3d::scatterplot3d(
                         medians, xlab = Selections[i, 1], ylab = Selections[i, 2],
                         zlab = Selections[i, 3], color = "black",
-                        pch = groups, cex_symbols = SymbolSize, main = paste("group medians:",
+                        pch = groups, cex.symbols = SymbolSize, main = paste("group medians:",
                         Selections[i,1], ",", Selections[i,2], ",", Selections[i,3]))
           browser()
         }

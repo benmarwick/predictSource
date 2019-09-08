@@ -81,7 +81,7 @@
 #' AnalyticVars=analyticVars,VariablePairs=c("Rb","Nb"),PlotEllipses=FALSE,LowessLine=FALSE,
 #' PlotHulls=TRUE,PlotMedians=TRUE,PlotPoints=FALSE)
 #'
-#' @import MASS  ellipse
+#' @import MASS  ellipse  assertthat
 #'
 #' @export
 #'
@@ -119,9 +119,11 @@ ps_2dPlot <- function(doc = "ps_2dPlot",
               msg="parameter AnalyticVars not a character vector")
   assert_that(is.character(ID), msg="parameter ID not a character name")
   assert_that(is.character(VariablePairs), msg="type of parameter VariablePairs not character")
-  assert_that((is.vector(VariablePairs) & (length(VariablePairs)==2))|
-              (!is.vector(VariablePairs) & is.matrix(VariablePairs)),
-              msg="parameter VariablePairs not a vector of length 2 or matrix with 2 columns")
+  assert_that(is.vector(VariablePairs) | is.matrix(VariablePairs),
+              msg="parameter VariablePairs must be a vector or matrix")
+  if (is.vector(VariablePairs))  assert_that(length(VariablePairs)==2, msg="vector VariablePairs not of length 2")
+  if (is.matrix(VariablePairs))  assert_that(ncol(VariablePairs)==2,
+              msg="number of columns of matrix VariablePairs not 2")
   assert_that(is.logical(PlotPoints), msg="parameter PlotPoints not logical")
   assert_that(is.logical(LowessLine), msg="parameter LowessLine not logical")
   assert_that(is.na(Lowess_f) |(is.numeric(Lowess_f) & (Lowess_f > 0) & (Lowess_f <= 1)),

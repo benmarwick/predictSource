@@ -41,7 +41,7 @@
 #'   See the vignette for more information: visualizing each plot, the information obtained
 #'    by using the package qqtest, the tests for bivariate normality, and identifying points of interest.
 #'
-#' @import MASS  qqtest  MVN  nortest graphics stats
+#' @import MASS  qqtest  MVN  nortest graphics stats assertthat
 #'
 #' @examples
 #' data(ObsidianSources)
@@ -65,7 +65,23 @@ ps_2dPlotGauss <- function (doc = "ps_2dPlotGauss",
                              folder=" "
                             )
 {
-  if (length(variablePair)!=2)  stop("length of AnalyticVars must be 2")
+  #
+  #  check for valid parameters
+  #
+  assert_that(is.data.frame(data), msg="parameter data not a data.frame")
+  assert_that(is.character(GroupVar), msg="paramter GroupVar not character")
+  assert_that(is.character(Groups), msg="parameter Groups not character")
+  assert_that(is.vector(AnalyticVars)&is.character(AnalyticVars),
+              msg="parameter AnalyticVars not a character vector")
+  assert_that(is.character(ID), msg="parameter ID not a character name")
+  assert_that(is.character(variablePair), msg="type of parameter variablePair not character")
+  assert_that(is.vector(variablePair)&(length(variablePair)==2),
+              msg="vector variablePair not a vector with length 2")
+  assert_that(is.logical(scatterplot), msg="type of parameter scatterplot not logical")
+  assert_that(is.logical(QQPlot), msg="type of parameter QQPlot not logical")
+  assert_that(is.numeric(pvalue_digits) & (round(pvalue_digits,0)==pvalue_digits) & (pvalue_digits > 0),
+              msg="parameter pvalue_digits not a positive integer")
+  assert_that(is.logical(Identify), msg="type of parameter Identify is not logical")
   #
   if (Groups[1] != "All") {
     Use_rows <- (data[, GroupVar] %in% Groups)

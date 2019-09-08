@@ -22,7 +22,7 @@ are to be done; if "All", use all groups; if " ", no grouping}
 
 \item{AnalyticVars}{A vector of names (character values) of the analytic variables}
 
-\item{Selections}{A vector of length 3, or data frame with 3 columns,
+\item{Selections}{A vector of length 3, or matrix or data frame with 3 columns,
 with the combinations of the analytic variables to be plotted}
 
 \item{ByGroup}{Logical.  If TRUE, show scatterplot for each group
