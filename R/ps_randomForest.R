@@ -78,7 +78,7 @@
 #' plotImportance=FALSE, predictSources=TRUE, predictData=ObsidianArtifacts, unknownID="ID",
 #'  plotSourceProbs=TRUE)
 #'
-#' @import  MASS randomForest missForest rpart graphics stats
+#' @import  MASS randomForest missForest rpart graphics stats assertthat
 #'
 #' @export
 
@@ -102,6 +102,35 @@ ps_randomForest <-
            folder = " "
            )
 {
+    #
+    #  check for valid parameters
+    #
+    assert_that(is.data.frame(data), msg="parameter data not a data frame")
+    assert_that(is.character(GroupVar), msg="parameter GroupVar not character")
+    assert_that(is.character(Groups), msg="parameter Groups not character")
+    assert_that(is.vector(AnalyticVars)&is.character(AnalyticVars),
+                msg="parameter AnalyticVars not a character vector")
+    assert_that(is.character(sourceID), msg="parameter sourceID not a character name")
+    assert_that(is.character(unknownID), msg="parameter unknownID not a character name")
+    assert_that(is.numeric(Ntrees) | is.na(Ntrees), msg="parameter Ntrees not numeric and not NA")
+    if (Ntrees > 0)  assert_that((round(Ntrees,0)==Ntrees)&(Ntrees > 0),
+                                 msg="parameter Ntrees not a positive integer")
+    assert_that(is.numeric(NvarUsed) | is.na(NvarUsed), msg="parameter NvarUsed not numeric and not NA")
+    if (NvarUsed > 0)  assert_that((round(NvarUsed,0)==NvarUsed)&(NvarUsed > 0),
+                                 msg="parameter NvarUsed not a positive integer")
+    assert_that(is.numeric(Seed) | is.na(Seed), msg="parameter Seed not numeric and not NA")
+    if (Seed > 0)  assert_that((round(Seed,0)==Seed)&(Seed > 0),
+                                   msg="parameter Seed not a positive integer")
+    assert_that(is.numeric(digitsImportance), msg="parameter NvarYsed not numeric")
+    if (digitsImportance > 0)  assert_that((round(digitsImportance,0)==digitsImportance)&(digitsImportance > 0),
+                               msg="parameter digitsImportance not a positive integer")
+    assert_that(is.logical(plotErrorRate), msg="type of parameter plotErrorRate not logical")
+    assert_that(is.logical(plotImportance), msg="type of parameter plotImportance not logical")
+    assert_that(is.logical(predictSources), msg="type of parameter predictSources not logical")
+    assert_that(is.data.frame(predictData) | is.matrix(predictData),
+                msg="parameter predictData must be a data frame or a matrix")
+    assert_that(is.logical(plotSourceProbs), msg="type of parameter plotSourceProbs not logical")
+    #
     # create dataset dataUsed based on grouping: restrict to desired set of groups
     if (Groups[1] != "All") {
       Use_rows <- (data[, GroupVar] %in% Groups)

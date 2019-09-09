@@ -67,7 +67,7 @@
 #' ModelTitle = "Sr + Nb + Rb + Y + Zr", predictSources=TRUE, predictData=ObsidianArtifacts,
 #'  ID="ID", plotTree=FALSE, plotCp=FALSE)
 #'
-#' @import rpart partykit Formula graphics stats
+#' @import rpart partykit Formula graphics stats assertthat
 #'
 #' @export
 
@@ -90,6 +90,28 @@ ps_tree <-
            ID = " ",
            folder = " ")
 {
+    #
+    #  check for valid parameters
+    #
+    assert_that(is.data.frame(data), msg="parameter data not a data frame")
+    assert_that(is.character(GroupVar), msg="parameter GroupVar not character")
+    assert_that(is.character(Groups), msg="parameter Groups not character")
+    assert_that(is.vector(AnalyticVars)&is.character(AnalyticVars),
+                msg="parameter AnalyticVars not a character vector")
+    assert_that(is.character(ID), msg="parameter ID not character valued")
+    assert_that(is.na(wts) | is.vector(wts), msg="parameter wts must be NA or a vector")
+    if (!is.na(wts)) assert_that(is.numeric(wts) & length(wts)==nrow(data),
+                          msg="parameter wts as a vector must be numeric and have length nrow(data)")
+    assert_that(is.numeric(CpDigits) | is.na(CpDigits), msg="parameter CpDigits not numeric and not NA")
+    if (is.numeric(CpDigits))  assert_that((round(CpDigits,0)==CpDigits)&(CpDigits > 0),
+                                 msg="parameter CpDigits not a positive integer")
+    assert_that(is.numeric(minSplit) | is.na(minSplit), msg="parameter Nvarused not numeric and not NA")
+    if (minSplit > 0)  assert_that((round(minSplit,0)==minSplit)&(minSplit > 0),
+                                   msg="parameter minSplit not a positive integer")
+    assert_that(is.numeric(cP) & (cP > 0) & (cP < 1), msg="parameter cP not numeric and positive and < 1")
+    assert_that(is.logical(predictSources), msg="type of parameter predictSources not logical")
+    assert_that(is.character(ModelTitle), msg="parameter ModelTitle not character valued")
+    #
     # create dataset dataUsed based on grouping restrict to desired set of groups
     if (Groups[1] != "All") {
       Use_rows <- (data[, GroupVar] %in% Groups)

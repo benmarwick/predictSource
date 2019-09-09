@@ -6,7 +6,7 @@
 \usage{
 ps_pcaEvaluation(doc = "ps_pcaEvaluation", SourceData, unknownData,
   ID = " ", SourceGroup, unknownGroup, known_sources, predicted_sources,
-  AnalyticVars, Identify = FALSE, loc_legend = "topright",
+  AnalyticVars, Identify = FALSE, legendLoc = "topright",
   plotAllPoints = TRUE, plotHullsOutsidePoints = TRUE,
   plotOutsidePoints = TRUE, Seed = 11111, folder = " ")
 }
@@ -34,7 +34,7 @@ need be in known_sources}
 \item{Identify}{Logical.  If TRUE, the user can identify unknowns of interest and
 obtain a data set with information on those unknowns (default is FALSE)}
 
-\item{loc_legend}{The location of legend added to plots (alternates are "topleft",
+\item{legendLoc}{The location of legend added to plots (alternates are "topleft",
 "bottomright","bottomleft")}
 
 \item{plotAllPoints}{Logical.  If TRUE (the default), show a plot with two panes:

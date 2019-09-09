@@ -33,6 +33,8 @@
 #'           ID = "ID",
 #'           AnalyticVars = c("Rb","Sr","Y","Zr","Nb"))
 #'
+#' @import  assertthat
+#'
 #' @export
 
 ps_createData <- function(doc="ps_createData",
@@ -41,6 +43,16 @@ ps_createData <- function(doc="ps_createData",
                           Subset,
                           ID,
                           AnalyticVars){
+  #
+  #  check for valid parameters
+  #
+  assert_that(is.data.frame(data), msg="parameter data not a data frame")
+  assert_that(is.character(Group), msg="parameter Group not character")
+  assert_that(is.character(Subset), msg="parameter Subset not character")
+  assert_that(is.vector(AnalyticVars)&is.character(AnalyticVars),
+              msg="parameter AnalyticVars not a character vector")
+  assert_that(is.character(ID), msg="parameter ID not character valued")
+  #
   dataCode <- rep(Group, nrow(data))  # create a vector with the specified code
   #
   if (length(Subset) == nrow(data))  dataSubset <- Subset  # use specified subsets

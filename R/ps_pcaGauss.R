@@ -36,7 +36,7 @@
 #'   \item{location:}{ The value of the parameter folder}
 #'  }
 #'
-#' @import MASS nortest qqtest MVN graphics stats
+#' @import MASS nortest qqtest MVN graphics stats assertthat
 #'
 #' @examples
 #' data(ObsidianSources)
@@ -48,7 +48,7 @@
 #'
 
 ps_pcaGauss <-
-  function(doc = "fn_pca_Gauss",
+  function(doc = "fn_pcaGauss",
            data,
            GroupVar,
            Groups,
@@ -58,6 +58,17 @@ ps_pcaGauss <-
            gaussIdentify = FALSE,
            folder = " ")
     {
+    #
+    #  check for valid parameters
+    #
+    assert_that(is.data.frame(data), msg="parameter data not a data frame")
+    assert_that(is.character(GroupVar), msg="parameter GroupVar not character")
+    assert_that(is.character(Groups), msg="parameter Groups not character")
+    assert_that(is.vector(AnalyticVars)&is.character(AnalyticVars),
+                msg="parameter AnalyticVars not a character vector")
+    assert_that(is.logical(qqPlot), msg="type of parameter qqPlot is not logical")
+    assert_that(is.character(gaussID), msg="parameter gaussID not a character name")
+    #
     # restrict to desired set of groups
     if (Groups[1] != "All") {
       Use_rows <- (data[, GroupVar] %in% Groups)

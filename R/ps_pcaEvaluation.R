@@ -13,7 +13,7 @@
 #' @param predicted_sources A vector of predicted sources to be considered, not all
 #'  need be in known_sources
 #' @param AnalyticVars The elements used in the principal component analyses
-#' @param loc_legend The location of legend added to plots (alternates are "topleft",
+#' @param legendLoc The location of legend added to plots (alternates are "topleft",
 #'    "bottomright","bottomleft")
 #' @param Identify Logical.  If TRUE, the user can identify unknowns of interest and
 #' obtain a data set with information on those unknowns (default is FALSE)
@@ -63,7 +63,7 @@
 #'   \item{location:}{  The value of the parameter folder}
 #'    }
 #'
-#' @import graphics stats  mgcv
+#' @import graphics stats  mgcv  assertthat
 #'
 #' @examples
 #' # Evaluate sources of obsidian artifacts predicted from scatterplots
@@ -120,13 +120,32 @@ ps_pcaEvaluation <-function(doc = "ps_pcaEvaluation",
            predicted_sources,
            AnalyticVars,
            Identify = FALSE,
-           loc_legend = "topright",
+           legendLoc = "topright",
            plotAllPoints = TRUE,
            plotHullsOutsidePoints = TRUE,
            plotOutsidePoints = TRUE,
            Seed=11111,
            folder = " ")
 {
+  #
+  #  check for valid parameters
+  #  known_sources and predicted_sources not checked, as they may be names of objects
+  #    from a call to a classification function
+  #
+  assert_that(is.data.frame(SourceData), msg="parameter SourceData not a data frame")
+  assert_that(is.data.frame(unknownData), msg="parameter unknownData not a data frame")
+  assert_that(is.character(SourceGroup), msg="parameter SourceGroup not character")
+  assert_that(is.character(unknownGroup), msg="parameter unknownGroup not character")
+  assert_that(is.vector(AnalyticVars)&is.character(AnalyticVars),
+              msg="parameter AnalyticVars not a character vector")
+  assert_that(is.character(ID), msg="parameter ID not a character name")
+  assert_that(is.logical(plotAllPoints), msg="type of parameter plotAllPoints not logical")
+  assert_that(is.logical(plotHullsOutsidePoints), msg="type of parameter plotHullsOutsidePoints not logical")
+  assert_that(is.logical(plotOutsidePoints), msg="type of parameter plotOutsidePoints not logical")
+  assert_that(is.na(Seed) | ((round(Seed,0)==Seed)&(Seed>= 1)),
+              msg="parameter Seed is not a positive integer or not NA")
+  assert_that(is.character(legendLoc), msg="parameter legendLoc not character")
+  assert_that(is.logical(Identify), msg="type of parameter Identify is not logical")
     #
     #  create source data set with group code and elements, restricted to identified sources
     #
@@ -309,7 +328,7 @@ ps_pcaEvaluation <-function(doc = "ps_pcaEvaluation",
     for (i in 1:length(known_sources))
        lines(hullVertices[[i]])
     legend(
-      x = loc_legend,
+      x = legendLoc,
       legend = known_sources,
       pch = 1:(length(known_sources)),
       bty = "n"
@@ -335,7 +354,7 @@ ps_pcaEvaluation <-function(doc = "ps_pcaEvaluation",
            cex = .5,
            pch = pcaLocationsArtifacts[, "index"])
     legend(
-      x = loc_legend,
+      x = legendLoc,
       legend = known_sources,
       pch = 1:(length(known_sources)),
       bty = "n"
@@ -451,7 +470,7 @@ ps_pcaEvaluation <-function(doc = "ps_pcaEvaluation",
     for (i in 1:length(known_sources))
      lines(hullVertices[[i]])
      legend(
-      x = loc_legend,
+      x = legendLoc,
       legend = known_sources,
       pch = 1:length(known_sources),
       bty = "n"
@@ -489,7 +508,7 @@ ps_pcaEvaluation <-function(doc = "ps_pcaEvaluation",
     for (i in 1:length(known_sources))
        lines(hullVertices[[i]])
     legend(
-      x = loc_legend,
+      x = legendLoc,
       legend = known_sources,
       pch = 1:length(known_sources),
       bty = "n"

@@ -73,8 +73,8 @@ ps_CV_corr <-
     #
     #  check for valid parameters
     #
-    assert_that(is.data.frame(data), msg="parameter data not a data.frame")
-    assert_that(is.character(GroupVar), msg="paramter GroupVar not character")
+    assert_that(is.data.frame(data), msg="parameter data not a data frame")
+    assert_that(is.character(GroupVar), msg="parameter GroupVar not character")
     assert_that(is.character(Groups), msg="parameter Groups not character")
     assert_that(is.logical(ByGroup), msg="parameter ByGroup not logical")
     assert_that(is.vector(AnalyticVars)&is.character(AnalyticVars),

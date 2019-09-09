@@ -108,8 +108,8 @@ ps_pca <-  function(doc = "ps_pca",
   #
   #  check for valid parameters
   #
-  assert_that(is.data.frame(data), msg="parameter data not a data.frame")
-  assert_that(is.character(GroupVar), msg="paramter GroupVar not character")
+  assert_that(is.data.frame(data), msg="parameter data not a data frame")
+  assert_that(is.character(GroupVar), msg="parameter GroupVar not character")
   assert_that(is.character(Groups), msg="parameter Groups not character")
   assert_that(is.vector(AnalyticVars)&is.character(AnalyticVars),
               msg="parameter AnalyticVars not a character vector")
@@ -125,7 +125,8 @@ ps_pca <-  function(doc = "ps_pca",
   assert_that(is.logical(PlotHull), msg="type of parameter PlotHull not logical")
   assert_that(is.logical(PlotColors), msg="type of parameter PlotColors not logical")
   assert_that((round(digits,0)==digits)&(digits>= 1), msg="parameter digits is not a positive integer")
-  assert_that((round(Seed,0)==Seed)&(Seed>= 1), msg="parameter Seed is not a positive integer")
+  assert_that(is.na(Seed) | ((round(Seed,0)==Seed)&(Seed>= 1)),
+              msg="parameter Seed is not a positive integer or is not NA")
   assert_that(is.character(Colors), msg="parameter Colors not character")
   assert_that(is.character(legendLoc), msg="parameter legendLoc not character")
   assert_that(is.logical(Identify), msg="type of parameter Identify is not logical")

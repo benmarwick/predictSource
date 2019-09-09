@@ -7,15 +7,15 @@
 #' @param data  An R object (data frame) containing analytic data
 #' @param CheckDupVars  A vector with names of identifying variables, typically group and lab ID
 #' @param GroupVar  If there are groups, name of variable defining the groups,
-#'  default value of " ": no grouping
+#'  default value of " ", no grouping
 #' @param Groups  A character vector of groups by which numbers of samples and statistics will be
-#'  tabulated.  Default is " ": tabulations are done for the entire data set.
-#'  If value = "All": tabulation for each distinct code in GroupVar
+#'  tabulated.  Default is " ", tabulations are done for the entire data set.
+#'  If value ls "All", tabulation for each distinct code in GroupVar
 #' @param ID  The name of lab ID, default is " " (no lab ID)
 #' @param AnalyticVars  A character vector of names of analytic variables for which tabulations are done
-#' @param folder  The path to the folder in which data frames will be saved; default is " ": no path
+#' @param folder  The path to the folder in which data frames will be saved; default is " ", no path
 #'
-#' @return
+#' @return  The function returns a list with the following components
 #'  \itemize{
 #' \item{usage:}{  A string with the contents of the argument doc, date run, R version used}
 #' \item{dataUsed:}{  The data frame specified by the argument data and GroupVar}
@@ -27,7 +27,7 @@
 #' \item{Nvalues:}{  A data frame contain the number of observations with a value for each analytic variable}
 #' \item{statistics:}{  A data frame containing the statistics statistics (by group, if Group is specified)}
 #' \item{location:}{  The value of the parameter folder}
-#   }
+#' }
 #'
 #' @section Detail:
 #' AnalyticVars must be a vector of length at least 2.  If Groups specifies selected groups (is
@@ -56,6 +56,18 @@ ps_checkData <-
            ID = " ",
            AnalyticVars,
            folder = " ") {
+    #
+    #  check for valid parameters
+    #
+    assert_that(is.data.frame(data), msg="parameter data not a data frame")
+    assert_that(is.character(CheckDupVars) & is.vector(CheckDupVars),
+                msg="parameter CheckDupVars not a vector of names")
+    assert_that(is.character(GroupVar), msg="parameter GroupVar not character")
+    assert_that(is.character(Groups), msg="parameter Groups not character")
+    assert_that(is.vector(AnalyticVars)&is.character(AnalyticVars),
+                msg="parameter AnalyticVars not a character vector")
+    assert_that(is.character(ID), msg="parameter ID not character valued")
+    #
     #
     #  restrict data if specified
     #

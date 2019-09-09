@@ -15,17 +15,32 @@ ps_checkData(doc = "pc_checkData", data, CheckDupVars, GroupVar = " ",
 \item{CheckDupVars}{A vector with names of identifying variables, typically group and lab ID}
 
 \item{GroupVar}{If there are groups, name of variable defining the groups,
-default value of " ": no grouping}
+default value of " ", no grouping}
 
 \item{Groups}{A character vector of groups by which numbers of samples and statistics will be
-tabulated.  Default is " ": tabulations are done for the entire data set.
-If value = "All": tabulation for each distinct code in GroupVar}
+tabulated.  Default is " ", tabulations are done for the entire data set.
+If value ls "All", tabulation for each distinct code in GroupVar}
 
 \item{ID}{The name of lab ID, default is " " (no lab ID)}
 
 \item{AnalyticVars}{A character vector of names of analytic variables for which tabulations are done}
 
-\item{folder}{The path to the folder in which data frames will be saved; default is " ": no path}
+\item{folder}{The path to the folder in which data frames will be saved; default is " ", no path}
+}
+\value{
+The function returns a list with the following components
+ \itemize{
+\item{usage:}{  A string with the contents of the argument doc, date run, R version used}
+\item{dataUsed:}{  The data frame specified by the argument data and GroupVar}
+\item{params:}{  A character vector with the values of CheckDupVars, GroupVar, and Groups}
+\item{analyticVars:}{  The vector of names specified by the argument AnalyticVars}
+\item{Duplicates:}{  A data frame containing the observations with duplicate values}
+\item{NegativeValues:}{  A data frame containing the observations with at least one negative
+ value for a variable in AnalyticVars}
+\item{Nvalues:}{  A data frame contain the number of observations with a value for each analytic variable}
+\item{statistics:}{  A data frame containing the statistics statistics (by group, if Group is specified)}
+\item{location:}{  The value of the parameter folder}
+}
 }
 \description{
 Data checks and summaries: duplicate records, negative analytic values,
