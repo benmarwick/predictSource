@@ -73,7 +73,7 @@
 #'   \item{location:}{  The value of the parameter folder}
 #'  }
 #'
-#' @import  MASS ellipse  randomForest graphics stats
+#' @import  MASS ellipse  randomForest graphics stats assertthat
 #'
 #' @examples
 #' data(ObsidianSources)
@@ -105,6 +105,30 @@ ps_pca <-  function(doc = "ps_pca",
                     Seed=11111,
                     folder = " ")
 {
+  #
+  #  check for valid parameters
+  #
+  assert_that(is.data.frame(data), msg="parameter data not a data.frame")
+  assert_that(is.character(GroupVar), msg="paramter GroupVar not character")
+  assert_that(is.character(Groups), msg="parameter Groups not character")
+  assert_that(is.vector(AnalyticVars)&is.character(AnalyticVars),
+              msg="parameter AnalyticVars not a character vector")
+  assert_that(is.character(ID), msg="parameter ID not a character name")
+  assert_that(is.logical(ScreePlot), msg="type of parameter ScreePlot not logical")
+  assert_that(is.logical(BoxPlots), msg="type of parameter BoxPlots not logical")
+  assert_that(is.logical(pcPlot), msg="type of parameter pcPlot not logical")
+  assert_that(is.logical(PlotPoints), msg="type of parameter PlotPoints not logical")
+  assert_that(is.logical(PlotMedians), msg="type of parameter PlotMedians not logical")
+  assert_that(is.logical(PlotEllipses), msg="type of parameter PlotEllipses not logical")
+  assert_that(is.numeric(Ellipses), msg="parameter Ellipses not numeric")
+  assert_that((min(Ellipses) > 0) & (max(Ellipses) < 1), msg="values of parameter Ellipses not between 0 and 1")
+  assert_that(is.logical(PlotHull), msg="type of parameter PlotHull not logical")
+  assert_that(is.logical(PlotColors), msg="type of parameter PlotColors not logical")
+  assert_that((round(digits,0)==digits)&(digits>= 1), msg="parameter digits is not a positive integer")
+  assert_that((round(Seed,0)==Seed)&(Seed>= 1), msg="parameter Seed is not a positive integer")
+  assert_that(is.character(Colors), msg="parameter Colors not character")
+  assert_that(is.character(legendLoc), msg="parameter legendLoc not character")
+  assert_that(is.logical(Identify), msg="type of parameter Identify is not logical")
    #
   #  define functions to plot convex hulls and ellipses
     fnConvexHull <- function(Code) {

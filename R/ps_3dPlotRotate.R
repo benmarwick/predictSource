@@ -4,12 +4,12 @@
 #'  Create 3-dimensional data plot(s) that can be rotated
 #'
 #' @param doc A string documenting usage written to the list return, default is the function name
-#' @param data A matrix or data frame containing the data to be analyzed
+#' @param data A data frame containing the data to be analyzed
 #' @param GroupVar The name for variable defining grouping; a group variable must be specified
 #' @param Groups A vector of values of group variable for which plots are to be done;
 #'    "All": use all groups;" ": no grouping
 #' @param AnalyticVars A vector of names (character values) of analytic results
-#' @param Selections A vector of length 3, or data frame with 3 columns, with combinations to be plotted
+#' @param Selections A vector of length 3, or a matrix or data frame with 3 columns, with combinations to be plotted
 #' @param ByGroup  Logical. If TRUE, show scatterplot for each group for each selection of 3 variables;
 #'                       default is FALSE
 #' @param ptSize  The size of plotted points, default is 5 (a larger value gives larger points)
@@ -18,9 +18,9 @@
 #' @param folder The folder to which one or more files with images will be saved;
 #' default is " " (no files saved)
 #' @param dsFile The complete path to a file in folder to which each image will be saved;
-#' if folder is not " ", this must be a valid path and file name (ends in _pdf for current function)
+#' if folder is not " ", this must be a valid path and file name (ends in .pdf for current function)
 #`
-#' @import MASS rgl scatterplot3d graphics
+#' @import MASS rgl scatterplot3d graphics assertthat
 #'
 #' @section: Details:
 #' See the vignette for details on the use of colors.  The rotated 3d plot can be saved to a file
@@ -67,6 +67,24 @@ ps_3dPlotRotate <-
            dsFile
   )
   {
+    #
+    #  check for valid parameters
+    #
+    assert_that(is.data.frame(data), msg="parameter data not a data.frame")
+    assert_that(is.character(GroupVar), msg="paramter GroupVar not character")
+    assert_that(is.character(Groups), msg="parameter Groups not character")
+    assert_that(is.logical(ByGroup), msg="type of parameter ByGroup not logical")
+    assert_that(is.vector(AnalyticVars)&is.character(AnalyticVars),
+                msg="parameter AnalyticVars not a character vector")
+    assert_that(is.character(Selections), msg="type of parameter Selections not character")
+    assert_that(is.vector(Selections) | is.matrix(Selections),
+                msg="parameter VariablePairs must be a vector or matrix")
+    if (is.vector(Selections))  assert_that(length(Selections)==3, msg="vector Selections not of length 3")
+    if (is.matrix(Selections))  assert_that(ncol(Selections)==3,
+                                            msg="number of columns of matrix Selections not 3")
+    assert_that(is.character(Colors), msg="parameter Colors not character")
+    assert_that(is.numeric(ptSize)&(ptSize > 0), msg="parameter ptSize not positive and numeric")
+    #
   #
     if ((Groups[1] != " ") & (Groups[1] != "All")) {
       Use_rows <- (data[, GroupVar] %in% Groups)

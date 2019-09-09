@@ -11,7 +11,7 @@ ps_3dPlotRotate(doc = "ps_3dPlotRotate", data, GroupVar, Groups, AnalyticVars,
 \arguments{
 \item{doc}{A string documenting usage written to the list return, default is the function name}
 
-\item{data}{A matrix or data frame containing the data to be analyzed}
+\item{data}{A data frame containing the data to be analyzed}
 
 \item{GroupVar}{The name for variable defining grouping; a group variable must be specified}
 
@@ -20,7 +20,7 @@ ps_3dPlotRotate(doc = "ps_3dPlotRotate", data, GroupVar, Groups, AnalyticVars,
 
 \item{AnalyticVars}{A vector of names (character values) of analytic results}
 
-\item{Selections}{A vector of length 3, or data frame with 3 columns, with combinations to be plotted}
+\item{Selections}{A vector of length 3, or a matrix or data frame with 3 columns, with combinations to be plotted}
 
 \item{ByGroup}{Logical. If TRUE, show scatterplot for each group for each selection of 3 variables;
 default is FALSE}
@@ -34,7 +34,7 @@ red, black, blue, green, purple}
 default is " " (no files saved)}
 
 \item{dsFile}{The complete path to a file in folder to which each image will be saved;
-if folder is not " ", this must be a valid path and file name (ends in _pdf for current function)}
+if folder is not " ", this must be a valid path and file name (ends in .pdf for current function)}
 }
 \value{
 A list with the following components:
