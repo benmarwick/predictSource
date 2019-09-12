@@ -127,8 +127,8 @@ ps_randomForest <-
     assert_that(is.logical(plotErrorRate), msg="type of parameter plotErrorRate not logical")
     assert_that(is.logical(plotImportance), msg="type of parameter plotImportance not logical")
     assert_that(is.logical(predictSources), msg="type of parameter predictSources not logical")
-    assert_that(is.data.frame(predictData) | is.matrix(predictData),
-                msg="parameter predictData must be a data frame or a matrix")
+    assert_that(is.na(predictData) | is.data.frame(predictData) | is.matrix(predictData),
+                msg="parameter predictData must be a data frame, a matrix, or NA")
     assert_that(is.logical(plotSourceProbs), msg="type of parameter plotSourceProbs not logical")
     #
     # create dataset dataUsed based on grouping: restrict to desired set of groups

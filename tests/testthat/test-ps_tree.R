@@ -1,6 +1,5 @@
 
-# starting with the Vignette, let's look to see if the key functions
-# do what they ought to
+# test validity of ps_tree()
 
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
@@ -19,11 +18,13 @@ test_that("ps_tree output is a list", {
   expect_type(tree, "list")
 })
 
-test_that("ps_tree output nrow is correct", {
-  expect_equal(nrow(tree$dataUsed), 113)
+data(testTree)
+
+test_that("ps_tree Cp table is correct", {
+  expect_equal(tree$CpTable, testTree$CpTable)
 })
 
-test_that("ps_tree output classification is correct", {
-  expect_equal(tree$classification, classification_output)
+test_that("ps_tree classification is correct", {
+  expect_equal(tree$classification, testTree$classification)
 })
 

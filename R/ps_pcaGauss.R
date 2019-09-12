@@ -29,7 +29,7 @@
 #'   for an analysis variable, NA if no missing values}
 #'   \item{params:}{ A list with the values of the arguments grouping and logical arguments}
 #'   \item{analyticVars:}{ A vector with the value of the argument AnalyticVars}
-#'   \item{p_values:}{ A data frame with the p-values for the Gaussian assumptions for each
+#'   \item{pvalues:}{ A data frame with the p-values for the Gaussian assumptions for each
 #'    group specified}
 #'  \item{data_check:}{  A data frame with data identified as generating points of interest;
 #'  value is NA if no points are identified}
@@ -165,8 +165,8 @@ ps_pcaGauss <-
                 dataUsed=dataUsed,
                 dataNA=dataNA,
                 analyticVars=AnalyticVars,
-                params,
-                p_values = outGauss$pvalues,
+                params=params,
+                pvalues = outGauss$pvalues,
                 data_check = data_check,
                 location=folder)
     out
