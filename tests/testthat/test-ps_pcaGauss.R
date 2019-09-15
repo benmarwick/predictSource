@@ -14,7 +14,7 @@ test_that("ps_pcaGauss output is a list", {
 data(test_pcaGauss)
 
 test_that("ps_pcaGauss pvalues are correct: first column is character", {
-  expect_equal(pcaGauss$pvalues[,-1], test+pcaGauss$pvalues[,-1])
+  expect_equal(pcaGauss$pvalues[,-1], test_pcaGauss$pvalues[,-1])
 })
 
 

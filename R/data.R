@@ -145,3 +145,180 @@
 #' using Identify=TRUE.
 #'
 "sources.data.check"
+
+#' A list used to verify that ps_checkData() is valid
+#'
+#' @format  A list with the following elements
+#' \describe{
+#' \item{usage:}{  A string with the contents of the argument doc, date run, R version used}
+#' \item{dataUsed:}{  The data frame specified by the argument data and GroupVar}
+#' \item{params:}{  A character vector with the values of CheckDupVars, GroupVar, and Groups}
+#' \item{analyticVars:}{  The vector of names specified by the argument AnalyticVars}
+#' \item{Duplicates:}{  A data frame containing the observations with duplicate values}
+#' \item{NegativeValues:}{  A data frame containing the observations with at least one negative
+#'  value for a variable in AnalyticVars}
+#' \item{Nvalues:}{  A data frame contain the number of observations with a value for each analytic variable}
+#' \item{statistics:}{  A data frame containing the statistics statistics (by group, if Group is specified)}
+#' \item{location:}{  The value of the parameter folder}
+#' }
+#'
+"testCheckData"
+
+#' A list used to verify that ps_2dPlotGauss() is valid
+#'
+#' @format  A list with the following elements
+#' \describe{
+#' \item{usage:}{  String with the contents of the argument doc, the date run, the version of R used}
+#' \item{dataUsed:}{ The contents of the argument data restricted to the groups used}
+#' \item{dataNA:}{  A data frame with observations containing a least one missing value
+#'   for an analysis variable, NA if no missing values}
+#' \item{analyticVars:}{  A vector with the contents of the argument analyticVars}
+#' \item{variablePair:}{  A vector with the contents of the argument variablePair}
+#' \item{params:}{  A list with the values of grouping, logical, and numberic arguments}
+#' \item{pvalues:}{  A data frame with the p-values for univariate and bivariate tests of normality}
+#' \item{dataCheck:}{ If Identify=TRUE, a data frame with the information on user-identified points of interest}
+#' \item{location:}{ The value of the parameter folder}
+#' }
+#'
+"test2dPlotGauss"
+
+#' A list used to verify that ps_CV_corr() is valid
+#'
+#' @format  A list with the following elements
+#' \describe{
+#'   \item{usage:}{  A vector with the contents of the argument doc, the date run, the version of R used}
+#'   \item{dataUsed:}{  The contents of the argument data restricted to the groups used}
+#'   \item{dataNA:}{  A data frame with observations containing a least one missing value
+#'   for an analysis variable, NA if no missing values}
+#'   \item{params:}{  A list containing the values of the grouping,logical, and numeric parameters}
+#'   \item{analyticVars:}{  A vector with the value of the argument AnalyticVars}
+#'   \item{CV:}{  A data frame with the coefficients of variation for each analytic variable in each group}
+#'   \item{corr:}{  A data frame with the correlations between pairs of variables in each group}
+#'   \item{location:}{  The value of the parameter folder}
+#'       }
+#'
+"testCV_corr"
+
+#' A list used to verify that ps_pca() is valid
+#'
+#' @format  A list with the following elements
+#' \describe{
+#'   \item{usage:}{  A string with the contents of the argument doc, the date run, the version of R used}
+#'   \item{dataUsed:}{  The contents of the argument data restricted to the groups used}
+#'   \item{dataNA:}{  A data frame with observations containing a least one missing value
+#'   for an analysis variable, NA if no missing values}
+#'   \item{params:}{  A list with the values of the arguments for grouping, logical parameters,
+#'   Ellipses, and Colors}
+#'   \item{analyticVars:}{  A vector with the value of the argument AnalyticVars}
+#'   \item{ellipse_pct:}{  The value of the argument Ellipses}
+#'   \item{variances:}{  A data frame including the percent of variation explained by each
+#'   principal component and the cumulative percent explained}
+#'   \item{weights:}{  A data frame with the principal component weights for each observation}
+#'   \item{Predicted:}{  A data frame with the predicted values for each principal component,
+#'    plus the value of Groups and an integer GroupIndex (with values 1:number of Groups)}
+#'   \item{DataPlusPredicted:}{  A data frame with the data used to compute the principal components,
+#'    plus GroupIndex (as defined above) and predicted values for each principal component}
+#'   \item{dataCheck:}{  If Identify=TRUE, a data frame with the observations in dataUsed
+#'    identified as of interest}
+#'   \item{location:}{  The value of the parameter folder}
+#'  }
+#'
+"test_pca"
+
+#' A list used to verify that ps_pcaEvaluation() is valid
+#'
+#' @format  A list with the following elements
+#' \describe{
+#'   \item{usage:}{  A vector with the contents of the argument doc, the date run,
+#'   the version of R used}
+#'   \item{sourceData:}{  The contents of the argument SourceData restricted to knownSources}
+#'   \item{sourcesNA:}{ A data frame with source observations with missing data for analytic
+#'   variables; NA if no missing data}
+#'   \item{unknownData:}{  The contents of the argument unknownData restricted to predictedSources}
+#'   \item{unknownsNA:}{ A data frame with unknown observations with missing data for analytic
+#'   variables; NA if no missing data}
+#'   \item{impError}{  Normalized root mean square error estimate for imputed data;
+#'   NA if no missing data}
+#'   \item{params:}{  A list with the values of the grouping and source arguments and
+#'   values of the logical arguments}
+#'   \item{analyticVars:}{  A vector with the value of the argument AnalyticVars}
+#'   \item{tableInOut:} {  A data frame with counts of the numbers of unknowns inside and
+#'   outside of each predicted source location}
+#'   \item{ptsOutside:}  {  A data frame with the data for unknown points located outside of the
+#'    predicted source}
+#'   \item{dataCheck:}{If Identify=TRUE, a data frame with the observations in dataUsed identified
+#'    as of interest; value is c(NA,NA) if no points are identified}
+#'   \item{location:}{The value of the parameter folder}
+#'    }
+#'
+"test_pcaEval"
+
+#' A list used to verify that ps_pcaGauss() is valid
+#'
+#' @format  A list with the following elements
+#' \describe{
+#'   \item{usage:}{ A vector with the contents of the argument doc, the date run, the version of R used}
+#'   \item{dataUsed:}{ The contents of the argument data restricted to the groups used}
+#'   \item{dataNA:}{  A data frame with observations containing a least one missing value
+#'   for an analysis variable, NA if no missing values}
+#'   \item{params:}{ A list with the values of the arguments grouping and logical arguments}
+#'   \item{analyticVars:}{ A vector with the value of the argument AnalyticVars}
+#'   \item{pvalues:}{ A data frame with the p-values for the Gaussian assumptions for each
+#'    group specified}
+#'  \item{data_check:}{  A data frame with data identified as generating points of interest;
+#'  value is NA if no points are identified}
+#'   \item{location:}{ The value of the parameter folder}
+#'  }
+#'
+"test_pcaGauss"
+
+#' A list used to verify that ps_randomForest() is valid
+#'
+#' @format  A list with the following elements
+#' \describe{
+#'   \item{usage:}{ A string with the contents of the argument doc, the date run, the version of R used}
+#'   \item{dataUsed:}{ The contents of the argument data restricted to the groups used}
+#'   \item{sourcesNA:}{  A data frame with data from the data frame data with missing values,
+#'    NÁ if no missing values}
+#'   \item{analyticVars:}{ A vector with the value of the argument AnalyticVars}
+#'   \item{params:}{ A list with the values of the grouping, logical, and numeric arguments}
+#'   \item{formulaRf:}  {The formula used in the analysis (the variables specified in the argument AnalyticVars
+#'                        separated by + signs)}
+#'   \item{forest:}{  A summary of the random forest call, estimated error rate, and
+#'   confusion matrix}
+#'   \item{importance:}{  A data frame with information on the importance of each variable
+#'    in AnalyticVars}
+#'   \item{confusion:}{  A data frame with the estimate of the confusion matrix}
+#'   \item{predictedData:} {  A data frame with the artifact data used for predictions; if there
+#'   is missing data, after imputation of the missing data}
+#'   \item{predictedNA:}{ A data frame with the observations for which missing data were imputed;
+#'   NA if there are no missing data}
+#'   \item{predictedSources:}{  A data frame with prediction information, sample ID (if requested),
+#'      and values of AnalyticVars}
+#'   \item{predictedTotals:}{  A vector with the predicted totals for each group (source)}
+#'   \item{impError:}{ The estimated OOB (out of bag) error for imputed predictor data;
+#'   NA if no imputed data}
+#'   \item{location:}{ The value of the parameter folder}
+#'  }
+#'
+"testRandomForest"
+
+#' A list used to verify that ps_tree() is valid
+#'
+#' @format  A list with the following elements
+#' \describe{
+#'   \item{usage:}{ A string with the contents of the argument doc, the date run, the version of R used}
+#'   \item{dataUsed:}{ The contents of the argument data restricted to the groups used}
+#'   \item{params_grouping:}{ A list with the values of the arguments GroupVar and Groups}
+#'   \item{analyticVars:}{ A vector with the value of the argument AnalyticVars}
+#'   \item{params:}{ A list with the values of the grouping, logical, and splitting parameters}
+#'   \item{model:}{ A character string with the value of the argument ModelTitle}
+#'   \item{Tree:}{ A list with details of the tree construction_}
+#'   \item{classification:}  {A data frame showing the crossclassification of sources and predicted sources}
+#'   \item{CpTable:}{  A data frame showing the decrease in Cp with increasing numbers of splits}
+#'   \item{predictedSources:}{  If predictSources = T, a data frame with the predicted sources}
+#'   \item{predictedTotals:}{  If predictedSources = T, a vector with the number of objects predicted to be from each source}
+#'   \item{location:}{ The value of the parameter folder}
+#'  }
+#'
+"testTree"
