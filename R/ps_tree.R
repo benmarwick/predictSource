@@ -11,6 +11,7 @@
 #' @param AnalyticVars  A vector with the names (character values) of the analytic variables
 #' @param wts Option to weight the observations, if used, vector with length nrow(data);
 #'  if NA (the default), assume equal weights
+#' @param Seed A positive integer, to produce a reproducible analysis
 #' @param CpDigits  The number of significant digits to display in the Cp table, default value is 3
 #' @param plotTree Logical.  If TRUE (the default), plot the recursive partitioning tree
 #' @param plotCp  Logical.  If TRUE (the default), plot the Cp table values
@@ -40,6 +41,7 @@
 #'   \item{params_grouping:}{ A list with the values of the arguments GroupVar and Groups}
 #'   \item{analyticVars:}{ A vector with the value of the argument AnalyticVars}
 #'   \item{params:}{ A list with the values of the grouping, logical, and splitting parameters}
+#'   \item{Seed:}{ A positive integer to set the random number generator}
 #'   \item{model:}{ A character string with the value of the argument ModelTitle}
 #'   \item{Tree:}{ A list with details of the tree construction_}
 #'   \item{classification:}  {A data frame showing the crossclassification of sources and predicted sources}
@@ -78,6 +80,7 @@ ps_tree <-
            Groups = "All",
            AnalyticVars ,
            wts = NA,
+           Seed = 11111,
            CpDigits = 3,
            plotTree = TRUE,
            plotCp = TRUE,
@@ -105,12 +108,18 @@ ps_tree <-
     assert_that(is.numeric(CpDigits) | is.na(CpDigits), msg="parameter CpDigits not numeric and not NA")
     if (is.numeric(CpDigits))  assert_that((round(CpDigits,0)==CpDigits)&(CpDigits > 0),
                                  msg="parameter CpDigits not a positive integer")
-    assert_that(is.numeric(minSplit) | is.na(minSplit), msg="parameter Nvarused not numeric and not NA")
+    assert_that(is.numeric(Seed) | is.na(Seed), msg="parameter Seed not numeric and not NA")
+    if (is.numeric(Seed))  assert_that((round(Seed,0)==Seed)&(Seed > 0),
+                                           msg="parameter Seed not a positive integer")
+    assert_that(is.numeric(minSplit) | is.na(minSplit), msg="parameter minSplit not numeric and not NA")
     if (minSplit > 0)  assert_that((round(minSplit,0)==minSplit)&(minSplit > 0),
                                    msg="parameter minSplit not a positive integer")
     assert_that(is.numeric(cP) & (cP > 0) & (cP < 1), msg="parameter cP not numeric and positive and < 1")
     assert_that(is.logical(predictSources), msg="type of parameter predictSources not logical")
     assert_that(is.character(ModelTitle), msg="parameter ModelTitle not character valued")
+    #
+    if (!is.na(Seed))
+      set.seed(Seed)  # create reproducible analysis
     #
     # create dataset dataUsed based on grouping restrict to desired set of groups
     if (Groups[1] != "All") {
@@ -232,6 +241,7 @@ ps_tree <-
                   dataUsed=dataUsed,
                   analyticVars=AnalyticVars,
                   params=params,
+                  Seed=Seed,
                   model=ModelTitle,
                   Tree = Tree,
                   classification = classification,

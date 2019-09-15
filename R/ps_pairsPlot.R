@@ -88,7 +88,7 @@ ps_pairsPlot <-
         data_temp <- dataPlot[rows_temp, AnalyticVars]
         pairs(data_temp, panel = panel.smooth, span = Span,
               main = paste("group", groups[i]))
-        browser()
+  #      browser()
        }
     }
     fcnDateVersion<-paste(doc,date(),R.Version()$version.string)

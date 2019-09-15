@@ -122,14 +122,14 @@ ps_randomForest <-
     if (Seed > 0)  assert_that((round(Seed,0)==Seed)&(Seed > 0),
                                    msg="parameter Seed not a positive integer")
     assert_that(is.numeric(digitsImportance), msg="parameter NvarYsed not numeric")
-    if (digitsImportance > 0)  assert_that((round(digitsImportance,0)==digitsImportance)&(digitsImportance > 0),
+    assert_that((round(digitsImportance,0)==digitsImportance)&(digitsImportance > 0),
                                msg="parameter digitsImportance not a positive integer")
     assert_that(is.logical(plotErrorRate), msg="type of parameter plotErrorRate not logical")
     assert_that(is.logical(plotImportance), msg="type of parameter plotImportance not logical")
     assert_that(is.logical(predictSources), msg="type of parameter predictSources not logical")
-    assert_that(is.na(predictData) | is.data.frame(predictData) | is.matrix(predictData),
-                msg="parameter predictData must be a data frame, a matrix, or NA")
     assert_that(is.logical(plotSourceProbs), msg="type of parameter plotSourceProbs not logical")
+    assert_that(as.logical((sum(is.na(predictData))==1)) | (is.data.frame(predictData) | is.matrix(predictData)),
+               msg="parameter predictData must be a data frame, a matrix, or NA")
     #
     # create dataset dataUsed based on grouping: restrict to desired set of groups
     if (Groups[1] != "All") {
@@ -188,13 +188,13 @@ ps_randomForest <-
     #
     if (plotErrorRate) {
       plot(fit_rf, main = "Estimated error rate by number of trees")
-      browser()
+#      browser()
     }
     #
     importance_rf <- importance(fit_rf)
     if (plotImportance)  {
       varImpPlot(fit_rf, main = "Variable importance")
-      browser()
+#      browser()
     }
 #
     if (!predictSources) {  # predictSources is FALSE
@@ -250,7 +250,7 @@ ps_randomForest <-
       if (plotSourceProbs) {
         ps_boxPlots(data = probSource, GroupVar="source", Groups="All",
                   AnalyticVars="SourceProbability", Nrow=1, Ncol=1)
-        browser()
+ #       browser()
       }
       #
       # box plots of probabilities for sources not assigned to each unknown

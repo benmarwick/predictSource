@@ -291,7 +291,7 @@ ps_2dPlot <- function(doc = "ps_2dPlot",
            dataCheck <- rbind(dataCheck,identified)
          }  # end of code for Identify = TRUE
          #  pause to save plot after a page is full
-         if (i %% (parRowsCols[1]*parRowsCols[2]) == 0)  browser()
+#         if (i %% (parRowsCols[1]*parRowsCols[2]) == 0)  browser()
       }  # end of loop on i
       if (Identify)  dataCheck<-dataCheck[-1,]  # remove dummy first row
     }  # end of code for ByGroup = TRUE
@@ -342,7 +342,7 @@ ps_2dPlot <- function(doc = "ps_2dPlot",
                            ps_legend = legendLoc,
                            ps_identify = Identify)
          if (i_row < nrow(VariablePairs))  {
-           browser()  #  pause to save plot
+ #          browser()  #  pause to save plot
            plot.new()  #  next plot on a new page
          }
        }  # end of code for ByGroup = FALSE
@@ -392,7 +392,7 @@ ps_2dPlot <- function(doc = "ps_2dPlot",
                               ps_identify = Identify)
              dataCheck <- rbind(dataCheck,identified)
              }  # end of code for Identify = TRUE
-            if (i %% (parRowsCols[1]*parRowsCols[2]) == 0)  browser()
+ #           if (i %% (parRowsCols[1]*parRowsCols[2]) == 0)  browser()
          }  # end of code for ByGroup = TRUE
       }  #  end of loop on i
     if (i_row < nrow(VariablePairs))  plot.new()  #  start a new page for the next set of variable pairs

@@ -108,7 +108,7 @@ ps_boxPlots <-
         }
         plot_index <- plot_index + plots_per_page
         n_plots_remaining <- n_plots_remaining - plots_per_page
-        if (n_plots_remaining > 0) browser()
+ #       if (n_plots_remaining > 0) browser()
       }
     }
     if (Groups[1] == " ") {

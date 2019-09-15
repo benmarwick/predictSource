@@ -197,7 +197,7 @@ ps_pca <-  function(doc = "ps_pca",
     pca <- prcomp(dataUsed[, AnalyticVars], scale = TRUE)
     if (ScreePlot) {  # TRUE
       plot(pca, main = "Scree plot", xlab = "Principal component")
-      browser()
+ #     browser()
     }
     importance_pca <- summary(pca)$importance
     #
@@ -215,7 +215,7 @@ ps_pca <-  function(doc = "ps_pca",
       plot(predict_pc1, predict_pc2, xlab = "first PC",
            ylab = "second PC", main = "Principal component plot for all groups combined")
       Predicted <- predict(pca)
-      browser()
+#      browser()
     }
     #
     #  define group index for plotting symbols and colors
@@ -236,7 +236,7 @@ ps_pca <-  function(doc = "ps_pca",
         par(mfrow = c(1, 2))
         plot(Predicted[, c("group", "PC1")], notch = T, main = "Box plots by group: first PC")
         plot(Predicted[, c("group", "PC2")], notch = T, main = "Box plots by group: second PC")
-        browser()
+ #       browser()
       }
       if (pcPlot) {  #  TRUE
       par(mfrow=c(1,1))

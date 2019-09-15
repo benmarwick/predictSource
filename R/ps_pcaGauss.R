@@ -146,7 +146,7 @@ ps_pcaGauss <-
                                QQPlot=pc_qqPlot,
                                pvalue_digits=pc_digits,
                                Identify=gaussIdentify)
-    browser()
+#    browser()
     #
     fcnDateVersion<-paste(doc,date(),R.Version()$version.string)
     params_grouping<-list(GroupVar,Groups)
