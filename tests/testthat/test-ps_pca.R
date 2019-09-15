@@ -4,7 +4,7 @@
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 pca <- ps_pca(data=ObsidianSources, ID="ID", GroupVar="Code",
-                   + Groups="All", AnalyticVars=analyticVars)
+       Groups="All", AnalyticVars=analyticVars)
 
 test_that("ps_pca output is a list", {
   expect_type(pca, "list")

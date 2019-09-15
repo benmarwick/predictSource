@@ -4,7 +4,7 @@
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 checkData<-ps_checkData(data=ObsidianSources,CheckDupVars=analyticVars,GroupVar="Code",Groups="All",
-                            + ID = "ID", AnalyticVars=analyticVars)
+       ID = "ID", AnalyticVars=analyticVars)
 
 test_that("ps_checkData output is a list", {
   expect_type(checkData, "list")

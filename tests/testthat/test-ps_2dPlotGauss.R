@@ -4,7 +4,7 @@
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 twoDPlotGauss<-ps_2dPlotGauss(data=ObsidianSources, GroupVar="Code", ID="ID", Groups=c("A","B"),
-                                +     AnalyticVars= analyticVars, variablePair=c("Rb","Zr"))
+       AnalyticVars= analyticVars, variablePair=c("Rb","Zr"))
 
 test_that("ps_2dPlotGauss output is a list", {
   expect_type(twoDPlotGauss, "list")

@@ -4,7 +4,7 @@
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 CV_corr<-ps_CV_corr(data = ObsidianSources, GroupVar="Code", Groups = "All",
-                    +  AnalyticVars=analyticVars, ByGroup=FALSE)
+        AnalyticVars=analyticVars, ByGroup=FALSE)
 
 test_that("ps_CV_corr output is a list", {
   expect_type(CV_corr, "list")
