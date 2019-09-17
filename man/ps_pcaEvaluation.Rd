@@ -109,7 +109,7 @@ analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 sources <- unique(ObsidianSources[,"Code"])
 save_tree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All",
  AnalyticVars=analyticVars, ID="ID", Model = "Rb"+"Sr"+"Y"+"Zr"+"Nb",
-  ModelTitle="Rb + Sr + Y + Zr + Nb", predictSources=T, predictData=ObsidianArtifacts,
+  ModelTitle="Rb + Sr + Y + Zr + Nb", predictSources=TRUE, predictData=ObsidianArtifacts,
   plotTree=TRUE, plotCp=FALSE)
 pca_eval <- ps_pcaEvaluation(SourceData=ObsidianSources,
   unknownData=save_tree$predictedSources, SourceGroup= "Code", unknownGroup="source",
@@ -125,7 +125,7 @@ sources <- unique(ObsidianSources[,"Code"])
 save_randomForest <- ps_randomForest(data=ObsidianSources,
 GroupVar="Code",Groups="All",
   AnalyticVars=analyticVars, unknownID="ID", NvarUsed=3,
-  plotErrorRate=FALSE, plotImportance=F,
+  plotErrorRate=FALSE, plotImportance=FALSE,
   predictSources=TRUE, predictData=ObsidianArtifacts, plotSourceProbs=FALSE)
 pca_eval <- ps_pcaEvaluation(SourceData=ObsidianSources,
   unknownData=save_randomForest$predictedSources, SourceGroup= "Code",

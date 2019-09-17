@@ -46,8 +46,8 @@
 #'   \item{Tree:}{ A list with details of the tree construction_}
 #'   \item{classification:}  {A data frame showing the crossclassification of sources and predicted sources}
 #'   \item{CpTable:}{  A data frame showing the decrease in Cp with increasing numbers of splits}
-#'   \item{predictedSources:}{  If predictSources = T, a data frame with the predicted sources}
-#'   \item{predictedTotals:}{  If predictedSources = T, a vector with the number of objects predicted to be from each source}
+#'   \item{predictedSources:}{  If predictSources = TRUE, a data frame with the predicted sources}
+#'   \item{predictedTotals:}{  If predictedSources = TRUE, a vector with the number of objects predicted to be from each source}
 #'   \item{location:}{ The value of the parameter folder}
 #'  }
 #'
@@ -135,7 +135,7 @@ ps_tree <-
     #
     #  if predictions to be made and ID used, sort on ID
     #
-    if ((predictSources == T) & (ID[1] != " "))
+    if ((predictSources == TRUE) & (ID[1] != " "))
       predictData <- predictData[order(predictData[,"ID"]),]
       #
     # define variable groups as groups used in analysis
@@ -193,7 +193,7 @@ ps_tree <-
     Nsplitopt <-
       table(Model = nsplitopt[, "Model"], Splits = nsplitopt[, "Splits"])
     #
-    if (predictSources == T) {
+    if (predictSources == TRUE) {
       predictedSources <- predict(object = Tree, newdata = predictData)
       predictedTotals <- apply(predictedSources,2,sum)
       #

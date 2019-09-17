@@ -68,8 +68,8 @@ The function returns a list with the following components:
   \item{Tree:}{ A list with details of the tree construction_}
   \item{classification:}  {A data frame showing the crossclassification of sources and predicted sources}
   \item{CpTable:}{  A data frame showing the decrease in Cp with increasing numbers of splits}
-  \item{predictedSources:}{  If predictSources = T, a data frame with the predicted sources}
-  \item{predictedTotals:}{  If predictedSources = T, a vector with the number of objects predicted to be from each source}
+  \item{predictedSources:}{  If predictSources = TRUE, a data frame with the predicted sources}
+  \item{predictedTotals:}{  If predictedSources = TRUE, a vector with the number of objects predicted to be from each source}
   \item{location:}{ The value of the parameter folder}
  }
 }

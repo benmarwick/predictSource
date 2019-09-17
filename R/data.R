@@ -18,7 +18,6 @@
 #' @source  Data are from Steve Shackley's website http://www.swxrflab.net/ and from
 #'   files provided by Shackley.
 #'
-
 "ObsidianSources"
 #'
 #' Chemical composition of obsidian artifacts
@@ -44,9 +43,7 @@
 #' the single sample predicted from another source) from a data set on approximately 450 artifacts provided by
 #' the state of New Mexico Office of Archaeological Studies (unpublished).
 #'
-
 "ObsidianArtifacts"
-
 #'
 #' p-values for testing whether the bivariate Rb/Zr distribution is Gaussian
 #'  at two Jemez sources.
@@ -242,9 +239,9 @@
 #'   \item{params:}{  A list with the values of the grouping and source arguments and
 #'   values of the logical arguments}
 #'   \item{analyticVars:}{  A vector with the value of the argument AnalyticVars}
-#'   \item{tableInOut:} {  A data frame with counts of the numbers of unknowns inside and
+#'   \item{tableInOut:}{  A data frame with counts of the numbers of unknowns inside and
 #'   outside of each predicted source location}
-#'   \item{ptsOutside:}  {  A data frame with the data for unknown points located outside of the
+#'   \item{ptsOutside:}{  A data frame with the data for unknown points located outside of the
 #'    predicted source}
 #'   \item{dataCheck:}{If Identify=TRUE, a data frame with the observations in dataUsed identified
 #'    as of interest; value is c(NA,NA) if no points are identified}
@@ -282,19 +279,19 @@
 #'    NÁ if no missing values}
 #'   \item{analyticVars:}{ A vector with the value of the argument AnalyticVars}
 #'   \item{params:}{ A list with the values of the grouping, logical, and numeric arguments}
-#'   \item{formulaRf:}  {The formula used in the analysis (the variables specified in the argument AnalyticVars
-#'                        separated by + signs)}
+#'   \item{formulaRf:}{The formula used in the analysis (the variables specified in the argument AnalyticVars
+#'    separated by + signs)}
 #'   \item{forest:}{  A summary of the random forest call, estimated error rate, and
 #'   confusion matrix}
 #'   \item{importance:}{  A data frame with information on the importance of each variable
 #'    in AnalyticVars}
-#'   \item{confusion:}{  A data frame with the estimate of the confusion matrix}
-#'   \item{predictedData:} {  A data frame with the artifact data used for predictions; if there
+#'   \item{confusion:}{A data frame with the estimate of the confusion matrix}
+#'   \item{predictedData:}{  A data frame with the artifact data used for predictions; if there
 #'   is missing data, after imputation of the missing data}
 #'   \item{predictedNA:}{ A data frame with the observations for which missing data were imputed;
 #'   NA if there are no missing data}
 #'   \item{predictedSources:}{  A data frame with prediction information, sample ID (if requested),
-#'      and values of AnalyticVars}
+#'    and values of AnalyticVars}
 #'   \item{predictedTotals:}{  A vector with the predicted totals for each group (source)}
 #'   \item{impError:}{ The estimated OOB (out of bag) error for imputed predictor data;
 #'   NA if no imputed data}
@@ -314,11 +311,10 @@
 #'   \item{params:}{ A list with the values of the grouping, logical, and splitting parameters}
 #'   \item{model:}{ A character string with the value of the argument ModelTitle}
 #'   \item{Tree:}{ A list with details of the tree construction_}
-#'   \item{classification:}  {A data frame showing the crossclassification of sources and predicted sources}
+#'   \item{classification:}{A data frame showing the crossclassification of sources and predicted sources}
 #'   \item{CpTable:}{  A data frame showing the decrease in Cp with increasing numbers of splits}
 #'   \item{predictedSources:}{  If predictSources = T, a data frame with the predicted sources}
 #'   \item{predictedTotals:}{  If predictedSources = T, a vector with the number of objects predicted to be from each source}
 #'   \item{location:}{ The value of the parameter folder}
 #'  }
-#'
 "testTree"
