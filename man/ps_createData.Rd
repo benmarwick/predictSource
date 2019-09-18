@@ -4,7 +4,8 @@
 \alias{ps_createData}
 \title{ps_createData}
 \usage{
-ps_createData(doc = "ps_createData", data, Group, Subset, ID, AnalyticVars)
+ps_createData(doc = "ps_createData", data, Group, Subset, ID,
+  AnalyticVars)
 }
 \arguments{
 \item{doc}{Documentation, default is the function name}
