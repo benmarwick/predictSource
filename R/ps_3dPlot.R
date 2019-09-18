@@ -164,7 +164,7 @@ ps_3dPlot <-
                           color = Colors[group_index], pch = 16, cex.symbols = SymbolSize,
                           main = paste(Selections[i, 1], ",", Selections[i,2], ",", Selections[i, 3]),
                           sub=subtitle)
-            browser()
+ #         browser()
           }
         }
       } # end of plot points for groups combined
@@ -180,7 +180,7 @@ ps_3dPlot <-
                           data_i[!index_na,], xlab = Selections[1], ylab = Selections[2], zlab = Selections[3],
                           color = Colors[1], pch = 16, cex.symbols = SymbolSize,
                           main = paste(groups[i],": ",Selections[1]," ,", Selections[2], ",", Selections[3],sep=""))
-            browser()
+ #          browser()
           }
         }
         if (is.matrix(Selections)) {
@@ -195,7 +195,7 @@ ps_3dPlot <-
                             zlab = Selections[i,3], pch = 16, cex.symbols = SymbolSize,
                             main = paste(groups[i],": ",Selections[i, 1], ",", Selections[i,2], ",",
                                          Selections[i, 3]), color = Colors[index])
-              browser()
+ #            browser()
             }
           }
         }
@@ -233,7 +233,7 @@ ps_3dPlot <-
                         zlab = Selections[i, 3], color = "black",
                         pch = groups, cex.symbols = SymbolSize, main = paste("group medians:",
                         Selections[i,1], ",", Selections[i,2], ",", Selections[i,3]))
-          browser()
+ #         browser()
         }
       }
     }

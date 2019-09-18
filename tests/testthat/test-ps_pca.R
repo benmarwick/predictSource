@@ -4,7 +4,7 @@
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 pca <- ps_pca(data=ObsidianSources, ID="ID", GroupVar="Code",
-                   + Groups="All", AnalyticVars=analyticVars)
+       Groups="All", AnalyticVars=analyticVars)
 
 test_that("ps_pca output is a list", {
   expect_type(pca, "list")
@@ -13,8 +13,10 @@ test_that("ps_pca output is a list", {
 #  use saved valid output from the function
 data(test_pca)
 
+# algorithm can change sign of a principal component
+
 test_that("ps_pca Predicted pvalues are correct: first column is character", {
-  expect_equal(pca$Predicted[,-1], test_pca$Predicted[,-1])
+  expect_equal(abs(pca$Predicted[,-1]), abs(test_pca$Predicted[,-1]))
 })
 
 

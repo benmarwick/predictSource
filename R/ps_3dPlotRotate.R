@@ -164,7 +164,7 @@ ps_3dPlotRotate <-
                  ylab = Selections[i, 2], zlab = Selections[i, 3],
                  col = Colors[dataUsed[,"group_index"]], pch = 16, type="p", size=ptSize,
                  main=header)
-          browser()
+  #       browser()
          }
       } # end of code for Selections as a matrix
     } # end of code for plot points with groups combined
@@ -180,7 +180,7 @@ ps_3dPlotRotate <-
                         col = Colors[1], pch = 16, type="p", size=ptSize,
                         main = paste(groups[i],": ",Selections[1]," ,", Selections[2], ",",
                                      Selections[3],sep=""))
-          if (i < length(groups))  browser()
+   #      if (i < length(groups))  browser()
         }
       } # end of code for Selections as vector
       if (is.matrix(Selections)) {
@@ -195,7 +195,7 @@ ps_3dPlotRotate <-
                    type="p", size=ptSize,
                    main = paste(groups[i],": ",Selections[i, 1], ",", Selections[i,2], ",",
                                        Selections[i, 3]))
-            browser()
+  #          browser()
           }
         }
       } # end of code for Selections as a matrix

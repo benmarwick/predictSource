@@ -63,6 +63,7 @@
 #'   \item{location:}{  The value of the parameter folder}
 #'    }
 #'
+#'
 #' @import graphics stats  mgcv  assertthat
 #'
 #' @examples
@@ -359,7 +360,7 @@ ps_pcaEvaluation <-function(doc = "ps_pcaEvaluation",
       pch = 1:(length(known_sources)),
       bty = "n"
     )
-    browser()
+#    browser()
     } # end of code for first two panel plot
     #
     #  create vector of indicators for whether principal components point for a unknown is in predicted source hull
@@ -482,7 +483,7 @@ ps_pcaEvaluation <-function(doc = "ps_pcaEvaluation",
            y = pcaLocationsArtifacts[!pcaLocationsArtifacts["in_hull"], "pc2"],
            cex = .5,
            pch = pcaLocationsArtifacts[!pcaLocationsArtifacts["in_hull"], "index"])
-    browser()
+#    browser()
     #
     }  #  end of code for two-panel evaluation plot
     #

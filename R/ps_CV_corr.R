@@ -215,7 +215,7 @@ ps_CV_corr <-
             dataUsed[rows_i, AnalyticVars]  # data restricted to group i
           corrplot(cor(data_i[,AnalyticVars],method="s"),type="upper",method="ellipse",
                    title=groups[i])
-          browser()
+ #         browser()
         } # end of loop on i
       }  # end of code for plotting correlations
      } # end of code for computation by group

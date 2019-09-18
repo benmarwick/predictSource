@@ -5,9 +5,9 @@
 \title{ps_tree}
 \usage{
 ps_tree(doc = "ps_tree", data, GroupVar, Groups = "All", AnalyticVars,
-  wts = NA, CpDigits = 3, plotTree = TRUE, plotCp = TRUE, Model,
-  ModelTitle, minSplit = 20, cP = 0.01, predictSources = FALSE,
-  predictData, ID = " ", folder = " ")
+  wts = NA, Seed = 11111, CpDigits = 3, plotTree = TRUE,
+  plotCp = TRUE, Model, ModelTitle, minSplit = 20, cP = 0.01,
+  predictSources = FALSE, predictData, ID = " ", folder = " ")
 }
 \arguments{
 \item{doc}{A string with documentation added to defintion of usage,
@@ -24,6 +24,8 @@ if use all groups}
 
 \item{wts}{Option to weight the observations, if used, vector with length nrow(data);
 if NA (the default), assume equal weights}
+
+\item{Seed}{A positive integer, to produce a reproducible analysis}
 
 \item{CpDigits}{The number of significant digits to display in the Cp table, default value is 3}
 
@@ -61,12 +63,13 @@ The function returns a list with the following components:
   \item{params_grouping:}{ A list with the values of the arguments GroupVar and Groups}
   \item{analyticVars:}{ A vector with the value of the argument AnalyticVars}
   \item{params:}{ A list with the values of the grouping, logical, and splitting parameters}
+  \item{Seed:}{ A positive integer to set the random number generator}
   \item{model:}{ A character string with the value of the argument ModelTitle}
   \item{Tree:}{ A list with details of the tree construction_}
   \item{classification:}  {A data frame showing the crossclassification of sources and predicted sources}
   \item{CpTable:}{  A data frame showing the decrease in Cp with increasing numbers of splits}
-  \item{predictedSources:}{  If predictSources = T, a data frame with the predicted sources}
-  \item{predictedTotals:}{  If predictedSources = T, a vector with the number of objects predicted to be from each source}
+  \item{predictedSources:}{  If predictSources = TRUE, a data frame with the predicted sources}
+  \item{predictedTotals:}{  If predictedSources = TRUE, a vector with the number of objects predicted to be from each source}
   \item{location:}{ The value of the parameter folder}
  }
 }

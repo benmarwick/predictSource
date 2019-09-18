@@ -128,10 +128,10 @@ ps_2dPlotGauss <- function (doc = "ps_2dPlotGauss",
     pvalues[pvalues[i,] < 0] <- NA
     if ( Identify)  dataCheck <- rbind(dataCheck, temp_i$dataCheck)
     if ((i < length(groups)) & QQPlot) {
-       browser()  # pause to enable plot to be saved
+ #     browser()  # pause to enable plot to be saved
        plot.new()
     }
-    if (((i %% 2)==0) & !QQPlot) browser()  # no QQ plot
+ #  if (((i %% 2)==0) & !QQPlot) browser()  # no QQ plot
       } # end of loop on i
   #
   colnames(pvalues) <- c("n", paste("AD_",variablePair,sep=""), paste("SW_",variablePair,sep=""),
