@@ -76,7 +76,7 @@ ps_pairsPlot <-
       dataKeep[is.na(dataPlot[,AnalyticVars[i]])] <- F
     #
     if (Groups[1] == " ")
-      pairs(dataPlot[, AnalyticVars], panel = panel.smooth,
+      graphics::pairs(dataPlot[, AnalyticVars], panel = panel.smooth,
             span = Span)
     else {
       if (Groups[1] == "All")
@@ -86,7 +86,7 @@ ps_pairsPlot <-
       for (i in 1:length(groups)) {
         rows_temp <- (dataPlot[, GroupVar] %in% groups[i])
         data_temp <- dataPlot[rows_temp, AnalyticVars]
-        pairs(data_temp, panel = panel.smooth, span = Span,
+        graphics::pairs(data_temp, panel = panel.smooth, span = Span,
               main = paste("group", groups[i]))
   #      browser()
        }

@@ -19,7 +19,7 @@
 #' otherwise, NA}
 #' }
 #'
-#' @import  stats  graphics
+#' @import  stats  graphics  MVN
 #'
 #' @export
 #'
