@@ -85,7 +85,7 @@
 #' sources <- unique(ObsidianSources[,"Code"])
 #' save_tree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All",
 #'  AnalyticVars=analyticVars, ID="ID", Model = "Rb"+"Sr"+"Y"+"Zr"+"Nb",
-#'   ModelTitle="Rb + Sr + Y + Zr + Nb", predictSources=T, predictData=ObsidianArtifacts,
+#'   ModelTitle="Rb + Sr + Y + Zr + Nb", predictSources=TRUE, predictData=ObsidianArtifacts,
 #'   plotTree=TRUE, plotCp=FALSE)
 #' pca_eval <- ps_pcaEvaluation(SourceData=ObsidianSources,
 #'   unknownData=save_tree$predictedSources, SourceGroup= "Code", unknownGroup="source",
@@ -101,7 +101,7 @@
 #' save_randomForest <- ps_randomForest(data=ObsidianSources,
 #' GroupVar="Code",Groups="All",
 #'   AnalyticVars=analyticVars, unknownID="ID", NvarUsed=3,
-#'   plotErrorRate=FALSE, plotImportance=F,
+#'   plotErrorRate=FALSE, plotImportance=FALSE,
 #'   predictSources=TRUE, predictData=ObsidianArtifacts, plotSourceProbs=FALSE)
 #' pca_eval <- ps_pcaEvaluation(SourceData=ObsidianSources,
 #'   unknownData=save_randomForest$predictedSources, SourceGroup= "Code",
@@ -155,7 +155,7 @@ ps_pcaEvaluation <-function(doc = "ps_pcaEvaluation",
     #
     # matrix to contain indices for observations with no missing values
     #
-    sourceKeep <- rep(T, nrow(sourceData))
+    sourceKeep <- rep(TRUE, nrow(sourceData))
     for (i in 1:length(AnalyticVars))
       sourceKeep[is.na(sourceData[,AnalyticVars[i]])] <- F
     #
@@ -178,7 +178,7 @@ ps_pcaEvaluation <-function(doc = "ps_pcaEvaluation",
         if (sourceData[i, SourceGroup] == known_sources[j])
           SourceIndex[i] <- j
       }  # end of loop on i
-    data_Source <- rep(T, nrow(sourceData))
+    data_Source <- rep(TRUE, nrow(sourceData))
     sourceData <- data.frame(sourceData[,c(SourceGroup,AnalyticVars)], SourceIndex, data_Source)
     colnames(sourceData) <- c("group",AnalyticVars,"index", "data_source")
     #
@@ -194,7 +194,7 @@ ps_pcaEvaluation <-function(doc = "ps_pcaEvaluation",
     #
     #  vector with F if row contains missing analytic variable
     #
-    unknownKeep <- rep(T, nrow(unknownData))
+    unknownKeep <- rep(TRUE, nrow(unknownData))
     for (i in 1:length(AnalyticVars))
       unknownKeep[is.na(unknownData[,AnalyticVars[i]])] <- F
     #
@@ -242,7 +242,7 @@ ps_pcaEvaluation <-function(doc = "ps_pcaEvaluation",
         if (unknownData[i, unknownGroup] == as.character(predicted_sources[j],type="character"))
           ArtifactIndex[i] <- j
     }  # end of loop on i
-    data_Source <- rep(F,nrow(unknownData))
+    data_Source <- rep(FALSE,nrow(unknownData))
     unknownData <- cbind(unknownData[,c(unknownGroup,AnalyticVars)], ArtifactIndex, data_Source,
                           unknownData[,"ID"])  # needed if no ID provided
     colnames(unknownData) <- c("group", AnalyticVars, "index", "data_source", "ID")
@@ -271,8 +271,8 @@ ps_pcaEvaluation <-function(doc = "ps_pcaEvaluation",
     #
     #  create separate principal component location data sets for sources and unknowns
     #
-    pcaLocationsSources <- pcaLocations[pcaLocations[,"data_source"] == T,]
-    pcaLocationsArtifacts <- pcaLocations[pcaLocations[,"data_source"] == F,]
+    pcaLocationsSources <- pcaLocations[pcaLocations[,"data_source"] == TRUE,]
+    pcaLocationsArtifacts <- pcaLocations[pcaLocations[,"data_source"] == FALSE,]
     #
     #  principal component weights
     #
@@ -412,7 +412,7 @@ ps_pcaEvaluation <-function(doc = "ps_pcaEvaluation",
       #  first panel is source convex hulls, second panel is hulls with unknown points outside of
       #  predicted hull
     #
-    #  if Identify = T, do not create the evaluation plot, but only the plot of points outside predicted hulls
+    #  if Identify = TRUE, do not create the evaluation plot, but only the plot of points outside predicted hulls
     #
     #  left plot panel: convex hulls for sources
     #

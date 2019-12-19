@@ -36,7 +36,7 @@
 #'   \item{location:}{ The value of the parameter folder}
 #'  }
 #'
-#' @import MASS nortest qqtest MVN graphics stats assertthat
+#' @import MASS nortest qqtest graphics stats assertthat
 #'
 #' @examples
 #' data(ObsidianSources)
@@ -146,7 +146,6 @@ ps_pcaGauss <-
                                QQPlot=pc_qqPlot,
                                pvalue_digits=pc_digits,
                                Identify=gaussIdentify)
-#    browser()
     #
     fcnDateVersion<-paste(doc,date(),R.Version()$version.string)
     params_grouping<-list(GroupVar,Groups)
