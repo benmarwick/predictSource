@@ -4,8 +4,17 @@
 \alias{ps_checkData}
 \title{ps_checkData}
 \usage{
-ps_checkData(doc = "pc_checkData", data, CheckDupVars, GroupVar = " ",
-  Groups, ID = " ", AnalyticVars, folder = " ")
+ps_checkData(
+  doc = "pc_checkData",
+  data,
+  CheckDupVars,
+  GroupVar,
+  Groups = "All",
+  ByGroup = TRUE,
+  ID = " ",
+  AnalyticVars,
+  folder = " "
+)
 }
 \arguments{
 \item{doc}{A character string written to the output list; default is the function name}
@@ -14,12 +23,12 @@ ps_checkData(doc = "pc_checkData", data, CheckDupVars, GroupVar = " ",
 
 \item{CheckDupVars}{A vector with names of identifying variables, typically group and lab ID}
 
-\item{GroupVar}{If there are groups, name of variable defining the groups,
-default value of " ", no grouping}
+\item{GroupVar}{The name of variable defining the groups (required)}
 
 \item{Groups}{A character vector of groups by which numbers of samples and statistics will be
-tabulated.  Default is " ", tabulations are done for the entire data set.
-If value ls "All", tabulation for each distinct code in GroupVar}
+tabulated or "All"}
+
+\item{ByGroup}{Logical: default is TRUE. If FALSE, tabulations are for all groups combined}
 
 \item{ID}{The name of lab ID, default is " " (no lab ID)}
 
@@ -38,7 +47,7 @@ The function returns a list with the following components
 \item{NegativeValues:}{  A data frame containing the observations with at least one negative
  value for a variable in AnalyticVars}
 \item{Nvalues:}{  A data frame contain the number of observations with a value for each analytic variable}
-\item{statistics:}{  A data frame containing the statistics statistics (by group, if Group is specified)}
+\item{statistics:}{  A data frame containing the descriptive statistics (by group, if ByGroup = TRUE)}
 \item{location:}{  The value of the parameter folder}
 }
 }
@@ -49,17 +58,19 @@ Data checks and summaries: duplicate records, negative analytic values,
 \section{Detail}{
 
 AnalyticVars must be a vector of length at least 2.  If Groups specifies selected groups (is
-not equal to "All" or " "), it must be a vector of length at least 2.  The function returns a list
+not equal to "All"), it must be a vector of length at least 2.  The function returns a list
 with four data frames: duplicate observations, observations with negative
-      values for one or more analytic variables, numbers of observations for each analytic
-      variable, and statistics statistics (quartiles and number missing).
-      If Groups != " ", numbers of observations and statistics statistics are by group.
+values for one or more analytic variables, numbers of observations for each analytic
+variable, and descriptive statistics (quantiles and number missing).
+If the largest values is < 10 (true if use log10 transforms), the descriptive statistics
+are rounded to 2 digits, otherwise to integers.
+If ByGroup=TRUE, numbers of observations and statistics statistics are by group.
 }
 
 \examples{
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 dataCheck<-ps_checkData(data=ObsidianSources,CheckDupVars=analyticVars,GroupVar="Code",Groups="All",
-ID = "ID", AnalyticVars=analyticVars)
+ByGroup=TRUE, ID = "ID", AnalyticVars=analyticVars)
 
 }
