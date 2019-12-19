@@ -130,14 +130,14 @@ knitr::kable(checkData$statistics, caption="Table 3.2: Descriptive statistics fo
 
 ```
 
-The example table shows that, in the descriptive statistics data frame (Robject$statistiacs), there is a row for each element and each source, with a row containing missing values (NAs) between elements.  If this data frame is written to an excel file, those rows between elements can be converted to blank rows, to make the resulting table easier to read.
+The example table shows that, in the descriptive statistics data frame (Robject$statistics), there is a row for each element and each source, with a row containing missing values (NAs) between elements.  If this data frame is written to an excel file, those rows between elements can be converted to blank rows, to make the resulting table easier to read.
 
 For understanding later results, we need the corresponding descriptive statistics for the artifacts.
 
 ```{r } 
 library(karon)
 data(ObsidianArtifacts)
-checkData<-ps_checkData(data=ObsidianArtifacts,CheckDupVars=c("Code","ID"), GroupVar=" ", Groups=" ", AnalyticVars=c("Sr","Rb","Y"))
+checkData<-ps_checkData(data=ObsidianArtifacts,CheckDupVars=c("Code","ID"), GroupVar="Code", ByGroup=FALSE, AnalyticVars=c("Sr","Rb","Y"))
 knitr::kable(checkData$statistics, caption="Table 3.3: Descriptive statistics for the elements in the obsidian artifacts used in the classification tree in Figure 1.1.")
 
 ```
