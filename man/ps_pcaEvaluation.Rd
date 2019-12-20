@@ -4,11 +4,24 @@
 \alias{ps_pcaEvaluation}
 \title{ps_pcaEvaluation}
 \usage{
-ps_pcaEvaluation(doc = "ps_pcaEvaluation", SourceData, unknownData,
-  ID = " ", SourceGroup, unknownGroup, known_sources, predicted_sources,
-  AnalyticVars, Identify = FALSE, legendLoc = "topright",
-  plotAllPoints = TRUE, plotHullsOutsidePoints = TRUE,
-  plotOutsidePoints = TRUE, Seed = 11111, folder = " ")
+ps_pcaEvaluation(
+  doc = "ps_pcaEvaluation",
+  SourceData,
+  unknownData,
+  ID = " ",
+  SourceGroup,
+  unknownGroup,
+  known_sources,
+  predicted_sources,
+  AnalyticVars,
+  Identify = FALSE,
+  legendLoc = "topright",
+  plotAllPoints = TRUE,
+  plotHullsOutsidePoints = TRUE,
+  plotOutsidePoints = TRUE,
+  Seed = 11111,
+  folder = " "
+)
 }
 \arguments{
 \item{doc}{A string with documentation, default is the function name}

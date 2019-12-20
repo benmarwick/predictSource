@@ -4,9 +4,20 @@
 \alias{ps_CV_corr}
 \title{ps_CV_corr}
 \usage{
-ps_CV_corr(doc = "ps_CV_corr", data, GroupVar, Groups = "All",
-  ByGroup = TRUE, ID = " ", AnalyticVars, Transpose = TRUE,
-  CV_digits = 2, corr_digits = 2, plotCorrs = TRUE, folder = " ")
+ps_CV_corr(
+  doc = "ps_CV_corr",
+  data,
+  GroupVar,
+  Groups = "All",
+  ByGroup = TRUE,
+  ID = " ",
+  AnalyticVars,
+  Transpose = TRUE,
+  CV_digits = 2,
+  corr_digits = 2,
+  plotCorrs = TRUE,
+  folder = " "
+)
 }
 \arguments{
 \item{doc}{A string with documentation, default is the function name}

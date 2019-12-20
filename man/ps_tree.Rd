@@ -4,10 +4,26 @@
 \alias{ps_tree}
 \title{ps_tree}
 \usage{
-ps_tree(doc = "ps_tree", data, GroupVar, Groups = "All", AnalyticVars,
-  wts = NA, Seed = 11111, CpDigits = 3, plotTree = TRUE,
-  plotCp = TRUE, Model, ModelTitle, minSplit = 20, cP = 0.01,
-  predictSources = FALSE, predictData, ID = " ", folder = " ")
+ps_tree(
+  doc = "ps_tree",
+  data,
+  GroupVar,
+  Groups = "All",
+  AnalyticVars,
+  wts = NA,
+  Seed = 11111,
+  CpDigits = 3,
+  plotTree = TRUE,
+  plotCp = TRUE,
+  Model,
+  ModelTitle,
+  minSplit = 20,
+  cP = 0.01,
+  predictSources = FALSE,
+  predictData,
+  ID = " ",
+  folder = " "
+)
 }
 \arguments{
 \item{doc}{A string with documentation added to defintion of usage,

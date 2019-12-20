@@ -4,8 +4,15 @@
 \alias{fn.BoxPlots}
 \title{fn.BoxPlots}
 \usage{
-fn.BoxPlots(doc = "fn.BoxPlots", data, GroupVar, Groups, AnalyticVars,
-  Nrow, Ncol)
+fn.BoxPlots(
+  doc = "fn.BoxPlots",
+  data,
+  GroupVar,
+  Groups,
+  AnalyticVars,
+  Nrow,
+  Ncol
+)
 }
 \arguments{
 \item{doc}{A string documenting use, included in list returned; default value is the function name}

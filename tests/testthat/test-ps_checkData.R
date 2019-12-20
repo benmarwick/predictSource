@@ -11,10 +11,10 @@ test_that("ps_checkData output is a list", {
 })
 
 #  use saved valid output from the function
-data(testCheckData)
+ data(testCheckData)
 
 test_that("ps_checkData statistics are correct for one element", {
-  expect_equal(checkData$statistics[1:5,-(1:2)], testCheckData$statistics[1:5,-(1:2)])
+   expect_equal(checkData$statistics[1:5,-(1:2)], testCheckData$statistics[1:5,-(1:2)])
 })
 
 

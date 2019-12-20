@@ -159,7 +159,7 @@
 #' \item{location:}{  The value of the parameter folder}
 #' }
 #'
-"testCheckData"
+ "testCheckData"
 
 #' A list used to verify that ps_2dPlotGauss() is valid
 #'

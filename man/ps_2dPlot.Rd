@@ -4,13 +4,30 @@
 \alias{ps_2dPlot}
 \title{ps_2dPlot}
 \usage{
-ps_2dPlot(doc = "ps_2dPlot", data, GroupVar, AnalyticVars, ID = "none",
-  Groups, ByGroup = FALSE, PlotAllGroups = FALSE, VariablePairs,
-  PlotPoints = TRUE, LowessLine = TRUE, Lowess_f = NA,
-  PlotMedians = FALSE, PlotEllipses = FALSE, Ellipses = c(0.95,
-  0.99), KernelSmooth = FALSE, Kernelwidth = 0.3, PlotHulls = FALSE,
-  parRowsCols = c(2, 2), Colors = c("red", "black", "blue", "green",
-  "purple"), legendLoc = "topleft", Identify = FALSE)
+ps_2dPlot(
+  doc = "ps_2dPlot",
+  data,
+  GroupVar,
+  AnalyticVars,
+  ID = "none",
+  Groups,
+  ByGroup = FALSE,
+  PlotAllGroups = FALSE,
+  VariablePairs,
+  PlotPoints = TRUE,
+  LowessLine = TRUE,
+  Lowess_f = NA,
+  PlotMedians = FALSE,
+  PlotEllipses = FALSE,
+  Ellipses = c(0.95, 0.99),
+  KernelSmooth = FALSE,
+  Kernelwidth = 0.3,
+  PlotHulls = FALSE,
+  parRowsCols = c(2, 2),
+  Colors = c("red", "black", "blue", "green", "purple"),
+  legendLoc = "topleft",
+  Identify = FALSE
+)
 }
 \arguments{
 \item{doc}{A string documenting use written to the output list;

@@ -3,6 +3,6 @@
 .RData
 .Ruserdata
 inst/doc
-karon.Rcheck/
-karon*.tar.gz
-karon*.tgz
+predictSource.Rcheck/
+predictSource*.tar.gz
+predictSource*.tgz

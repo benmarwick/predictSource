@@ -4,8 +4,16 @@
 \alias{as_checkData}
 \title{as_CheckData}
 \usage{
-as_checkData(doc = "fn.CheckData", data, CheckDupVars, GroupVar = " ",
-  Groups, ID = " ", AnalyticVars, folder = " ")
+as_checkData(
+  doc = "fn.CheckData",
+  data,
+  CheckDupVars,
+  GroupVar = " ",
+  Groups,
+  ID = " ",
+  AnalyticVars,
+  folder = " "
+)
 }
 \arguments{
 \item{doc:}{a character string written to the output list; default is the function name}
