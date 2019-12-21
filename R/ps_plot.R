@@ -39,7 +39,7 @@
 #'  analytic variables, for display if the user identifies points of interest.  If plotMedians is TRUE,
 #'  the convex hull and median of the points are plotted for each group.
 #'
-#' @import MASS ellipse graphics stats  grDevices
+#' @import MASS ellipse graphics stats  grDevices  KernSmooth
 #'
 #' @export
 #'
@@ -116,9 +116,11 @@ ps_plot <- function(   data,
         lines(lowess_fit)
       }  # end of code for lowessLine = TRUE
       if (kernelSmooth) {
-        kernel_fit<-ksmooth(x=data[,useVars[1]],
-                            y=data[,useVars[2]],"normal",
-                            bandwidth=sum(range(data[,useVars[1]])*c(-1,1))*kernelWidth)
+#        kernel_fit<-ksmooth(x=data[,useVars[1]],
+#                            y=data[,useVars[2]],"normal",
+#                            bandwidth=sum(range(data[,useVars[1]])*c(-1,1))*kernelWidth)
+        kernel_fit<-bkde(x=data[,useVars[1]],
+                         y=data[,useVars[2]])
         lines(kernel_fit)
       }
       if (plotHulls & (!plotMedians))  {  # plot hulls but not medians
@@ -209,9 +211,11 @@ ps_plot <- function(   data,
         if (kernelSmooth) {
           for (i in 1:length(groups)) {
             data_i<-data[data[,ps_groupVar]==groups[i],]
-            kernel_fit<-ksmooth(x=data_i[,useVars[1]],
-                              y=data_i[,useVars[2]],"normal",
-                              bandwidth=sum(range(data_i[,useVars[1]])*c(-1,1))*kernelWidth)
+#            kernel_fit<-ksmooth(x=data_i[,useVars[1]],
+#                              y=data_i[,useVars[2]],"normal",
+#                              bandwidth=sum(range(data_i[,useVars[1]])*c(-1,1))*kernelWidth)
+            kernel_fit<-bkde(x=data_i[,useVars[1]],
+                             y=data_i[,useVars[2]])
             lines(kernel_fit)
             }
           }

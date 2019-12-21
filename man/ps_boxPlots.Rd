@@ -4,8 +4,15 @@
 \alias{ps_boxPlots}
 \title{ps_boxPlots}
 \usage{
-ps_boxPlots(doc = "ps_boxPlots", data, GroupVar, Groups, AnalyticVars, Nrow,
-  Ncol)
+ps_boxPlots(
+  doc = "ps_boxPlots",
+  data,
+  GroupVar,
+  Groups,
+  AnalyticVars,
+  Nrow,
+  Ncol
+)
 }
 \arguments{
 \item{doc}{A string documenting use, included in list returned;

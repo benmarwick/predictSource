@@ -4,9 +4,26 @@
 \alias{ps_plot}
 \title{ps_plot}
 \usage{
-ps_plot(data, ps_groupVar, ps_byGroup, ps_plotAllGroups, useVars, plotPoints,
-  lowessLine, lowess_f, plotMedians, kernelSmooth, kernelWidth, plotHulls,
-  plotEllipses, ps_ellipses, groupIndex, ps_colors, ps_legend, ps_identify)
+ps_plot(
+  data,
+  ps_groupVar,
+  ps_byGroup,
+  ps_plotAllGroups,
+  useVars,
+  plotPoints,
+  lowessLine,
+  lowess_f,
+  plotMedians,
+  kernelSmooth,
+  kernelWidth,
+  plotHulls,
+  plotEllipses,
+  ps_ellipses,
+  groupIndex,
+  ps_colors,
+  ps_legend,
+  ps_identify
+)
 }
 \arguments{
 \item{data}{A data frame containing the data to be analyzed}

@@ -4,12 +4,29 @@
 \alias{ps_pca}
 \title{ps_pca}
 \usage{
-ps_pca(doc = "ps_pca", data, ID = " ", GroupVar, Groups, AnalyticVars,
-  ScreePlot = FALSE, BoxPlots = FALSE, pcPlot = TRUE, PlotPoints = TRUE,
-  PlotEllipses = TRUE, PlotHull = FALSE, PlotMedians = FALSE,
-  Ellipses = c(0.95, 0.99), PlotColors = T, legendLoc = "topright",
-  Colors = c("red", "black", "blue", "green", "purple"), Identify = FALSE,
-  digits = 3, Seed = 11111, folder = " ")
+ps_pca(
+  doc = "ps_pca",
+  data,
+  ID = " ",
+  GroupVar,
+  Groups,
+  AnalyticVars,
+  ScreePlot = FALSE,
+  BoxPlots = FALSE,
+  pcPlot = TRUE,
+  PlotPoints = TRUE,
+  PlotEllipses = TRUE,
+  PlotHull = FALSE,
+  PlotMedians = FALSE,
+  Ellipses = c(0.95, 0.99),
+  PlotColors = T,
+  legendLoc = "topright",
+  Colors = c("red", "black", "blue", "green", "purple"),
+  Identify = FALSE,
+  digits = 3,
+  Seed = 11111,
+  folder = " "
+)
 }
 \arguments{
 \item{doc}{A string with documentation in the list returned, default

@@ -4,8 +4,14 @@
 \alias{ps_pairsPlot}
 \title{ps_pairsPlot}
 \usage{
-ps_pairsPlot(doc = "ps_pairsPlot", data, GroupVar, Groups, AnalyticVars,
-  Span = 2/3)
+ps_pairsPlot(
+  doc = "ps_pairsPlot",
+  data,
+  GroupVar,
+  Groups,
+  AnalyticVars,
+  Span = 2/3
+)
 }
 \arguments{
 \item{doc}{A string documenting use added to the output list, default is the function name}
