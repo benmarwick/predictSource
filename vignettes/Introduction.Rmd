@@ -1,5 +1,5 @@
 ---
-title: "Introduction to the karon package"
+title: "Introduction to the predictSource package"
 author: "John Karon & Ben Marwick"
 date: "`r Sys.Date()`"
 output:
@@ -8,7 +8,9 @@ output:
   pdf_document: default
   word_document: default
 vignette: |
-  %\VignetteIndexEntry{Vignette Title} %\VignetteEngine{knitr::rmarkdown} %\VignetteEncoding{UTF-8}
+  %\VignetteIndexEntry{Vignette Title} 
+  %\VignetteEngine{knitr::rmarkdown} 
+  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r setup, include = FALSE}
@@ -33,7 +35,7 @@ After creating analysis files and carrying out standard data quality and descrip
 The data used to illustrate these procedures are five elements from five obsidian sources in the Jemez caldera in central New Mexico (the sources are coded A through E) and obsidian artifacts from a valley east of that caldera (see the next section).  The classification tree for separating the Jemez obsidian sources is in Figure 1.1.  Of the five candidate elements, only strontium, rubidium, and ytterbium are needed to perfectly predict a source (the two elements not used are niobium and zirconium).  A principal component plot for predicting the source of artifacts using this classification tree (rather than from the random forest analysis) is in Figure 1.2.  It shows that some artifacts predicted to be from source C are likely in fact from source B.  We will see that the corresponding plot of the random forest predictions identifies no likely misclassifications.  
 
 ```{r results='hide',message=FALSE, fig.cap="Figure 1.1: Classification tree analysis for the Jemez obsidian sources."}
-library(karon)
+library(predictSource)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 tree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
@@ -70,7 +72,7 @@ http://www.swxrflab.net/labfees.htm#QuanX%20Energy-Dispersive%20X-Ray%20Fluoresc
 The five obsidian sources are coded as A, B, C, D, and E in the source and artifact data sets (ObsidianSources and ObsidianArtifacts, respectively).  The source (or predicted source for an artifact) is in the character-valued variable Code. Each data set contains the variables Code, the five elements (as numeric variables, with variable names the element symbols), and a character-valued variable ID containing an artificial lab ID.  For example, the first few rows of ObsidianSources are in Table 2.1.
 
 ```{r }
-library(karon)
+library(predictSource)
 data(ObsidianSources)
 knitr::kable(ObsidianSources[1:6,], caption="Table 2.1: Sample of the data in the file ObsidianSources.")
 #
@@ -112,7 +114,7 @@ After creating the analysis file, use
 to obtain basic descriptive statistics and carry out several data checks (number of observations, number of missing values, number of negative values, duplicate observations, and descriptive statistics, by group and analysis variable).  For the data set ObsidianSources, there are no negative values for the five elements of interest and no duplicate observations.  The numbers of observations by source and element are in Table 3.1.
 
 ```{r echo=FALSE, message=FALSE}
-library(karon)
+library(predictSource)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 checkData<-ps_checkData(data=ObsidianSources,CheckDupVars=c("Code","ID"),GroupVar="Code",Groups="All",AnalyticVars=analyticVars)
@@ -123,7 +125,7 @@ knitr::kable(checkData$Nvalues, caption="Table 3.1: Number of values for each el
 The descriptive statistics for the elements in the classification tree in Figure 1.1 are in Table 3.2. 
 
 ```{r } 
-library(karon)
+library(predictSource)
 data(ObsidianSources)
 checkData<-ps_checkData(data=ObsidianSources,CheckDupVars=c("Code","ID"),GroupVar="Code",Groups="All",AnalyticVars=c("Sr","Rb","Nb","Y"))
 knitr::kable(checkData$statistics, caption="Table 3.2: Descriptive statistics for the elements in the Jemez obsidian sources used in the classification tree in Figure 1.1.")
@@ -135,7 +137,7 @@ The example table shows that, in the descriptive statistics data frame (Robject$
 For understanding later results, we need the corresponding descriptive statistics for the artifacts.
 
 ```{r } 
-library(karon)
+library(predictSource)
 data(ObsidianArtifacts)
 checkData<-ps_checkData(data=ObsidianArtifacts,CheckDupVars=c("Code","ID"), GroupVar="Code", ByGroup=FALSE, AnalyticVars=c("Sr","Rb","Y"))
 knitr::kable(checkData$statistics, caption="Table 3.3: Descriptive statistics for the elements in the obsidian artifacts used in the classification tree in Figure 1.1.")
@@ -160,7 +162,7 @@ the boxes
 From Figure 4.1, below, we see immediately that there is little variation among the values of an element at a source. There are a few outliers, but they are not far from the range of adjacent values.  
 
 ```{r results='hide',message=FALSE, fig.cap="Figure 4.1: Box plots for the Jemez obsidian source data."} 
-library(karon)
+library(predictSource)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Nb")
 boxPlots<-ps_boxPlots(data=ObsidianSources, GroupVar="Code",                Groups="All",AnalyticVars=analyticVars,Nrow=2,Ncol=2)
@@ -170,7 +172,7 @@ boxPlots<-ps_boxPlots(data=ObsidianSources, GroupVar="Code",                Grou
 We can also create side-by-side box plots of the sources and the artifacts assigned to the sources, in order to see how well the distributions of the elements from artifacts correspond to the distributions of the corresponding sources.  The plot below shows this comparison for rubidium and niobium; the code for the artifact is .A added to the code for the assigned source (e.g., the artifacts assigned to source x have the code x.a).  We see that, for the artifacts assigned to sources A and E, the artifact values for rubidium are larger than the corresponding source values and also are more variable.  For one artifact assigned to source D, the niobium value is a clear outlier, suggesting a misclassified artifact.  For the artifacts assigned to source E, the upper quartile for niobium is only slightly larger than the median, resulting in the unusual appearance of the box.
 
 ```{r results='hide',message=FALSE, fig.cap="Figure 4.2: Box plots for rubidium and niobium comparing the Jemez obsidian sources and the obsidian artifacts assigned to those sources by Steve Shackley.  x.a labels the artifacts assigned to source x." } 
-library(karon)
+library(predictSource)
 data(ObsidianSources)
 data(ObsidianArtifacts)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
@@ -195,7 +197,7 @@ The plot is obtained with the function ps_pairsPlot() and the arguments data, Gr
 The plot below of the relations between elements at source A shows that the relationships between rubidium and ytterbium, and between rubidium and zirconium, are roughly linear, but that, roughly, there is no relation between the values of strontium and those of ytterbium and zirconium.  Note that it is necessary to look at both scatterplots of the relation between a pair of variables, as limited variation in one variable and dependence of the location of the largest and smallest values of one variable can make there seem to be a relationship (see the plots of strontium as the ordinate versus ytterbium or zirconium).  
 
 ```{r results='hide',message=FALSE, fig.cap="FIgure 4.3: Pairs plots of the Jemez obsidian source data." } 
-library(karon)
+library(predictSource)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 pairsPlot <- ps_pairsPlot(data=ObsidianSources, GroupVar="Code", Groups="A", AnalyticVars=analyticVars)
@@ -211,7 +213,7 @@ Table 4.1 contains the Spearman correlation coefficient estimates for all pairs 
 Table 4.2 contains the Spearman correlation coefficients if group membership is ignored.  The high correlation between pairs of variables suggests that principal components will be a useful method for showing the variation among source groups in two dimensions.  
 
 ```{r } 
-library(karon)
+library(predictSource)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 CV_corr<-ps_CV_corr(data = ObsidianSources, GroupVar="Code", Groups = "All", AnalyticVars=analyticVars, plotCorrs=FALSE)
@@ -295,7 +297,7 @@ The function ps_3dPlot() creates one or more three-dimensional scatterplots.  If
 file:///C:/Consulting/Sourcing/Vignette/scatterRbSrY.doc
 
 ```{r results='hide',message=FALSE, fig.cap="Figure 4.9: Example of a three-dimensional plot showing data from three Jemez obsidian sources."}
-library(karon)
+library(predictSource)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 plot3d<-ps_3dPlot(data=ObsidianSources, GroupVar="Code", Groups=c("A","B","C"), AnalyticVars=analyticVars,
@@ -330,7 +332,7 @@ Since niobium has many samples with equal values, it is clear that niobium does 
 
 
 ```{r results='hide',message=FALSE, fig.cap="Figure 4.10a: Q-Q plots of rubidium and zirconium, including the bivariate Q-Q plot, for the Jemez obsidian source data from source A." } 
-library(karon)
+library(predictSource)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 plot2dGauss<-ps_2dPlotGauss(data=ObsidianSources, GroupVar="Code", ID="ID", Groups="A",
@@ -339,7 +341,7 @@ plot2dGauss<-ps_2dPlotGauss(data=ObsidianSources, GroupVar="Code", ID="ID", Grou
 ```
 
 ```{r results='hide',message=FALSE, fig.cap="Figure 4.10b: Q-Q plots of rubidium and zirconium, including the bivariate Q-Q plot, for the Jemez obsidian source data from source B." } 
-library(karon)
+library(predictSource)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 plot2dGauss<-ps_2dPlotGauss(data=ObsidianSources, GroupVar="Code", ID="ID", Groups="B",
@@ -348,7 +350,7 @@ plot2dGauss<-ps_2dPlotGauss(data=ObsidianSources, GroupVar="Code", ID="ID", Grou
 ```
 
 ```{r results='hide',message=FALSE, fig.cap="Figure 4.10c: Q-Q plots of rubidium and niobium for the Jemez obsidian source data from sources A and B." } 
-library(karon)
+library(predictSource)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 plot2dGauss<-ps_2dPlotGauss(data=ObsidianSources, GroupVar="Code", ID="ID", Groups=c("A","B"),
@@ -466,7 +468,7 @@ Figure 6.1 shows the classification tree using the obsidian source data (this is
 
 
 ```{r results='hide',message=FALSE, fig.cap="Figure 6.1: The classification tree for the Jemez obsidian source data based on five potential elements as predictors."}
-library(karon)
+library(predictSource)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 tree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
@@ -499,7 +501,7 @@ tree$Tree
 The component classification in the list produced by ps_tree() contains a table with the predicted sources for the data used to create the tree.  The results for the Jemez obsidian source data are in Table y.  These results reproduce the information in Figure 6.1.  Note that, in Figure 6.1, the terminal nodes from left to right (1 to 5) contain the observations from sources B, A, D, C, and E, in that order, which is different from the row order in Table 6.2.
 
 ```{r, message=FALSE  }
-library(karon)
+library(predictSource)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 tree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
@@ -511,7 +513,7 @@ knitr::kable(tree$classification, caption = "Table 6.2:  Classification tree pre
 Table 6.3 contains the improvement in predicted group purity, as measured by Cp, and the estimated relative error rates and their standard errors obtained from cross-validation from the tree procedure using the Jemez obsidian source data. 
 
 ```{r, message=FALSE }
-library(karon)
+library(predictSource)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
  tree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,

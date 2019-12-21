@@ -4,9 +4,17 @@
 \alias{ps_pcaGaussian}
 \title{ps_pcaGaussian}
 \usage{
-ps_pcaGaussian(doc = "ps_pcaGaussian", data, GroupVar, Groups,
-  gaussID = " ", AnalyticVars, qqPlot = TRUE, gaussIdentify = FALSE,
-  folder = " ")
+ps_pcaGaussian(
+  doc = "ps_pcaGaussian",
+  data,
+  GroupVar,
+  Groups,
+  gaussID = " ",
+  AnalyticVars,
+  qqPlot = TRUE,
+  gaussIdentify = FALSE,
+  folder = " "
+)
 }
 \arguments{
 \item{doc}{Documentation for the analysis, default if the function name}

@@ -4,9 +4,19 @@
 \alias{fn_2dPlotGauss}
 \title{fn_2dPlotGauss}
 \usage{
-fn_2dPlotGauss(doc = "fn_2dPlotGauss", data, GroupVar, ID, Groups,
-  AnalyticVars, scatterPlot = TRUE, qqPlot = TRUE, pvalue_digits = 3,
-  Identify = FALSE, folder = " ")
+fn_2dPlotGauss(
+  doc = "fn_2dPlotGauss",
+  data,
+  GroupVar,
+  ID,
+  Groups,
+  AnalyticVars,
+  scatterPlot = TRUE,
+  qqPlot = TRUE,
+  pvalue_digits = 3,
+  Identify = FALSE,
+  folder = " "
+)
 }
 \arguments{
 \item{doc}{A string documenting use written to the output list; default is the function name}

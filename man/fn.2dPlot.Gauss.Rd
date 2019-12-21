@@ -4,9 +4,19 @@
 \alias{fn.2dPlot.Gauss}
 \title{fn.2dPlot.Gauss}
 \usage{
-fn.2dPlot.Gauss(doc = "fn.2dPlot.Gauss", data, GroupVar, ID, Groups,
-  AnalyticVars, scatterPlot = T, qqPlot = T, pvalue.digits = 3,
-  Identify = F, folder = " ")
+fn.2dPlot.Gauss(
+  doc = "fn.2dPlot.Gauss",
+  data,
+  GroupVar,
+  ID,
+  Groups,
+  AnalyticVars,
+  scatterPlot = T,
+  qqPlot = T,
+  pvalue.digits = 3,
+  Identify = F,
+  folder = " "
+)
 }
 \arguments{
 \item{doc}{A string documenting use written to the output list; default is the function name}

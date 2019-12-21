@@ -4,10 +4,19 @@
 \alias{fn.3dPlot.rotate}
 \title{fn.3dPlot.rotate}
 \usage{
-fn.3dPlot.rotate(doc = "fn.3dPlot.rotate", data, GroupVar, Groups,
-  AnalyticVars, Selections, ByGroup = F, ptSize = 5,
-  Colors = c("red", "black", "blue", "green", "purple"), folder = " ",
-  dsFile)
+fn.3dPlot.rotate(
+  doc = "fn.3dPlot.rotate",
+  data,
+  GroupVar,
+  Groups,
+  AnalyticVars,
+  Selections,
+  ByGroup = F,
+  ptSize = 5,
+  Colors = c("red", "black", "blue", "green", "purple"),
+  folder = " ",
+  dsFile
+)
 }
 \arguments{
 \item{doc}{A string documenting usage written to the list return, default is the function name}

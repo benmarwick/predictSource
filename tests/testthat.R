@@ -1,4 +1,4 @@
 library(testthat)
-library(karon)
+library(predictSource)
 
-test_check("karon")
+test_check("predictSource")
