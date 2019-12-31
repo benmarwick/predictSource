@@ -25,6 +25,8 @@
 #' if FALSE (the default), no kernel smooth is plotted
 #' @param Kernelwidth the proportion of the range of x-values used in the kernel smooth;
 #' default is 0.3
+#' @param localPoly Logical.  If TRUE (default is FALSE), plot local polynomial lines with
+#' a bandwidth selected from the data.  Currently not used.
 #' @param PlotEllipses Logical.  If TRUE, Gaussian confidence ellipses are plotted for each group;
 #' if F (the default), no ellipses are plotted
 #' @param Ellipses single value or vector of values with confidence values for the ellipses; default is c(0.95,0.99)
@@ -102,6 +104,7 @@ ps_2dPlot <- function(doc = "ps_2dPlot",
                       Ellipses = c(0.95, 0.99),
                       KernelSmooth = FALSE,
                       Kernelwidth = 0.3,
+                      localPoly = FALSE,
                       PlotHulls = FALSE,
                       parRowsCols = c(2,2),
                       Colors = c("red","black","blue","green","purple"),
@@ -134,6 +137,7 @@ ps_2dPlot <- function(doc = "ps_2dPlot",
   assert_that((min(Ellipses) > 0) & (max(Ellipses) < 1), msg="values of parameter Ellipses not between 0 and 1")
   assert_that(is.logical(KernelSmooth), msg="type of parameter KernelSmooth not logical")
   assert_that(is.numeric(Kernelwidth) & (Kernelwidth > 0), msg="parameter KernelWidth must be numeric and positive")
+  assert_that(is.logical(localPoly), msg="type of parameter localPoly not logical")
   assert_that(is.logical(PlotHulls), msg="type of parameter PlotHulls not logical")
   assert_that(is.vector(parRowsCols) & (length(parRowsCols) == 2),
               msg="parameter parRowsCols not a vector of length 2")
@@ -219,6 +223,7 @@ ps_2dPlot <- function(doc = "ps_2dPlot",
               plotMedians= PlotMedians,
               kernelSmooth = KernelSmooth,
               kernelWidth = Kernelwidth,
+              locPoly = localPoly,
               plotHulls = PlotHulls,
               groupIndex = group_index,
               ps_colors = Colors,
@@ -238,6 +243,7 @@ ps_2dPlot <- function(doc = "ps_2dPlot",
                 plotMedians= PlotMedians,
                 kernelSmooth = KernelSmooth,
                 kernelWidth = Kernelwidth,
+                locPoly = localPoly,
                 plotHulls = PlotHulls,
                 groupIndex = group_index,
                 ps_colors = Colors,
@@ -264,6 +270,7 @@ ps_2dPlot <- function(doc = "ps_2dPlot",
                  plotMedians = PlotMedians,
                  kernelSmooth = KernelSmooth,
                  kernelWidth = Kernelwidth,
+                 locPoly = localPoly,
                  plotHulls = PlotHulls,
                  groupIndex = group_index,
                  ps_colors = Colors,
@@ -283,6 +290,7 @@ ps_2dPlot <- function(doc = "ps_2dPlot",
                    plotMedians = PlotMedians,
                    kernelSmooth = KernelSmooth,
                    kernelWidth = Kernelwidth,
+                   locPoly = localPoly,
                    plotHulls = PlotHulls,
                    groupIndex = group_index,
                    ps_colors = Colors,
@@ -317,6 +325,7 @@ ps_2dPlot <- function(doc = "ps_2dPlot",
                 plotMedians= PlotMedians,
                 kernelSmooth = KernelSmooth,
                 kernelWidth = Kernelwidth,
+                locPoly = localPoly,
                 plotHulls = PlotHulls,
                 groupIndex = group_index,
                 ps_colors = Colors,
@@ -336,6 +345,7 @@ ps_2dPlot <- function(doc = "ps_2dPlot",
                            plotMedians= PlotMedians,
                            kernelSmooth = KernelSmooth,
                            kernelWidth = Kernelwidth,
+                           locPoly = localPoly,
                            plotHulls = PlotHulls,
                            groupIndex = group_index,
                            ps_colors = Colors,
@@ -366,6 +376,7 @@ ps_2dPlot <- function(doc = "ps_2dPlot",
                   plotMedians = PlotMedians,
                   kernelSmooth = KernelSmooth,
                   kernelWidth = Kernelwidth,
+                  locPoly = localPoly,
                   plotHulls = PlotHulls,
                   groupIndex = group_index,
                   ps_colors = Colors,
@@ -385,6 +396,7 @@ ps_2dPlot <- function(doc = "ps_2dPlot",
                               plotMedians = PlotMedians,
                               kernelSmooth = KernelSmooth,
                               kernelWidth = Kernelwidth,
+                              locPoly = localPoly,
                               plotHulls = PlotHulls,
                               groupIndex = group_index,
                               ps_colors = Colors,
@@ -404,9 +416,10 @@ ps_2dPlot <- function(doc = "ps_2dPlot",
   #
   params_grouping<-list(GroupVar,Groups)
   names(params_grouping)<-c("GroupVar","Groups")
-  params_logical<-c(ByGroup,PlotAllGroups,PlotPoints,LowessLine,PlotEllipses,KernelSmooth,PlotHulls,PlotMedians)
+  params_logical<-c(ByGroup,PlotAllGroups,PlotPoints,LowessLine,PlotEllipses,KernelSmooth,
+                    localPoly,PlotHulls,PlotMedians)
   names(params_logical)<-c("ByGroup","PlotAllGroups","PlotPoints","LowessLine","PlotEllipses","KernelSmooth",
-                           "PlotHulls","PlotMedians")
+                           "localPoly","PlotHulls","PlotMedians")
   params_continuous<-c(Lowess_f,Kernelwidth)
   names(params_continuous)<-c("Lowess_f","Kernelwidth")
   params<-list(grouping=params_grouping,logical=params_logical,continuous=params_continuous,colors=Colors)

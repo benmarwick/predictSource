@@ -14,6 +14,8 @@
 #' @param kernelSmooth Logical.  If TRUE, a kernel smooth is plotted for each group;
 #' if FALSE, no kernel smooth is plotted
 #' @param kernelWidth the proportion of the range of x-values used in the kernel smooth
+#' @param locPoly Logical.  If TRUE, fit a local linear polynomial with a bandwidth selected
+#' using the data.  Currently not used.
 #' @param plotEllipses Logical.  If TRUE, Gaussian confidence ellipses are plotted for each group;
 #' if FALSE, no ellipses are plotted
 #' @param ps_ellipses single value or vector of values with confidence values for the ellipses
@@ -37,9 +39,10 @@
 #'  This function is used internally by the function ps_2dPlot.  The default values are those
 #'  from ps_2dPlot.  data will contain a group code, a lab ID (if used in the data set), and all
 #'  analytic variables, for display if the user identifies points of interest.  If plotMedians is TRUE,
-#'  the convex hull and median of the points are plotted for each group.
+#'  the convex hull and median of the points are plotted for each group.  The package fANACOVA (required
+#'  to use the function lowess.as()) was not available for the current version of R.
 #'
-#' @import MASS ellipse graphics stats  grDevices  KernSmooth
+#' @import MASS ellipse graphics stats  grDevices  KernSmooth  fANACOVA
 #'
 #' @export
 #'
@@ -54,6 +57,7 @@ ps_plot <- function(   data,
                        plotMedians,
                        kernelSmooth,
                        kernelWidth,
+                       locPoly,
                        plotHulls,
                        plotEllipses,
                        ps_ellipses,
@@ -110,19 +114,29 @@ ps_plot <- function(   data,
           ps_dataCheck<-data[index,]  # identified points
         }
       }  # end of code for plotPoints = TRUE
+      #
+      #  plot smoothed line
+      #
       if (lowessLine) {
         if (is.na(lowess_f)) lowess_fit<-lowess(data[,useVars])
         else  lowess_fit<-lowess(data[,useVars],f=lowess_f)
+#        lowess_fit <- lowess.as(x=data[,useVars[1]],y=data[,useVars[2]],criterion="aicc",
+#                                family="gaussian")
         lines(lowess_fit)
       }  # end of code for lowessLine = TRUE
       if (kernelSmooth) {
-#        kernel_fit<-ksmooth(x=data[,useVars[1]],
-#                            y=data[,useVars[2]],"normal",
-#                            bandwidth=sum(range(data[,useVars[1]])*c(-1,1))*kernelWidth)
-        kernel_fit<-bkde(x=data[,useVars[1]],
-                         y=data[,useVars[2]])
+        kernel_fit<-ksmooth(x=data[,useVars[1]],
+                            y=data[,useVars[2]],"normal",
+                            bandwidth=sum(range(data[,useVars[1]])*c(-1,1))*kernelWidth)
         lines(kernel_fit)
       }
+#      if (locPoly) {
+#         bw <- dpill(x=data[,useVars[1]],y=data[,useVars[2]])  # compute bandwidth
+#         browser()
+#         fit <- locpoly(x=data[,useVars[1]],y=data[,useVars[2]],degree=1,bandwidth=bw,gridsize=50L)
+#         lines(fit)
+#      }
+      #
       if (plotHulls & (!plotMedians))  {  # plot hulls but not medians
         hull_pts <- chull(data[,useVars])
         hull_pts <- c(hull_pts, hull_pts[1])
@@ -192,6 +206,8 @@ ps_plot <- function(   data,
                 data_i<-data[data[,ps_groupVar]==groups[i],]
                 if (is.na(lowess_f)) lowess_fit<-lowess(data_i[,useVars])
                 else  lowess_fit<-lowess(data_i[,useVars],f=lowess_f)
+#                lowess_fit <- lowess.as(x=data[,useVars[1]],y=data[,useVars[2]],criterion="aicc",
+#                                        family="gaussian")
                 lines(lowess_fit)
                 }
               }  # end of code for lowessLine = TRUE
@@ -200,25 +216,34 @@ ps_plot <- function(   data,
             ps_dataCheck<-data[index,]  # identified points
           }  # end of code for ps_identify = TRUE
         }  # end of code for plotPoints = TRUE
+        #
+        #  plot smoothed lines
+        #
         if (lowessLine) {
-          for (i in length(groups)) {
+          for (i in 1:length(groups)) {
             data_i<-data[data[,ps_groupVar]==groups[i],]
             if (is.na(lowess_f)) lowess_fit<-lowess(data_i[,useVars])
             else  lowess_fit<-lowess(data_i[,useVars],f=lowess_f)
+#            lowess_fit <- lowess.as(x=data[,useVars[1]],y=data[,useVars[2]],criterion="aicc",
+#                                    family="gaussian")
             lines(lowess_fit)
             }
           }  # end of code for lowessLine = TRUE
         if (kernelSmooth) {
           for (i in 1:length(groups)) {
             data_i<-data[data[,ps_groupVar]==groups[i],]
-#            kernel_fit<-ksmooth(x=data_i[,useVars[1]],
-#                              y=data_i[,useVars[2]],"normal",
-#                              bandwidth=sum(range(data_i[,useVars[1]])*c(-1,1))*kernelWidth)
-            kernel_fit<-bkde(x=data_i[,useVars[1]],
-                             y=data_i[,useVars[2]])
+            kernel_fit<-ksmooth(x=data_i[,useVars[1]],
+                              y=data_i[,useVars[2]],"normal",
+                              bandwidth=sum(range(data_i[,useVars[1]])*c(-1,1))*kernelWidth)
             lines(kernel_fit)
             }
-          }
+        }
+#        if (locPoly) {
+#          bw <- dpill(x=data[,useVars[1]],y=data[,useVars[2]])  # compute bandwidth
+#          browser()
+#          fit <- locpoly(x=data[,useVars[1]],y=data[,useVars[2]],degree=1,bandwidth=bw,gridsize=50L)
+#          lines(fit)
+#        }
         if (plotHulls)  {  # plot hulls
           for (i in length(groups)) {
             data_i<-data[data[,ps_groupVar]==groups[i],]

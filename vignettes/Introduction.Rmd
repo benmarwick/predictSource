@@ -269,7 +269,7 @@ plot_2d <- ps_2dPlot(data = ObsidianSources, GroupVar = "Code", ID = "ID", Group
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 plot_2d <- ps_2dPlot(data = ObsidianSources, GroupVar = "Code", ID = "ID", Groups = c("A", "B", "C", "D"),
-          AnalyticVars = analyticVars, VariablePairs=analyticVars[c(1,4)], PlotEllipses=TRUE, KernelSmooth=TRUE,                  LowessLine=FALSE, ByGroup=TRUE)
+          AnalyticVars = analyticVars, VariablePairs=analyticVars[c(1,4)], PlotEllipses=TRUE, KernelSmooth=TRUE,                LowessLine=FALSE, ByGroup=TRUE)
 ```
 
 ```{r results='hide',message=FALSE, fig.cap="Figure 4.7: Example of a scatterplot for obsidian Jemez source data with the median values of and convex hulls of the points at each source."} 

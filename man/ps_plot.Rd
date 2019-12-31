@@ -16,6 +16,7 @@ ps_plot(
   plotMedians,
   kernelSmooth,
   kernelWidth,
+  locPoly,
   plotHulls,
   plotEllipses,
   ps_ellipses,
@@ -51,6 +52,9 @@ if FALSE, no kernel smooth is plotted}
 
 \item{kernelWidth}{the proportion of the range of x-values used in the kernel smooth}
 
+\item{locPoly}{Logical.  If TRUE, fit a local linear polynomial with a bandwidth selected
+using the data.  Currently not used.}
+
 \item{plotHulls}{Logical. If TRUE, the convex hull is drawn for each set of points; if FALSE,
 no hulls are drawn}
 
@@ -83,6 +87,7 @@ Create 2-dimensional scatter plot for one group: used by ps_2dPlot().
  This function is used internally by the function ps_2dPlot.  The default values are those
  from ps_2dPlot.  data will contain a group code, a lab ID (if used in the data set), and all
  analytic variables, for display if the user identifies points of interest.  If plotMedians is TRUE,
- the convex hull and median of the points are plotted for each group.
+ the convex hull and median of the points are plotted for each group.  The package fANACOVA (required
+ to use the function lowess.as()) was not available for the current version of R.
 }
 

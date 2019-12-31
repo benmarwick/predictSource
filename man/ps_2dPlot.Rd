@@ -22,6 +22,7 @@ ps_2dPlot(
   Ellipses = c(0.95, 0.99),
   KernelSmooth = FALSE,
   Kernelwidth = 0.3,
+  localPoly = FALSE,
   PlotHulls = FALSE,
   parRowsCols = c(2, 2),
   Colors = c("red", "black", "blue", "green", "purple"),
@@ -74,6 +75,9 @@ if FALSE (the default), no kernel smooth is plotted}
 
 \item{Kernelwidth}{the proportion of the range of x-values used in the kernel smooth;
 default is 0.3}
+
+\item{localPoly}{Logical.  If TRUE (default is FALSE), plot local polynomial lines with
+a bandwidth selected from the data.  Currently not used.}
 
 \item{PlotHulls}{if TRUE, the convex hull is drawn for each set of points; if FALSE (the default),
 no hulls are drawn}
