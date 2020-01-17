@@ -156,10 +156,12 @@ ps_tree <-
             cp=cP)
     if (plotTree) {  #  plotTree is TRUE
       plot(as.party(Tree), tp_args = list(id = FALSE), main=paste("model:",ModelTitle))
-
       }
-    # classification
-    classification <- table(Tree$y, Sources)
+    # classification: accuracy of predicting sources
+    predicteds<-rep(" ",length(Tree$y))
+    for (i in 1:length(predicteds))  predicteds[i] <- groups[Tree$y[i]]
+    #
+    classification <- table(predicteds, Sources)
     # evaluate tree size
     CpTable <- Tree$cptable
     #
