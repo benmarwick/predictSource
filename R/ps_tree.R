@@ -53,21 +53,13 @@
 #'
 #' @examples
 #' # Analyze the obsidian source data with variables in the model statement in order of
-#' # importance from a random forst analysis
+#' # importance from a random forest analysis
 #' data(ObsidianSources)
 #' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 #' save_tree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All",
 #' AnalyticVars=analyticVars, Model = "Rb"+"Sr"+"Y"+"Zr"+"Nb",
 #'  ModelTitle = "Sr + Nb + Rb + Y + Zr")
 #'
-#'  #  Predict the sources of artifacts
-#' data(ObsidianSources)
-#' data(ObsidianArtifacts)
-#' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-#' save_tree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All",
-#' AnalyticVars=analyticVars, Model = "Sr"+ "Nb" + "Rb" + "Y"+"Zr",
-#' ModelTitle = "Sr + Nb + Rb + Y + Zr", predictSources=TRUE, predictData=ObsidianArtifacts,
-#'  ID="ID", plotTree=FALSE, plotCp=FALSE)
 #'
 #' @import rpart partykit Formula graphics stats assertthat
 #'
