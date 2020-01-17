@@ -49,7 +49,7 @@
 #' @export
 
 ps_checkData <-
-  function(doc = "pc_checkData",
+  function(doc = "ps_checkData",
            data,
            CheckDupVars,
            GroupVar,
