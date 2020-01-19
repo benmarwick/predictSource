@@ -113,6 +113,7 @@ ps_tree <-
     if (!is.na(Seed))
       set.seed(Seed)  # create reproducible analysis
     #
+    data[1,"Code"] <- "E"
     # create dataset dataUsed based on grouping restrict to desired set of groups
     if (Groups[1] != "All") {
       Use_rows <- (data[, GroupVar] %in% Groups)
@@ -156,7 +157,7 @@ ps_tree <-
             cp=cP)
     if (plotTree) {  #  plotTree is TRUE
       plot(as.party(Tree), tp_args = list(id = FALSE), main=paste("model:",ModelTitle))
-      }
+    }
     # classification: accuracy of predicting sources
     predicteds<-rep(" ",length(Tree$y))
     for (i in 1:length(predicteds))  predicteds[i] <- groups[Tree$y[i]]
@@ -188,16 +189,46 @@ ps_tree <-
       table(Model = nsplitopt[, "Model"], Splits = nsplitopt[, "Splits"])
     #
     if (predictSources == TRUE) {
-      predictedSources <- predict(object = Tree, newdata = predictData)
-      predictedTotals <- apply(predictedSources,2,sum)
+      predictedProbs <- predict(object = Tree, newdata = predictData)
+        #  matrix of probabilities: i,j is probability of source j for sample i
+      # set up matrix to store indicator values: 1 when sample predicted to be from source
+      predictedSource <- matrix(0, nrow(predictedProbs), ncol(predictedProbs))
+      rownames(predictedSource) <- dataUsed[,GroupVar]
+      colnames(predictedSource) <- groups
       #
-      #  create vector with predicted source for each observation
-      source <- rep(" ",nrow(predictedSources))
-      for (i in 1:ncol(predictedSources))
-        source[predictedSources[,i]==1] <- colnames(predictedSources)[i]
+      #  add GroupVar, ID (if given) to predictedProbs
+      if (ID == " ")  predictedProbs <- data.frame(dataUsed[,GroupVar], predictedProbs)
+      if (ID != " ")  predictedProbs <- data.frame(dataUsed[,c(GroupVar,ID)], predictedProbs)
       #
-      if (substr(ID,1,1) == " ")  predictedResults<-data.frame(source,predictData[,AnalyticVars])
-      if (substr(ID,1,1) != " ")  predictedResults<-data.frame(source, predictData[,c(ID, AnalyticVars)])
+      #  define predicted source for each sample
+      for (i in 1:nrow(predictedSource)) {
+         index_i <- 1 # column index with maximum probability
+         for (j in 1:ncol(predictedProbs))
+           if(predictedProbs[i,j] > predictedProbs[i,index_i])  index_i <- j
+                predictedSource[i,index_i] <- 1
+      }
+      #  add GroupVar, ID (if given) to predictedSource
+      if (ID == " ")  predictedSources <- data.frame(dataUsed[,GroupVar], predictedSource)
+      if (ID != " ")  predictedSource  <- data.frame(dataUsed[,c(GroupVar,ID)], predictedSource)
+     #
+     #  create matrix with number assigned to each group, by group
+     #
+     classMatrix <- matrix(0,nrow=length(groups),ncol=length(groups))
+     dimnames(classMatrix) <- list(groups,groups)
+     for (i in 1:length(groups)) {
+        data_i <- predictedSource[predictedSource[,GroupVar]==groups[i],]
+        if (ID == " ")  data_i <- data_i[,-1]   # keep only indicator value data
+        if (ID != " ")  data_i <- data_i[,-(1:2)]
+        classMatrix[i,] <- apply(data_i,2,sum)
+        }
+     browser()
+     #
+     #  error rate
+     #
+     errorRate <- 1 - round(sum(diag(classMatrix)/sum(classMatrix)), dig=3)
+      #
+      if (substr(ID,1,1) == " ")  predictedResults<-data.frame(predictData[,AnalyticVars])
+      if (substr(ID,1,1) != " ")  predictedResults<-data.frame(predictData[,c(ID, AnalyticVars)])
       #
       } # end of code for predictSources == T
     #
@@ -226,7 +257,8 @@ ps_tree <-
                 params=params,
                 model=ModelTitle,
                 Tree = Tree,
-                classification = classification,
+                classification = classMatrix,
+                errorRate = errorRate,
                 CpTable = CpTable,
                 location=folder)
     #
@@ -238,10 +270,11 @@ ps_tree <-
                   Seed=Seed,
                   model=ModelTitle,
                   Tree = Tree,
-                  classification = classification,
+                  classification = classMatrix,
+                  errorRate = errorRate,
                   CpTable = CpTable,
                   predictedSources = predictedResults,
-                  predictedTotals = data.frame(t(predictedTotals)),
+#                  predictedTotals = data.frame(t(predictedTotals)),
                   location=folder)
    out
   }
