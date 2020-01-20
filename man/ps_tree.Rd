@@ -116,8 +116,9 @@ The function fits a classification tree model us the R function rpart().
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 save_tree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All",
-AnalyticVars=analyticVars, Model = "Rb"+"Sr"+"Y"+"Zr"+"Nb",
- ModelTitle = "Sr + Nb + Rb + Y + Zr")
+ AnalyticVars=analyticVars, Model = "Rb"+"Sr"+"Y"+"Zr"+"Nb",
+ ModelTitle = "Sr + Nb + Rb + Y + Zr", predictSources=TRUE, predictUnknowns=FALSE,
+ ID="ID")
 
 # Predict the sources of the obsidian artifacts
 data(ObsidianSources)
@@ -126,6 +127,6 @@ analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 save_tree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All",
  AnalyticVars=analyticVars, Model = "Rb"+"Sr"+"Y"+"Zr"+"Nb",
  ModelTitle = "Sr + Nb + Rb + Y + Zr", predictSources=FALSE, predictUnknowns=TRUE,
- unknownData=ObsidianArtifacts)
+ unknownData=ObsidianArtifacts, unknownID="ID")
 
 }

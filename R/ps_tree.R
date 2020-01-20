@@ -66,8 +66,9 @@
 #' data(ObsidianSources)
 #' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 #' save_tree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All",
-#' AnalyticVars=analyticVars, Model = "Rb"+"Sr"+"Y"+"Zr"+"Nb",
-#'  ModelTitle = "Sr + Nb + Rb + Y + Zr")
+#'  AnalyticVars=analyticVars, Model = "Rb"+"Sr"+"Y"+"Zr"+"Nb",
+#'  ModelTitle = "Sr + Nb + Rb + Y + Zr", predictSources=TRUE, predictUnknowns=FALSE,
+#'  ID="ID")
 #'
 #' # Predict the sources of the obsidian artifacts
 #' data(ObsidianSources)
@@ -76,7 +77,7 @@
 #' save_tree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All",
 #'  AnalyticVars=analyticVars, Model = "Rb"+"Sr"+"Y"+"Zr"+"Nb",
 #'  ModelTitle = "Sr + Nb + Rb + Y + Zr", predictSources=FALSE, predictUnknowns=TRUE,
-#'  unknownData=ObsidianArtifacts)
+#'  unknownData=ObsidianArtifacts, unknownID="ID")
 #'
 #' @import rpart partykit Formula graphics stats assertthat
 #'
@@ -255,10 +256,9 @@ ps_tree <-
      errorCount <- round(c(nTotal-nCorrect, nTotal), dig = 0)
      names(errorCount) <- c("incorrect", "n total")
      #
-#     if (substr(ID,1,1) == " ")  predictedResults<-data.frame(unknownData[,AnalyticVars])
-#     if (substr(ID,1,1) != " ")  predictedResults<-data.frame(unknownData[,c(ID, AnalyticVars)])
-      #
-      } # end of code for predictSources == TRUE
+     classMatrix <- data.frame(classMatrix,total=apply(classMatrix,1,sum))
+     classMatrix <- rbind(classMatrix, all=apply(classMatrix,2,sum))
+     } # end of code for predictSources == TRUE
     #
     if (predictUnknowns == TRUE) {
       predictedProbsUnknowns <- predict(object = treeFit, newdata = unknownData)
@@ -274,6 +274,8 @@ ps_tree <-
           if(predictedProbsUnknowns[i,j] > predictedProbsUnknowns[i,index_i])  index_i <- j
           predictedSourceUnknowns[i,index_i] <- 1
       }
+      predictedTotalsUnknowns <- apply(predictedSourceUnknowns,2,sum)
+      predictedTotalsUnknowns <- c(predictedTotalsUnknowns, all=sum(predictedTotalsUnknowns))
       #  add ID (if given) to predictedProbsUnknowns
       if (unknownID != " ") {
         predictedProbsUnknowns <- data.frame(unknownData[,unknownID], predictedProbs)
@@ -330,8 +332,8 @@ ps_tree <-
                 model=ModelTitle,
                 treeFit = treeFit,
                 predictedProbsUnknowns = predictedProbsUnknowns,
-                predictedSourcesUnknowns = predictedSourcesUnknowns,
-                classification = classMatrix,
+                predictedSourceUnknowns = predictedSourceUnknowns,
+                predictedTotalsUnknowns = predictedTotalsUnknowns,
                 CpTable = CpTable,
                 location=folder)
     #
@@ -349,7 +351,8 @@ ps_tree <-
                 errorRate = errorRate,
                 errorCount = errorCount,
                 predictedProbsUnknowns = predictedProbsUnknowns,
-                predictedSourcesUnknowns = predictedSourcesUnknowns,
+                predictedSourceUnknowns = predictedSourceUnknowns,
+                predictedTotalsUnknowns = predictedTotalsUnknowns,
                 classification = classMatrix,
                 CpTable = CpTable,
                 location=folder)
