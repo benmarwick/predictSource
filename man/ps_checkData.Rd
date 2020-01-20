@@ -5,7 +5,7 @@
 \title{ps_checkData}
 \usage{
 ps_checkData(
-  doc = "pc_checkData",
+  doc = "ps_checkData",
   data,
   CheckDupVars,
   GroupVar,

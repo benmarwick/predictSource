@@ -19,8 +19,9 @@ ps_tree(
   ModelTitle,
   minSplit = 20,
   cP = 0.01,
-  predictSources = FALSE,
-  predictData,
+  predictSources = TRUE,
+  predictUnknowns = FALSE,
+  unknownData,
   ID = " ",
   folder = " "
 )
@@ -60,13 +61,16 @@ separated by + signs}
 \item{cP}{The required improvement in Cp for a group to be split,
 default is .01 (the default in rpart())}
 
-\item{predictSources}{Logical: if TRUE, use the tree to predict sources for observations
-in predictData; default is FALSE}
+\item{predictSources}{Logical: if TRUE, use the tree to predict sources for the source data;
+default is TRUE}
 
-\item{predictData}{Data frame with data used to predict sources, must contain all variables
+\item{predictUnknowns}{Logical: if TRUE, use the tree to predict sources for observations
+in unknownData; default is FALSE}
+
+\item{unknownData}{Data frame with data used to predict sources, must contain all variables
 in AnalyticVars}
 
-\item{ID}{If not " " (the default), the name of a variable identifying a sample in predictData}
+\item{ID}{If not " " (the default), the name of a variable identifying a sample in unknownData}
 
 \item{folder}{The path to the folder in which data frames will be saved; default is " "}
 }
@@ -81,12 +85,18 @@ The function returns a list with the following components:
   \item{params:}{ A list with the values of the grouping, logical, and splitting parameters}
   \item{Seed:}{ A positive integer to set the random number generator}
   \item{model:}{ A character string with the value of the argument ModelTitle}
-  \item{Tree:}{ A list with details of the tree construction_}
+  \item{treeFit:}{ A list with details of the tree construction_}
   \item{classification:}  {A data frame showing the crossclassification of sources and predicted sources}
   \item{CpTable:}{  A data frame showing the decrease in Cp with increasing numbers of splits}
-  \item{predictedSources:}{  If predictSources = TRUE, a data frame with the predicted sources}
-  \item{predictedTotals:}{  If predictedSources = TRUE, a vector with the number of objects predicted to be from each source}
-  \item{location:}{ The value of the parameter folder}
+  \item{predictedSource:}{  If predictSources = TRUE, a data frame with the predicted source for each source
+  sample}
+  \item{predictedProbs:}{  If predictSources = TRUE, a data frame with the set of prediction probabilities
+  for each source sample}
+  \item{errorRate:}{  If predictSources = TRUE, the proportion of misassigned source samples}
+  \item{errorCount:}{ If predictSources = TRUE, a vector with the number of misassigned sources and
+  total number of sources}
+  \item{predictedTotals:}{  If predictUnknowns = TRUE, a vector with the number of objects predicted to be from each source}
+  \item{location:}{ The value of the argument folder}
  }
 }
 \description{
@@ -99,20 +109,12 @@ The function fits a classification tree model us the R function rpart().
 }
 \examples{
 # Analyze the obsidian source data with variables in the model statement in order of
-# importance from a random forst analysis
+# importance from a random forest analysis
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 save_tree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All",
 AnalyticVars=analyticVars, Model = "Rb"+"Sr"+"Y"+"Zr"+"Nb",
  ModelTitle = "Sr + Nb + Rb + Y + Zr")
 
- #  Predict the sources of artifacts
-data(ObsidianSources)
-data(ObsidianArtifacts)
-analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-save_tree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All",
-AnalyticVars=analyticVars, Model = "Sr"+ "Nb" + "Rb" + "Y"+"Zr",
-ModelTitle = "Sr + Nb + Rb + Y + Zr", predictSources=TRUE, predictData=ObsidianArtifacts,
- ID="ID", plotTree=FALSE, plotCp=FALSE)
 
 }

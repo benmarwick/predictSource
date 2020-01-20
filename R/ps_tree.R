@@ -22,11 +22,13 @@
 #' (the default in rpart())
 #' @param cP  The required improvement in Cp for a group to be split,
 #' default is .01 (the default in rpart())
-#' @param predictSources  Logical: if TRUE, use the tree to predict sources for observations
-#'  in predictData; default is FALSE
-#' @param predictData  Data frame with data used to predict sources, must contain all variables
+#' @param predictSources  Logical: if TRUE, use the tree to predict sources for the source data;
+#'  default is TRUE
+#' @param predictUnknowns  Logical: if TRUE, use the tree to predict sources for observations
+#'  in unknownData; default is FALSE
+#' @param unknownData  Data frame with data used to predict sources, must contain all variables
 #'  in AnalyticVars
-#' @param ID  If not " " (the default), the name of a variable identifying a sample in predictData
+#' @param ID  If not " " (the default), the name of a variable identifying a sample in unknownData
 #' @param folder  The path to the folder in which data frames will be saved; default is " "
 #'
 #' @details The function fits a classification tree model us the R function rpart().
@@ -43,12 +45,18 @@
 #'   \item{params:}{ A list with the values of the grouping, logical, and splitting parameters}
 #'   \item{Seed:}{ A positive integer to set the random number generator}
 #'   \item{model:}{ A character string with the value of the argument ModelTitle}
-#'   \item{Tree:}{ A list with details of the tree construction_}
+#'   \item{treeFit:}{ A list with details of the tree construction_}
 #'   \item{classification:}  {A data frame showing the crossclassification of sources and predicted sources}
 #'   \item{CpTable:}{  A data frame showing the decrease in Cp with increasing numbers of splits}
-#'   \item{predictedSources:}{  If predictSources = TRUE, a data frame with the predicted sources}
-#'   \item{predictedTotals:}{  If predictedSources = TRUE, a vector with the number of objects predicted to be from each source}
-#'   \item{location:}{ The value of the parameter folder}
+#'   \item{predictedSource:}{  If predictSources = TRUE, a data frame with the predicted source for each source
+#'   sample}
+#'   \item{predictedProbs:}{  If predictSources = TRUE, a data frame with the set of prediction probabilities
+#'   for each source sample}
+#'   \item{errorRate:}{  If predictSources = TRUE, the proportion of misassigned source samples}
+#'   \item{errorCount:}{ If predictSources = TRUE, a vector with the number of misassigned sources and
+#'   total number of sources}
+#'   \item{predictedTotals:}{  If predictUnknowns = TRUE, a vector with the number of objects predicted to be from each source}
+#'   \item{location:}{ The value of the argument folder}
 #'  }
 #'
 #' @examples
@@ -80,8 +88,9 @@ ps_tree <-
            ModelTitle,
            minSplit = 20,
            cP = 0.01,
-           predictSources = FALSE,
-           predictData,
+           predictSources = TRUE,
+           predictUnknowns = FALSE,
+           unknownData,
            ID = " ",
            folder = " ")
 {
@@ -107,13 +116,12 @@ ps_tree <-
     if (minSplit > 0)  assert_that((round(minSplit,0)==minSplit)&(minSplit > 0),
                                    msg="parameter minSplit not a positive integer")
     assert_that(is.numeric(cP) & (cP > 0) & (cP < 1), msg="parameter cP not numeric and positive and < 1")
-    assert_that(is.logical(predictSources), msg="type of parameter predictSources not logical")
+    assert_that(is.logical(predictUnknowns), msg="type of parameter predictUnknowns not logical")
     assert_that(is.character(ModelTitle), msg="parameter ModelTitle not character valued")
     #
     if (!is.na(Seed))
       set.seed(Seed)  # create reproducible analysis
     #
-    data[1,"Code"] <- "E"
     # create dataset dataUsed based on grouping restrict to desired set of groups
     if (Groups[1] != "All") {
       Use_rows <- (data[, GroupVar] %in% Groups)
@@ -128,8 +136,8 @@ ps_tree <-
     #
     #  if predictions to be made and ID used, sort on ID
     #
-    if ((predictSources == TRUE) & (ID[1] != " "))
-      predictData <- predictData[order(predictData[,"ID"]),]
+    if ((predictUnknowns == TRUE) & (ID[1] != " "))
+      unknownData <- unknownData[order(unknownData[,"ID"]),]
       #
     # define variable groups as groups used in analysis
     if ((GroupVar[1] != " ") & (Groups[1] == "All"))
@@ -148,7 +156,7 @@ ps_tree <-
       paste(AnalyticVars, collapse = "+")  # right hand side of formula
     formula_tree <-
       as.formula(paste("Sources", formula_rhs, sep = " ~ "))
-    Tree <-
+    treeFit <-
       rpart(formula_tree,
             data = dataUsed,
             weights = Weights,
@@ -156,15 +164,15 @@ ps_tree <-
             minsplit=minSplit,
             cp=cP)
     if (plotTree) {  #  plotTree is TRUE
-      plot(as.party(Tree), tp_args = list(id = FALSE), main=paste("model:",ModelTitle))
+      plot(as.party(treeFit), tp_args = list(id = FALSE), main=paste("model:",ModelTitle))
     }
     # classification: accuracy of predicting sources
-    predicteds<-rep(" ",length(Tree$y))
-    for (i in 1:length(predicteds))  predicteds[i] <- groups[Tree$y[i]]
+    predicteds<-rep(" ",length(treeFit$y))
+    for (i in 1:length(predicteds))  predicteds[i] <- groups[treeFit$y[i]]
     #
     classification <- table(predicteds, Sources)
     # evaluate tree size
-    CpTable <- Tree$cptable
+    CpTable <- treeFit$cptable
     #
     if (plotCp) {
       plot(
@@ -181,7 +189,7 @@ ps_tree <-
     # optimal number of splits
     nsplitopt <- vector(mode = "integer", length = 25)
     for (i in 1:length(nsplitopt)) {
-      cp <- Tree$cptable
+      cp <- treeFit$cptable
       nsplitopt[i] <- cp[which.min(cp[, "xerror"]), "nsplit"]
     }
     nsplitopt <- cbind(Model = rep(0, 25), Splits = nsplitopt)
@@ -189,16 +197,12 @@ ps_tree <-
       table(Model = nsplitopt[, "Model"], Splits = nsplitopt[, "Splits"])
     #
     if (predictSources == TRUE) {
-      predictedProbs <- predict(object = Tree, newdata = predictData)
+      predictedProbs <- predict(object = treeFit, newdata = dataUsed)
         #  matrix of probabilities: i,j is probability of source j for sample i
       # set up matrix to store indicator values: 1 when sample predicted to be from source
       predictedSource <- matrix(0, nrow(predictedProbs), ncol(predictedProbs))
       rownames(predictedSource) <- dataUsed[,GroupVar]
       colnames(predictedSource) <- groups
-      #
-      #  add GroupVar, ID (if given) to predictedProbs
-      if (ID == " ")  predictedProbs <- data.frame(dataUsed[,GroupVar], predictedProbs)
-      if (ID != " ")  predictedProbs <- data.frame(dataUsed[,c(GroupVar,ID)], predictedProbs)
       #
       #  define predicted source for each sample
       for (i in 1:nrow(predictedSource)) {
@@ -207,30 +211,43 @@ ps_tree <-
            if(predictedProbs[i,j] > predictedProbs[i,index_i])  index_i <- j
                 predictedSource[i,index_i] <- 1
       }
+      #  add GroupVar, ID (if given) to predictedProbs
+      if (ID == " ")  predictedProbs <- data.frame(source=dataUsed[,GroupVar], predictedProbs)
+      if (ID != " ") {
+        predictedProbs <- data.frame(dataUsed[,c(GroupVar,ID)], predictedProbs)
+        colnames(predictedProbs)<-c("source",ID,groups)
+      }
+      rownames(predictedProbs) <- 1:nrow(predictedProbs)
+      #
       #  add GroupVar, ID (if given) to predictedSource
-      if (ID == " ")  predictedSources <- data.frame(dataUsed[,GroupVar], predictedSource)
-      if (ID != " ")  predictedSource  <- data.frame(dataUsed[,c(GroupVar,ID)], predictedSource)
+      if (ID == " ")  predictedSource <- data.frame(source=dataUsed[,GroupVar], predictedSource)
+      if (ID != " ") {
+        predictedSource  <- data.frame(dataUsed[,c(GroupVar,ID)], predictedSource)
+        colnames(predictedSource) <- c("source",ID,groups)
+      }
+      rownames(predictedSource) <- 1:nrow(predictedSource)
      #
      #  create matrix with number assigned to each group, by group
      #
      classMatrix <- matrix(0,nrow=length(groups),ncol=length(groups))
      dimnames(classMatrix) <- list(groups,groups)
      for (i in 1:length(groups)) {
-        data_i <- predictedSource[predictedSource[,GroupVar]==groups[i],]
-        if (ID == " ")  data_i <- data_i[,-1]   # keep only indicator value data
-        if (ID != " ")  data_i <- data_i[,-(1:2)]
+        data_i <- predictedSource[predictedSource[,"source"]==groups[i],groups]
         classMatrix[i,] <- apply(data_i,2,sum)
-        }
-     browser()
+     }
      #
      #  error rate
      #
-     errorRate <- 1 - round(sum(diag(classMatrix)/sum(classMatrix)), dig=3)
+     nCorrect <- sum(diag(classMatrix))
+     nTotal <- sum(classMatrix)
+     errorRate <- 1 - round(nCorrect/nTotal, dig=3)
+     errorCount <- round(c(nTotal-nCorrect, nTotal), dig = 0)
+     names(errorCount) <- c("incorrect", "n total")
+     #
+#     if (substr(ID,1,1) == " ")  predictedResults<-data.frame(unknownData[,AnalyticVars])
+#     if (substr(ID,1,1) != " ")  predictedResults<-data.frame(unknownData[,c(ID, AnalyticVars)])
       #
-      if (substr(ID,1,1) == " ")  predictedResults<-data.frame(predictData[,AnalyticVars])
-      if (substr(ID,1,1) != " ")  predictedResults<-data.frame(predictData[,c(ID, AnalyticVars)])
-      #
-      } # end of code for predictSources == T
+      } # end of code for predictSources == TRUE
     #
     nsplit <- CpTable[,"nsplit"]
     Cp <- round(CpTable[,-2],digits = CpDigits)
@@ -240,8 +257,8 @@ ps_tree <-
     #
     params_grouping<-list(GroupVar,Groups)
     names(params_grouping)<-c("GroupVar","Groups")
-    params_logical<-c(plotTree, plotCp, predictSources)
-    names(params_logical)<-c("plotTree", "plotCp", "predictSources")
+    params_logical<-c(plotTree, plotCp, predictSources, predictUnknowns)
+    names(params_logical)<-c("plotTree", "plotCp", "predictSources", "predictUnknowns")
     params_splitting <- c(minSplit, cP, CpDigits)
     names(params_splitting) <- c("minSplit","cP", "CpDigits")
     params<-list(grouping=params_grouping,logical=params_logical,splitting=params_splitting)
@@ -250,13 +267,13 @@ ps_tree <-
     Cp <- round(CpTable[,-2],digits = CpDigits)
     CpTable <- cbind(nsplit,Cp)
     #
-    if (!predictSources)
+    if (!predictUnknowns)
       out<-list(usage=fcnDateVersion,
                 dataUsed=dataUsed,
                 analyticVars=AnalyticVars,
                 params=params,
                 model=ModelTitle,
-                Tree = Tree,
+                treeFit = treeFit,
                 classification = classMatrix,
                 errorRate = errorRate,
                 CpTable = CpTable,
@@ -269,11 +286,14 @@ ps_tree <-
                   params=params,
                   Seed=Seed,
                   model=ModelTitle,
-                  Tree = Tree,
+                  treeFit = treeFit,
+                  predictedProbs = predictedProbs,
+                  predictedSource = predictedSource,
                   classification = classMatrix,
                   errorRate = errorRate,
+                  errorCount = errorCount,
                   CpTable = CpTable,
-                  predictedSources = predictedResults,
+#                  predictedSources = predictedResults,
 #                  predictedTotals = data.frame(t(predictedTotals)),
                   location=folder)
    out
