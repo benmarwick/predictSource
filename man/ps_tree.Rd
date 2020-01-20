@@ -23,6 +23,7 @@ ps_tree(
   predictUnknowns = FALSE,
   unknownData,
   ID = " ",
+  unknownID = " ",
   folder = " "
 )
 }
@@ -30,7 +31,7 @@ ps_tree(
 \item{doc}{A string with documentation added to defintion of usage,
 default is ps_tree (the function name)}
 
-\item{data}{A data frame with the data to be analyzed}
+\item{data}{A data frame with the source data to be analyzed}
 
 \item{GroupVar}{The name of the variable defining groups, grouping is required}
 
@@ -70,7 +71,9 @@ in unknownData; default is FALSE}
 \item{unknownData}{Data frame with data used to predict sources, must contain all variables
 in AnalyticVars}
 
-\item{ID}{If not " " (the default), the name of a variable identifying a sample in unknownData}
+\item{ID}{If not " " (the default), the name of a variable identifying a sample in data}
+
+\item{unknownID}{If not " " (the default), the name of a variable identifying a sample in unknownData}
 
 \item{folder}{The path to the folder in which data frames will be saved; default is " "}
 }
@@ -116,5 +119,13 @@ save_tree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All",
 AnalyticVars=analyticVars, Model = "Rb"+"Sr"+"Y"+"Zr"+"Nb",
  ModelTitle = "Sr + Nb + Rb + Y + Zr")
 
+# Predict the sources of the obsidian artifacts
+data(ObsidianSources)
+data(ObsidianArtifacts)
+analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+save_tree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All",
+ AnalyticVars=analyticVars, Model = "Rb"+"Sr"+"Y"+"Zr"+"Nb",
+ ModelTitle = "Sr + Nb + Rb + Y + Zr", predictSources=FALSE, predictUnknowns=TRUE,
+ unknownData=ObsidianArtifacts)
 
 }

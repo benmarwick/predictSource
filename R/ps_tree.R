@@ -4,7 +4,7 @@
 #'
 #' @param doc A string with documentation added to defintion of usage,
 #' default is ps_tree (the function name)
-#' @param data  A data frame with the data to be analyzed
+#' @param data  A data frame with the source data to be analyzed
 #' @param GroupVar  The name of the variable defining groups, grouping is required
 #' @param Groups  A vector of codes for groups to be used, 'All' (the default)
 #'  if use all groups
@@ -28,7 +28,8 @@
 #'  in unknownData; default is FALSE
 #' @param unknownData  Data frame with data used to predict sources, must contain all variables
 #'  in AnalyticVars
-#' @param ID  If not " " (the default), the name of a variable identifying a sample in unknownData
+#' @param ID  If not " " (the default), the name of a variable identifying a sample in data
+#' @param unknownID  If not " " (the default), the name of a variable identifying a sample in unknownData
 #' @param folder  The path to the folder in which data frames will be saved; default is " "
 #'
 #' @details The function fits a classification tree model us the R function rpart().
@@ -68,6 +69,14 @@
 #' AnalyticVars=analyticVars, Model = "Rb"+"Sr"+"Y"+"Zr"+"Nb",
 #'  ModelTitle = "Sr + Nb + Rb + Y + Zr")
 #'
+#' # Predict the sources of the obsidian artifacts
+#' data(ObsidianSources)
+#' data(ObsidianArtifacts)
+#' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+#' save_tree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All",
+#'  AnalyticVars=analyticVars, Model = "Rb"+"Sr"+"Y"+"Zr"+"Nb",
+#'  ModelTitle = "Sr + Nb + Rb + Y + Zr", predictSources=FALSE, predictUnknowns=TRUE,
+#'  unknownData=ObsidianArtifacts)
 #'
 #' @import rpart partykit Formula graphics stats assertthat
 #'
@@ -92,6 +101,7 @@ ps_tree <-
            predictUnknowns = FALSE,
            unknownData,
            ID = " ",
+           unknownID = " ",
            folder = " ")
 {
     #
@@ -116,6 +126,7 @@ ps_tree <-
     if (minSplit > 0)  assert_that((round(minSplit,0)==minSplit)&(minSplit > 0),
                                    msg="parameter minSplit not a positive integer")
     assert_that(is.numeric(cP) & (cP > 0) & (cP < 1), msg="parameter cP not numeric and positive and < 1")
+    assert_that(is.logical(predictSources), msg="type of parameter predictSources not logical")
     assert_that(is.logical(predictUnknowns), msg="type of parameter predictUnknowns not logical")
     assert_that(is.character(ModelTitle), msg="parameter ModelTitle not character valued")
     #
@@ -249,6 +260,33 @@ ps_tree <-
       #
       } # end of code for predictSources == TRUE
     #
+    if (predictUnknowns == TRUE) {
+      predictedProbsUnknowns <- predict(object = treeFit, newdata = unknownData)
+      #  matrix of probabilities: i,j is probability of source j for sample i
+      # set up matrix to store indicator values: 1 when sample predicted to be from source
+      predictedSourceUnknowns <- matrix(0, nrow(predictedProbsUnknowns), ncol(predictedProbsUnknowns))
+      colnames(predictedSourceUnknowns) <- groups
+      #
+      #  define predicted source for each sample
+      for (i in 1:nrow(predictedSourceUnknowns)) {
+        index_i <- 1 # column index with maximum probability
+        for (j in 1:ncol(predictedProbsUnknowns))
+          if(predictedProbsUnknowns[i,j] > predictedProbsUnknowns[i,index_i])  index_i <- j
+          predictedSourceUnknowns[i,index_i] <- 1
+      }
+      #  add ID (if given) to predictedProbsUnknowns
+      if (unknownID != " ") {
+        predictedProbsUnknowns <- data.frame(unknownData[,unknownID], predictedProbs)
+        colnames(predictedProbsUnknowns)<-c(unknownID,groups)
+      }
+      rownames(predictedProbsUnknowns) <- 1:nrow(predictedProbsUnknowns)
+      #
+      #  add GroupVar, ID (if given) to predictedSource
+      if (unknownID != " ")
+        predictedSourceUnknowns  <- data.frame(unknownID=unknownData[,unknownID], predictedSourceUnknowns)
+      rownames(predictedSourceUnknowns) <- 1:nrow(predictedSourceUnknowns)
+    }  # end of code for predictUnknowns = TRUE
+    #
     nsplit <- CpTable[,"nsplit"]
     Cp <- round(CpTable[,-2],digits = CpDigits)
     CpTable <- cbind(nsplit,Cp)
@@ -267,19 +305,7 @@ ps_tree <-
     Cp <- round(CpTable[,-2],digits = CpDigits)
     CpTable <- cbind(nsplit,Cp)
     #
-    if (!predictUnknowns)
-      out<-list(usage=fcnDateVersion,
-                dataUsed=dataUsed,
-                analyticVars=AnalyticVars,
-                params=params,
-                model=ModelTitle,
-                treeFit = treeFit,
-                classification = classMatrix,
-                errorRate = errorRate,
-                CpTable = CpTable,
-                location=folder)
-    #
-    if (predictSources)
+    if (predictSources & !predictUnknowns)
         out<-list(usage=fcnDateVersion,
                   dataUsed=dataUsed,
                   analyticVars=AnalyticVars,
@@ -293,8 +319,39 @@ ps_tree <-
                   errorRate = errorRate,
                   errorCount = errorCount,
                   CpTable = CpTable,
-#                  predictedSources = predictedResults,
-#                  predictedTotals = data.frame(t(predictedTotals)),
                   location=folder)
+    #
+    if (!predictSources & predictUnknowns)
+      out<-list(usage=fcnDateVersion,
+                dataUsed=dataUsed,
+                analyticVars=AnalyticVars,
+                params=params,
+                Seed=Seed,
+                model=ModelTitle,
+                treeFit = treeFit,
+                predictedProbsUnknowns = predictedProbsUnknowns,
+                predictedSourcesUnknowns = predictedSourcesUnknowns,
+                classification = classMatrix,
+                CpTable = CpTable,
+                location=folder)
+    #
+    if (predictSources & predictUnknowns)
+      out<-list(usage=fcnDateVersion,
+                dataUsed=dataUsed,
+                analyticVars=AnalyticVars,
+                params=params,
+                Seed=Seed,
+                model=ModelTitle,
+                treeFit = treeFit,
+                predictedProbs = predictedProbs,
+                predictedSource = predictedSource,
+                classification = classMatrix,
+                errorRate = errorRate,
+                errorCount = errorCount,
+                predictedProbsUnknowns = predictedProbsUnknowns,
+                predictedSourcesUnknowns = predictedSourcesUnknowns,
+                classification = classMatrix,
+                CpTable = CpTable,
+                location=folder)
    out
   }
