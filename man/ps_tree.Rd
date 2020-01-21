@@ -89,16 +89,21 @@ The function returns a list with the following components:
   \item{Seed:}{ A positive integer to set the random number generator}
   \item{model:}{ A character string with the value of the argument ModelTitle}
   \item{treeFit:}{ A list with details of the tree construction_}
-  \item{classification:}  {A data frame showing the crossclassification of sources and predicted sources}
+  \item{classification:}  {A data frame showing the crossclassification of sources and predicted sources.  Rows
+    represent sources, columns represent predicted source}
   \item{CpTable:}{  A data frame showing the decrease in Cp with increasing numbers of splits}
   \item{predictedSource:}{  If predictSources = TRUE, a data frame with the predicted source for each source
-  sample}
+  sample, plus the known source, the sample ID (if given), and the analytic variable values}
   \item{predictedProbs:}{  If predictSources = TRUE, a data frame with the set of prediction probabilities
-  for each source sample}
+  for each source sample, plus the known source and sample ID (if given)}
+  \item{predictedSourceUnknowns:}{  If predictUnknowns = TRUE, a data frame with the predicted source for each unknown
+  sample, plus the  the sample ID (if given) and the analytic variable values}
+  \item{predictedProbsUnknowns:}{  If predictUnknowns = TRUE, a data frame with the set of prediction probabilities
+  for each unknown sample, plus the sample ID (if given)}
   \item{errorRate:}{  If predictSources = TRUE, the proportion of misassigned source samples}
   \item{errorCount:}{ If predictSources = TRUE, a vector with the number of misassigned sources and
   total number of sources}
-  \item{predictedTotals:}{  If predictUnknowns = TRUE, a vector with the number of objects predicted to be from each source}
+  \item{predictedTotalsUnknowns:} {If predictUnknowns = TRUE, a vector with the number of objects predicted to be from each source}
   \item{location:}{ The value of the argument folder}
  }
 }

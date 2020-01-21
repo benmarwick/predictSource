@@ -47,16 +47,21 @@
 #'   \item{Seed:}{ A positive integer to set the random number generator}
 #'   \item{model:}{ A character string with the value of the argument ModelTitle}
 #'   \item{treeFit:}{ A list with details of the tree construction_}
-#'   \item{classification:}  {A data frame showing the crossclassification of sources and predicted sources}
+#'   \item{classification:}  {A data frame showing the crossclassification of sources and predicted sources.  Rows
+#'     represent sources, columns represent predicted source}
 #'   \item{CpTable:}{  A data frame showing the decrease in Cp with increasing numbers of splits}
 #'   \item{predictedSource:}{  If predictSources = TRUE, a data frame with the predicted source for each source
-#'   sample}
+#'   sample, plus the known source, the sample ID (if given), and the analytic variable values}
 #'   \item{predictedProbs:}{  If predictSources = TRUE, a data frame with the set of prediction probabilities
-#'   for each source sample}
+#'   for each source sample, plus the known source and sample ID (if given)}
+#'   \item{predictedSourceUnknowns:}{  If predictUnknowns = TRUE, a data frame with the predicted source for each unknown
+#'   sample, plus the  the sample ID (if given) and the analytic variable values}
+#'   \item{predictedProbsUnknowns:}{  If predictUnknowns = TRUE, a data frame with the set of prediction probabilities
+#'   for each unknown sample, plus the sample ID (if given)}
 #'   \item{errorRate:}{  If predictSources = TRUE, the proportion of misassigned source samples}
 #'   \item{errorCount:}{ If predictSources = TRUE, a vector with the number of misassigned sources and
 #'   total number of sources}
-#'   \item{predictedTotals:}{  If predictUnknowns = TRUE, a vector with the number of objects predicted to be from each source}
+#'   \item{predictedTotalsUnknowns:} {If predictUnknowns = TRUE, a vector with the number of objects predicted to be from each source}
 #'   \item{location:}{ The value of the argument folder}
 #'  }
 #'
@@ -212,16 +217,14 @@ ps_tree <-
       predictedProbs <- predict(object = treeFit, newdata = dataUsed)
         #  matrix of probabilities: i,j is probability of source j for sample i
       # set up matrix to store indicator values: 1 when sample predicted to be from source
-      predictedSource <- matrix(0, nrow(predictedProbs), ncol(predictedProbs))
-      rownames(predictedSource) <- dataUsed[,GroupVar]
-      colnames(predictedSource) <- groups
+      predictedSource <- matrix(0, nrow(predictedProbs), length(groups))
       #
       #  define predicted source for each sample
       for (i in 1:nrow(predictedSource)) {
          index_i <- 1 # column index with maximum probability
-         for (j in 1:ncol(predictedProbs))
+         for (j in 2:ncol(predictedProbs))
            if(predictedProbs[i,j] > predictedProbs[i,index_i])  index_i <- j
-                predictedSource[i,index_i] <- 1
+         predictedSource[i,index_i] <- 1
       }
       #  add GroupVar, ID (if given) to predictedProbs
       if (ID == " ")  predictedProbs <- data.frame(source=dataUsed[,GroupVar], predictedProbs)
@@ -232,10 +235,10 @@ ps_tree <-
       rownames(predictedProbs) <- 1:nrow(predictedProbs)
       #
       #  add GroupVar, ID (if given) to predictedSource
-      if (ID == " ")  predictedSource <- data.frame(source=dataUsed[,GroupVar], predictedSource)
+      if (ID == " ")  predictedSource <- data.frame(source=dataUsed[,GroupVar],predictedSource)
       if (ID != " ") {
         predictedSource  <- data.frame(dataUsed[,c(GroupVar,ID)], predictedSource)
-        colnames(predictedSource) <- c("source",ID,groups)
+        colnames(predictedSource) <- c("source",ID, groups)
       }
       rownames(predictedSource) <- 1:nrow(predictedSource)
      #
@@ -258,6 +261,17 @@ ps_tree <-
      #
      classMatrix <- data.frame(classMatrix,total=apply(classMatrix,1,sum))
      classMatrix <- rbind(classMatrix, all=apply(classMatrix,2,sum))
+     #
+     #  redefine predictedSource to return code for source, not indicator values
+     #
+     predicted <- rep(" ", nrow(predictedSource))
+     for (i in 1:length(predicted)) {
+        for (j in 1:length(groups))
+          if (predictedSource[i,groups[j]] == 1) predicted[i] <- groups[j]
+     }
+     if (ID == " ")
+       predictedSource <- data.frame(predictedSource[,"source"],predicted=predicted,dataUsed[,AnalyticVars])
+     if (ID != " ") predictedSource <- data.frame(predictedSource[,c("source",ID)],predicted=predicted,dataUsed[AnalyticVars])
      } # end of code for predictSources == TRUE
     #
     if (predictUnknowns == TRUE) {
@@ -278,14 +292,24 @@ ps_tree <-
       predictedTotalsUnknowns <- c(predictedTotalsUnknowns, all=sum(predictedTotalsUnknowns))
       #  add ID (if given) to predictedProbsUnknowns
       if (unknownID != " ") {
-        predictedProbsUnknowns <- data.frame(unknownData[,unknownID], predictedProbs)
+        predictedProbsUnknowns <- data.frame(unknownData[,unknownID], predictedProbsUnknowns)
         colnames(predictedProbsUnknowns)<-c(unknownID,groups)
       }
       rownames(predictedProbsUnknowns) <- 1:nrow(predictedProbsUnknowns)
       #
-      #  add GroupVar, ID (if given) to predictedSource
-      if (unknownID != " ")
-        predictedSourceUnknowns  <- data.frame(unknownID=unknownData[,unknownID], predictedSourceUnknowns)
+      #  redefine predictedSourceUnknowns to return code for source, not indicator values
+      #
+      predicted <- rep(" ", nrow(predictedSourceUnknowns))
+      for (i in 1:length(predicted)) {
+        for (j in 1:length(groups))
+          if (predictedSourceUnknowns[i,groups[j]] == 1) predicted[i] <- groups[j]
+      }
+      if (ID == " ")
+        predictedSourceUnknowns <- data.frame(predicted=predicted,unknownData[,AnalyticVars])
+      if (unknownID != " ") {
+         predictedSourceUnknowns <- data.frame(unknownData[,unknownID],predicted=predicted,unknownData[,AnalyticVars])
+         colnames(predictedSourceUnknowns) <- c(unknownID,"predicted",AnalyticVars)
+      }
       rownames(predictedSourceUnknowns) <- 1:nrow(predictedSourceUnknowns)
     }  # end of code for predictUnknowns = TRUE
     #
@@ -353,7 +377,6 @@ ps_tree <-
                 predictedProbsUnknowns = predictedProbsUnknowns,
                 predictedSourceUnknowns = predictedSourceUnknowns,
                 predictedTotalsUnknowns = predictedTotalsUnknowns,
-                classification = classMatrix,
                 CpTable = CpTable,
                 location=folder)
    out
