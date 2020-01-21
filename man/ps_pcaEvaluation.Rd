@@ -69,7 +69,7 @@ when missing data are imputed_  Default value is 11111}
 \item{folder}{The path to the folder in which data frames will be saved; default is " "}
 }
 \description{
-Create principal component plots to evaluate the predicted sources of unknowns.
+Create principal component plots to evaluate the validity of source predictions.
 }
 \details{
 See the vignette for instructions for identifying points of interest using the paramter
@@ -104,17 +104,9 @@ The function returns a list with the following components:
    }
 }
 \examples{
-# Evaluate sources of obsidian artifacts predicted from scatterplots
-data(ObsidianSources)
-data(ObsidianArtifacts)
-analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-sources <- unique(ObsidianSources[,"Code"])
-pca_eval <- ps_pcaEvaluation(SourceData=ObsidianSources,
-  unknownData=ObsidianArtifacts, SourceGroup= "Code", unknownGroup="Code",
-  known_sources=sources, predicted_sources=sources, AnalyticVars=analyticVars, ID="ID",
-  plotAllPoints=TRUE, plotHullsOutsidePoints = TRUE, plotOutsidePoints = TRUE)
+# Evaluate Shackley's predicted sources of obsidian artifacts (predicted using scatterplots)
 
-# evaluate predictions from a tree model; this may need to be run twice
+# evaluate source predictions from a tree model; this may need to be run twice
 # (save_tree is created but may not be available for ps_pcaEvaluation)
 data(ObsidianSources)
 data(ObsidianArtifacts)
@@ -122,10 +114,10 @@ analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 sources <- unique(ObsidianSources[,"Code"])
 save_tree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All",
  AnalyticVars=analyticVars, ID="ID", Model = "Rb"+"Sr"+"Y"+"Zr"+"Nb",
-  ModelTitle="Rb + Sr + Y + Zr + Nb", predictSources=TRUE, predictData=ObsidianArtifacts,
+  ModelTitle="Rb + Sr + Y + Zr + Nb", predictSources=TRUE,
   plotTree=TRUE, plotCp=FALSE)
 pca_eval <- ps_pcaEvaluation(SourceData=ObsidianSources,
-  unknownData=save_tree$predictedSources, SourceGroup= "Code", unknownGroup="source",
+  unknownData=save_tree$predictedSource, SourceGroup= "Code", unknownGroup="source",
   known_sources=sources, predicted_sources=sources, AnalyticVars=analyticVars, ID="ID",
   plotAllPoints=TRUE, plotHullsOutsidePoints = TRUE, plotOutsidePoints = TRUE)
 

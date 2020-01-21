@@ -67,6 +67,7 @@ ps_plot <- function(   data,
                        ps_identify) {
       #
       # set up plot
+      plot.new()
       rangeX<-range(data[,useVars[1]])
       rangeY<-range(data[,useVars[2]])
       #
