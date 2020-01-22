@@ -55,9 +55,8 @@ all source points and
    the convex hulls for the sources, and all unknown points with these source hulls}
 
 \item{plotHullsOutsidePoints}{Logical.  If TRUE (the default), show a plot with two panes:
-all source points and
-  the convex hulls for the sources, and the unknown points lying outside of their
-   predicted source convex hulls and these hulls}
+all source points and the convex hulls for the sources, and the unknown points lying outside of their
+predicted source convex hulls and these hulls}
 
 \item{plotOutsidePoints}{Logical.  If TRUE (the default), show a plot with one pane:
 athe unknown points lying outside of their predicted source convex hulls and these
@@ -69,7 +68,9 @@ when missing data are imputed_  Default value is 11111}
 \item{folder}{The path to the folder in which data frames will be saved; default is " "}
 }
 \description{
-Create principal component plots to evaluate the validity of source predictions.
+Create principal component plots to evaluate the validity of source predictions:
+ plots show convex hulls of data used to create a tree or random forest analysis and
+ points from predictions plotted with the hulls.
 }
 \details{
 See the vignette for instructions for identifying points of interest using the paramter
@@ -104,31 +105,43 @@ The function returns a list with the following components:
    }
 }
 \examples{
-# Evaluate Shackley's predicted sources of obsidian artifacts (predicted using scatterplots)
+Evaluate the predicted sources of source samples from a tree model,
+Since all predictions are correct, all predictions are inside the source hulls.
+data(ObsidianSources)
+analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+sources <- unique(ObsidianSources[,"Code"])
+save_tree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All",
+ AnalyticVars=analyticVars, ID="ID", Model = "Rb"+"Sr"+"Y"+"Zr"+"Nb",
+  ModelTitle="Rb + Sr + Y + Zr + Nb", predictSources=TRUE, predictUnknowns=FALSE,
+  plotTree=TRUE, plotCp=FALSE)
+pca_eval <- ps_pcaEvaluation(SourceData=ObsidianSources,
+  unknownData=save_tree$predictedSource, SourceGroup= "Code", unknownGroup="predicted",
+  known_sources=sources, predicted_sources=sources, AnalyticVars=analyticVars, ID="ID",
+  plotAllPoints=TRUE, plotHullsOutsidePoints = TRUE, plotOutsidePoints = TRUE)
 
-# evaluate source predictions from a tree model; this may need to be run twice
-# (save_tree is created but may not be available for ps_pcaEvaluation)
+# Evaluate Shackley's predicted sources of obsidian artifacts (predicted using scatterplots)
 data(ObsidianSources)
 data(ObsidianArtifacts)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 sources <- unique(ObsidianSources[,"Code"])
 save_tree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All",
  AnalyticVars=analyticVars, ID="ID", Model = "Rb"+"Sr"+"Y"+"Zr"+"Nb",
-  ModelTitle="Rb + Sr + Y + Zr + Nb", predictSources=TRUE,
+  ModelTitle="Rb + Sr + Y + Zr + Nb", predictSources=FALSE, predictUnknowns=TRUE,
+  unknownData=ObsidianArtifacts, unknownID="ID",
   plotTree=TRUE, plotCp=FALSE)
 pca_eval <- ps_pcaEvaluation(SourceData=ObsidianSources,
-  unknownData=save_tree$predictedSource, SourceGroup= "Code", unknownGroup="source",
+  unknownData=save_tree$predictedSourceUnknowns, SourceGroup= "Code", unknownGroup="predicted",
   known_sources=sources, predicted_sources=sources, AnalyticVars=analyticVars, ID="ID",
   plotAllPoints=TRUE, plotHullsOutsidePoints = TRUE, plotOutsidePoints = TRUE)
 
-# evaluate predictions from a random forest analysis:
+# Evaluate the predicted artifact sources from a random forest analysis:
 #     plot only points outside the predicted source hull
 data(ObsidianSources)
 data(ObsidianArtifacts)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 sources <- unique(ObsidianSources[,"Code"])
 save_randomForest <- ps_randomForest(data=ObsidianSources,
-GroupVar="Code",Groups="All",
+  GroupVar="Code",Groups="All",
   AnalyticVars=analyticVars, unknownID="ID", NvarUsed=3,
   plotErrorRate=FALSE, plotImportance=FALSE,
   predictSources=TRUE, predictData=ObsidianArtifacts, plotSourceProbs=FALSE)

@@ -1,6 +1,8 @@
 #'  ps_pcaEvaluation
 #'
-#'  Create principal component plots to evaluate the validity of source predictions.
+#'  Create principal component plots to evaluate the validity of source predictions:
+#'  plots show convex hulls of data used to create a tree or random forest analysis and
+#'  points from predictions plotted with the hulls.
 #'
 #' @param doc A string with documentation, default is the function name
 #' @param SourceData A data frame with the data from known sources,
@@ -21,9 +23,8 @@
 #' all source points and
 #'    the convex hulls for the sources, and all unknown points with these source hulls
 #' @param plotHullsOutsidePoints Logical.  If TRUE (the default), show a plot with two panes:
-#'  all source points and
-#'    the convex hulls for the sources, and the unknown points lying outside of their
-#'     predicted source convex hulls and these hulls
+#'  all source points and the convex hulls for the sources, and the unknown points lying outside of their
+#'  predicted source convex hulls and these hulls
 #' @param plotOutsidePoints Logical.  If TRUE (the default), show a plot with one pane:
 #' athe unknown points lying outside of their predicted source convex hulls and these
 #'  hulls (the second pane for plotHullsOutsidePoints)
@@ -67,31 +68,43 @@
 #' @import graphics stats  mgcv  assertthat
 #'
 #' @examples
-#' # Evaluate Shackley's predicted sources of obsidian artifacts (predicted using scatterplots)
+#' Evaluate the predicted sources of source samples from a tree model,
+#' Since all predictions are correct, all predictions are inside the source hulls.
+#' data(ObsidianSources)
+#' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+#' sources <- unique(ObsidianSources[,"Code"])
+#' save_tree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All",
+#'  AnalyticVars=analyticVars, ID="ID", Model = "Rb"+"Sr"+"Y"+"Zr"+"Nb",
+#'   ModelTitle="Rb + Sr + Y + Zr + Nb", predictSources=TRUE, predictUnknowns=FALSE,
+#'   plotTree=TRUE, plotCp=FALSE)
+#' pca_eval <- ps_pcaEvaluation(SourceData=ObsidianSources,
+#'   unknownData=save_tree$predictedSource, SourceGroup= "Code", unknownGroup="predicted",
+#'   known_sources=sources, predicted_sources=sources, AnalyticVars=analyticVars, ID="ID",
+#'   plotAllPoints=TRUE, plotHullsOutsidePoints = TRUE, plotOutsidePoints = TRUE)
 #'
-#' # evaluate source predictions from a tree model; this may need to be run twice
-#' # (save_tree is created but may not be available for ps_pcaEvaluation)
+#' # Evaluate Shackley's predicted sources of obsidian artifacts (predicted using scatterplots)
 #' data(ObsidianSources)
 #' data(ObsidianArtifacts)
 #' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 #' sources <- unique(ObsidianSources[,"Code"])
 #' save_tree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All",
 #'  AnalyticVars=analyticVars, ID="ID", Model = "Rb"+"Sr"+"Y"+"Zr"+"Nb",
-#'   ModelTitle="Rb + Sr + Y + Zr + Nb", predictSources=TRUE,
+#'   ModelTitle="Rb + Sr + Y + Zr + Nb", predictSources=FALSE, predictUnknowns=TRUE,
+#'   unknownData=ObsidianArtifacts, unknownID="ID",
 #'   plotTree=TRUE, plotCp=FALSE)
 #' pca_eval <- ps_pcaEvaluation(SourceData=ObsidianSources,
-#'   unknownData=save_tree$predictedSource, SourceGroup= "Code", unknownGroup="source",
+#'   unknownData=save_tree$predictedSourceUnknowns, SourceGroup= "Code", unknownGroup="predicted",
 #'   known_sources=sources, predicted_sources=sources, AnalyticVars=analyticVars, ID="ID",
 #'   plotAllPoints=TRUE, plotHullsOutsidePoints = TRUE, plotOutsidePoints = TRUE)
 #'
-#' # evaluate predictions from a random forest analysis:
+#' # Evaluate the predicted artifact sources from a random forest analysis:
 #' #     plot only points outside the predicted source hull
 #' data(ObsidianSources)
 #' data(ObsidianArtifacts)
 #' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 #' sources <- unique(ObsidianSources[,"Code"])
 #' save_randomForest <- ps_randomForest(data=ObsidianSources,
-#' GroupVar="Code",Groups="All",
+#'   GroupVar="Code",Groups="All",
 #'   AnalyticVars=analyticVars, unknownID="ID", NvarUsed=3,
 #'   plotErrorRate=FALSE, plotImportance=FALSE,
 #'   predictSources=TRUE, predictData=ObsidianArtifacts, plotSourceProbs=FALSE)
@@ -294,7 +307,7 @@ ps_pcaEvaluation <-function(doc = "ps_pcaEvaluation",
     #
     # code for first two panel plot: source points and convex hulls, and all unknown poins with hulls
     #
-    if (plotAllPoints == T) {
+    if (plotAllPoints) {
     # plots of source and unknown data with source convex hulls
     plot.new()
     par(mfrow = c(1, 2))  #  two plots on one page
@@ -411,7 +424,8 @@ ps_pcaEvaluation <-function(doc = "ps_pcaEvaluation",
     #
     #  convex hulls for source data
     #
-    if (plotAllPoints == F)  plot.new()
+    if (!plotAllPoints)
+    plot.new()
     par(mfrow = c(1, 2))
     #  set up plot
     plot(
@@ -420,7 +434,7 @@ ps_pcaEvaluation <-function(doc = "ps_pcaEvaluation",
       y = range_pc2,
       xlab = "first PC",
       ylab = "second PC",
-      main = "Source hulls"
+      main = "Hulls"
     )
     #
     #  plot convex hulls of sources
@@ -486,7 +500,8 @@ ps_pcaEvaluation <-function(doc = "ps_pcaEvaluation",
     #
     #  convex hulls for source data
     #
-    if ((plotAllPoints == FALSE) & (plotHullsOutsidePoints == FALSE))  plot.new()
+    if (!plotAllPoints & plotHullsOutsidePoints)
+    plot.new()
     par(mfrow=c(1,1))
     plot(
       type = "n",
@@ -494,7 +509,7 @@ ps_pcaEvaluation <-function(doc = "ps_pcaEvaluation",
       y = range_pc2,
       xlab = "first PC",
       ylab = "second PC",
-      main = "Points outside source hulls"
+      main = "Points outside hulls"
     )
     #
     # plot source convex hulls
