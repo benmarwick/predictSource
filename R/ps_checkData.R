@@ -105,14 +105,14 @@ ps_checkData <-
       NegativeValues <- NA
     else    NegativeValues <- data[NegRows, ]
     #
-      if (ByGroup == FALSE) {
+      if (!ByGroup) {
       Nvalues <- rep(0, length(AnalyticVars))
       for (i in 1:length(AnalyticVars))
         Nvalues[i] <- sum(!is.na(data[, AnalyticVars[i]]))
       names(Nvalues)<-AnalyticVars
       }
     #
-    if ((ByGroup == TRUE) & (Groups[1] == "All")) {
+    if (ByGroup & (Groups[1] == "All")) {
       groups <- as.character(unique(dataUsed[, GroupVar]))
       n_groups <- length(groups)
       nvalues <- matrix(0, nrow = n_groups + 1, ncol = length(AnalyticVars))
@@ -128,7 +128,7 @@ ps_checkData <-
       Nvalues <- data.frame(Group = c(groups, "Total"), nvalues)
     } # end of code for Groups == "All"
     #
-    if ((ByGroup == TRUE) & (Groups[1] != "All")) {
+    if (ByGroup & (Groups[1] != "All")) {
       n_groups <- length(Groups)
       nvalues <- matrix(0, nrow = n_groups + 1, ncol = length(AnalyticVars))
       for (i in 1:n_groups) {
@@ -145,7 +145,7 @@ ps_checkData <-
     #
     #  descriptive statistics
     #
-    if (ByGroup == FALSE) {
+    if (!ByGroup) {
       statistics <- matrix(NA, nrow = length(AnalyticVars), ncol = 7)
       for (j in 1:length(AnalyticVars)) {
         statisticsj <- summary(dataUsed[, AnalyticVars[j]])
@@ -154,7 +154,7 @@ ps_checkData <-
       statistics_values <- statistics
       }
       # end of code for ByGroup = FALSE
-    else if (ByGroup == TRUE) {
+    else if (ByGroup) {
       if (Groups[1] == "All")  groups <- as.character(unique(dataUsed[, GroupVar]))
         else  groups <- Groups
       n_groups <- length(groups)
@@ -186,7 +186,7 @@ ps_checkData <-
       #  if no missing values, replace NA by 0
       statistics_values[is.na(statistics_values[, 7]), 7] <- 0
       #
-      if (ByGroup == FALSE)
+      if (!ByGroup)
         statistics <- data.frame(Analysis = AnalyticVars, statistics_values)
       else  statistics <- data.frame(Analysis = vector_values, Group = vector_groups,
                             statistics_values)

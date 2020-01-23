@@ -494,7 +494,7 @@ ps_pcaEvaluation <-function(doc = "ps_pcaEvaluation",
     #
     }  #  end of code for two-panel evaluation plot
     #
-    if ((plotOutsidePoints == T) | (Identify == T)) {
+    if (plotOutsidePoints | Identify) {
     #  code for single panel evaluation plot; source convex hulls and unknown points outside
     #  of predicted hull
     #
@@ -528,7 +528,7 @@ ps_pcaEvaluation <-function(doc = "ps_pcaEvaluation",
     points(x = pts_outside[, "pc1"], y = pts_outside[,"pc2"],
            cex = .5, pch = pts_outside[, "index"])
     #
-    if (Identify == T) {
+    if (Identify) {
     # identify points of interest
     index<-identify(pts_outside[,c("pc1","pc2")])
     dataCheck<-pts_outside[index,]
@@ -547,12 +547,12 @@ ps_pcaEvaluation <-function(doc = "ps_pcaEvaluation",
       else          keepVars <- c("group", "ID", AnalyticVars)
     unknownData <- unknownData[,keepVars]
     pts_outside <- pts_outside[,c(keepVars, "pc1", "pc2")]
-    if (Identify == T) dataCheck <- dataCheck[,c(keepVars, "pc1", "pc2")]
+    if (Identify) dataCheck <- dataCheck[,c(keepVars, "pc1", "pc2")]
     #
     if (ID[1] != " ") {
        unknownData <- unknownData[order(unknownData[, "ID"]),]
        pts_outside <- pts_outside[order(pts_outside[, "ID"]),]
-       if (Identify == T)  dataCheck <- dataCheck[order(dataCheck[, "ID"]),]
+       if (Identify)  dataCheck <- dataCheck[order(dataCheck[, "ID"]),]
     }
     fcnDateVersion<-paste(doc,date(),R.Version()$version.string)
     #

@@ -22,7 +22,6 @@ ps_2dPlot(
   Ellipses = c(0.95, 0.99),
   KernelSmooth = FALSE,
   Kernelwidth = 0.3,
-  localPoly = FALSE,
   PlotHulls = FALSE,
   parRowsCols = c(2, 2),
   Colors = c("red", "black", "blue", "green", "purple"),
@@ -76,17 +75,13 @@ if FALSE (the default), no kernel smooth is plotted}
 \item{Kernelwidth}{the proportion of the range of x-values used in the kernel smooth;
 default is 0.3}
 
-\item{localPoly}{Logical.  If TRUE (default is FALSE), plot local polynomial lines with
-a bandwidth selected from the data.  Currently not used.}
-
 \item{PlotHulls}{if TRUE, the convex hull is drawn for each set of points; if FALSE (the default),
 no hulls are drawn}
 
 \item{parRowsCols}{A vector of length 2, with the numbers of rows and columns for a plot
 when plots are shown by group; default is c(2,2)}
 
-\item{Colors}{A vector with the colors of plotted points,
-used sequentially for the groups}
+\item{Colors}{A vector with the colors of plotted points, used sequentially for the groups}
 
 \item{legendLoc}{Character.  Identifies the location of the legend for a plot showing all groups
 on one plot.  Default is "topleft"; alternatives are "bottomleft", "topright", "bottomright"}

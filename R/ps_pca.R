@@ -254,7 +254,7 @@ ps_pca <-  function(doc = "ps_pca",
              y = c(min(Predicted[,"PC2"], na_rm = T) - 1, max(Predicted[, "PC2"], na_rm = T) + 1),
              type = "n", xlab = "first PC", ylab = "second PC", main = "Principal components plot",
              sub=subtext)
-      }  # end of code for PlotEllipses=T
+      }  # end of code for PlotEllipses=TRUE
       #
       if (PlotPoints) {   #  TRUE
         if (PlotColors)
@@ -263,7 +263,7 @@ ps_pca <-  function(doc = "ps_pca",
                                                                         1), col = Colors[Predicted[, "GroupIndex"]])
         else points(x = Predicted[, "PC1"], y = Predicted[,
                                             "PC2"], pch = (Predicted[, "GroupIndex"] - 1))
-        }  # end of code for PlotPoints=T
+        }  # end of code for PlotPoints=TRUE
       if (PlotHull) {  #  TRUE
         for (i in 1:length(groups)) fnConvexHull(Code = groups[i])
       }
@@ -281,14 +281,14 @@ ps_pca <-  function(doc = "ps_pca",
         for (i in 1:length(groups)) {
           temp <- Predicted[Predicted[, "group"] == groups[i],
                             c("PC1", "PC2")]
-          medians[i, 1] <- median(temp[, 1], na_rm = T)
-          medians[i, 2] <- median(temp[, 2], na_rm = T)
+          medians[i, 1] <- median(temp[, 1], na_rm = TRUE)
+          medians[i, 2] <- median(temp[, 2], na_rm = TRUE)
         }
         medians <- cbind(1:length(groups), medians)
         colnames(medians) <- c("group", "PC1", "PC2")
         text(x = medians[, "PC1"], y = medians[, "PC2"],
              labels = groups, cex = 0.75, adj = 0.5)
-      } # end of code for PlotMedians=T
+      } # end of code for PlotMedians=TRUE
         if ((Identify) & ((PlotPoints) | (PlotMedians)))  {
           index<-identify(x = Predicted[,"PC1"], y = Predicted[,"PC2"])
           dataCheck<-dataUsed[index,]

@@ -154,7 +154,7 @@ ps_pcaGauss <-
     names(params_logical)<-c("qqPlot","gaussIdentify")
     params<-list(grouping=params_grouping,logical=params_logical)
     #
-    if (gaussIdentify == T) {
+    if (gaussIdentify) {
     if (gaussID == " ") data_check<-outGauss$data_check[,c(GroupVar, AnalyticVars)]
     else  data_check<-outGauss$data_check[,c(GroupVar, gaussID, AnalyticVars)]
     }
