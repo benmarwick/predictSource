@@ -681,11 +681,12 @@ sources <- unique(ObsidianSources[,"Code"])
 saveTree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
   Model = "Sr"+"Nb"+"Rb"+"Y"+"Zr", ModelTitle="Sr + Nb + Rb + Y + Zr",predictSources=TRUE, predictUnknowns=TRUE, unknownData=ObsidianArtifacts, unknownID="ID", plotTree=FALSE, plotCp=FALSE)
 ObsidianSources<-ObsidianSources[,c("Code",analyticVars)]
-Artifacts <- saveTree$predictedSources[,c("source",analyticVars)]
+Artifacts <- saveTree$predictedSourceUnknowns[,c("predicted",analyticVars)]
 SourcesCode <- as.vector(ObsidianSources[,"Code"], mode="character")
-ArtifactsCode <- as.vector(paste(Artifacts[,"source"],"a",sep="."),mode="character")
+ArtifactsCode <- as.vector(paste(Artifacts[,"predicted"],"a",sep="."),mode="character")
 Sources <- c(SourcesCode, ArtifactsCode)
-SourcesArtifacts <- data.frame(rbind(ObsidianSources[,analyticVars], Artifacts[,analyticVars]),Source = Sources)
+SourcesArtifacts <- data.frame(rbind(ObsidianSources[,analyticVars], Artifacts[,analyticVars]))
+SourcesArtifacts <- data.frame(SourcesArtifacts,Source = Sources)
 boxPlots<-ps_boxPlots(data=SourcesArtifacts, GroupVar="Source", Groups="All",AnalyticVars=c("Y","Nb"),Nrow=2,Ncol=1)
 
 ```
