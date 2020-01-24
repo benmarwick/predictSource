@@ -235,7 +235,10 @@ ps_tree <-
       rownames(predictedProbs) <- 1:nrow(predictedProbs)
       #
       #  add GroupVar, ID (if given) to predictedSource
-      if (ID == " ")  predictedSource <- data.frame(source=dataUsed[,GroupVar],predictedSource)
+      if (ID == " ")  {
+        predictedSource <- data.frame(source=dataUsed[,GroupVar],predictedSource)
+        colnames(predictedSource) <- c("source", groups)
+      }
       if (ID != " ") {
         predictedSource  <- data.frame(dataUsed[,c(GroupVar,ID)], predictedSource)
         colnames(predictedSource) <- c("source",ID, groups)
@@ -270,7 +273,7 @@ ps_tree <-
           if (predictedSource[i,groups[j]] == 1) predicted[i] <- groups[j]
      }
      if (ID == " ")
-       predictedSource <- data.frame(predictedSource[,"source"],predicted=predicted,dataUsed[,AnalyticVars])
+       predictedSource <- data.frame(source=predictedSource[,"source"],predicted=predicted,dataUsed[,AnalyticVars])
      if (ID != " ") predictedSource <- data.frame(predictedSource[,c("source",ID)],predicted=predicted,dataUsed[AnalyticVars])
      } # end of code for predictSources == TRUE
     #
@@ -304,7 +307,7 @@ ps_tree <-
         for (j in 1:length(groups))
           if (predictedSourceUnknowns[i,groups[j]] == 1) predicted[i] <- groups[j]
       }
-      if (ID == " ")
+      if (unknownID == " ")
         predictedSourceUnknowns <- data.frame(predicted=predicted,unknownData[,AnalyticVars])
       if (unknownID != " ") {
          predictedSourceUnknowns <- data.frame(unknownData[,unknownID],predicted=predicted,unknownData[,AnalyticVars])

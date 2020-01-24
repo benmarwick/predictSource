@@ -43,15 +43,15 @@ tree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars
 
 ```
 
-```{r results='hide', message=FALSE, fig.keep='last', fig.cap="Figure 1.2 Principal components plot with Jemez obsidian source convex hulls and obsidian artifacts with points outside the convex hull predicted from a classification tree model."}
+```{r results='hide', message=FALSE, fig.keep='last', fig.cap="Figure 1.2 Principal components plot the sources of Jemez obsidian artifacts predicted from a classification tree with points outside the convex hull of the source samples."}
 data(ObsidianSources)
 data(ObsidianArtifacts)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 sources <- unique(ObsidianSources[,"Code"])
 save.tree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
-  Model = "Sr"+"Nb"+"Rb"+"Y"+"Zr", ModelTitle="Sr + Nb + Rb + Y + Zr", predictSources=TRUE,       predictData=ObsidianArtifacts, ID="ID", plotTree=FALSE, plotCp=FALSE)
-pca.eval <- ps_pcaEvaluation(SourceData=ObsidianSources, unknownData=save.tree$predictedSources,
-  SourceGroup= "Code", unknownGroup="source",known_sources=sources, predicted_sources=sources,
+  Model = "Sr"+"Nb"+"Rb"+"Y"+"Zr", ModelTitle="Sr + Nb + Rb + Y + Zr", predictSources=FALSE,             predictUnknowns=TRUE, unknownData=ObsidianArtifacts, unknownID="ID", plotTree=FALSE, plotCp=FALSE)
+pca.eval <- ps_pcaEvaluation(SourceData=ObsidianSources, unknownData=save.tree$predictedSourceUnknowns,
+  SourceGroup= "Code", unknownGroup="predicted",known_sources=sources, predicted_sources=sources,
   AnalyticVars=analyticVars, plotAllPoints=TRUE, plotHullsOutsidePoints=TRUE, plotOutsidePoints=TRUE)
   
 ```
@@ -529,7 +529,7 @@ data(ObsidianSources)
 data(ObsidianArtifacts)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 save_tree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
-   Model = "Sr"+"Nb"+"Rb"+"Y"+"Zr", ModelTitle="Sr + Nb + Rb + Y + Zr",predictSources=TRUE, predictData=ObsidianArtifacts, ID="ID", plotTree=FALSE, plotCp=FALSE)
+   Model = "Sr"+"Nb"+"Rb"+"Y"+"Zr", ModelTitle="Sr + Nb + Rb + Y + Zr",predictSources=TRUE, unknownData=ObsidianArtifacts, unknownID="ID", plotTree=FALSE, plotCp=FALSE)
 knitr::kable(save_tree$predictedSources[1:5,], caption = "Table 6.4: An example of the data frame containing predicted sources of obsidian artifacts from the classification tree for the Jemez obsidian sources using five elements as potential predictors.")
 
 ```
@@ -539,7 +539,7 @@ data(ObsidianSources)
 data(ObsidianArtifacts)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 save_tree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
-   Model = "Sr"+"Nb"+"Rb"+"Y"+"Zr", ModelTitle="Sr + Nb + Rb + Y + Zr", predictSources=TRUE, predictData=ObsidianArtifacts, ID="ID", plotTree=FALSE, plotCp=FALSE)
+   Model = "Sr"+"Nb"+"Rb"+"Y"+"Zr", ModelTitle="Sr + Nb + Rb + Y + Zr", predictSources=TRUE, unknownData=ObsidianArtifacts, unknownID="ID", plotTree=FALSE, plotCp=FALSE)
 knitr::kable(save_tree$predictedTotals, caption = "Table 6.6:  Predicted number of obsidian artifacts
 from each source based on the classification tree for the Jemez obsidian sources using five elements as potential predictors.")
 
@@ -553,9 +553,9 @@ data(ObsidianArtifacts)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 tree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
                 ID="ID", Model="Sr"+"Nb"+"Rb"+"Y"+"Zr", ModelTitle="Sr + Nb + Rb + Y + Zr",
-                plotTree=FALSE, plotCp = F, predictSources=TRUE, predictData=ObsidianArtifacts)
-predictedSources<-tree$predictedSources[tree$predictedSources[,"source"]!="A",]
-save_pca <- ps_pca(data=predictedSources, ID="ID", GroupVar="source",Groups="All", AnalyticVars=analyticVars, PlotEllipses=FALSE)
+                plotTree=FALSE, plotCp = F, predictSources=TRUE, unknownData=ObsidianArtifacts)
+predictedSource<-tree$predictedSource[tree$predictedSource[,"source"]!="A",]
+save_pca <- ps_pca(data=predictedSource, ID="ID", GroupVar="source",Groups="All", AnalyticVars=analyticVars, PlotEllipses=FALSE)
 
 ```
 
@@ -679,9 +679,9 @@ data(ObsidianArtifacts)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 sources <- unique(ObsidianSources[,"Code"])
 saveTree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
-  Model = "Sr"+"Nb"+"Rb"+"Y"+"Zr", ModelTitle="Sr + Nb + Rb + Y + Zr",predictSources=TRUE, predictData=ObsidianArtifacts, ID="ID", plotTree=FALSE, plotCp=FALSE)
+  Model = "Sr"+"Nb"+"Rb"+"Y"+"Zr", ModelTitle="Sr + Nb + Rb + Y + Zr",predictSources=TRUE, predictUnknowns=TRUE, unknownData=ObsidianArtifacts, unknownID="ID", plotTree=FALSE, plotCp=FALSE)
 ObsidianSources<-ObsidianSources[,c("Code",analyticVars)]
-Artifacts <- save.tree$predictedSources[,c("source",analyticVars)]
+Artifacts <- saveTree$predictedSources[,c("source",analyticVars)]
 SourcesCode <- as.vector(ObsidianSources[,"Code"], mode="character")
 ArtifactsCode <- as.vector(paste(Artifacts[,"source"],"a",sep="."),mode="character")
 Sources <- c(SourcesCode, ArtifactsCode)
