@@ -704,10 +704,10 @@ data(ObsidianArtifacts)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 sources <- unique(ObsidianSources[,"Code"])
 saveTree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
-  Model = "Sr"+"Nb"+"Rb"+"Y"+"Zr", ModelTitle="Sr + Nb + Rb + Y + Zr", predictSources=TRUE, predictData=ObsidianArtifacts, ID="ID",
+  Model = "Sr"+"Nb"+"Rb"+"Y"+"Zr", ModelTitle="Sr + Nb + Rb + Y + Zr", predictSources=TRUE, unknownData=ObsidianArtifacts, ID="ID",
   plotTree=FALSE, plotCp=FALSE)
-pcaEval <- ps_pcaEvaluation(SourceData=ObsidianSources, unknownData=saveTree$predictedSources,
-  SourceGroup= "Code", unknownGroup="source",known_sources=sources, predicted_sources=sources,
+pcaEval <- ps_pcaEvaluation(SourceData=ObsidianSources, unknownData=saveTree$predictedSource,
+  SourceGroup= "Code", unknownGroup="predicted",known_sources=sources, predicted_sources=sources,
   AnalyticVars=analyticVars, plotAllPoints=TRUE, plotHullsOutsidePoints=TRUE, plotOutsidePoints=FALSE)
   
 ```
@@ -718,9 +718,9 @@ data(ObsidianArtifacts)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 sources <- unique(ObsidianSources[,"Code"])
 saveTree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
-  Model = "Sr"+"Nb"+"Rb"+"Y"+"Zr", ModelTitle="Sr + Nb + Rb + Y + Zr", predictSources=TRUE, predictData=ObsidianArtifacts, ID="ID", plotTree=FALSE, plotCp=FALSE)
-pcaEval <- ps_pcaEvaluation(SourceData=ObsidianSources, unknownData=saveTree$predictedSources,
-  SourceGroup= "Code", unknownGroup="source",known_sources=sources, predicted_sources=sources,
+  Model = "Sr"+"Nb"+"Rb"+"Y"+"Zr", ModelTitle="Sr + Nb + Rb + Y + Zr", predictSources=TRUE, unknownData=ObsidianArtifacts, ID="ID", plotTree=FALSE, plotCp=FALSE)
+pcaEval <- ps_pcaEvaluation(SourceData=ObsidianSources, unknownData=saveTree$predictedSource,
+  SourceGroup= "Code", unknownGroup="predicted",known_sources=sources, predicted_sources=sources,
   AnalyticVars=analyticVars, plotAllPoints=TRUE, plotHullsOutsidePoints=TRUE, plotOutsidePoints=FALSE)
   
 ```
@@ -730,10 +730,10 @@ data(ObsidianSources)
 data(ObsidianArtifacts)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 sources <- unique(ObsidianSources[,"Code"])
-  saveTree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
-  Model = "Sr"+"Nb"+"Rb"+"Y"+"Zr", ModelTitle="Sr + Nb + Rb + Y + Zr", predictSources=TRUE,   predictData=ObsidianArtifacts, ID="ID", plotTree=FALSE, plotCp=FALSE)
-pcaEval <- ps_pcaEvaluation(SourceData=ObsidianSources, unknownData=saveTree$predictedSources,
-  SourceGroup= "Code", unknownGroup="source",known_sources=sources, predicted_sources=sources,
+saveTree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
+  Model = "Sr"+"Nb"+"Rb"+"Y"+"Zr", ModelTitle="Sr + Nb + Rb + Y + Zr", predictSources=TRUE,      unknownData=ObsidianArtifacts, ID="ID", plotTree=FALSE, plotCp=FALSE)
+pcaEval <- ps_pcaEvaluation(SourceData=ObsidianSources, unknownData=saveTree$predictedSource,
+  SourceGroup= "Code", unknownGroup="predicted",known_sources=sources, predicted_sources=sources,
   AnalyticVars=analyticVars, ID="ID", plotAllPoints=TRUE, plotHullsOutsidePoints=TRUE, plotOutsidePoints=TRUE)
 
 ```
