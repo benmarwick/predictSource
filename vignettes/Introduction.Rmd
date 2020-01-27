@@ -473,7 +473,7 @@ The function ps_tree() defines splits using a dichotomous criterion for a single
 
 There are a number of implementations of recursive partitioning.  We used the rpart() function in the rpart library in R.  This function provides an estimate of the potential error (misclassification) in a tree using cross-validation: a subset of the data is deleted, the tree is created using the remaining data; the tree is applied to the subset, to obtain an error rate; this process is repeated, by default 10 times.  The rpart() function also has a statistical procedure for choosing the proper number of splits (recursive partitioning trees tend to be too complex, overfitting the data).   The software grows a tree with too many nodes (overfits the data), then prunes back the tree so that each split results in a specified minimum improvement (by default, 0.01) in a measure of diversity within a node.  
 
-The tree procedure is implemented using a model statement assigned in the parameter Model containing the predictor variables separated by "+" signs.  For the examples below, the values of Model is
+The tree procedure is implemented using a model statement assigned in the parameter Model containing the predictor variables separated by "+" signs.  For the examples below, the value of Model is
 "Sr"+"Nb"+"Rb"+"Y"+"Zr".  The order in which the variables appear in the model statement may affect the tree produced by the algorithm (if several predictor variables yield equally good splits at a node, the procedure may use the variable that appears first in the model statement).  Therefore, model statements with variables in different orders can yield different categorical trees.  As a result, we suggest running a random forest analysis before a classification tree model, then listing the predictor variables in the tree model statement in the order of importance estimated from the random forest model.  The value of Model uses that predicted order.  
 
 The function produces two plots, the classification tree and the reduction in the cross-validation error estimate with an increasing number of splits.  It returns a list with three results of the computations: a definition of the tree (including the split criteria; this is useful if the tree is too large to be plotted), the classification results, and the Cp table (defined below).  
@@ -515,7 +515,7 @@ tree$Tree
 
 ```
 
-The component classification in the list produced by ps_tree() contains a table with the predicted sources for the data used to create the tree.  The results for the Jemez obsidian source data are in Table y.  These results reproduce the information in Figure 6.1.  Note that, in Figure 6.1, the terminal nodes from left to right (1 to 5) contain the observations from sources B, A, D, C, and E, in that order, which is different from the row order in Table 6.2.
+The component classification in the list produced by ps_tree() contains a table with the predicted sources for the data used to create the tree.  The results for the Jemez obsidian source data are in Table 6.2.  The rows are the known group codes; the columns are the predicted groups.  Since there are no prediction errors (see Figure 6.1), the matrix is diagonal.  Note that, in Figure 6.1, the terminal nodes from left to right (1 to 5) contain the observations from sources B, A, D, C, and E, in that order, which is different from the row order in Table 6.2.
 
 ```{r, message=FALSE  }
 library(predictSource)
@@ -549,18 +549,6 @@ analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 save_tree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
    Model = "Sr"+"Nb"+"Rb"+"Y"+"Zr", ModelTitle="Sr + Nb + Rb + Y + Zr",predictSources=TRUE, unknownData=ObsidianArtifacts, unknownID="ID", plotTree=FALSE, plotCp=FALSE)
 knitr::kable(save_tree$predictedSource[1:5,], caption = "Table 6.4: An example of the data frame containing predicted sources of obsidian artifacts from the classification tree for the Jemez obsidian sources using five elements as potential predictors.") %>%
-  kable_styling(full_width=F, position="center")
-
-```
-
-```{r, message=FALSE }
-data(ObsidianSources)
-data(ObsidianArtifacts)
-analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-save_tree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
-   Model = "Sr"+"Nb"+"Rb"+"Y"+"Zr", ModelTitle="Sr + Nb + Rb + Y + Zr", predictSources=TRUE, unknownData=ObsidianArtifacts, unknownID="ID", plotTree=FALSE, plotCp=FALSE)
-knitr::kable(save_tree$predictedTotals, caption = "Table 6.6:  Predicted number of obsidian artifacts
-from each source based on the classification tree for the Jemez obsidian sources using five elements as potential predictors.") %>%
   kable_styling(full_width=F, position="center")
 
 ```
@@ -774,7 +762,7 @@ knitr::kable(tree.data.check, caption="Table 8.1: Artifacts which may have misid
 
 In contrast, in the corresponding plot based on the random forest analysis, these artifacts are predicted to come from the sources generating the convex hulls to which they are closest: see Figure 8.3.   
 
-```{r  results='hide', message=FALSE, fig.keep='last', fig.cap="Figure 8.3: Principal components plot of the Jemez obsidian source convex hulls and obsidian artifacts with points outside the convex hull predicted from a random forests analysis."}
+```{r  results='hide', message=FALSE, fig.keep='last', fig.cap="Figure 8.3: Principal components plot of the Jemez obsidian source convex hulls and sources outside of those hulls using predictions from a random forests analysis."}
 data(ObsidianSources)
 data(ObsidianArtifacts)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
@@ -785,7 +773,7 @@ saveRandomForest <- ps_randomForest(data=ObsidianSources, GroupVar="Code",Groups
   pcaEval <- ps_pcaEvaluation(SourceData=ObsidianSources,
     unknownData=saveRandomForest$predictedSources, SourceGroup= "Code", unknownGroup="source",
     known_sources=sources, predicted_sources=sources, AnalyticVars=analyticVars,
-    plotAllPoints=TRUE, plotHullsOutsidePoints = T, plotOutsidePoints = T)
+    plotAllPoints=TRUE, plotHullsOutsidePoints = TRUE, plotOutsidePoints = TRUE)
 
 ```
 
