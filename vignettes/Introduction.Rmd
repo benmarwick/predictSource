@@ -73,8 +73,11 @@ The five obsidian sources are coded as A, B, C, D, and E in the source and artif
 
 ```{r }
 library(predictSource)
+library(magrittr)
+library(kableExtra)
 data(ObsidianSources)
-knitr::kable(ObsidianSources[1:6,], caption="Table 2.1: Sample of the data in the file ObsidianSources.")
+knitr::kable(ObsidianSources[1:6,], caption="Table 2.1: Sample of the data in the file ObsidianSources.") %>%
+  kable_styling(full_width=F, position="center")
 #
 ```
 
@@ -118,7 +121,8 @@ library(predictSource)
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 checkData<-ps_checkData(data=ObsidianSources,CheckDupVars=c("Code","ID"),GroupVar="Code",Groups="All",AnalyticVars=analyticVars)
-knitr::kable(checkData$Nvalues, caption="Table 3.1: Number of values for each element from each Jemez source.")
+knitr::kable(checkData$Nvalues, caption="Table 3.1: Number of values for each element from each Jemez source.") %>%
+  kable_styling(full_width=F, position="center")
 
 ```
 
@@ -128,7 +132,8 @@ The descriptive statistics for the elements in the classification tree in Figure
 library(predictSource)
 data(ObsidianSources)
 checkData<-ps_checkData(data=ObsidianSources,CheckDupVars=c("Code","ID"),GroupVar="Code",Groups="All",AnalyticVars=c("Sr","Rb","Nb","Y"))
-knitr::kable(checkData$statistics, caption="Table 3.2: Descriptive statistics for the elements in the Jemez obsidian sources used in the classification tree in Figure 1.1.")
+knitr::kable(checkData$statistics, caption="Table 3.2: Descriptive statistics for the elements in the Jemez obsidian sources used in the classification tree in Figure 1.1.") %>%
+  kable_styling(full_width=F, position="center")
 
 ```
 
@@ -140,7 +145,8 @@ For understanding later results, we need the corresponding descriptive statistic
 library(predictSource)
 data(ObsidianArtifacts)
 checkData<-ps_checkData(data=ObsidianArtifacts,CheckDupVars=c("Code","ID"), GroupVar="Code", ByGroup=FALSE, AnalyticVars=c("Sr","Rb","Y"))
-knitr::kable(checkData$statistics, caption="Table 3.3: Descriptive statistics for the elements in the obsidian artifacts used in the classification tree in Figure 1.1.")
+knitr::kable(checkData$statistics, caption="Table 3.3: Descriptive statistics for the elements in the obsidian artifacts used in the classification tree in Figure 1.1.") %>%
+  kable_styling(full_width=F, position="center")
 
 ```
 
@@ -218,7 +224,8 @@ data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 CV_corr<-ps_CV_corr(data = ObsidianSources, GroupVar="Code", Groups = "All", AnalyticVars=analyticVars, plotCorrs=FALSE)
 knitr::kable(CV_corr$corr, caption="Table 4.1: Spearman correlations among pairs of elements from the Jemez sources,
-by group.")
+by group.") %>%
+  kable_styling(full_width=F, position="center")
 #
 ```
 
@@ -226,7 +233,8 @@ by group.")
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 CV_corr<-ps_CV_corr(data = ObsidianSources, GroupVar="Code", Groups="All", AnalyticVars=analyticVars, ByGroup=FALSE, plotCorrs=FALSE)
-knitr::kable(CV_corr$corr, caption="Table 4.2: Spearman correlations among pairs of elements from the Jemez obsidian sources, all groups combined.")
+knitr::kable(CV_corr$corr, caption="Table 4.2: Spearman correlations among pairs of elements from the Jemez obsidian sources, all groups combined.") %>%
+  kable_styling(full_width=F, position="center")
 #
 ```
 
@@ -244,7 +252,8 @@ Table 4.3 shows the coefficients of variation for each element at each source.  
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 CV_corr<-ps_CV_corr(data = ObsidianSources, GroupVar="Code", Groups = "All", AnalyticVars=analyticVars, ByGroup=TRUE, plotCorrs=FALSE)
-knitr::kable(CV_corr$CV, caption="Table 4.3:  Coefficients of variation of the elements from the Jemez sources.")
+knitr::kable(CV_corr$CV, caption="Table 4.3:  Coefficients of variation of the elements from the Jemez sources.") %>%
+  kable_styling(full_width=F, position="center")
 #
 ```
 
@@ -288,7 +297,8 @@ plot_2d <- ps_2dPlot(data = ObsidianSources, GroupVar = "Code", ID = "ID", Group
 
 ```{r}
 data("sources.data.check")
-knitr::kable(sources.data.check,caption="Table 4.4: Data generating identified points.")
+knitr::kable(sources.data.check,caption="Table 4.4: Data generating identified points.") %>%
+  kable_styling(full_width=F, position="center")
 #
 ```
 
@@ -363,13 +373,15 @@ data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")    
 plot2dGauss<-ps_2dPlotGauss(data=ObsidianSources, GroupVar="Code", ID="ID", Groups="All",
     AnalyticVars=analyticVars, variablePair=c("Rb","Zr"), QQPlot=FALSE, scatterplot=FALSE)
-knitr::kable(plot2dGauss$pvalues,caption="Table 4.5:  P-values from test statistics for a bivariate Rb/Zr distribution at the Jemez obsidian sources.")
+knitr::kable(plot2dGauss$pvalues,caption="Table 4.5:  P-values from test statistics for a bivariate Rb/Zr distribution at the Jemez obsidian sources.") %>%
+  kable_styling(full_width=F, position="center")
 
 ```
 ```{r echo=FALSE, message=FALSE}
 plot2dGauss<-ps_2dPlotGauss(data=ObsidianSources, GroupVar="Code", ID="ID", Groups="All",
     AnalyticVars=analyticVars, variablePair=c("Rb","Nb"),QQPlot=FALSE, scatterplot=FALSE)
-knitr::kable(plot2dGauss$pvalues,caption="Table 4.6:  Samples sizes and p-values from test statistics for a bivariate Rb/Nb distribution at the Jemez obsidian sources.")
+knitr::kable(plot2dGauss$pvalues,caption="Table 4.6:  Samples sizes and p-values from test statistics for a bivariate Rb/Nb distribution at the Jemez obsidian sources.") %>%
+  kable_styling(full_width=F, position="center")
 
 ```
 
@@ -416,9 +428,13 @@ save_pca <- ps_pca(data=ObsidianSources, ID="ID", GroupVar="Code",Groups="All", 
 ```{r}
 save_pca <- ps_pca(data=ObsidianSources, ID="ID", GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
                    pcPlot=FALSE)
-knitr::kable(save_pca$variances, caption="Table 5.1:  Proportions of the variance explained in the principal components analysis of the Jemez obsidian source data.")
-knitr::kable(save_pca$weights, caption="Table 5.2:  Weights for each principal component in the principal components analysis of the Jemez obsidian source data.")
-knitr::kable(head(save_pca$DataPlusPredicted), caption="Table 5,3:  Original data and principal components in the principal components analysis of the Jemez obsidian source data.")
+knitr::kable(save_pca$variances, caption="Table 5.1:  Proportions of the variance explained in the principal components analysis of the Jemez obsidian source data.") %>%
+  kable_styling(full_width=F, position="center")
+knitr::kable(save_pca$weights, caption="Table 5.2:  Weights for each principal component in the principal components analysis of the Jemez obsidian source data.") %>%
+  kable_styling(full_width=F, position="center")
+knitr::kable(head(save_pca$DataPlusPredicted), caption="Table 5,3:  Original data and principal components in the principal components analysis of the Jemez obsidian source data.") %>%
+  kable_styling(full_width=F, position="center") %>%
+  kable_styling(full_width=F, position="center")
 
 ```
 
@@ -433,7 +449,8 @@ The function ps_pca.Gauss() computes p-values, by source, for assessing whether 
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 pca_Gauss <- ps_pcaGauss(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars, qqPlot=FALSE)
-knitr::kable(pca_Gauss$p.values, caption="Table 5.4: P-values from test statistics for a bivariate Gaussian distribution of the first two principal components at each Jemez obsidian source.")
+knitr::kable(pca_Gauss$pvalues, caption="Table 5.4: P-values from test statistics for a bivariate Gaussian distribution of the first two principal components at each Jemez obsidian source.") %>%
+  kable_styling(full_width=F, position="center")
 
 ```
 
@@ -506,8 +523,8 @@ data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 tree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
                  Model="Sr"+"Nb"+"Rb"+"Y"+"Zr", ModelTitle="Sr + Nb + Rb + Y + Zr", plotTree=FALSE, plotCp = F)
-knitr::kable(tree$classification, caption = "Table 6.2:  Classification tree predictions for the Jemez obsidian sources using five elements as potential predictors.")
-
+knitr::kable(tree$classification, caption = "Table 6.2:  Classification tree predictions for the Jemez obsidian sources using five elements as potential predictors.") %>%
+  kable_styling(full_width=F, position="center")
 ```
 
 Table 6.3 contains the improvement in predicted group purity, as measured by Cp, and the estimated relative error rates and their standard errors obtained from cross-validation from the tree procedure using the Jemez obsidian source data. 
@@ -518,7 +535,8 @@ data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
  tree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
                  Model="Sr"+"Nb"+"Rb"+"Y"+"Zr", ModelTitle="Sr + Nb + Rb + Y + Zr", plotTree=FALSE, plotCp = F)
-knitr::kable(tree$CpTable, caption = "Table 6.3:  Cp table from the classification tree for the Jemez obsidian sources using five elements as potential predictors.")
+knitr::kable(tree$CpTable, caption = "Table 6.3:  Cp table from the classification tree for the Jemez obsidian sources using five elements as potential predictors.") %>%
+  kable_styling(full_width=F, position="center")
 
 ```
 
@@ -530,7 +548,8 @@ data(ObsidianArtifacts)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 save_tree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
    Model = "Sr"+"Nb"+"Rb"+"Y"+"Zr", ModelTitle="Sr + Nb + Rb + Y + Zr",predictSources=TRUE, unknownData=ObsidianArtifacts, unknownID="ID", plotTree=FALSE, plotCp=FALSE)
-knitr::kable(save_tree$predictedSources[1:5,], caption = "Table 6.4: An example of the data frame containing predicted sources of obsidian artifacts from the classification tree for the Jemez obsidian sources using five elements as potential predictors.")
+knitr::kable(save_tree$predictedSource[1:5,], caption = "Table 6.4: An example of the data frame containing predicted sources of obsidian artifacts from the classification tree for the Jemez obsidian sources using five elements as potential predictors.") %>%
+  kable_styling(full_width=F, position="center")
 
 ```
 
@@ -541,7 +560,8 @@ analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 save_tree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
    Model = "Sr"+"Nb"+"Rb"+"Y"+"Zr", ModelTitle="Sr + Nb + Rb + Y + Zr", predictSources=TRUE, unknownData=ObsidianArtifacts, unknownID="ID", plotTree=FALSE, plotCp=FALSE)
 knitr::kable(save_tree$predictedTotals, caption = "Table 6.6:  Predicted number of obsidian artifacts
-from each source based on the classification tree for the Jemez obsidian sources using five elements as potential predictors.")
+from each source based on the classification tree for the Jemez obsidian sources using five elements as potential predictors.") %>%
+  kable_styling(full_width=F, position="center")
 
 ```
 
@@ -593,7 +613,8 @@ data(ObsidianSources)
 data(ObsidianSources)
  analyticVars<-c("Rb","Sr","Y","Zr","Nb")
  saveRandomForest <- ps_randomForest(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars, NvarUsed=3, plotImportance=FALSE, plotErrorRate=FALSE)
-knitr::kable(saveRandomForest$importance, caption="Table 7.1: Relative variable importance in a random forest model for the Jemez obsidian source data.")
+knitr::kable(saveRandomForest$importance, caption="Table 7.1: Relative variable importance in a random forest model for the Jemez obsidian source data.") %>%
+  kable_styling(full_width=F, position="center")
 
 ```
 
@@ -603,7 +624,8 @@ The accuracy of classification from the random forest analysis is reported in th
 data(ObsidianSources)
  analyticVars<-c("Rb","Sr","Y","Zr","Nb")
  saveRandomForest <- ps_randomForest(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars, NvarUsed=3, plotImportance=FALSE, plotErrorRate=FALSE)
-knitr::kable(saveRandomForest$confusion, caption="Table 7.2: The confusion matrix from a random forest model for the Jemez obsidian source data: accuracy of classification.")
+knitr::kable(saveRandomForest$confusion, caption="Table 7.2: The confusion matrix from a random forest model for the Jemez obsidian source data: accuracy of classification.") %>%
+  kable_styling(full_width=F, position="center")
 
 ```
 
@@ -615,9 +637,11 @@ data(ObsidianArtifacts)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 saveRandomForest <- ps_randomForest(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars, NvarUsed=3, plotErrorRate=FALSE, plotImportance=FALSE, predictSources=TRUE,predictData=ObsidianArtifacts, plotSourceProbs=FALSE)
 knitr::kable(saveRandomForest$predictedSources[1:5,], caption="Table 7.3: The predicted source and predicted 
-  source probabilities from a random forest model for the Jemez obsidian artifact data.")
+  source probabilities from a random forest model for the Jemez obsidian artifact data.") %>%
+  kable_styling(full_width=F, position="center")
 knitr::kable(saveRandomForest$predictedTotals, caption="Table 7.4: The predicted number of artifacts from 
-  each Jemez source from a random forest model for the Jemez obsidian artifact data.")
+  each Jemez source from a random forest model for the Jemez obsidian artifact data.") %>%
+  kable_styling(full_width=F, position="center")
 
 ```
 
@@ -654,7 +678,8 @@ rows<-((check[,"C"]>0.14)&(check[,"C"]<0.35))
 checkC<-check[rows,]
 orderedRows<-order(checkC[,"C"])
 knitr::kable(checkC[orderedRows,], caption="Table 7.3:  Rows with relative large probabilities of
-             misclassification to source C.")
+             misclassification to source C.") %>%
+  kable_styling(full_width=F, position="center")
 ```
 
 ```{r  results='hide', message=FALSE, fig.cap="Figure 7.4: Principal components plot of the predicted sources of the obsidian artifacts from a random forests analysis."}
@@ -791,7 +816,8 @@ treeDataCheck <- tree.data.check[order(tree.data.check[,"ID"]),]
 saveRF<-saveRandomForest$predictedSources[order(saveRandomForest$predictedSources[,"source"]),]
 obsCheck<-merge(x=saveRF, y = tree.data.check[,c("ID","pc1","pc2")],
                 by = "ID", x.all=FALSE, y.all=FALSE)
-knitr::kable(obsCheck, caption="Table 8.2: Random forest probability estimates for artifacts which may have  been misidentified as from source C using the tree model identified by using Identify=T in ps_pcaEvaluation().  source is the predicted source from the random forest procedure.")
+knitr::kable(obsCheck, caption="Table 8.2: Random forest probability estimates for artifacts which may have  been misidentified as from source C using the tree model identified by using Identify=T in ps_pcaEvaluation().  source is the predicted source from the random forest procedure.") %>%
+  kable_styling(full_width=F, position="center")
 
 ```
 
