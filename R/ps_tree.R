@@ -258,8 +258,8 @@ ps_tree <-
      #
      nCorrect <- sum(diag(classMatrix))
      nTotal <- sum(classMatrix)
-     errorRate <- 1 - round(nCorrect/nTotal, dig=3)
-     errorCount <- round(c(nTotal-nCorrect, nTotal), dig = 0)
+     errorRate <- 1 - round(nCorrect/nTotal, digits =3)
+     errorCount <- round(c(nTotal-nCorrect, nTotal), digits = 0)
      names(errorCount) <- c("incorrect", "n total")
      #
      classMatrix <- data.frame(classMatrix,total=apply(classMatrix,1,sum))
