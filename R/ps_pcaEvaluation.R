@@ -68,8 +68,8 @@
 #' @import graphics stats  mgcv  assertthat
 #'
 #' @examples
-#' Evaluate the predicted sources of source samples from a tree model,
-#' Since all predictions are correct, all predictions are inside the source hulls.
+#' # Evaluate the predicted sources of source samples from a tree model,
+#' # Since all predictions are correct, all predictions are inside the source hulls.
 #' data(ObsidianSources)
 #' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
 #' sources <- unique(ObsidianSources[,"Code"])
