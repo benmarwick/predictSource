@@ -19,7 +19,8 @@
 #' otherwise, NA}
 #' }
 #'
-#' @import  stats  graphics  MVN
+#' @import  stats  graphics
+#' @importFrom  MVN  mvn
 #'
 #' @export
 #'

@@ -23,11 +23,10 @@ default is the function name}
 
 \item{data}{A matrix or data frame containing the data to be analyzed}
 
-\item{GroupVar}{The name for variable defining grouping;
-can be " " if no grouping_}
+\item{GroupVar}{The name for variable defining grouping}
 
 \item{Groups}{A vector of values of group variable for which plots
-are to be done; if "All", use all groups; if " ", no grouping}
+are to be done; if "All", use all groups}
 
 \item{AnalyticVars}{A vector of names (character values) of the analytic variables}
 
@@ -39,14 +38,11 @@ for each selection of 3 variables; if FALSE (the default),
  all specified groups are on one plot}
 
 \item{PlotMedians}{Logical.  If TRUE, plot only the medians in each group
- (the points are not plotted).
-If FALSE (the default), the median locations are not plotted}
+(the points are not plotted).  If FALSE (the default), the median locations are not plotted}
 
-\item{Colors}{A vector with the colors of plotted points,
-used sequentially for the groups}
+\item{Colors}{A vector with the colors of plotted points, used sequentially for the groups}
 
-\item{SymbolSize}{A value at most 1, a smaller value gives
-smaller diameter points}
+\item{SymbolSize}{A value at most 1, a smaller value gives smaller diameter points}
 }
 \value{
 A list with the following components:

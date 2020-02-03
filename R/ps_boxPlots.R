@@ -51,7 +51,7 @@
 #' boxPlots<-ps_boxPlots(data=SourcesArtifacts, GroupVar="Code", Groups="All",
 #' AnalyticVars="Rb",Nrow=1,Ncol=1)
 #'
-#' @import  graphics  assertthat
+#' @import  assertthat
 #'
 #' @export
 #'

@@ -42,7 +42,8 @@
 #'  the convex hull and median of the points are plotted for each group.  The package fANACOVA (required
 #'  to use the function lowess.as()) was not available for the current version of R.
 #'
-#' @import MASS ellipse graphics stats  grDevices
+#' @import MASS graphics stats  grDevices
+#' @importFrom  ellipse  ellipse
 #'
 #' @export
 #'

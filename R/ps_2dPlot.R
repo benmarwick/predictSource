@@ -80,7 +80,7 @@
 #' AnalyticVars=analyticVars,VariablePairs=c("Rb","Nb"),PlotEllipses=FALSE,LowessLine=FALSE,
 #' PlotHulls=TRUE,PlotMedians=TRUE,PlotPoints=FALSE)
 #'
-#' @import MASS  ellipse  assertthat
+#' @import MASS  assertthat
 #'
 #' @export
 #'

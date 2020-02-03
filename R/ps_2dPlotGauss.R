@@ -41,7 +41,7 @@
 #'   See the vignette for more information: visualizing each plot, the information obtained
 #'    by using the package qqtest, the tests for bivariate normality, and identifying points of interest.
 #'
-#' @import MASS  qqtest  nortest graphics stats assertthat
+#' @import MASS  stats assertthat
 #'
 #' @examples
 #' data(ObsidianSources)

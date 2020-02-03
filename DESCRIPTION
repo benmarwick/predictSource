@@ -19,6 +19,7 @@ Imports: MVN, MASS, scatterplot3d, rgl, mgcv, randomForest, rpart, partykit, For
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.0.2
+Depends: R (>= 2.10)
 Suggests: 
     knitr,
     rmarkdown,

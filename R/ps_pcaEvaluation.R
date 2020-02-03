@@ -65,7 +65,8 @@
 #'    }
 #'
 #'
-#' @import graphics stats  mgcv  assertthat
+#' @import graphics stats  assertthat
+#' @importFrom mgcv in.out
 #'
 #' @examples
 #' # Evaluate the predicted sources of source samples from a tree model,

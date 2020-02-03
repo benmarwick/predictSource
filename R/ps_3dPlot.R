@@ -7,10 +7,9 @@
 #' @param doc A string documenting use written to the output list;
 #' default is the function name
 #' @param data A matrix or data frame containing the data to be analyzed
-#' @param GroupVar The name for variable defining grouping;
-#' can be " " if no grouping_
+#' @param GroupVar The name for variable defining grouping
 #' @param Groups A vector of values of group variable for which plots
-#'  are to be done; if "All", use all groups; if " ", no grouping
+#'  are to be done; if "All", use all groups
 #' @param AnalyticVars A vector of names (character values) of the analytic variables
 #' @param Selections A vector of length 3, or matrix or data frame with 3 columns,
 #'  with the combinations of the analytic variables to be plotted
@@ -18,12 +17,9 @@
 #'  for each selection of 3 variables; if FALSE (the default),
 #'   all specified groups are on one plot
 #' @param PlotMedians  Logical.  If TRUE, plot only the medians in each group
-#'  (the points are not plotted).
-#' If FALSE (the default), the median locations are not plotted
-#' @param Colors A vector with the colors of plotted points,
-#' used sequentially for the groups
-#' @param SymbolSize A value at most 1, a smaller value gives
-#' smaller diameter points
+#'  (the points are not plotted).  If FALSE (the default), the median locations are not plotted
+#' @param Colors A vector with the colors of plotted points, used sequentially for the groups
+#' @param SymbolSize A value at most 1, a smaller value gives smaller diameter points
 #'
 #' @return   A list with the following components:
 #'  \itemize{
@@ -45,7 +41,7 @@
 #'   all points have the color of the first element in Colors.
 #'   If PlotMedians = TRUE, the value of ByGroup is not used.
 #'
-#' @import MASS scatterplot3d graphics stats assertthat
+#' @import MASS scatterplot3d stats assertthat
 #'
 #' @examples
 #' #  show points from several groups on one plot
@@ -108,7 +104,7 @@ ps_3dPlot <-
     #
     dataKeep <- rep(T, nrow(dataUsed))
     for (i in 1:length(AnalyticVars))
-      dataKeep[is.na(dataUsed[,AnalyticVars[i]])] <- F
+      dataKeep[is.na(dataUsed[,AnalyticVars[i]])] <- FALSE
     #
     if ((GroupVar[1] != " ") & (Groups[1] == "All"))
       groups <- as.character(unique(dataUsed[, GroupVar]))
@@ -126,7 +122,7 @@ ps_3dPlot <-
     #
     #  add index to dataUsed to specific color for plotting points in groups
     #
-    if ((!ByGroup) & (Groups[1] != " ")) {
+    if (!ByGroup) {
       n_group<-rep(0,length(groups))
       for (i in 1:length(groups))  {
         n_group<-nrow(dataUsed[dataUsed[,GroupVar]==groups[i],])
@@ -201,7 +197,7 @@ ps_3dPlot <-
         }
       } # end of plot points by group
     }
-    if ((PlotMedians) & (GroupVar != " ")) {
+    if (PlotMedians & ByGroup) {
       # plot medians
       if (is.vector(Selections)) {
         dev.new()
