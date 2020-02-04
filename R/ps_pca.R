@@ -74,7 +74,6 @@
 #'  }
 #'
 #' @import  MASS randomForest graphics stats assertthat
-#' @importFrom  ellipse  ellipse
 #'
 #' @examples
 #' data(ObsidianSources)
@@ -147,7 +146,7 @@ ps_pca <-  function(doc = "ps_pca",
                           c("PC1", "PC2")]
         Covar <- var(temp)
         for (j in 1:length(Ellipses)) {
-          Ellipse <- ellipse(x = Covar, centre = apply(temp,
+          Ellipse <- ellipse::ellipse(x = Covar, centre = apply(temp,
                                                        2, mean, na_rm = T), level = Ellipses[j], npoints = 200)
           lines(Ellipse)
         }

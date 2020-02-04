@@ -20,7 +20,6 @@
 #' }
 #'
 #' @import  stats  graphics
-#' @importFrom  MVN  mvn
 #'
 #' @export
 #'

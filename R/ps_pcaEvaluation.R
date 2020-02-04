@@ -66,7 +66,6 @@
 #'
 #'
 #' @import graphics stats  assertthat
-#' @importFrom mgcv in.out
 #'
 #' @examples
 #' # Evaluate the predicted sources of source samples from a tree model,
@@ -383,7 +382,7 @@ ps_pcaEvaluation <-function(doc = "ps_pcaEvaluation",
       if (sum(index_i) > 0) {
         # at least one unknown from source i
         temp_i <- pcaLocationsArtifacts[index_i,]
-        unknown_in_hull[index_i] <- in.out(bnd = as.matrix(hullVertices[[i]], mode="numeric"),
+        unknown_in_hull[index_i] <- mgcv::in.out(bnd = as.matrix(hullVertices[[i]], mode="numeric"),
                                             x = as.matrix(temp_i[, c("pc1", "pc2")],mode="numeric"))
       }  # end of loop for sum(index_i) > 0
     }  # end of loop on i

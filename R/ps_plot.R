@@ -43,7 +43,6 @@
 #'  to use the function lowess.as()) was not available for the current version of R.
 #'
 #' @import MASS graphics stats  grDevices
-#' @importFrom  ellipse  ellipse
 #'
 #' @export
 #'
@@ -79,7 +78,7 @@ ps_plot <- function(   data,
       if (plotEllipses) {
         for (j in 1:length(ps_ellipses)) {
           Covar <- var(data[,useVars])
-          Ellipse <- ellipse(x = Covar, centre = apply(data[,useVars], 2, mean, na.rm = T),
+          Ellipse <- ellipse::ellipse(x = Covar, centre = apply(data[,useVars], 2, mean, na.rm = T),
                              level = ps_ellipses[j], npoints = 200)
           rangeX<-range(rangeX,Ellipse[,1])
           rangeY<-range(rangeY,Ellipse[,2])
@@ -97,7 +96,7 @@ ps_plot <- function(   data,
       if (plotEllipses) {
         Covar <- var(data[,useVars])
         for (j in 1:length(ps_ellipses)) {
-          Ellipse <- ellipse(x = Covar, centre = apply(data[,useVars],2, mean, na.rm = T),
+          Ellipse <- ellipse::ellipse(x = Covar, centre = apply(data[,useVars],2, mean, na.rm = T),
                              level = ps_ellipses[j], npoints = 200)
           lines(Ellipse, lty=1)
         }
@@ -171,7 +170,7 @@ ps_plot <- function(   data,
             data_i <- data[data[,ps_groupVar]== groups[i],]
             for (j in 1:length(ps_ellipses)) {
               Covar <- var(data_i[,useVars])
-              Ellipse <- ellipse(x = Covar, centre = apply(data_i[,useVars], 2, mean, na.rm = T),
+              Ellipse <- ellipse::ellipse(x = Covar, centre = apply(data_i[,useVars], 2, mean, na.rm = T),
                                level = ps_ellipses[j], npoints = 200)
               rangeX<-range(rangeX,Ellipse[,1])
               rangeY<-range(rangeY,Ellipse[,2])
@@ -190,7 +189,7 @@ ps_plot <- function(   data,
             data_i<-data[data[,ps_groupVar]==groups[i],]
             Covar <- var(data_i[,useVars])
             for (j in 1:length(ps_ellipses)) {
-              Ellipse <- ellipse(x = Covar, centre = apply(data_i[,useVars],2, mean, na.rm = T),
+              Ellipse <- ellipse::ellipse(x = Covar, centre = apply(data_i[,useVars],2, mean, na.rm = T),
                                level = ps_ellipses[j], npoints = 200)
             lines(Ellipse, lty=1)
             }
