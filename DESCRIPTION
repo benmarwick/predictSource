@@ -24,5 +24,8 @@ Suggests:
     knitr,
     rmarkdown,
     testthat,
-    here
+    here,
+    kableExtra,
+    magrittr
 VignetteBuilder: knitr
+
