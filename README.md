@@ -3,6 +3,12 @@
 
 # predictSource
 
+<!-- badges: start -->
+
+[![Travis build
+status](https://travis-ci.org/benmarwick/predictSource.svg?branch=master)](https://travis-ci.org/benmarwick/predictSource)
+<!-- badges: end -->
+
 The goal of predictSource is to provide functions for working with
 compositional data from archaeological artefacts.
 

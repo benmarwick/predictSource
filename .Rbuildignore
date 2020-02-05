@@ -9,3 +9,4 @@ scatterRb_Sr_Y.jpeg
 scatterSrYZr.emf
 scatterSr_Y_Zr.jpeg
 ^LICENSE\.md$
+^\.travis\.yml$
