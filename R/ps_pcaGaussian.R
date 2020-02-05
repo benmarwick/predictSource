@@ -37,7 +37,7 @@
 #'   \item{location:}{ The value of the parameter folder}
 #'  }
 #'
-#' @import MASS nortest qqtest MVN
+#' @import MASS nortest qqtest
 #'
 #' @examples
 #' data(ObsidianSources)
@@ -127,8 +127,14 @@ ps_pcaGaussian <-
     pc_qqPlot <- qqPlot
     pc_digits <- 3
     #
-    outGauss <- ps_2dPlotGauss(data=DataPlusPredicted, GroupVar=pc_GroupVar, Groups=pc_Groups,
-                           AnalyticVars=c("PC1", "PC2"), ID=gaussID, qqPlot=pc_qqPlot, pvalue_digits=pc_digits,
+    outGauss <- ps_2dPlotGauss(data=DataPlusPredicted,
+                               GroupVar=pc_GroupVar,
+                               Groups=pc_Groups,
+                           AnalyticVars=c("PC1", "PC2"),
+                           variablePair =  analyticVars[c(1, 4)], # is this right?
+                           ID=gaussID,
+                           QQPlot=pc_qqPlot,
+                           pvalue_digits=pc_digits,
                            Identify=gaussIdentify)
     browser()
     #

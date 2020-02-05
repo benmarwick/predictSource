@@ -298,7 +298,8 @@
 #'   \item{location:}{ The value of the parameter folder}
 #'  }
 #'
-"testRandomForest"
+#"testRandomForest"
+NULL
 
 #' A list used to verify that ps_tree() is valid
 #'
@@ -318,3 +319,9 @@
 #'   \item{location:}{ The value of the parameter folder}
 #'  }
 "testTree"
+
+#' A dataset...
+#'
+
+
+"ObsidianData"

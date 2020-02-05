@@ -2,17 +2,17 @@
 #'
 #' Data checks and summaries: duplicate records, negative analytic values, numbers of analytic results, percentiles of results
 #'
-#' @param doc: a character string written to the output list; default is the function name
-#' @param data: R object (data frame) containing analytic data
-#' @param CheckDupVars: vector with names of identifying variables, typically group and lab ID
-#' @param GroupVar: if there are groups, name of variable defining the groups, default value of " ": no grouping
-#' @param Groups: character vector of groups by which numbers of samples and statistics statistics will be
+#' @param doc a character string written to the output list; default is the function name
+#' @param data R object (data frame) containing analytic data
+#' @param CheckDupVars vector with names of identifying variables, typically group and lab ID
+#' @param GroupVar if there are groups, name of variable defining the groups, default value of " ": no grouping
+#' @param Groups character vector of groups by which numbers of samples and statistics statistics will be
 #'  tabulated
 #'   default value of " ": tabulations are done for the entire data set
 #'   value = "All": tabulation for each distinct code in GroupVar
-#' @param ID: name of lab ID, default is " " (no lab ID)
-#' @param AnalyticVars: character vector of names of analytic variables for which tabulations are done
-#' @param folder:  the path to a folder in which data frames will be saved; default is " "
+#' @param ID name of lab ID, default is " " (no lab ID)
+#' @param AnalyticVars character vector of names of analytic variables for which tabulations are done
+#' @param folder  the path to a folder in which data frames will be saved; default is " "
 #' #``
 #' @return
 #'   Four data frames with duplicate observations, observations with negative
@@ -39,13 +39,13 @@
 #' @examples
 #' data(ObsidianSources)
 #' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-#' dataCheck<-fn.CheckData(data=ObsidianSources,CheckDupVars=analyticVars,GroupVar="Code",Groups="All",
+#' dataCheck<-as_checkData(data=ObsidianSources,CheckDupVars=analyticVars,GroupVar="Code",Groups="All",
 #' ID = "ID", AnalyticVars=analyticVars)
 #'
 #' @export
 
 as_checkData <-
-  function(doc = "fn.CheckData",
+  function(doc = "as_CheckData",
            data,
            CheckDupVars,
            GroupVar = " ",
@@ -132,7 +132,7 @@ as_checkData <-
         statisticsj <- summary(data.Used[, AnalyticVars[j]])
         statistics[j, 1:length(statisticsj)] <- statisticsj
       } # end of loop on j
-      statistics.values <- round(statistics, dig = 0)
+      statistics.values <- round(statistics, digits = 0)
       colnames(statistics.values) <- c("min", "Q1", "median",
                                        "mean", "Q3", "max", "n.missing")
       statistics.values[is.na(statistics.values[, 7]), 7] <- 0
@@ -158,7 +158,7 @@ as_checkData <-
         row <- row + n.groups + 1
       }  # end of loop on i
       }  # end of code for specified groups
-      statistics.values <- round(statistics.values, dig = 0)
+      statistics.values <- round(statistics.values, digits = 0)
       colnames(statistics.values) <- c("min", "Q1", "median",
                                     "mean", "Q3", "max", "n.missing")
       statistics.values[is.na(statistics.values[, 7]), 7] <- 0
@@ -170,7 +170,7 @@ as_checkData <-
     fcn.date.ver<-c(doc,date(),R.Version()$version.string)
     params<-list(CheckDupVars,GroupVar,Groups)
     names(params)<-c("CheckDupVars","GroupVar","Groups")
-    statistics[,"mean"] <- round(statistics[,"mean"], dig = 0)
+    statistics[,"mean"] <- round(statistics[,"mean"], digits = 0)
   #
  list(usage=fcn.date.ver,
                                  dataUsed=data,params=params,

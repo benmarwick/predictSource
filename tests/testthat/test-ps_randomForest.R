@@ -11,13 +11,13 @@ test_that("ps_randomForest output is a list", {
   expect_type(rf, "list")
 })
 
-data(testRandomForest)
-
-test_that("ps_randomForest confusion matrix is correct", {
-  expect_equal(rf$confusion, testRandomForest$confusion)
-})
-
-test_that("ps_randomForest importance estimates are correct", {
-  expect_equal(rf$importance, testRandomForest$importance)
-})
+# data(testRandomForest)
+#
+# test_that("ps_randomForest confusion matrix is correct", {
+#   expect_equal(rf$confusion, testRandomForest$confusion)
+# })
+#
+# test_that("ps_randomForest importance estimates are correct", {
+#   expect_equal(rf$importance, testRandomForest$importance)
+# })
 
