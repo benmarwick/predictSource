@@ -1,3 +1,5 @@
+#' Documentation for data sets
+#'
 #' Chemical composition of obsidian sources
 #'
 #' A data set containing data on five elements from 113 obsidian samples from five sources in the Jemez
@@ -298,8 +300,7 @@
 #'   \item{location:}{ The value of the parameter folder}
 #'  }
 #'
-#"testRandomForest"
-NULL
+# "testRandomForest"
 
 #' A list used to verify that ps_tree() is valid
 #'
@@ -318,10 +319,7 @@ NULL
 #'   \item{predictedTotals:}{  If predictedSources = T, a vector with the number of objects predicted to be from each source}
 #'   \item{location:}{ The value of the parameter folder}
 #'  }
+#'
 "testTree"
-
-#' A dataset...
 #'
 
-
-"ObsidianData"

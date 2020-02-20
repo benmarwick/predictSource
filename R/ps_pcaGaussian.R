@@ -8,7 +8,9 @@
 #' @param Groups  A vector of values of group variable for which plots are to be done;
 #' if "All"', use all groups
 #' @param gaussID An optional name for an ID, default is " " if no ID
-#' @param AnalyticVars  A vector of names (character values) of analytic results
+#' @param analyticVars  A vector of names (character values) of analytic results
+#' @param varPair  A vector of names (character values) of the variable pair to be analyzed,
+#' default is first two principal components
 #' @param qqPlot  Logical, should Q-Q plots (univariate with the bootstrap envelope, multivariate)
 #'  be shown; default is TRUE
 #' @param gaussIdentify  Logical, should user identify points of interest, default is FALSE
@@ -28,7 +30,7 @@
 #'   \item{dataNA:}{  A data frame with observations containing a least one missing value
 #'   for an analysis variable, NA if no missing values}
 #'   \item{params_grouping:}{ A list with the values of the arguments GroupVar and Groups}
-#'   \item{analyticVars:}{ A vector with the value of the argument AnalyticVars}
+#'   \item{analyticVars:}{ A vector with the value of the argument analyticVars}
 #'   \item{params_logical:}{ The value of QQtest}
 #'   \item{p_values:}{ A data frame with the p-values for the Gaussian assumptions for each
 #'    group specified}
@@ -41,9 +43,9 @@
 #'
 #' @examples
 #' data(ObsidianSources)
-#' analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+#' analVars<-c("Rb","Sr","Y","Zr","Nb")
 #' pca_Gauss <- ps_pcaGaussian(data=ObsidianSources, GroupVar="Code",Groups=c("A","B"),
-#'   AnalyticVars=analyticVars)
+#'   analyticVars=analVars)
 #'
 #' @export
 #'
@@ -54,7 +56,8 @@ ps_pcaGaussian <-
            GroupVar,
            Groups,
            gaussID = " ",
-           AnalyticVars,
+           analyticVars,
+           varPair = c("PC1", "PC2"),
            qqPlot = TRUE,
            gaussIdentify = FALSE,
            folder = " ")
@@ -78,8 +81,8 @@ ps_pcaGaussian <-
     }
     dataKeep <- rep(T, nrow(dataUsed)) # will contain indices for observations with no missing data
     for (i in 1:nrow(dataUsed)) {
-      for (j in 1:length(AnalyticVars))
-        if (is.na(dataUsed[,AnalyticVars][i,j]))  dataKeep[i] <- F
+      for (j in 1:length(analyticVars))
+        if (is.na(dataUsed[,analyticVars][i,j]))  dataKeep[i] <- F
     }
     if (sum(dataKeep) < nrow(dataUsed))  dataNA<-dataUsed[!dataKeep,]
       else  dataNA<-NA
@@ -93,7 +96,7 @@ ps_pcaGaussian <-
     else
       groups <- as.character(Groups)
     #
-    pca <- prcomp(dataUsed[, AnalyticVars], scale = TRUE)
+    pca <- prcomp(dataUsed[, analyticVars], scale = TRUE)
     # predicted values for first two components
     predict_pc1 <- predict(pca)[, 1]
     predict_pc2 <- predict(pca)[, 2]
@@ -130,13 +133,12 @@ ps_pcaGaussian <-
     outGauss <- ps_2dPlotGauss(data=DataPlusPredicted,
                                GroupVar=pc_GroupVar,
                                Groups=pc_Groups,
-                           AnalyticVars=c("PC1", "PC2"),
-                           variablePair =  analyticVars[c(1, 4)], # is this right?
+                           AnalyticVars=analyticVars,
+                           variablePair=varPair,
                            ID=gaussID,
                            QQPlot=pc_qqPlot,
                            pvalue_digits=pc_digits,
                            Identify=gaussIdentify)
-    browser()
     #
     fcnDateVersion<-paste(doc,date(),R.Version()$version.string)
     params_grouping<-list(GroupVar,Groups)
@@ -145,15 +147,15 @@ ps_pcaGaussian <-
     names(params_logical)<-c("qqPlot","gaussIdentify")
     #
     if (gaussIdentify) {  # TRUE
-    if (gaussID == " ") dataCheck<-outGauss$dataCheck[,c(GroupVar, AnalyticVars)]
-    else  dataCheck<-outGauss$dataCheck[,c(GroupVar, gaussID, AnalyticVars)]
+    if (gaussID == " ") dataCheck<-outGauss$dataCheck[,c(GroupVar, analyticVars)]
+    else  dataCheck<-outGauss$dataCheck[,c(GroupVar, gaussID, analyticVars)]
     }
     else  dataCheck <- NA
     #
     out<-list(usage=fcnDateVersion,
                 dataUsed=dataUsed,
                 dataNA=dataNA,
-                analyticVars=AnalyticVars,
+                analyticVars=analyticVars,
                 params_grouping=params_grouping,
                 params_logical=params_logical,
                 p_values = outGauss$pvalues,

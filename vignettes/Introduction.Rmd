@@ -489,7 +489,7 @@ plot3d <-
 
 ###  Evaluating bivariate normality
 
-The function `ps_2dPlotGauss()` allows the user to evaluate the hypothesis that a pair of variables has a bivariate Gaussian distribution in a group (source).  This function is also used in the function `ps_pcaGauss()` to evaluate whether the first two principal components at a group have a bivariate distribution; therefore, the discussion in this section is also appropriate for a similar analysis of principal components results.  In either case, evaluating bivariate normality is useful in deciding whether a confidence ellipse is valid for describing the variation in the data at a group. This function uses scatter plots and hypothesis tests.  It is essential to note that, if the hypothesis tests fail to reject the null hypothesis of a Gaussian distribution, we CANNOT concude that the distribution is Gaussian.  It may be plausible to believe that the bivariate distribution is approximately Gaussian, and therefore the confidence ellipses may be useful in identifying observations of interest.
+The function `ps_2dPlotGauss()` allows the user to evaluate the hypothesis that a pair of variables has a bivariate Gaussian distribution in a group (source).  This function is also used in the function `ps_pcaGaussian()` to evaluate whether the first two principal components at a group have a bivariate distribution; therefore, the discussion in this section is also appropriate for a similar analysis of principal components results.  In either case, evaluating bivariate normality is useful in deciding whether a confidence ellipse is valid for describing the variation in the data at a group. This function uses scatter plots and hypothesis tests.  It is essential to note that, if the hypothesis tests fail to reject the null hypothesis of a Gaussian distribution, we CANNOT concude that the distribution is Gaussian.  It may be plausible to believe that the bivariate distribution is approximately Gaussian, and therefore the confidence ellipses may be useful in identifying observations of interest.
 
 For a pair of variables to have a bivariate Gaussian distribution, each variable must have a univariate Gaussian distribution, and the bivariate distribution must also be Gaussian. Note that, if the bivariate distribution is not Gaussian, one of these conditions can be true (each condition is necessary but not sufficient).  The function ps_2dPlotGauss() displays Q-Q plots giving the user information on whether the univariate distributions may be Gaussian. The function also computes p-values for test statistics for univariate Gaussian distributions and for a bivariate Gaussian distribution.  These p-values are in the component named pvalues in the list returned by the function.  This function also allows users to identify points of interest in the univariate Q-Q plots (if the parameter Identify=TRUE); the component dataCheck in the list returned by the function contains the data generating the points of interest.
 
@@ -609,9 +609,9 @@ Principal components analysis is a standard method implementing dimension reduct
 
 As in ps_2dPlot.Gauss(), the parameter Identify=TRUE in this function allows the user to identify points of interest if points are plotted and the analytic values defining group medians if medians are plotted.  If points are identified, the data frame containing information on these points (dataCheck) is sorted by group name, and, if samples have IDs, by ID within group.  As a result of the R sort convention, an ID of A1x (x an integer from 0 to 9) appears above an ID of A2.  
 
-The function ps_pcaGauss() provides information to evaluate whether the points from each group have a bivariate Gaussian distribution, with the same information provided by the function ps_2dPlotGauss().  The user can create a data frame containing the data generating points of interest by setting the parameter gaussIdentify = T.
+The function ps_pcaGaussian() provides information to evaluate whether the points from each group have a bivariate Gaussian distribution, with the same information provided by the function ps_2dPlotGauss().  The user can create a data frame containing the data generating points of interest by setting the parameter gaussIdentify = T.
 
-A principal components analysis requires that the data to be analyzed have no missing values (an observation with a missing value is deleted from the analysis).  The function ps_pca() uses the function rfImpute() to impute a single value for any missing value, so that no observations have missing data and all observations can be analyzed.  See the discussion in Section 9 (Discussion) for more information on this procedure.  There is no imputation in ps_pcaGauss(): this function analyzes only the observations with complete data.
+A principal components analysis requires that the data to be analyzed have no missing values (an observation with a missing value is deleted from the analysis).  The function ps_pca() uses the function rfImpute() to impute a single value for any missing value, so that no observations have missing data and all observations can be analyzed.  See the discussion in Section 9 (Discussion) for more information on this procedure.  There is no imputation in ps_pcaGaussian(): this function analyzes only the observations with complete data.
 
 ###5.1  Standard principal components analysis
 
@@ -684,7 +684,7 @@ knitr::kable(save_pca$variances, caption = "Table 5.1:  Proportions of the varia
   kable_styling(full_width = F, position = "center")
 knitr::kable(save_pca$weights, caption = "Table 5.2:  Weights for each principal component in the principal components analysis of the Jemez obsidian source data.") %>%
   kable_styling(full_width = F, position = "center")
-knitr::kable(head(save_pca$DataPlusPredicted), caption = "Table 5,3:  Original data and principal components in the principal components analysis of the Jemez obsidian source data.") %>%
+knitr::kable(head(save_pca$DataPlusPredicted), caption = "Table 5.3:  Original data and principal components in the principal components analysis of the Jemez obsidian source data.") %>%
   kable_styling(full_width = F, position = "center") %>%
   kable_styling(full_width = F, position = "center")
 
@@ -694,21 +694,22 @@ knitr::kable(head(save_pca$DataPlusPredicted), caption = "Table 5,3:  Original d
 
 At each source, each principal component is a linear combination of the elements at that source (for the Jemez obsidian source data, the coefficients are in Table 5.2).  If each variable has a Gaussian distribution in a set of variables, a linear combination of these variables has a univariate Gaussian distribution.  Therefore, if each element at a source has an approximate Gaussian distribution, the first two principal components at this source may have an approximate Gaussian distribution.  However, if at least one element does not have a Gaussian distribution, these principal components are unlikely to have a Gaussian distribution.
 
-The function ps_pcaGauss() computes p-values, by source, for assessing whether the first two principal components have a bivariate Gaussian distribution.  This function uses the function ps_2dPlotGauss(), so the discussion of that function applies here.  Table 5.4 contains the p-values from this functions.  It is likely that we have approximate bivariate Gaussian distributions at sources A and C, but not at sources B, D, and E.
+The function ps_pcaGaussian() computes p-values, by source, for assessing whether (using the default parameter values) the first two principal components have a bivariate Gaussian distribution.  This function uses the function ps_2dPlotGauss(), so the discussion of that function applies here.  Table 5.4 contains the p-values from this functions.  It is likely that we have approximate bivariate Gaussian distributions at sources A and C, but not at sources B, D, and E.
 
 
 ```{r echo=FALSE, message=FALSE}
 data(ObsidianSources)
-analyticVars <- c("Rb", "Sr", "Y", "Zr", "Nb")
+analVars <- c("Rb", "Sr", "Y", "Zr", "Nb")
 pca_Gauss <-
-  ps_pcaGauss(
+  ps_pcaGaussian(
     data = ObsidianSources,
     GroupVar = "Code",
     Groups = "All",
-    AnalyticVars = analyticVars,
+    analyticVars = analVars,
     qqPlot = FALSE
   )
-knitr::kable(pca_Gauss$pvalues, caption = "Table 5.4: P-values from test statistics for a bivariate Gaussian distribution of the first two principal components at each Jemez obsidian source.") %>%
+
+knitr::kable(pca_Gauss$p_values, caption = "Table 5.4: P-values from test statistics for a bivariate Gaussian distribution of the first two principal components at each Jemez obsidian source.") %>%
   kable_styling(full_width = F, position = "center")
 
 ```
@@ -1468,7 +1469,7 @@ Using the functions
 
 To execute the example code in the function documentation, the user should highlight that section of the code in the documentation in the window showing the function and, in the windows operating system, use Control+Enter; in the macOS, use Cmd+Enter.
 
-Functions that create more than one plot contain one or more comment lines with the command browser() after each plot to stop function execution.  If the user is running code using base R, this command allows the user to examine and potentially save the plot to a file.  The function must be edited to remove the comment symbol (#).  In Rstudio, this command is not be necessary, as the user can examine a set of plots in the Plot window using the back arrow.  To continue execution after browser() is executed, the user should enter c at the prompt.  Most functions can produce more than one plot.  Those that do are ps_2dPlot(), ps_2dPlotGauss(), ps_3dPlot(), ps_3dPlotRotate(), ps_boxPlots(), ps_CV_corr(), ps_pairsPlot(), ps_pca(), ps_pcaEvaluation(), ps_pcaGauss(), and ps_randomForest().  
+Functions that create more than one plot contain one or more comment lines with the command browser() after each plot to stop function execution.  If the user is running code using base R, this command allows the user to examine and potentially save the plot to a file.  The function must be edited to remove the comment symbol (#).  In Rstudio, this command is not be necessary, as the user can examine a set of plots in the Plot window using the back arrow.  To continue execution after browser() is executed, the user should enter c at the prompt.  Most functions can produce more than one plot.  Those that do are ps_2dPlot(), ps_2dPlotGauss(), ps_3dPlot(), ps_3dPlotRotate(), ps_boxPlots(), ps_CV_corr(), ps_pairsPlot(), ps_pca(), ps_pcaEvaluation(), ps_pcaGaussian(), and ps_randomForest().  
 
 If Identify is TRUE, the user must interact with a plot before continuing.  To identify a point of interest, place the cursor as close to the point as possible and left click.  The data creating the point closest to the cursor will be added to the data frame dataCheck.  Repeat for all points of interest.  After all points are identified (or if no point is identified), the user must end the interaction: in the Windows operating system, right click; in Rstudio, click on Finish in the upper right corner of the plot window.
 
