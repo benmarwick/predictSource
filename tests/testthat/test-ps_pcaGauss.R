@@ -1,10 +1,10 @@
 
-# test validity of ps_pcaGauss
+# test validity of ps_pcaGaussian
 
 data(ObsidianSources)
-analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-pcaGauss <- ps_pcaGauss(data=ObsidianSources, GroupVar="Code",Groups=c("A","B"),
-              AnalyticVars=analyticVars)
+analVars<-c("Rb","Sr","Y","Zr","Nb")
+pcaGauss <- ps_pcaGaussian(data=ObsidianSources, GroupVar="Code",Groups=c("A","B"),
+              analyticVars=analVars)
 
 test_that("ps_pcaGauss output is a list", {
   expect_type(pcaGauss, "list")
@@ -14,7 +14,7 @@ test_that("ps_pcaGauss output is a list", {
 data(test_pcaGauss)
 
 test_that("ps_pcaGauss pvalues are correct: first column is character", {
-  expect_equal(pcaGauss$pvalues[,-1], test_pcaGauss$pvalues[,-1])
+  expect_equal(pcaGauss$p_values[,-1], test_pcaGauss$pvalues[,-1])
 })
 
 
