@@ -3,7 +3,7 @@
 \docType{data}
 \name{ObsidianSources}
 \alias{ObsidianSources}
-\title{Documentation for data sets}
+\title{Chemical composition of obsidian sources}
 \format{A data frame with 113 rows and 7 variables:
 \describe{
   \item{Code}{A one-character variable with source code: A, B, C, D, E, F}
@@ -23,9 +23,6 @@ Data are from Steve Shackley's website http://www.swxrflab.net/ and from
 ObsidianSources
 }
 \description{
-Chemical composition of obsidian sources
-}
-\details{
 A data set containing data on five elements from 113 obsidian samples from five sources in the Jemez
 caldera in north central New Mexico.  The element presence values (parts per million) were obtained using
 x-ray fluorescence at a laboratory at the University of California in Berkeley.

@@ -1,5 +1,13 @@
 #' Documentation for data sets
 #'
+#'
+#' Chemical composition of obsidian sources
+#'
+#' A data set
+#'
+"ObsidianData"
+
+
 #' Chemical composition of obsidian sources
 #'
 #' A data set containing data on five elements from 113 obsidian samples from five sources in the Jemez

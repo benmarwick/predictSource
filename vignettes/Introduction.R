@@ -472,23 +472,24 @@ knitr::kable(save_pca$variances, caption = "Table 5.1:  Proportions of the varia
   kable_styling(full_width = F, position = "center")
 knitr::kable(save_pca$weights, caption = "Table 5.2:  Weights for each principal component in the principal components analysis of the Jemez obsidian source data.") %>%
   kable_styling(full_width = F, position = "center")
-knitr::kable(head(save_pca$DataPlusPredicted), caption = "Table 5,3:  Original data and principal components in the principal components analysis of the Jemez obsidian source data.") %>%
+knitr::kable(head(save_pca$DataPlusPredicted), caption = "Table 5.3:  Original data and principal components in the principal components analysis of the Jemez obsidian source data.") %>%
   kable_styling(full_width = F, position = "center") %>%
   kable_styling(full_width = F, position = "center")
 
 
 ## ----echo=FALSE, message=FALSE------------------------------------------------
 data(ObsidianSources)
-analyticVars <- c("Rb", "Sr", "Y", "Zr", "Nb")
+analVars <- c("Rb", "Sr", "Y", "Zr", "Nb")
 pca_Gauss <-
-  ps_pcaGauss(
+  ps_pcaGaussian(
     data = ObsidianSources,
     GroupVar = "Code",
     Groups = "All",
-    AnalyticVars = analyticVars,
+    analyticVars = analVars,
     qqPlot = FALSE
   )
-knitr::kable(pca_Gauss$pvalues, caption = "Table 5.4: P-values from test statistics for a bivariate Gaussian distribution of the first two principal components at each Jemez obsidian source.") %>%
+
+knitr::kable(pca_Gauss$p_values, caption = "Table 5.4: P-values from test statistics for a bivariate Gaussian distribution of the first two principal components at each Jemez obsidian source.") %>%
   kable_styling(full_width = F, position = "center")
 
 
