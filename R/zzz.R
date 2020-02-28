@@ -14,4 +14,7 @@
 
 # get data in, and deposit in appropriate location
 # load('../ObsidianData.Rdata')
-# devtools::use_data(ObsidianData)
+# usethis::use_data(ObsidianData, overwrite = TRUE)
+
+
+

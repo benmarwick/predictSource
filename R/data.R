@@ -1,6 +1,6 @@
 #' Documentation for data sets
 #'
-#' Chemical composition of obsidian sources
+#'  Chemical composition of obsidian sources
 #'
 #' A data set containing data on five elements from 113 obsidian samples from five sources in the Jemez
 #' caldera in north central New Mexico.  The element presence values (parts per million) were obtained using
