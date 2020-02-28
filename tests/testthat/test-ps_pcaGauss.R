@@ -4,7 +4,7 @@
 data(ObsidianSources)
 analVars<-c("Rb","Sr","Y","Zr","Nb")
 pcaGauss <- ps_pcaGaussian(data=ObsidianSources, GroupVar="Code",Groups=c("A","B"),
-              analyticVars=analVars)
+              analyticVars=analVars,qqPlot=FALSE)
 
 test_that("ps_pcaGauss output is a list", {
   expect_type(pcaGauss, "list")

@@ -300,7 +300,7 @@
 #'   \item{location:}{ The value of the parameter folder}
 #'  }
 #'
-# "testRandomForest"
+ "test_randomForest"
 
 #' A list used to verify that ps_tree() is valid
 #'

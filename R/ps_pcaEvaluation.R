@@ -289,6 +289,8 @@ ps_pcaEvaluation <-function(doc = "ps_pcaEvaluation",
     #
     #  principal components plots
     #
+    plot.new()
+    #
     #  compute limits for axes to include all points
     #
     range_pc1 <- range(pcaLocations[, "pc1"])
