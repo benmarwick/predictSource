@@ -39,6 +39,55 @@ principal components graphic identifies objects that are or may be
 misclassified. Archaeological knowledge should also be used in making
 predictions.
 
+The figure below shows principal components plots using data sets with
+the composition of five elements from five obsidian sources and the
+predicted sources of 91 artifacts, with predictions made from
+scatterplots (see the vignette for information about these data sets).
+The left-hand plot shows the convex hulls of the first two principal
+components from the source data. The second plot shows the locations of
+artifacts that are outside of their respective predicted source convex
+hulls. That plot clearly identifies one misclassified artifact
+(predicted to be from source D but inside the convex hull for source C);
+the remaining artifacts appear to be correctly classified. For these
+data, the random forests predictions appear to be correct for all of the
+artifacts.
+
+<img src="man/figures/README-unnamed-chunk-1-1.png" title="Principal components plot with Jemez obsidian source convex hulls and obsidian artifacts with points outside the convex hull labeled with source predictions based on scatterplots." alt="Principal components plot with Jemez obsidian source convex hulls and obsidian artifacts with points outside the convex hull labeled with source predictions based on scatterplots." width="100%" />
+
+The figure below is from a random forests analysis of the artifacts. The
+figure contains box plots of the source assignment probabilities for
+each artifact, excluding the probabilities of assignment to the
+predicted source. This plot identifies the artifacts for which
+assignment is most difficult. Source C is potentially of most concern.
+The user can create a data frame with information on artifacts that may
+be most likely to be misclassified. See the vignette for more details.
+
+``` r
+library(predictSource)
+data(ObsidianSources)
+data(ObsidianArtifacts)
+analyticVars <- c("Rb", "Sr", "Y", "Zr", "Nb")
+saveRandomForest <-
+  ps_randomForest(
+    data = ObsidianSources,
+    GroupVar = "Code",
+    Groups = "All",
+    AnalyticVars = analyticVars,
+    NvarUsed = 3,
+    plotErrorRate = FALSE,
+    plotImportance = FALSE,
+    predictSources = TRUE,
+    predictData = ObsidianArtifacts,
+    plotSourceProbs = TRUE
+  )
+#> Warning in bxp(list(stats = structure(c(0.998, 0.998, 0.998, 0.998, 0.998, :
+#> some notches went outside hinges ('box'): maybe set notch=FALSE
+#> Warning in bxp(list(stats = structure(c(0, 0, 0, 0.004, 0.01, 0, 0, 0.002, :
+#> some notches went outside hinges ('box'): maybe set notch=FALSE
+```
+
+<img src="man/figures/README-unnamed-chunk-2-1.png" title="Figure 7.3b: Box plots of the estimated probabilities of sources other than the predicted sources for the obsidian artifacts." alt="Figure 7.3b: Box plots of the estimated probabilities of sources other than the predicted sources for the obsidian artifacts." width="100%" />
+
 ## Run in Binder
 
 [![Binder](http://mybinder.org/badge.svg)](http://mybinder.org/v2/gh/benmarwick/predictSource/master)
