@@ -9,8 +9,8 @@ output:
   word_document: default
 vignette: |
   %\VignetteIndexEntry{Vignette Title} 
-  %\VignetteEngine{knitr::rmarkdown} 
   %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown} 
 ---
 
 ```{r setup, include = FALSE}
@@ -37,23 +37,54 @@ The data used to illustrate these procedures are five elements from five obsidia
 ```{r results='hide',message=FALSE, fig.cap="Figure 1.1: Classification tree analysis for the Jemez obsidian sources."}
 library(predictSource)
 data(ObsidianSources)
-analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-tree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
-                 Model="Sr"+"Nb"+"Rb"+"Y"+"Zr", ModelTitle="Sr + Nb + Rb + Y + Zr", plotCp=FALSE)
+analyticVars <- c("Rb", "Sr", "Y", "Zr", "Nb")
+tree <-
+  ps_tree(
+    data = ObsidianSources,
+    GroupVar = "Code",
+    Groups = "All",
+    AnalyticVars = analyticVars,
+    Model = "Sr"+"Nb"+"Rb"+"Y"+"Zr",
+    ModelTitle = "Sr + Nb + Rb + Y + Zr",
+    plotCp = FALSE
+  )
 
 ```
 
 ```{r results='hide', message=FALSE, fig.keep='last', fig.cap="Figure 1.2 Principal components plot the sources of Jemez obsidian artifacts predicted from a classification tree with points outside the convex hull of the source samples."}
 data(ObsidianSources)
 data(ObsidianArtifacts)
-analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-sources <- unique(ObsidianSources[,"Code"])
-save.tree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
-  Model = "Sr"+"Nb"+"Rb"+"Y"+"Zr", ModelTitle="Sr + Nb + Rb + Y + Zr", predictSources=FALSE,             predictUnknowns=TRUE, unknownData=ObsidianArtifacts, unknownID="ID", plotTree=FALSE, plotCp=FALSE)
-pca.eval <- ps_pcaEvaluation(SourceData=ObsidianSources, unknownData=save.tree$predictedSourceUnknowns,
-  SourceGroup= "Code", unknownGroup="predicted",known_sources=sources, predicted_sources=sources,
-  AnalyticVars=analyticVars, plotAllPoints=TRUE, plotHullsOutsidePoints=TRUE, plotOutsidePoints=TRUE)
-  
+analyticVars <- c("Rb", "Sr", "Y", "Zr", "Nb")
+sources <- unique(ObsidianSources[, "Code"])
+save.tree <-
+  ps_tree(
+    data = ObsidianSources,
+    GroupVar = "Code",
+    Groups = "All",
+    AnalyticVars = analyticVars,
+    Model = "Sr"+"Nb"+"Rb"+"Y"+"Zr",
+    ModelTitle = "Sr + Nb + Rb + Y + Zr",
+    predictSources = FALSE,
+    predictUnknowns = TRUE,
+    unknownData = ObsidianArtifacts,
+    unknownID = "ID",
+    plotTree = FALSE,
+    plotCp = FALSE
+  )
+pca.eval <-
+  ps_pcaEvaluation(
+    SourceData = ObsidianSources,
+    unknownData = save.tree$predictedSourceUnknowns,
+    SourceGroup = "Code",
+    unknownGroup = "predicted",
+    known_sources = sources,
+    predicted_sources = sources,
+    AnalyticVars = analyticVars,
+    plotAllPoints = TRUE,
+    plotHullsOutsidePoints = TRUE,
+    plotOutsidePoints = TRUE
+  )
+
 ```
 
 The final two sections of this vignette contain a discussion of results using these methods and then information on using the functions in this package, including arguments that are standard among the functions, names of components of the list returned by each function, and instructions for selecting points of interest in some of the plots.  We also provide information on the differences between interacting with plots in base R versus Rstudio.  In particular, it will be necessary for a user running this code in base R (not Rstudio) to edit a function that produces multiple plots in order to view all of those plots.  For those using Rstudio, we provide simple instructions for running the example code for a function.
@@ -76,8 +107,10 @@ library(predictSource)
 library(magrittr)
 library(kableExtra)
 data(ObsidianSources)
-knitr::kable(ObsidianSources[1:6,], caption="Table 2.1: Sample of the data in the file ObsidianSources.") %>%
-  kable_styling(full_width=F, position="center")
+knitr::kable(ObsidianSources[1:6,],
+             caption = "Table 2.1: Sample of the data in the file ObsidianSources.") %>%
+  kable_styling(full_width = F,
+                position = "center")
 #
 ```
 
@@ -89,40 +122,61 @@ The following procedure produces an analysis file from excel data files, with th
 
 To create an R object (a data frame) from an excel file stored in .csv format, use the R command
 
-`object_name <- read.csv(file = 'file name')`
+```{r eval = FALSE}
+object_name <- read.csv(file = 'file name')
+```
+
 
 Other R functions could also be used, including `read.table()`; see the documentation for `read.csv` (obtained by entering `?read.csv` at the R prompt) for alternatives and details.
 
 If it is necessary to combine several data files into an analysis file, use the function `ps_createData()` to create an R data frame from each of the individual R objects.  For example, Shackley’s website contains an excel file with data for individual sources.  After creating an R data frame for a source using e.g. `read.csv()`, the element dataOut of the list created by `ps_createData()` is a data frame with the analysis variables in a specified sequence; to create this new data frame, use the command
 
-`new_object_name <- ps_createData(data=object_name)$dataOut`
+```{r  eval = FALSE}
+new_object_name <- ps_createData(data=object_name)$dataOut
+```
 
 where object_name is the data frame created from `read.csv()`; alternatively, save the result of `ps_createData()` as an R object (a list), and create the new data frame with the command
 
-`new_object_name <-list_name$dataOut`
+```{r  eval = FALSE}
+new_object_name <-list_name$dataOut
+```
 
 These data frames can then be combined into an analysis data frame using the R function `rbind()`.  If it may be necessary to repeat this operation for a number of source files, it may be useful to define an R function  
 
-`ps_combine <- function()`
-`rbind(data1, data2,…..)`
+```{r, eval = FALSE}
+ps_combine <- function()
+rbind(data1, data2, ...)
+```
 
 This function will return the result of the `rbind()` operation to define a data frame, such as
 
-`analysisFile <- ps_combine()`
+```{r  eval = FALSE}
+analysisFile <- ps_combine()
+```
 
 After creating the analysis file, use 
 
-`ps_checkData(data=analysisFile, CheckDupVars, GroupVar, Groups, AnalyticVars)`
+```{r  eval = FALSE}
+ps_checkData(data=analysisFile, CheckDupVars, GroupVar, Groups, AnalyticVars)
+```
 
 to obtain basic descriptive statistics and carry out several data checks (number of observations, number of missing values, number of negative values, duplicate observations, and descriptive statistics, by group and analysis variable).  For the data set ObsidianSources, there are no negative values for the five elements of interest and no duplicate observations.  The numbers of observations by source and element are in Table 3.1.  Note that the R object returned by this function contains rows with NA (the R code for a missing value) between rows of descriptive statistics for each group; those rows could be replace by rows of blanks in an excel file.
 
 ```{r echo=FALSE, message=FALSE}
 library(predictSource)
 data(ObsidianSources)
-analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-checkData<-ps_checkData(data=ObsidianSources,CheckDupVars=c("Code","ID"),GroupVar="Code",Groups="All",AnalyticVars=analyticVars)
-knitr::kable(checkData$Nvalues, caption="Table 3.1: Number of values for each element from each Jemez source.") %>%
-  kable_styling(full_width=F, position="center")
+analyticVars <- c("Rb", "Sr", "Y", "Zr", "Nb")
+checkData <-
+  ps_checkData(
+    data = ObsidianSources,
+    CheckDupVars = c("Code", "ID"),
+    GroupVar = "Code",
+    Groups = "All",
+    AnalyticVars = analyticVars
+  )
+knitr::kable(checkData$Nvalues,
+             caption = "Table 3.1: Number of values for each element from each Jemez source.") %>%
+  kable_styling(full_width = F, position = "center")
 
 ```
 
@@ -131,9 +185,16 @@ The descriptive statistics for the elements in the classification tree in Figure
 ```{r } 
 library(predictSource)
 data(ObsidianSources)
-checkData<-ps_checkData(data=ObsidianSources,CheckDupVars=c("Code","ID"),GroupVar="Code",Groups="All",AnalyticVars=c("Sr","Rb","Y"))
-knitr::kable(checkData$statistics, caption="Table 3.2: Descriptive statistics for the elements in the Jemez obsidian sources used in the classification tree in Figure 1.1.") %>%
-  kable_styling(full_width=F, position="center")
+checkData <-
+  ps_checkData(
+    data = ObsidianSources,
+    CheckDupVars = c("Code", "ID"),
+    GroupVar = "Code",
+    Groups = "All",
+    AnalyticVars = c("Sr", "Rb", "Y")
+  )
+knitr::kable(checkData$statistics, caption = "Table 3.2: Descriptive statistics for the elements in the Jemez obsidian sources used in the classification tree in Figure 1.1.") %>%
+  kable_styling(full_width = F, position = "center")
 
 ```
 
@@ -144,9 +205,16 @@ For understanding later results, we need the corresponding descriptive statistic
 ```{r } 
 library(predictSource)
 data(ObsidianArtifacts)
-checkData<-ps_checkData(data=ObsidianArtifacts,CheckDupVars=c("Code","ID"), GroupVar="Code", ByGroup=FALSE, AnalyticVars=c("Sr","Rb","Y"))
-knitr::kable(checkData$statistics, caption="Table 3.3: Descriptive statistics for the elements in the obsidian artifacts used in the classification tree in Figure 1.1.") %>%
-  kable_styling(full_width=F, position="center")
+checkData <-
+  ps_checkData(
+    data = ObsidianArtifacts,
+    CheckDupVars = c("Code", "ID"),
+    GroupVar = "Code",
+    ByGroup = FALSE,
+    AnalyticVars = c("Sr", "Rb", "Y")
+  )
+knitr::kable(checkData$statistics, caption = "Table 3.3: Descriptive statistics for the elements in the obsidian artifacts used in the classification tree in Figure 1.1.") %>%
+  kable_styling(full_width = F, position = "center")
 
 ```
 
@@ -170,8 +238,16 @@ From Figure 4.1, below, we see immediately that there is little variation among 
 ```{r results='hide',message=FALSE, fig.cap="Figure 4.1: Box plots for the Jemez obsidian source data."} 
 library(predictSource)
 data(ObsidianSources)
-analyticVars<-c("Rb","Sr","Y","Nb")
-boxPlots<-ps_boxPlots(data=ObsidianSources, GroupVar="Code",                Groups="All",AnalyticVars=analyticVars,Nrow=2,Ncol=2)
+analyticVars <- c("Rb", "Sr", "Y", "Nb")
+boxPlots <-
+  ps_boxPlots(
+    data = ObsidianSources,
+    GroupVar = "Code",
+    Groups = "All",
+    AnalyticVars = analyticVars,
+    Nrow = 2,
+    Ncol = 2
+  )
 
 ```
 
@@ -181,14 +257,24 @@ We can also create side-by-side box plots of the sources and the artifacts assig
 library(predictSource)
 data(ObsidianSources)
 data(ObsidianArtifacts)
-analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-ObsidianSources<-ObsidianSources[,c("Code",analyticVars)]
-Artifacts <- ObsidianArtifacts[,c("Code",analyticVars)]
-sourcesCode <- as.vector(ObsidianSources[,"Code"], mode="character")
-artifactsCode <- as.vector(paste(Artifacts[,"Code"],"a",sep="."),mode="character")
+analyticVars <- c("Rb", "Sr", "Y", "Zr", "Nb")
+ObsidianSources <- ObsidianSources[, c("Code", analyticVars)]
+Artifacts <- ObsidianArtifacts[, c("Code", analyticVars)]
+sourcesCode <- as.vector(ObsidianSources[, "Code"], mode = "character")
+artifactsCode <-
+  as.vector(paste(Artifacts[, "Code"], "a", sep = "."), mode = "character")
 codes <- c(sourcesCode, artifactsCode)
-sourcesArtifacts <- data.frame(rbind(ObsidianSources,Artifacts)[,analyticVars], Code = codes)
-boxPlots<-ps_boxPlots(data=sourcesArtifacts, GroupVar="Code", Groups="All",AnalyticVars=c("Rb","Nb"),Nrow=2,Ncol=1)
+sourcesArtifacts <-
+  data.frame(rbind(ObsidianSources, Artifacts)[, analyticVars], Code = codes)
+boxPlots <-
+  ps_boxPlots(
+    data = sourcesArtifacts,
+    GroupVar = "Code",
+    Groups = "All",
+    AnalyticVars = c("Rb", "Nb"),
+    Nrow = 2,
+    Ncol = 1
+  )
 
 ```
 
@@ -205,8 +291,14 @@ The plot below of the relations between elements at source A shows that the rela
 ```{r results='hide',message=FALSE, fig.cap="FIgure 4.3: Pairs plots of the Jemez obsidian source data." } 
 library(predictSource)
 data(ObsidianSources)
-analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-pairsPlot <- ps_pairsPlot(data=ObsidianSources, GroupVar="Code", Groups="A", AnalyticVars=analyticVars)
+analyticVars <- c("Rb", "Sr", "Y", "Zr", "Nb")
+pairsPlot <-
+  ps_pairsPlot(
+    data = ObsidianSources,
+    GroupVar = "Code",
+    Groups = "A",
+    AnalyticVars = analyticVars
+  )
 
 ```
 
@@ -221,20 +313,35 @@ Table 4.2 contains the Spearman correlation coefficients if group membership is 
 ```{r } 
 library(predictSource)
 data(ObsidianSources)
-analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-CV_corr<-ps_CV_corr(data = ObsidianSources, GroupVar="Code", Groups = "All", AnalyticVars=analyticVars, plotCorrs=FALSE)
-knitr::kable(CV_corr$corr, caption="Table 4.1: Spearman correlations among pairs of elements from the Jemez sources,
+analyticVars <- c("Rb", "Sr", "Y", "Zr", "Nb")
+CV_corr <-
+  ps_CV_corr(
+    data = ObsidianSources,
+    GroupVar = "Code",
+    Groups = "All",
+    AnalyticVars = analyticVars,
+    plotCorrs = FALSE
+  )
+knitr::kable(CV_corr$corr, caption = "Table 4.1: Spearman correlations among pairs of elements from the Jemez sources,
 by group.") %>%
-  kable_styling(full_width=F, position="center")
+  kable_styling(full_width = F, position = "center")
 #
 ```
 
 ```{r } 
 data(ObsidianSources)
-analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-CV_corr<-ps_CV_corr(data = ObsidianSources, GroupVar="Code", Groups="All", AnalyticVars=analyticVars, ByGroup=FALSE, plotCorrs=FALSE)
-knitr::kable(CV_corr$corr, caption="Table 4.2: Spearman correlations among pairs of elements from the Jemez obsidian sources, all groups combined.") %>%
-  kable_styling(full_width=F, position="center")
+analyticVars <- c("Rb", "Sr", "Y", "Zr", "Nb")
+CV_corr <-
+  ps_CV_corr(
+    data = ObsidianSources,
+    GroupVar = "Code",
+    Groups = "All",
+    AnalyticVars = analyticVars,
+    ByGroup = FALSE,
+    plotCorrs = FALSE
+  )
+knitr::kable(CV_corr$corr, caption = "Table 4.2: Spearman correlations among pairs of elements from the Jemez obsidian sources, all groups combined.") %>%
+  kable_styling(full_width = F, position = "center")
 #
 ```
 
@@ -242,18 +349,34 @@ Figure 4.4 contains a graphical display of these correlations.  The slope of the
 
 ```{r results='hide',message=FALSE, fig.cap="Figure 4.4: Graphical display of the correlations between the Jemez obsidian source analysis variables with all groups combined."} 
 data(ObsidianSources)
-analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-CV_corr<-ps_CV_corr(data = ObsidianSources, GroupVar="Code", Groups = "All", AnalyticVars=analyticVars, ByGroup=FALSE, plotCorrs=TRUE)
+analyticVars <- c("Rb", "Sr", "Y", "Zr", "Nb")
+CV_corr <-
+  ps_CV_corr(
+    data = ObsidianSources,
+    GroupVar = "Code",
+    Groups = "All",
+    AnalyticVars = analyticVars,
+    ByGroup = FALSE,
+    plotCorrs = TRUE
+  )
 ```
 
 Table 4.3 shows the coefficients of variation for each element at each source.  Each standard deviation is small compared to the corresponding mean (each coefficient of variation is at most 0.11, and most are 0.05 or less) except for strontium at sources C and D.  The relatively large values of the coefficient of variation for strontium at those sources is a result of the small mean strontium values at those sources: the table of descriptive statistics (Table 3.2) gives mean values for strontium of 5 and 10, at C and D, respectively, with ranges of 0 to 8 and 2 to 11, respectively.
 
 ```{r } 
 data(ObsidianSources)
-analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-CV_corr<-ps_CV_corr(data = ObsidianSources, GroupVar="Code", Groups = "All", AnalyticVars=analyticVars, ByGroup=TRUE, plotCorrs=FALSE)
-knitr::kable(CV_corr$CV, caption="Table 4.3:  Coefficients of variation of the elements from the Jemez sources.") %>%
-  kable_styling(full_width=F, position="center")
+analyticVars <- c("Rb", "Sr", "Y", "Zr", "Nb")
+CV_corr <-
+  ps_CV_corr(
+    data = ObsidianSources,
+    GroupVar = "Code",
+    Groups = "All",
+    AnalyticVars = analyticVars,
+    ByGroup = TRUE,
+    plotCorrs = FALSE
+  )
+knitr::kable(CV_corr$CV, caption = "Table 4.3:  Coefficients of variation of the elements from the Jemez sources.") %>%
+  kable_styling(full_width = F, position = "center")
 #
 ```
 
@@ -269,36 +392,80 @@ The confidence ellipses provide information on whether the distributions of a pa
 
 ```{r results='hide',message=FALSE, fig.cap="Figure 4.5: Example of scatterplots for the obsidian Jemez source data with confidence ellipses and robust lowess smoothing lines."} 
 data(ObsidianSources)
-analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-plot_2d <- ps_2dPlot(data = ObsidianSources, GroupVar = "Code", ID = "ID", Groups = c("A","B","C","D"),
-                AnalyticVars = analyticVars, VariablePairs=analyticVars[c(1,4)], PlotEllipses=TRUE, LowessLine=TRUE,                    ByGroup=TRUE)
+analyticVars <- c("Rb", "Sr", "Y", "Zr", "Nb")
+plot_2d <-
+  ps_2dPlot(
+    data = ObsidianSources,
+    GroupVar = "Code",
+    ID = "ID",
+    Groups = c("A", "B", "C", "D"),
+    AnalyticVars = analyticVars,
+    VariablePairs = analyticVars[c(1, 4)],
+    PlotEllipses = TRUE,
+    LowessLine = TRUE,
+    ByGroup = TRUE
+  )
 ```
 
 ```{r results='hide',message=FALSE, fig.cap="Figure 4.6: Example of a scatterplot for obsidian Jemez source data with confidence ellipses and kernel smoothing lines."} 
 data(ObsidianSources)
-analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-plot_2d <- ps_2dPlot(data = ObsidianSources, GroupVar = "Code", ID = "ID", Groups = c("A", "B", "C", "D"),
-          AnalyticVars = analyticVars, VariablePairs=analyticVars[c(1,4)], PlotEllipses=TRUE, KernelSmooth=TRUE,                LowessLine=FALSE, ByGroup=TRUE)
+analyticVars <- c("Rb", "Sr", "Y", "Zr", "Nb")
+plot_2d <-
+  ps_2dPlot(
+    data = ObsidianSources,
+    GroupVar = "Code",
+    ID = "ID",
+    Groups = c("A", "B", "C", "D"),
+    AnalyticVars = analyticVars,
+    VariablePairs = analyticVars[c(1, 4)],
+    PlotEllipses = TRUE,
+    KernelSmooth = TRUE,
+    LowessLine = FALSE,
+    ByGroup = TRUE
+  )
 ```
 
 ```{r results='hide',message=FALSE, fig.cap="Figure 4.7: Example of a scatterplot for obsidian Jemez source data with the median values of and convex hulls of the points at each source."} 
 data(ObsidianSources)
-analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-plot_2d <- ps_2dPlot(data = ObsidianSources, GroupVar = "Code", ID = "ID", Groups = "All", 
-          AnalyticVars = analyticVars, VariablePairs=analyticVars[1:2], ByGroup=FALSE, PlotPoints=FALSE,                         PlotMedians=TRUE, PlotHulls=TRUE, LowessLine=FALSE)
+analyticVars <- c("Rb", "Sr", "Y", "Zr", "Nb")
+plot_2d <-
+  ps_2dPlot(
+    data = ObsidianSources,
+    GroupVar = "Code",
+    ID = "ID",
+    Groups = "All",
+    AnalyticVars = analyticVars,
+    VariablePairs = analyticVars[1:2],
+    ByGroup = FALSE,
+    PlotPoints = FALSE,
+    PlotMedians = TRUE,
+    PlotHulls = TRUE,
+    LowessLine = FALSE
+  )
 ```
 
 ```{r results='hide',message=FALSE, fig.cap="Figure 4.8: Example of a scatterplot for obsidian Jemez source data with data for all sources, with confidence ellipses and robust lowess smoothing lines."}
 data(ObsidianSources)
-analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-plot_2d <- ps_2dPlot(data = ObsidianSources, GroupVar = "Code", ID = "ID", Groups = "All",
-          AnalyticVars = analyticVars, VariablePairs=analyticVars[c(1,4)], ByGroup = FALSE, PlotEllipses=TRUE,                    LowessLine=TRUE, PlotAllGroups=TRUE)
+analyticVars <- c("Rb", "Sr", "Y", "Zr", "Nb")
+plot_2d <-
+  ps_2dPlot(
+    data = ObsidianSources,
+    GroupVar = "Code",
+    ID = "ID",
+    Groups = "All",
+    AnalyticVars = analyticVars,
+    VariablePairs = analyticVars[c(1, 4)],
+    ByGroup = FALSE,
+    PlotEllipses = TRUE,
+    LowessLine = TRUE,
+    PlotAllGroups = TRUE
+  )
 ```
 
 ```{r}
 data("sources.data.check")
-knitr::kable(sources.data.check,caption="Table 4.4: Data generating identified points.") %>%
-  kable_styling(full_width=F, position="center")
+knitr::kable(sources.data.check, caption = "Table 4.4: Data generating identified points.") %>%
+  kable_styling(full_width = F, position = "center")
 #
 ```
 
@@ -309,14 +476,20 @@ file:///C:/Consulting/Sourcing/Vignette/scatterRbSrY.doc
 ```{r results='hide',message=FALSE, fig.cap="Figure 4.9: Example of a three-dimensional plot showing data from three Jemez obsidian sources."}
 library(predictSource)
 data(ObsidianSources)
-analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-plot3d<-ps_3dPlot(data=ObsidianSources, GroupVar="Code", Groups=c("A","B","C"), AnalyticVars=analyticVars,
-                   Selections=rbind(analyticVars[1:3],analyticVars[2:4]))
+analyticVars <- c("Rb", "Sr", "Y", "Zr", "Nb")
+plot3d <-
+  ps_3dPlot(
+    data = ObsidianSources,
+    GroupVar = "Code",
+    Groups = c("A", "B", "C"),
+    AnalyticVars = analyticVars,
+    Selections = rbind(analyticVars[1:3], analyticVars[2:4])
+  )
 ```
 
 ###  Evaluating bivariate normality
 
-The function `ps_2dPlotGauss()` allows the user to evaluate the hypothesis that a pair of variables has a bivariate Gaussian distribution in a group (source).  This function is also used in the function `ps_pcaGauss()` to evaluate whether the first two principal components at a group have a bivariate distribution; therefore, the discussion in this section is also appropriate for a similar analysis of principal components results.  In either case, evaluating bivariate normality is useful in deciding whether a confidence ellipse is valid for describing the variation in the data at a group. This function uses scatter plots and hypothesis tests.  It is essential to note that, if the hypothesis tests fail to reject the null hypothesis of a Gaussian distribution, we CANNOT concude that the distribution is Gaussian.  It may be plausible to believe that the bivariate distribution is approximately Gaussian, and therefore the confidence ellipses may be useful in identifying observations of interest.
+The function `ps_2dPlotGauss()` allows the user to evaluate the hypothesis that a pair of variables has a bivariate Gaussian distribution in a group (source).  This function is also used in the function `ps_pcaGaussian()` to evaluate whether the first two principal components at a group have a bivariate distribution; therefore, the discussion in this section is also appropriate for a similar analysis of principal components results.  In either case, evaluating bivariate normality is useful in deciding whether a confidence ellipse is valid for describing the variation in the data at a group. This function uses scatter plots and hypothesis tests.  It is essential to note that, if the hypothesis tests fail to reject the null hypothesis of a Gaussian distribution, we CANNOT concude that the distribution is Gaussian.  It may be plausible to believe that the bivariate distribution is approximately Gaussian, and therefore the confidence ellipses may be useful in identifying observations of interest.
 
 For a pair of variables to have a bivariate Gaussian distribution, each variable must have a univariate Gaussian distribution, and the bivariate distribution must also be Gaussian. Note that, if the bivariate distribution is not Gaussian, one of these conditions can be true (each condition is necessary but not sufficient).  The function ps_2dPlotGauss() displays Q-Q plots giving the user information on whether the univariate distributions may be Gaussian. The function also computes p-values for test statistics for univariate Gaussian distributions and for a bivariate Gaussian distribution.  These p-values are in the component named pvalues in the list returned by the function.  This function also allows users to identify points of interest in the univariate Q-Q plots (if the parameter Identify=TRUE); the component dataCheck in the list returned by the function contains the data generating the points of interest.
 
@@ -344,44 +517,87 @@ Since niobium has many samples with equal values, it is clear that niobium does 
 ```{r results='hide',message=FALSE, fig.cap="Figure 4.10a: Q-Q plots of rubidium and zirconium, including the bivariate Q-Q plot, for the Jemez obsidian source data from source A." } 
 library(predictSource)
 data(ObsidianSources)
-analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-plot2dGauss<-ps_2dPlotGauss(data=ObsidianSources, GroupVar="Code", ID="ID", Groups="A",
-    AnalyticVars=analyticVars, variablePair=c("Rb","Zr"), QQPlot=TRUE)
+analyticVars <- c("Rb", "Sr", "Y", "Zr", "Nb")
+plot2dGauss <-
+  ps_2dPlotGauss(
+    data = ObsidianSources,
+    GroupVar = "Code",
+    ID = "ID",
+    Groups = "A",
+    AnalyticVars = analyticVars,
+    variablePair = c("Rb", "Zr"),
+    QQPlot = TRUE
+  )
 
 ```
 
 ```{r results='hide',message=FALSE, fig.cap="Figure 4.10b: Q-Q plots of rubidium and zirconium, including the bivariate Q-Q plot, for the Jemez obsidian source data from source B." } 
 library(predictSource)
 data(ObsidianSources)
-analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-plot2dGauss<-ps_2dPlotGauss(data=ObsidianSources, GroupVar="Code", ID="ID", Groups="B",
-    AnalyticVars=analyticVars,variablePair=c("Rb","Zr"))
-    
+analyticVars <- c("Rb", "Sr", "Y", "Zr", "Nb")
+plot2dGauss <-
+  ps_2dPlotGauss(
+    data = ObsidianSources,
+    GroupVar = "Code",
+    ID = "ID",
+    Groups = "B",
+    AnalyticVars = analyticVars,
+    variablePair = c("Rb", "Zr")
+  )
+
 ```
 
 ```{r results='hide',message=FALSE, fig.cap="Figure 4.10c: Q-Q plots of rubidium and niobium for the Jemez obsidian source data from sources A and B." } 
 library(predictSource)
 data(ObsidianSources)
-analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-plot2dGauss<-ps_2dPlotGauss(data=ObsidianSources, GroupVar="Code", ID="ID", Groups=c("A","B"),
-    AnalyticVars=analyticVars, variablePair=c("Rb","Nb"), QQPlot=FALSE)
+analyticVars <- c("Rb", "Sr", "Y", "Zr", "Nb")
+plot2dGauss <-
+  ps_2dPlotGauss(
+    data = ObsidianSources,
+    GroupVar = "Code",
+    ID = "ID",
+    Groups = c("A", "B"),
+    AnalyticVars = analyticVars,
+    variablePair = c("Rb", "Nb"),
+    QQPlot = FALSE
+  )
 
 ```
 
 ```{r echo=FALSE, message=FALSE}
 data(ObsidianSources)
-analyticVars<-c("Rb","Sr","Y","Zr","Nb")    
-plot2dGauss<-ps_2dPlotGauss(data=ObsidianSources, GroupVar="Code", ID="ID", Groups="All",
-    AnalyticVars=analyticVars, variablePair=c("Rb","Zr"), QQPlot=FALSE, scatterplot=FALSE)
-knitr::kable(plot2dGauss$pvalues,caption="Table 4.5:  P-values from test statistics for a bivariate Rb/Zr distribution at the Jemez obsidian sources.") %>%
-  kable_styling(full_width=F, position="center")
+analyticVars <- c("Rb", "Sr", "Y", "Zr", "Nb")
+plot2dGauss <-
+  ps_2dPlotGauss(
+    data = ObsidianSources,
+    GroupVar = "Code",
+    ID = "ID",
+    Groups = "All",
+    AnalyticVars = analyticVars,
+    variablePair = c("Rb", "Zr"),
+    QQPlot = FALSE,
+    scatterplot = FALSE
+  )
+knitr::kable(plot2dGauss$pvalues, caption = "Table 4.5:  P-values from test statistics for a bivariate Rb/Zr distribution at the Jemez obsidian sources.") %>%
+  kable_styling(full_width = F, position = "center")
 
 ```
+
+
 ```{r echo=FALSE, message=FALSE}
-plot2dGauss<-ps_2dPlotGauss(data=ObsidianSources, GroupVar="Code", ID="ID", Groups="All",
-    AnalyticVars=analyticVars, variablePair=c("Rb","Nb"),QQPlot=FALSE, scatterplot=FALSE)
-knitr::kable(plot2dGauss$pvalues,caption="Table 4.6:  Samples sizes and p-values from test statistics for a bivariate Rb/Nb distribution at the Jemez obsidian sources.") %>%
-  kable_styling(full_width=F, position="center")
+plot2dGauss <-
+  ps_2dPlotGauss(
+    data = ObsidianSources,
+    GroupVar = "Code",
+    ID = "ID",
+    Groups = "All",
+    AnalyticVars = analyticVars,
+    variablePair = c("Rb", "Nb"),
+    QQPlot = FALSE,
+    scatterplot = FALSE
+  )
+knitr::kable(plot2dGauss$pvalues, caption = "Table 4.6:  Samples sizes and p-values from test statistics for a bivariate Rb/Nb distribution at the Jemez obsidian sources.") %>%
+  kable_styling(full_width = F, position = "center")
 
 ```
 
@@ -393,9 +609,9 @@ Principal components analysis is a standard method implementing dimension reduct
 
 As in ps_2dPlot.Gauss(), the parameter Identify=TRUE in this function allows the user to identify points of interest if points are plotted and the analytic values defining group medians if medians are plotted.  If points are identified, the data frame containing information on these points (dataCheck) is sorted by group name, and, if samples have IDs, by ID within group.  As a result of the R sort convention, an ID of A1x (x an integer from 0 to 9) appears above an ID of A2.  
 
-The function ps_pcaGauss() provides information to evaluate whether the points from each group have a bivariate Gaussian distribution, with the same information provided by the function ps_2dPlotGauss().  The user can create a data frame containing the data generating points of interest by setting the parameter gaussIdentify = T.
+The function ps_pcaGaussian() provides information to evaluate whether the points from each group have a bivariate Gaussian distribution, with the same information provided by the function ps_2dPlotGauss().  The user can create a data frame containing the data generating points of interest by setting the parameter gaussIdentify = T.
 
-A principal components analysis requires that the data to be analyzed have no missing values (an observation with a missing value is deleted from the analysis).  The function ps_pca() uses the function rfImpute() to impute a single value for any missing value, so that no observations have missing data and all observations can be analyzed.  See the discussion in Section 9 (Discussion) for more information on this procedure.  There is no imputation in ps_pcaGauss(): this function analyzes only the observations with complete data.
+A principal components analysis requires that the data to be analyzed have no missing values (an observation with a missing value is deleted from the analysis).  The function ps_pca() uses the function rfImpute() to impute a single value for any missing value, so that no observations have missing data and all observations can be analyzed.  See the discussion in Section 9 (Discussion) for more information on this procedure.  There is no imputation in ps_pcaGaussian(): this function analyzes only the observations with complete data.
 
 ###5.1  Standard principal components analysis
 
@@ -411,30 +627,66 @@ Figure 5.2 contains the plot of the first two principal components by group with
 
 ```{r results='hide',message=FALSE, fig.cap="Figure 5.1: The scree plot from the principal components analysis of the Jemez obsidian source data."}
 data(ObsidianSources)
-analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-save_pca <- ps_pca(data=ObsidianSources, ID="ID", GroupVar="Code",Groups="All", AnalyticVars=analyticVars, pcPlot=FALSE, ScreePlot=TRUE)
+analyticVars <- c("Rb", "Sr", "Y", "Zr", "Nb")
+save_pca <-
+  ps_pca(
+    data = ObsidianSources,
+    ID = "ID",
+    GroupVar = "Code",
+    Groups = "All",
+    AnalyticVars = analyticVars,
+    pcPlot = FALSE,
+    ScreePlot = TRUE
+  )
 ```
 
 ```{r results='hide',message=FALSE, fig.cap="Figure 5.2: Box plots of the first two principal components from the principal components analysis of the Jemez obsidian source data."}
 data(ObsidianSources)
-analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-save_pca <- ps_pca(data=ObsidianSources, ID="ID", GroupVar="Code",Groups="All", AnalyticVars=analyticVars, pcPlot=FALSE, BoxPlots=TRUE)
+analyticVars <- c("Rb", "Sr", "Y", "Zr", "Nb")
+save_pca <-
+  ps_pca(
+    data = ObsidianSources,
+    ID = "ID",
+    GroupVar = "Code",
+    Groups = "All",
+    AnalyticVars = analyticVars,
+    pcPlot = FALSE,
+    BoxPlots = TRUE
+  )
 ```
+
+
 ```{r results='hide',message=FALSE}
 data(ObsidianSources)
-analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-save_pca <- ps_pca(data=ObsidianSources, ID="ID", GroupVar="Code",Groups="All", AnalyticVars=analyticVars) 
+analyticVars <- c("Rb", "Sr", "Y", "Zr", "Nb")
+save_pca <-
+  ps_pca(
+    data = ObsidianSources,
+    ID = "ID",
+    GroupVar = "Code",
+    Groups = "All",
+    AnalyticVars = analyticVars
+  ) 
 ```
+
+
 ```{r}
-save_pca <- ps_pca(data=ObsidianSources, ID="ID", GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
-                   pcPlot=FALSE)
-knitr::kable(save_pca$variances, caption="Table 5.1:  Proportions of the variance explained in the principal components analysis of the Jemez obsidian source data.") %>%
-  kable_styling(full_width=F, position="center")
-knitr::kable(save_pca$weights, caption="Table 5.2:  Weights for each principal component in the principal components analysis of the Jemez obsidian source data.") %>%
-  kable_styling(full_width=F, position="center")
-knitr::kable(head(save_pca$DataPlusPredicted), caption="Table 5,3:  Original data and principal components in the principal components analysis of the Jemez obsidian source data.") %>%
-  kable_styling(full_width=F, position="center") %>%
-  kable_styling(full_width=F, position="center")
+save_pca <-
+  ps_pca(
+    data = ObsidianSources,
+    ID = "ID",
+    GroupVar = "Code",
+    Groups = "All",
+    AnalyticVars = analyticVars,
+    pcPlot = FALSE
+  )
+knitr::kable(save_pca$variances, caption = "Table 5.1:  Proportions of the variance explained in the principal components analysis of the Jemez obsidian source data.") %>%
+  kable_styling(full_width = F, position = "center")
+knitr::kable(save_pca$weights, caption = "Table 5.2:  Weights for each principal component in the principal components analysis of the Jemez obsidian source data.") %>%
+  kable_styling(full_width = F, position = "center")
+knitr::kable(head(save_pca$DataPlusPredicted), caption = "Table 5.3:  Original data and principal components in the principal components analysis of the Jemez obsidian source data.") %>%
+  kable_styling(full_width = F, position = "center") %>%
+  kable_styling(full_width = F, position = "center")
 
 ```
 
@@ -442,15 +694,23 @@ knitr::kable(head(save_pca$DataPlusPredicted), caption="Table 5,3:  Original dat
 
 At each source, each principal component is a linear combination of the elements at that source (for the Jemez obsidian source data, the coefficients are in Table 5.2).  If each variable has a Gaussian distribution in a set of variables, a linear combination of these variables has a univariate Gaussian distribution.  Therefore, if each element at a source has an approximate Gaussian distribution, the first two principal components at this source may have an approximate Gaussian distribution.  However, if at least one element does not have a Gaussian distribution, these principal components are unlikely to have a Gaussian distribution.
 
-The function ps_pcaGauss() computes p-values, by source, for assessing whether the first two principal components have a bivariate Gaussian distribution.  This function uses the function ps_2dPlotGauss(), so the discussion of that function applies here.  Table 5.4 contains the p-values from this functions.  It is likely that we have approximate bivariate Gaussian distributions at sources A and C, but not at sources B, D, and E.
+The function ps_pcaGaussian() computes p-values, by source, for assessing whether (using the default parameter values) the first two principal components have a bivariate Gaussian distribution.  This function uses the function ps_2dPlotGauss(), so the discussion of that function applies here.  Table 5.4 contains the p-values from this functions.  It is likely that we have approximate bivariate Gaussian distributions at sources A and C, but not at sources B, D, and E.
 
 
 ```{r echo=FALSE, message=FALSE}
 data(ObsidianSources)
-analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-pca_Gauss <- ps_pcaGauss(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars, qqPlot=FALSE)
-knitr::kable(pca_Gauss$pvalues, caption="Table 5.4: P-values from test statistics for a bivariate Gaussian distribution of the first two principal components at each Jemez obsidian source.") %>%
-  kable_styling(full_width=F, position="center")
+analVars <- c("Rb", "Sr", "Y", "Zr", "Nb")
+pca_Gauss <-
+  ps_pcaGaussian(
+    data = ObsidianSources,
+    GroupVar = "Code",
+    Groups = "All",
+    analyticVars = analVars,
+    qqPlot = FALSE
+  )
+
+knitr::kable(pca_Gauss$p_values, caption = "Table 5.4: P-values from test statistics for a bivariate Gaussian distribution of the first two principal components at each Jemez obsidian source.") %>%
+  kable_styling(full_width = F, position = "center")
 
 ```
 
@@ -487,9 +747,17 @@ Figure 6.1 shows the classification tree using the obsidian source data (this is
 ```{r results='hide',message=FALSE, fig.cap="Figure 6.1: The classification tree for the Jemez obsidian source data based on five potential elements as predictors."}
 library(predictSource)
 data(ObsidianSources)
-analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-tree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
-                 Model="Sr"+"Nb"+"Rb"+"Y"+"Zr", ModelTitle="Sr + Nb + Rb + Y + Zr", plotCp=FALSE)
+analyticVars <- c("Rb", "Sr", "Y", "Zr", "Nb")
+tree <-
+  ps_tree(
+    data = ObsidianSources,
+    GroupVar = "Code",
+    Groups = "All",
+    AnalyticVars = analyticVars,
+    Model = "Sr"+"Nb"+"Rb"+"Y"+"Zr",
+    ModelTitle = "Sr + Nb + Rb + Y + Zr",
+    plotCp = FALSE
+  )
 ```
 
 To understand the structure of the tree and the decision splits, compare this tree with the descriptive statistics for the sources in Table 3.2 and the box plots for the sources in Figure 4.1.  Both the table and the figure show that the strontium values in source E are much larger than those values in the other four sources.  The minimum value in E is 72; the maximum in the other sources is 54; the value defining the tree branches at this first node is 54, the average of these two values.  For the next node, the minimum value at source C is 179; the maximum value at other sources is 178; the cutpoint is the average of these values.  Such a small difference implies that we expect misclassification of artifacts using this tree.  From Figure 4.1, it would be much better to use niobium or yttrium to assign a sample to source C.  Rerunning the analysis with niobium as the first element in the model statement yields the same tree.   It is not clear why the algorithm makes this choice, but it is clear that the algorithm does not use the differences between extreme values in candidate groups in creating the tree.  
@@ -498,9 +766,17 @@ Figure 6.2 shows the reduction in the crossvalidation error estimate with an inc
 
 ```{r results='hide',message=FALSE, fig.cap="Figure 6.2: Plot of the reduction in the crossvalidation error with an increasing number of nodes in the classification tree for the Jemez obsidian source data based on five potential elements as predictors."}
 data(ObsidianSources)
-analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-tree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
-                 Model="Sr"+"Nb"+"Rb"+"Y"+"Zr", ModelTitle="Sr + Nb + Rb + Y + Zr", plotTree=FALSE)
+analyticVars <- c("Rb", "Sr", "Y", "Zr", "Nb")
+tree <-
+  ps_tree(
+    data = ObsidianSources,
+    GroupVar = "Code",
+    Groups = "All",
+    AnalyticVars = analyticVars,
+    Model = "Sr"+"Nb"+"Rb"+"Y"+"Zr",
+    ModelTitle = "Sr + Nb + Rb + Y + Zr",
+    plotTree = FALSE
+  )
 ```
 
 If the tree is too complex to display, the description of the tree is contained in the component Tree in the list produced by ps_tree().  For the obsidian sources, this object (an R list) is displayed below.  The text above the information [node), split, n, loss, yval, (yprob)] describes what is displayed: the node number, the split criterion, the number of observations at that node, a measure of loss, the predicted group membership at that node, and the proportions in each of the groups at that node.  The predicted group membership is the group with the highest proportion.  It is helpful to compare this display with the plot showing the tree.  Observe that, for a node below the root, the first indented line describes a path to the left in the split, and the value of "node)" is twice the value of "node)" in the node that has been split. The value of "node)" for the path to the right is one greater than the value for the path to the left.  This object is displayed below (for much greater detail, we encourage the reader to use the command summary(tree$Tree) after running the example code):
@@ -508,9 +784,18 @@ If the tree is too complex to display, the description of the tree is contained 
 
 ```{r message=FALSE, fig.cap="Display 6.1: Full description of the classification tree for the Jemez obsidian source data using five elements as predictors."}
 data(ObsidianSources)
-analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-tree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
-                 Model="Sr"+"Nb"+"Rb"+"Y"+"Zr", ModelTitle="Sr + Nb + Rb + Y + Zr", plotCp=FALSE, plotTree=FALSE)
+analyticVars <- c("Rb", "Sr", "Y", "Zr", "Nb")
+tree <-
+  ps_tree(
+    data = ObsidianSources,
+    GroupVar = "Code",
+    Groups = "All",
+    AnalyticVars = analyticVars,
+    Model = "Sr"+"Nb"+"Rb"+"Y"+"Zr",
+    ModelTitle = "Sr + Nb + Rb + Y + Zr",
+    plotCp = FALSE,
+    plotTree = FALSE
+  )
 tree$Tree
 
 ```
@@ -520,11 +805,20 @@ The component classification in the list produced by ps_tree() contains a table 
 ```{r, message=FALSE  }
 library(predictSource)
 data(ObsidianSources)
-analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-tree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
-                 Model="Sr"+"Nb"+"Rb"+"Y"+"Zr", ModelTitle="Sr + Nb + Rb + Y + Zr", plotTree=FALSE, plotCp = F)
+analyticVars <- c("Rb", "Sr", "Y", "Zr", "Nb")
+tree <-
+  ps_tree(
+    data = ObsidianSources,
+    GroupVar = "Code",
+    Groups = "All",
+    AnalyticVars = analyticVars,
+    Model = "Sr"+"Nb"+"Rb"+"Y"+"Zr",
+    ModelTitle = "Sr + Nb + Rb + Y + Zr",
+    plotTree = FALSE,
+    plotCp = F
+  )
 knitr::kable(tree$classification, caption = "Table 6.2:  Classification tree predictions for the Jemez obsidian sources using five elements as potential predictors.") %>%
-  kable_styling(full_width=F, position="center")
+  kable_styling(full_width = F, position = "center")
 ```
 
 Table 6.3 contains the improvement in predicted group purity, as measured by Cp, and the estimated relative error rates and their standard errors obtained from cross-validation from the tree procedure using the Jemez obsidian source data. 
@@ -532,11 +826,20 @@ Table 6.3 contains the improvement in predicted group purity, as measured by Cp,
 ```{r, message=FALSE }
 library(predictSource)
 data(ObsidianSources)
-analyticVars<-c("Rb","Sr","Y","Zr","Nb")
- tree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
-                 Model="Sr"+"Nb"+"Rb"+"Y"+"Zr", ModelTitle="Sr + Nb + Rb + Y + Zr", plotTree=FALSE, plotCp = F)
+analyticVars <- c("Rb", "Sr", "Y", "Zr", "Nb")
+tree <-
+  ps_tree(
+    data = ObsidianSources,
+    GroupVar = "Code",
+    Groups = "All",
+    AnalyticVars = analyticVars,
+    Model = "Sr"+"Nb"+"Rb"+"Y"+"Zr",
+    ModelTitle = "Sr + Nb + Rb + Y + Zr",
+    plotTree = FALSE,
+    plotCp = F
+  )
 knitr::kable(tree$CpTable, caption = "Table 6.3:  Cp table from the classification tree for the Jemez obsidian sources using five elements as potential predictors.") %>%
-  kable_styling(full_width=F, position="center")
+  kable_styling(full_width = F, position = "center")
 
 ```
 
@@ -545,11 +848,23 @@ The ps_tree() function will predict sources of unknowns when the parameter predi
 ```{r, message=FALSE }
 data(ObsidianSources)
 data(ObsidianArtifacts)
-analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-save_tree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
-   Model = "Sr"+"Nb"+"Rb"+"Y"+"Zr", ModelTitle="Sr + Nb + Rb + Y + Zr",predictSources=TRUE, unknownData=ObsidianArtifacts, unknownID="ID", plotTree=FALSE, plotCp=FALSE)
-knitr::kable(save_tree$predictedSource[1:5,], caption = "Table 6.4: An example of the data frame containing predicted sources of obsidian artifacts from the classification tree for the Jemez obsidian sources using five elements as potential predictors.") %>%
-  kable_styling(full_width=F, position="center")
+analyticVars <- c("Rb", "Sr", "Y", "Zr", "Nb")
+save_tree <-
+  ps_tree(
+    data = ObsidianSources,
+    GroupVar = "Code",
+    Groups = "All",
+    AnalyticVars = analyticVars,
+    Model = "Sr"+"Nb"+"Rb"+"Y"+"Zr",
+    ModelTitle = "Sr + Nb + Rb + Y + Zr",
+    predictSources = TRUE,
+    unknownData = ObsidianArtifacts,
+    unknownID = "ID",
+    plotTree = FALSE,
+    plotCp = FALSE
+  )
+knitr::kable(save_tree$predictedSource[1:5, ], caption = "Table 6.4: An example of the data frame containing predicted sources of obsidian artifacts from the classification tree for the Jemez obsidian sources using five elements as potential predictors.") %>%
+  kable_styling(full_width = F, position = "center")
 
 ```
 
@@ -558,12 +873,32 @@ The locations of the artifact points on a principal components plot with symbols
 ```{r, message=FALSE, fig.cap="Figure 6.3: Principal components plot of the locations of artifact sources from classification tree model predictions."  }
 data(ObsidianSources)
 data(ObsidianArtifacts)
-analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-tree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
-                ID="ID", Model="Sr"+"Nb"+"Rb"+"Y"+"Zr", ModelTitle="Sr + Nb + Rb + Y + Zr",
-                plotTree=FALSE, plotCp = F, predictSources=TRUE, unknownData=ObsidianArtifacts)
-predictedSource<-tree$predictedSource[tree$predictedSource[,"source"]!="A",]
-save_pca <- ps_pca(data=predictedSource, ID="ID", GroupVar="source",Groups="All", AnalyticVars=analyticVars, PlotEllipses=FALSE)
+analyticVars <- c("Rb", "Sr", "Y", "Zr", "Nb")
+tree <-
+  ps_tree(
+    data = ObsidianSources,
+    GroupVar = "Code",
+    Groups = "All",
+    AnalyticVars = analyticVars,
+    ID = "ID",
+    Model = "Sr"+"Nb"+"Rb"+"Y"+"Zr",
+    ModelTitle = "Sr + Nb + Rb + Y + Zr",
+    plotTree = FALSE,
+    plotCp = F,
+    predictSources = TRUE,
+    unknownData = ObsidianArtifacts
+  )
+predictedSource <-
+  tree$predictedSource[tree$predictedSource[, "source"] != "A", ]
+save_pca <-
+  ps_pca(
+    data = predictedSource,
+    ID = "ID",
+    GroupVar = "source",
+    Groups = "All",
+    AnalyticVars = analyticVars,
+    PlotEllipses = FALSE
+  )
 
 ```
 
@@ -583,8 +918,16 @@ The ps_randomForest() function produces two plots, the estimated error rate as a
 
 ```{r  results='hide',message=FALSE, fig.cap="Figure 7.1: Error rates from a random forest analysis of the Jemez obsidian source data."}
 data(ObsidianSources)
- analyticVars<-c("Rb","Sr","Y","Zr","Nb")
- saveRandomForest <- ps_randomForest(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars, NvarUsed=3, plotImportance=FALSE)
+analyticVars <- c("Rb", "Sr", "Y", "Zr", "Nb")
+saveRandomForest <-
+  ps_randomForest(
+    data = ObsidianSources,
+    GroupVar = "Code",
+    Groups = "All",
+    AnalyticVars = analyticVars,
+    NvarUsed = 3,
+    plotImportance = FALSE
+  )
  
 ```                                      
 
@@ -592,17 +935,34 @@ The variable importance plot is shown in Figure 7.2, and the corresponding table
 
 ```{r  results='hide',message=FALSE, fig.cap="Figure 7.2: Variable importance for separating the Jemez obsidian sources using a random forest analysis."}
 data(ObsidianSources)
- analyticVars<-c("Rb","Sr","Y","Zr","Nb")
- saveRandomForest <- ps_randomForest(data=ObsidianSources, GroupVar="Code",Groups="All",   AnalyticVars=analyticVars, NvarUsed=3, plotErrorRate=FALSE)
+analyticVars <- c("Rb", "Sr", "Y", "Zr", "Nb")
+saveRandomForest <-
+  ps_randomForest(
+    data = ObsidianSources,
+    GroupVar = "Code",
+    Groups = "All",
+    AnalyticVars = analyticVars,
+    NvarUsed = 3,
+    plotErrorRate = FALSE
+  )
  
 ```
 
 ```{r  message=FALSE}
 data(ObsidianSources)
- analyticVars<-c("Rb","Sr","Y","Zr","Nb")
- saveRandomForest <- ps_randomForest(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars, NvarUsed=3, plotImportance=FALSE, plotErrorRate=FALSE)
-knitr::kable(saveRandomForest$importance, caption="Table 7.1: Relative variable importance in a random forest model for the Jemez obsidian source data.") %>%
-  kable_styling(full_width=F, position="center")
+analyticVars <- c("Rb", "Sr", "Y", "Zr", "Nb")
+saveRandomForest <-
+  ps_randomForest(
+    data = ObsidianSources,
+    GroupVar = "Code",
+    Groups = "All",
+    AnalyticVars = analyticVars,
+    NvarUsed = 3,
+    plotImportance = FALSE,
+    plotErrorRate = FALSE
+  )
+knitr::kable(saveRandomForest$importance, caption = "Table 7.1: Relative variable importance in a random forest model for the Jemez obsidian source data.") %>%
+  kable_styling(full_width = F, position = "center")
 
 ```
 
@@ -610,10 +970,19 @@ The accuracy of classification from the random forest analysis is reported in th
 
 ```{r  message=FALSE}
 data(ObsidianSources)
- analyticVars<-c("Rb","Sr","Y","Zr","Nb")
- saveRandomForest <- ps_randomForest(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars, NvarUsed=3, plotImportance=FALSE, plotErrorRate=FALSE)
-knitr::kable(saveRandomForest$confusion, caption="Table 7.2: The confusion matrix from a random forest model for the Jemez obsidian source data: accuracy of classification.") %>%
-  kable_styling(full_width=F, position="center")
+analyticVars <- c("Rb", "Sr", "Y", "Zr", "Nb")
+saveRandomForest <-
+  ps_randomForest(
+    data = ObsidianSources,
+    GroupVar = "Code",
+    Groups = "All",
+    AnalyticVars = analyticVars,
+    NvarUsed = 3,
+    plotImportance = FALSE,
+    plotErrorRate = FALSE
+  )
+knitr::kable(saveRandomForest$confusion, caption = "Table 7.2: The confusion matrix from a random forest model for the Jemez obsidian source data: accuracy of classification.") %>%
+  kable_styling(full_width = F, position = "center")
 
 ```
 
@@ -622,14 +991,32 @@ Setting the parameter predictSources to TRUE and specifying the data frame with 
 ```{r  message=FALSE}
 data(ObsidianSources)
 data(ObsidianArtifacts)
-analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-saveRandomForest <- ps_randomForest(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars, NvarUsed=3, plotErrorRate=FALSE, plotImportance=FALSE, predictSources=TRUE,predictData=ObsidianArtifacts, plotSourceProbs=FALSE)
-knitr::kable(saveRandomForest$predictedSources[1:5,], caption="Table 7.3: The predicted source and predicted 
-  source probabilities from a random forest model for the Jemez obsidian artifact data.") %>%
-  kable_styling(full_width=F, position="center")
-knitr::kable(saveRandomForest$predictedTotals, caption="Table 7.4: The predicted number of artifacts from 
-  each Jemez source from a random forest model for the Jemez obsidian artifact data.") %>%
-  kable_styling(full_width=F, position="center")
+analyticVars <- c("Rb", "Sr", "Y", "Zr", "Nb")
+saveRandomForest <-
+  ps_randomForest(
+    data = ObsidianSources,
+    GroupVar = "Code",
+    Groups = "All",
+    AnalyticVars = analyticVars,
+    NvarUsed = 3,
+    plotErrorRate = FALSE,
+    plotImportance = FALSE,
+    predictSources = TRUE,
+    predictData = ObsidianArtifacts,
+    plotSourceProbs = FALSE
+  )
+knitr::kable(
+  saveRandomForest$predictedSources[1:5, ],
+  caption = "Table 7.3: The predicted source and predicted
+  source probabilities from a random forest model for the Jemez obsidian artifact data."
+) %>%
+  kable_styling(full_width = F, position = "center")
+knitr::kable(
+  saveRandomForest$predictedTotals,
+  caption = "Table 7.4: The predicted number of artifacts from
+  each Jemez source from a random forest model for the Jemez obsidian artifact data."
+) %>%
+  kable_styling(full_width = F, position = "center")
 
 ```
 
@@ -642,41 +1029,100 @@ The second plot shows that there are a few relatively large probabilities for un
 ```{r  results='hide',message=FALSE, fig.cap="Figure 7.3a: Box plots of the estimated probabilities for the predicted sources for the obsidian artifacts.", fig.keep='first'}
 data(ObsidianSources)
 data(ObsidianArtifacts)
-analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-saveRandomForest <- ps_randomForest(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars, NvarUsed=3, plotErrorRate=FALSE, plotImportance=FALSE, predictSources=TRUE,predictData=ObsidianArtifacts, plotSourceProbs=TRUE)
+analyticVars <- c("Rb", "Sr", "Y", "Zr", "Nb")
+saveRandomForest <-
+  ps_randomForest(
+    data = ObsidianSources,
+    GroupVar = "Code",
+    Groups = "All",
+    AnalyticVars = analyticVars,
+    NvarUsed = 3,
+    plotErrorRate = FALSE,
+    plotImportance = FALSE,
+    predictSources = TRUE,
+    predictData = ObsidianArtifacts,
+    plotSourceProbs = TRUE
+  )
 
 ```
 
 ```{r  results='hide',message=FALSE, fig.cap="Figure 7.3b: Box plots of the estimated probabilities of sources other than the predicted sources for the obsidian artifacts.", fig.keep='last'}
 data(ObsidianSources)
 data(ObsidianArtifacts)
-analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-saveRandomForest <- ps_randomForest(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars, NvarUsed=3, plotErrorRate=FALSE, plotImportance=FALSE, predictSources=TRUE,predictData=ObsidianArtifacts, plotSourceProbs=TRUE)
+analyticVars <- c("Rb", "Sr", "Y", "Zr", "Nb")
+saveRandomForest <-
+  ps_randomForest(
+    data = ObsidianSources,
+    GroupVar = "Code",
+    Groups = "All",
+    AnalyticVars = analyticVars,
+    NvarUsed = 3,
+    plotErrorRate = FALSE,
+    plotImportance = FALSE,
+    predictSources = TRUE,
+    predictData = ObsidianArtifacts,
+    plotSourceProbs = TRUE
+  )
 
 ```
 
 ```{r  message=FALSE}
 data(ObsidianSources)
 data(ObsidianArtifacts)
-analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-saveRandomForest <- ps_randomForest(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars, 
-                                     sourceID="ID", NvarUsed=3, plotErrorRate=FALSE, plotImportance=FALSE, predictSources=TRUE,predictData=ObsidianArtifacts, plotSourceProbs=FALSE)
-check<-saveRandomForest$predictedSources
-rows<-((check[,"C"]>0.14)&(check[,"C"]<0.35))
-checkC<-check[rows,]
-orderedRows<-order(checkC[,"C"])
-knitr::kable(checkC[orderedRows,], caption="Table 7.3:  Rows with relative large probabilities of
+analyticVars <- c("Rb", "Sr", "Y", "Zr", "Nb")
+saveRandomForest <-
+  ps_randomForest(
+    data = ObsidianSources,
+    GroupVar = "Code",
+    Groups = "All",
+    AnalyticVars = analyticVars,
+    sourceID = "ID",
+    NvarUsed = 3,
+    plotErrorRate = FALSE,
+    plotImportance = FALSE,
+    predictSources = TRUE,
+    predictData = ObsidianArtifacts,
+    plotSourceProbs = FALSE
+  )
+check <- saveRandomForest$predictedSources
+rows <- ((check[, "C"] > 0.14) & (check[, "C"] < 0.35))
+checkC <- check[rows, ]
+orderedRows <- order(checkC[, "C"])
+knitr::kable(checkC[orderedRows, ], caption = "Table 7.3:  Rows with relative large probabilities of
              misclassification to source C.") %>%
-  kable_styling(full_width=F, position="center")
+  kable_styling(full_width = F, position = "center")
 ```
 
 ```{r  results='hide', message=FALSE, fig.cap="Figure 7.4: Principal components plot of the predicted sources of the obsidian artifacts from a random forests analysis."}
 data(ObsidianSources)
 data(ObsidianArtifacts)
-analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-saveRandomForest <- ps_randomForest(data=ObsidianSources, GroupVar="Code",Groups="All", sourceID="ID", AnalyticVars=analyticVars, NvarUsed=3, plotErrorRate=FALSE, plotImportance=FALSE, predictSources=TRUE,predictData=ObsidianArtifacts, plotSourceProbs=FALSE)
-predictedSources<-saveRandomForest$predictedSources[saveRandomForest$predictedSources[,"source"]!="A",]
-save_pca <- ps_pca(data=predictedSources, ID="source", GroupVar="source",Groups="All", AnalyticVars=analyticVars, PlotEllipses=FALSE)
+analyticVars <- c("Rb", "Sr", "Y", "Zr", "Nb")
+saveRandomForest <-
+  ps_randomForest(
+    data = ObsidianSources,
+    GroupVar = "Code",
+    Groups = "All",
+    sourceID = "ID",
+    AnalyticVars = analyticVars,
+    NvarUsed = 3,
+    plotErrorRate = FALSE,
+    plotImportance = FALSE,
+    predictSources = TRUE,
+    predictData = ObsidianArtifacts,
+    plotSourceProbs = FALSE
+  )
+predictedSources <-
+  saveRandomForest$predictedSources[saveRandomForest$predictedSources[, "source"] !=
+                                      "A", ]
+save_pca <-
+  ps_pca(
+    data = predictedSources,
+    ID = "source",
+    GroupVar = "source",
+    Groups = "All",
+    AnalyticVars = analyticVars,
+    PlotEllipses = FALSE
+  )
 
 ```
 
@@ -689,18 +1135,42 @@ We suggest two analyses for evaluating whether predicted sources for artifacts a
 ```{r results='hide',message=FALSE, fig.cap="Figure 8.1: Box plots for yttrium and niobium comparing the Jemez obsidian sources and the obsidian artifacts assigned to those sources by a classification tree analysis.  The plot for x.a is the artifacts assigned to source x." } 
 data(ObsidianSources)
 data(ObsidianArtifacts)
-analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-sources <- unique(ObsidianSources[,"Code"])
-saveTree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
-  Model = "Sr"+"Nb"+"Rb"+"Y"+"Zr", ModelTitle="Sr + Nb + Rb + Y + Zr",predictSources=TRUE, predictUnknowns=TRUE, unknownData=ObsidianArtifacts, unknownID="ID", plotTree=FALSE, plotCp=FALSE)
-ObsidianSources<-ObsidianSources[,c("Code",analyticVars)]
-Artifacts <- saveTree$predictedSourceUnknowns[,c("predicted",analyticVars)]
-SourcesCode <- as.vector(ObsidianSources[,"Code"], mode="character")
-ArtifactsCode <- as.vector(paste(Artifacts[,"predicted"],"a",sep="."),mode="character")
+analyticVars <- c("Rb", "Sr", "Y", "Zr", "Nb")
+sources <- unique(ObsidianSources[, "Code"])
+saveTree <-
+  ps_tree(
+    data = ObsidianSources,
+    GroupVar = "Code",
+    Groups = "All",
+    AnalyticVars = analyticVars,
+    Model = "Sr"+"Nb"+"Rb"+"Y"+"Zr",
+    ModelTitle = "Sr + Nb + Rb + Y + Zr",
+    predictSources = TRUE,
+    predictUnknowns = TRUE,
+    unknownData = ObsidianArtifacts,
+    unknownID = "ID",
+    plotTree = FALSE,
+    plotCp = FALSE
+  )
+ObsidianSources <- ObsidianSources[, c("Code", analyticVars)]
+Artifacts <-
+  saveTree$predictedSourceUnknowns[, c("predicted", analyticVars)]
+SourcesCode <- as.vector(ObsidianSources[, "Code"], mode = "character")
+ArtifactsCode <-
+  as.vector(paste(Artifacts[, "predicted"], "a", sep = "."), mode = "character")
 Sources <- c(SourcesCode, ArtifactsCode)
-SourcesArtifacts <- data.frame(rbind(ObsidianSources[,analyticVars], Artifacts[,analyticVars]))
-SourcesArtifacts <- data.frame(SourcesArtifacts,Source = Sources)
-boxPlots<-ps_boxPlots(data=SourcesArtifacts, GroupVar="Source", Groups="All",AnalyticVars=c("Y","Nb"),Nrow=2,Ncol=1)
+SourcesArtifacts <-
+  data.frame(rbind(ObsidianSources[, analyticVars], Artifacts[, analyticVars]))
+SourcesArtifacts <- data.frame(SourcesArtifacts, Source = Sources)
+boxPlots <-
+  ps_boxPlots(
+    data = SourcesArtifacts,
+    GroupVar = "Source",
+    Groups = "All",
+    AnalyticVars = c("Y", "Nb"),
+    Nrow = 2,
+    Ncol = 1
+  )
 
 ```
 
@@ -714,40 +1184,106 @@ The evaluation function can produce three plots, shown in Figures 8.2a, 8.2b, an
 ```{r  results='hide', message=FALSE, fig.keep='first', fig.cap="Figure 8.2a: Principal components plots of the Jemez obsidian source convex hulls with the source points (left panel) and obsidian artifact points (right panel).  The artifacts are labeled with their predicted source from a classification tree analysis."}
 data(ObsidianSources)
 data(ObsidianArtifacts)
-analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-sources <- unique(ObsidianSources[,"Code"])
-saveTree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
-  Model = "Sr"+"Nb"+"Rb"+"Y"+"Zr", ModelTitle="Sr + Nb + Rb + Y + Zr", predictSources=TRUE, unknownData=ObsidianArtifacts, ID="ID",
-  plotTree=FALSE, plotCp=FALSE)
-pcaEval <- ps_pcaEvaluation(SourceData=ObsidianSources, unknownData=saveTree$predictedSource,
-  SourceGroup= "Code", unknownGroup="predicted",known_sources=sources, predicted_sources=sources,
-  AnalyticVars=analyticVars, plotAllPoints=TRUE, plotHullsOutsidePoints=TRUE, plotOutsidePoints=FALSE)
-  
+analyticVars <- c("Rb", "Sr", "Y", "Zr", "Nb")
+sources <- unique(ObsidianSources[, "Code"])
+saveTree <-
+  ps_tree(
+    data = ObsidianSources,
+    GroupVar = "Code",
+    Groups = "All",
+    AnalyticVars = analyticVars,
+    Model = "Sr"+"Nb"+"Rb"+"Y"+"Zr",
+    ModelTitle = "Sr + Nb + Rb + Y + Zr",
+    predictSources = TRUE,
+    unknownData = ObsidianArtifacts,
+    ID = "ID",
+    plotTree = FALSE,
+    plotCp = FALSE
+  )
+pcaEval <-
+  ps_pcaEvaluation(
+    SourceData = ObsidianSources,
+    unknownData = saveTree$predictedSource,
+    SourceGroup = "Code",
+    unknownGroup = "predicted",
+    known_sources = sources,
+    predicted_sources = sources,
+    AnalyticVars = analyticVars,
+    plotAllPoints = TRUE,
+    plotHullsOutsidePoints = TRUE,
+    plotOutsidePoints = FALSE
+  )
+
 ```
 
 ```{r  results='hide', message=FALSE, fig.keep='last', fig.cap="Figure 8.2b: Principal components plots of the Jemez obsidian source convex hulls with the source point medians (left panel) and obsidian artifact points outside the predicted source hulls (right panel).  The artifacts are labeled with their predicted source from a classification tree analysis."}
 data(ObsidianSources)
 data(ObsidianArtifacts)
-analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-sources <- unique(ObsidianSources[,"Code"])
-saveTree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
-  Model = "Sr"+"Nb"+"Rb"+"Y"+"Zr", ModelTitle="Sr + Nb + Rb + Y + Zr", predictSources=TRUE, unknownData=ObsidianArtifacts, ID="ID", plotTree=FALSE, plotCp=FALSE)
-pcaEval <- ps_pcaEvaluation(SourceData=ObsidianSources, unknownData=saveTree$predictedSource,
-  SourceGroup= "Code", unknownGroup="predicted",known_sources=sources, predicted_sources=sources,
-  AnalyticVars=analyticVars, plotAllPoints=TRUE, plotHullsOutsidePoints=TRUE, plotOutsidePoints=FALSE)
-  
+analyticVars <- c("Rb", "Sr", "Y", "Zr", "Nb")
+sources <- unique(ObsidianSources[, "Code"])
+saveTree <-
+  ps_tree(
+    data = ObsidianSources,
+    GroupVar = "Code",
+    Groups = "All",
+    AnalyticVars = analyticVars,
+    Model = "Sr"+"Nb"+"Rb"+"Y"+"Zr",
+    ModelTitle = "Sr + Nb + Rb + Y + Zr",
+    predictSources = TRUE,
+    unknownData = ObsidianArtifacts,
+    ID = "ID",
+    plotTree = FALSE,
+    plotCp = FALSE
+  )
+pcaEval <-
+  ps_pcaEvaluation(
+    SourceData = ObsidianSources,
+    unknownData = saveTree$predictedSource,
+    SourceGroup = "Code",
+    unknownGroup = "predicted",
+    known_sources = sources,
+    predicted_sources = sources,
+    AnalyticVars = analyticVars,
+    plotAllPoints = TRUE,
+    plotHullsOutsidePoints = TRUE,
+    plotOutsidePoints = FALSE
+  )
+
 ```
 
 ```{r  results='hide', message=FALSE, fig.keep='last', fig.cap="Figure 8.2c: Principal components plot with Jemez obsidian source convex hulls and obsidian artifacts with points outside the convex hull predicted from a classification tree model."}
 data(ObsidianSources)
 data(ObsidianArtifacts)
-analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-sources <- unique(ObsidianSources[,"Code"])
-saveTree <- ps_tree(data=ObsidianSources, GroupVar="Code",Groups="All", AnalyticVars=analyticVars,
-  Model = "Sr"+"Nb"+"Rb"+"Y"+"Zr", ModelTitle="Sr + Nb + Rb + Y + Zr", predictSources=TRUE,      unknownData=ObsidianArtifacts, ID="ID", plotTree=FALSE, plotCp=FALSE)
-pcaEval <- ps_pcaEvaluation(SourceData=ObsidianSources, unknownData=saveTree$predictedSource,
-  SourceGroup= "Code", unknownGroup="predicted",known_sources=sources, predicted_sources=sources,
-  AnalyticVars=analyticVars, ID="ID", plotAllPoints=TRUE, plotHullsOutsidePoints=TRUE, plotOutsidePoints=TRUE)
+analyticVars <- c("Rb", "Sr", "Y", "Zr", "Nb")
+sources <- unique(ObsidianSources[, "Code"])
+saveTree <-
+  ps_tree(
+    data = ObsidianSources,
+    GroupVar = "Code",
+    Groups = "All",
+    AnalyticVars = analyticVars,
+    Model = "Sr"+"Nb"+"Rb"+"Y"+"Zr",
+    ModelTitle = "Sr + Nb + Rb + Y + Zr",
+    predictSources = TRUE,
+    unknownData = ObsidianArtifacts,
+    ID = "ID",
+    plotTree = FALSE,
+    plotCp = FALSE
+  )
+pcaEval <-
+  ps_pcaEvaluation(
+    SourceData = ObsidianSources,
+    unknownData = saveTree$predictedSource,
+    SourceGroup = "Code",
+    unknownGroup = "predicted",
+    known_sources = sources,
+    predicted_sources = sources,
+    AnalyticVars = analyticVars,
+    ID = "ID",
+    plotAllPoints = TRUE,
+    plotHullsOutsidePoints = TRUE,
+    plotOutsidePoints = TRUE
+  )
 
 ```
 
@@ -755,8 +1291,8 @@ Eleven artifacts predicted to be from source C are close to or closer to the hul
 
 ```{r  message=FALSE}
 data(tree.data.check)
-knitr::kable(tree.data.check, caption="Table 8.1: Artifacts which may have misidentified sources identified by using Identify=TRUE in ps_pcaEvaluation() after fitting a tree model.  The variable group is the predicted source from the model.") %>%
-  kable_styling(full_width=F, position="center")
+knitr::kable(tree.data.check, caption = "Table 8.1: Artifacts which may have misidentified sources identified by using Identify=TRUE in ps_pcaEvaluation() after fitting a tree model.  The variable group is the predicted source from the model.") %>%
+  kable_styling(full_width = F, position = "center")
 
 ```
 
@@ -765,15 +1301,34 @@ In contrast, in the corresponding plot based on the random forest analysis, thes
 ```{r  results='hide', message=FALSE, fig.keep='last', fig.cap="Figure 8.3: Principal components plot of the Jemez obsidian source convex hulls and sources outside of those hulls using predictions from a random forests analysis."}
 data(ObsidianSources)
 data(ObsidianArtifacts)
-analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-sources <- unique(ObsidianSources[,"Code"])
-saveRandomForest <- ps_randomForest(data=ObsidianSources, GroupVar="Code",Groups="All",
-    AnalyticVars=analyticVars, sourceID="ID", NvarUsed=3, plotErrorRate=FALSE, plotImportance=FALSE,
-    predictSources=TRUE, predictData=ObsidianArtifacts, plotSourceProbs=FALSE)
-  pcaEval <- ps_pcaEvaluation(SourceData=ObsidianSources,
-    unknownData=saveRandomForest$predictedSources, SourceGroup= "Code", unknownGroup="source",
-    known_sources=sources, predicted_sources=sources, AnalyticVars=analyticVars,
-    plotAllPoints=TRUE, plotHullsOutsidePoints = TRUE, plotOutsidePoints = TRUE)
+analyticVars <- c("Rb", "Sr", "Y", "Zr", "Nb")
+sources <- unique(ObsidianSources[, "Code"])
+saveRandomForest <-
+  ps_randomForest(
+    data = ObsidianSources,
+    GroupVar = "Code",
+    Groups = "All",
+    AnalyticVars = analyticVars,
+    sourceID = "ID",
+    NvarUsed = 3,
+    plotErrorRate = FALSE,
+    plotImportance = FALSE,
+    predictSources = TRUE,
+    predictData = ObsidianArtifacts,
+    plotSourceProbs = FALSE
+  )
+pcaEval <- ps_pcaEvaluation(
+  SourceData = ObsidianSources,
+  unknownData = saveRandomForest$predictedSources,
+  SourceGroup = "Code",
+  unknownGroup = "source",
+  known_sources = sources,
+  predicted_sources = sources,
+  AnalyticVars = analyticVars,
+  plotAllPoints = TRUE,
+  plotHullsOutsidePoints = TRUE,
+  plotOutsidePoints = TRUE
+)
 
 ```
 
@@ -782,11 +1337,22 @@ Finally, to demonstrate the utility of using a principal component plot to verif
 ```{r  results='hide', message=FALSE, fig.keep='last', fig.cap="Figure 8.4: Principal components plot with Jemez obsidian source convex hulls and obsidian artifacts with points outside the convex hull labeled with Steve Shackley's source predictions."}
 data(ObsidianSources)
 data(ObsidianArtifacts)
-analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-sources <- unique(ObsidianSources[,"Code"])
-pcaEval <- ps_pcaEvaluation(SourceData=ObsidianSources, unknownData=ObsidianArtifacts,
-  SourceGroup= "Code", unknownGroup="Code",known_sources=sources, predicted_sources=sources,
-  AnalyticVars=analyticVars, ID="ID", plotAllPoints=TRUE, plotHullsOutsidePoints=TRUE, plotOutsidePoints=TRUE)
+analyticVars <- c("Rb", "Sr", "Y", "Zr", "Nb")
+sources <- unique(ObsidianSources[, "Code"])
+pcaEval <-
+  ps_pcaEvaluation(
+    SourceData = ObsidianSources,
+    unknownData = ObsidianArtifacts,
+    SourceGroup = "Code",
+    unknownGroup = "Code",
+    known_sources = sources,
+    predicted_sources = sources,
+    AnalyticVars = analyticVars,
+    ID = "ID",
+    plotAllPoints = TRUE,
+    plotHullsOutsidePoints = TRUE,
+    plotOutsidePoints = TRUE
+  )
 
 ```
 
@@ -796,17 +1362,35 @@ Table 8.2 contains the source assignment probability estimates from the random f
 data(ObsidianSources)
 data(ObsidianArtifacts)
 data(tree.data.check)
-analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-sources <- unique(ObsidianSources[,"Code"])
-saveRandomForest <- ps_randomForest(data=ObsidianSources, GroupVar="Code",Groups="All",
-    AnalyticVars=analyticVars, sourceID="ID", NvarUsed=3, plotErrorRate=FALSE, plotImportance=FALSE,
-    predictSources=TRUE, predictData=ObsidianArtifacts, unknownID= "ID", plotSourceProbs=FALSE)
-treeDataCheck <- tree.data.check[order(tree.data.check[,"ID"]),]
-saveRF<-saveRandomForest$predictedSources[order(saveRandomForest$predictedSources[,"source"]),]
-obsCheck<-merge(x=saveRF, y = tree.data.check[,c("ID","pc1","pc2")],
-                by = "ID", x.all=FALSE, y.all=FALSE)
-knitr::kable(obsCheck, caption="Table 8.2: Random forest probability estimates for artifacts which may have  been misidentified as from source C using the tree model identified by using Identify=TRUE in ps_pcaEvaluation().  source is the predicted source from the random forest procedure.") %>%
-  kable_styling(full_width=F, position="center")
+analyticVars <- c("Rb", "Sr", "Y", "Zr", "Nb")
+sources <- unique(ObsidianSources[, "Code"])
+saveRandomForest <-
+  ps_randomForest(
+    data = ObsidianSources,
+    GroupVar = "Code",
+    Groups = "All",
+    AnalyticVars = analyticVars,
+    sourceID = "ID",
+    NvarUsed = 3,
+    plotErrorRate = FALSE,
+    plotImportance = FALSE,
+    predictSources = TRUE,
+    predictData = ObsidianArtifacts,
+    unknownID = "ID",
+    plotSourceProbs = FALSE
+  )
+treeDataCheck <- tree.data.check[order(tree.data.check[, "ID"]), ]
+saveRF <-
+  saveRandomForest$predictedSources[order(saveRandomForest$predictedSources[, "source"]), ]
+obsCheck <- merge(
+  x = saveRF,
+  y = tree.data.check[, c("ID", "pc1", "pc2")],
+  by = "ID",
+  x.all = FALSE,
+  y.all = FALSE
+)
+knitr::kable(obsCheck, caption = "Table 8.2: Random forest probability estimates for artifacts which may have  been misidentified as from source C using the tree model identified by using Identify=TRUE in ps_pcaEvaluation().  source is the predicted source from the random forest procedure.") %>%
+  kable_styling(full_width = F, position = "center")
 
 ```
 
@@ -885,7 +1469,7 @@ Using the functions
 
 To execute the example code in the function documentation, the user should highlight that section of the code in the documentation in the window showing the function and, in the windows operating system, use Control+Enter; in the macOS, use Cmd+Enter.
 
-Functions that create more than one plot contain one or more comment lines with the command browser() after each plot to stop function execution.  If the user is running code using base R, this command allows the user to examine and potentially save the plot to a file.  The function must be edited to remove the comment symbol (#).  In Rstudio, this command is not be necessary, as the user can examine a set of plots in the Plot window using the back arrow.  To continue execution after browser() is executed, the user should enter c at the prompt.  Most functions can produce more than one plot.  Those that do are ps_2dPlot(), ps_2dPlotGauss(), ps_3dPlot(), ps_3dPlotRotate(), ps_boxPlots(), ps_CV_corr(), ps_pairsPlot(), ps_pca(), ps_pcaEvaluation(), ps_pcaGauss(), and ps_randomForest().  
+Functions that create more than one plot contain one or more comment lines with the command browser() after each plot to stop function execution.  If the user is running code using base R, this command allows the user to examine and potentially save the plot to a file.  The function must be edited to remove the comment symbol (#).  In Rstudio, this command is not be necessary, as the user can examine a set of plots in the Plot window using the back arrow.  To continue execution after browser() is executed, the user should enter c at the prompt.  Most functions can produce more than one plot.  Those that do are ps_2dPlot(), ps_2dPlotGauss(), ps_3dPlot(), ps_3dPlotRotate(), ps_boxPlots(), ps_CV_corr(), ps_pairsPlot(), ps_pca(), ps_pcaEvaluation(), ps_pcaGaussian(), and ps_randomForest().  
 
 If Identify is TRUE, the user must interact with a plot before continuing.  To identify a point of interest, place the cursor as close to the point as possible and left click.  The data creating the point closest to the cursor will be added to the data frame dataCheck.  Repeat for all points of interest.  After all points are identified (or if no point is identified), the user must end the interaction: in the Windows operating system, right click; in Rstudio, click on Finish in the upper right corner of the plot window.
 

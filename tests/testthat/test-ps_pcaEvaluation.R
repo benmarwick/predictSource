@@ -9,7 +9,7 @@ sources <- unique(ObsidianSources[,"Code"])
 pcaEval <- ps_pcaEvaluation(SourceData=ObsidianSources,
    unknownData=ObsidianArtifacts, SourceGroup= "Code", unknownGroup="Code",
    known_sources=sources, predicted_sources=sources, AnalyticVars=analyticVars, ID="ID",
-   plotAllPoints=TRUE, plotHullsOutsidePoints = TRUE, plotOutsidePoints = TRUE)
+   plotAllPoints=FALSE, plotHullsOutsidePoints = FALSE, plotOutsidePoints = TRUE)
 
 test_that("ps_pcaEvaluation() output is a list", {
   expect_type(pcaEval, "list")
@@ -23,5 +23,5 @@ test_that("ps_pcaEvaluation pointsOutside is correct, first column is character"
 })
 
 test_that("ps_pcaEvaluation tableInOut is correct", {
-  expect_equal(pcaEval$tableInOut, test_pcaEval$tableInOut)
-})
+ expect_equal(pcaEval$tableInOut, test_pcaEval$tableInOut)
+ })

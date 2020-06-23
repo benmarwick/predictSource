@@ -1,4 +1,6 @@
-#' Chemical composition of obsidian sources
+#' Documentation for data sets
+#'
+#'  Chemical composition of obsidian sources
 #'
 #' A data set containing data on five elements from 113 obsidian samples from five sources in the Jemez
 #' caldera in north central New Mexico.  The element presence values (parts per million) were obtained using
@@ -298,7 +300,7 @@
 #'   \item{location:}{ The value of the parameter folder}
 #'  }
 #'
-"testRandomForest"
+ "test_randomForest"
 
 #' A list used to verify that ps_tree() is valid
 #'
@@ -317,4 +319,7 @@
 #'   \item{predictedTotals:}{  If predictedSources = T, a vector with the number of objects predicted to be from each source}
 #'   \item{location:}{ The value of the parameter folder}
 #'  }
+#'
 "testTree"
+#'
+

@@ -20,7 +20,7 @@
 #' @param dsFile The complete path to a file in folder to which each image will be saved;
 #' if folder is not " ", this must be a valid path and file name (ends in .pdf for current function)
 #`
-#' @import MASS scatterplot3d graphics assertthat  rgl
+#' @import MASS graphics assertthat  rgl
 #'
 #' @section: Details:
 #' See the vignette for details on the use of colors.  The rotated 3d plot can be saved to a file
@@ -147,7 +147,7 @@ ps_3dPlotRotate <-
         plot.new()
         index_na <- is.na(dataUsed[, Selections[1]]) | is.na(dataUsed[,Selections[2]]) |
           is.na(dataUsed[, Selections[3]])
-         plot3d(dataUsed[!index_na, Selections[1:3]], type="p", size=ptSize,
+        rgl::plot3d(dataUsed[!index_na, Selections[1:3]], type="p", size=ptSize,
                xlab = Selections[1], ylab = Selections[2], zlab = Selections[3],
                col = Colors[dataUsed[!index,"group_index"]],
                pch = 16, main=header)
@@ -160,7 +160,7 @@ ps_3dPlotRotate <-
           par(oma=rep(2,4))
           index_na <- is.na(dataUsed[, Selections[i,1]]) | is.na(dataUsed[,Selections[i,2]]) |
             is.na(dataUsed[, Selections[i,3]])
-          plot3d(dataUsed[!index_na, Selections[i, 1:3]], xlab = Selections[i, 1],
+          rgl::plot3d(dataUsed[!index_na, Selections[i, 1:3]], xlab = Selections[i, 1],
                  ylab = Selections[i, 2], zlab = Selections[i, 3],
                  col = Colors[dataUsed[,"group_index"]], pch = 16, type="p", size=ptSize,
                  main=header)
@@ -176,7 +176,7 @@ ps_3dPlotRotate <-
           data_i<-dataUsed[dataUsed[,GroupVar]==groups[i],Selections]
           index_na <- is.na(data_i[, Selections[1]]) | is.na(data_i[,Selections[2]]) |
             is.na(data_i[, Selections[3]])
-          plot3d(data_i[!index_na,], xlab = Selections[1], ylab = Selections[2], zlab = Selections[3],
+          rgl::plot3d(data_i[!index_na,], xlab = Selections[1], ylab = Selections[2], zlab = Selections[3],
                         col = Colors[1], pch = 16, type="p", size=ptSize,
                         main = paste(groups[i],": ",Selections[1]," ,", Selections[2], ",",
                                      Selections[3],sep=""))
@@ -190,7 +190,7 @@ ps_3dPlotRotate <-
             data_j<-dataUsed[dataUsed[,GroupVar]==groups[j],Selections[i,]]
             index_na <- is.na(data_j[, Selections[i,1]]) | is.na(data_j[,Selections[i,2]]) |
               is.na(data_j[, Selections[i,3]])
-            plot3d(data_j[!index_na,], xlab = Selections[i, 1], ylab = Selections[i, 2],
+            rgl::plot3d(data_j[!index_na,], xlab = Selections[i, 1], ylab = Selections[i, 2],
                    zlab = Selections[i,3], col = Colors[1], pch = 16,
                    type="p", size=ptSize,
                    main = paste(groups[i],": ",Selections[i, 1], ",", Selections[i,2], ",",

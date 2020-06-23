@@ -10,7 +10,8 @@ ps_pcaGaussian(
   GroupVar,
   Groups,
   gaussID = " ",
-  AnalyticVars,
+  analyticVars,
+  varPair = c("PC1", "PC2"),
   qqPlot = TRUE,
   gaussIdentify = FALSE,
   folder = " "
@@ -28,7 +29,10 @@ if "All"', use all groups}
 
 \item{gaussID}{An optional name for an ID, default is " " if no ID}
 
-\item{AnalyticVars}{A vector of names (character values) of analytic results}
+\item{analyticVars}{A vector of names (character values) of analytic results}
+
+\item{varPair}{A vector of names (character values) of the variable pair to be analyzed,
+default is first two principal components}
 
 \item{qqPlot}{Logical, should Q-Q plots (univariate with the bootstrap envelope, multivariate)
 be shown; default is TRUE}
@@ -46,7 +50,7 @@ The function returns a list with the following components:
   \item{dataNA:}{  A data frame with observations containing a least one missing value
   for an analysis variable, NA if no missing values}
   \item{params_grouping:}{ A list with the values of the arguments GroupVar and Groups}
-  \item{analyticVars:}{ A vector with the value of the argument AnalyticVars}
+  \item{analyticVars:}{ A vector with the value of the argument analyticVars}
   \item{params_logical:}{ The value of QQtest}
   \item{p_values:}{ A data frame with the p-values for the Gaussian assumptions for each
    group specified}
@@ -68,8 +72,8 @@ This function uses the function ps_2dPlotGauss().  The function produces p-value
 
 \examples{
 data(ObsidianSources)
-analyticVars<-c("Rb","Sr","Y","Zr","Nb")
+analVars<-c("Rb","Sr","Y","Zr","Nb")
 pca_Gauss <- ps_pcaGaussian(data=ObsidianSources, GroupVar="Code",Groups=c("A","B"),
-  AnalyticVars=analyticVars)
+  analyticVars=analVars)
 
 }

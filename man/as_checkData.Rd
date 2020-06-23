@@ -5,7 +5,7 @@
 \title{as_CheckData}
 \usage{
 as_checkData(
-  doc = "fn.CheckData",
+  doc = "as_CheckData",
   data,
   CheckDupVars,
   GroupVar = " ",
@@ -16,24 +16,24 @@ as_checkData(
 )
 }
 \arguments{
-\item{doc:}{a character string written to the output list; default is the function name}
+\item{doc}{a character string written to the output list; default is the function name}
 
-\item{data:}{R object (data frame) containing analytic data}
+\item{data}{R object (data frame) containing analytic data}
 
-\item{CheckDupVars:}{vector with names of identifying variables, typically group and lab ID}
+\item{CheckDupVars}{vector with names of identifying variables, typically group and lab ID}
 
-\item{GroupVar:}{if there are groups, name of variable defining the groups, default value of " ": no grouping}
+\item{GroupVar}{if there are groups, name of variable defining the groups, default value of " ": no grouping}
 
-\item{Groups:}{character vector of groups by which numbers of samples and statistics statistics will be
+\item{Groups}{character vector of groups by which numbers of samples and statistics statistics will be
 tabulated
  default value of " ": tabulations are done for the entire data set
  value = "All": tabulation for each distinct code in GroupVar}
 
-\item{ID:}{name of lab ID, default is " " (no lab ID)}
+\item{ID}{name of lab ID, default is " " (no lab ID)}
 
-\item{AnalyticVars:}{character vector of names of analytic variables for which tabulations are done}
+\item{AnalyticVars}{character vector of names of analytic variables for which tabulations are done}
 
-\item{folder:}{the path to a folder in which data frames will be saved; default is " "
+\item{folder}{the path to a folder in which data frames will be saved; default is " "
 #``}
 }
 \value{
@@ -66,7 +66,7 @@ not equal to "All" or " "), if must be a vector of length at least 2.
 \examples{
 data(ObsidianSources)
 analyticVars<-c("Rb","Sr","Y","Zr","Nb")
-dataCheck<-fn.CheckData(data=ObsidianSources,CheckDupVars=analyticVars,GroupVar="Code",Groups="All",
+dataCheck<-as_checkData(data=ObsidianSources,CheckDupVars=analyticVars,GroupVar="Code",Groups="All",
 ID = "ID", AnalyticVars=analyticVars)
 
 }

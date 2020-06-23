@@ -19,7 +19,7 @@ ps_pca(
   PlotHull = FALSE,
   PlotMedians = FALSE,
   Ellipses = c(0.95, 0.99),
-  PlotColors = T,
+  PlotColors = TRUE,
   legendLoc = "topright",
   Colors = c("red", "black", "blue", "green", "purple"),
   Identify = FALSE,

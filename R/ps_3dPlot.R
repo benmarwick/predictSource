@@ -41,7 +41,7 @@
 #'   all points have the color of the first element in Colors.
 #'   If PlotMedians = TRUE, the value of ByGroup is not used.
 #'
-#' @import MASS scatterplot3d stats assertthat
+#' @import MASS stats assertthat
 #'
 #' @examples
 #' #  show points from several groups on one plot
@@ -71,8 +71,6 @@ ps_3dPlot <-
            Colors = c("red","black","blue","green","purple"),
            SymbolSize = 0.7) {
 
-    library(scatterplot3d)
-#    library(rgl)
     #
     #  check for valid parameters
     #
