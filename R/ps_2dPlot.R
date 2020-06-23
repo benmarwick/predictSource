@@ -1,6 +1,6 @@
 #' ps_2dPlot
 #'
-#' Create 2-dimensional scatter plots, using ps_Plot().
+#' Create 2-dimensional scatter plots, using ps_plot().
 #'
 #' @param doc A string documenting use written to the output list;
 #' default is the function name

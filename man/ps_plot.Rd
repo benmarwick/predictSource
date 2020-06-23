@@ -80,7 +80,7 @@ If the user identifies points of interest:
  }
 }
 \description{
-Create 2-dimensional scatter plot for one group: used by ps_2dPlot().
+Create 2-dimensional scatter plot for one group: used by ps_2dPlot().  This is an internal function.
 }
 \section{Details}{
 
@@ -91,3 +91,4 @@ Create 2-dimensional scatter plot for one group: used by ps_2dPlot().
  to use the function lowess.as()) was not available for the current version of R.
 }
 
+\keyword{internal}

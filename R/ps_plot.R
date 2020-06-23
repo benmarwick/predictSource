@@ -1,6 +1,8 @@
 #' ps_plot
 #'
-#' Create 2-dimensional scatter plot for one group: used by ps_2dPlot().
+#' Create 2-dimensional scatter plot for one group: used by ps_2dPlot().  This is an internal function.
+#'
+#' @keywords internal
 #'
 #' @param data A data frame containing the data to be analyzed
 #' @param useVars A vector of length 2: the names of two analytic variables to

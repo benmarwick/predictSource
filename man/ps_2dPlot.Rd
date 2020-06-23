@@ -104,7 +104,7 @@ least one missing value for an analysis variable, NA if no missing values}
  }
 }
 \description{
-Create 2-dimensional scatter plots, using ps_Plot().
+Create 2-dimensional scatter plots, using ps_plot().
 }
 \section{Details}{
 
