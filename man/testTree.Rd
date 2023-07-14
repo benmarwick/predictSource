@@ -4,7 +4,8 @@
 \name{testTree}
 \alias{testTree}
 \title{A list used to verify that ps_tree() is valid}
-\format{A list with the following elements
+\format{
+A list with the following elements
 \describe{
   \item{usage:}{ A string with the contents of the argument doc, the date run, the version of R used}
   \item{dataUsed:}{ The contents of the argument data restricted to the groups used}
@@ -18,7 +19,8 @@
   \item{predictedSources:}{  If predictSources = T, a data frame with the predicted sources}
   \item{predictedTotals:}{  If predictedSources = T, a vector with the number of objects predicted to be from each source}
   \item{location:}{ The value of the parameter folder}
- }}
+ }
+}
 \usage{
 testTree
 }

@@ -17,6 +17,8 @@ test_that("ps_pcaEvaluation() output is a list", {
 
 #  use saved valid output from the function
 data(test_pcaEval)
+test_pcaEval$pointsOutside$ID <-
+  as.character(test_pcaEval$pointsOutside$ID)
 
 test_that("ps_pcaEvaluation pointsOutside is correct, first column is character", {
   expect_equal(pcaEval$pointsOutside[,-1], test_pcaEval$pointsOutside[,-1])

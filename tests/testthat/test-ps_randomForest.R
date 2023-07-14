@@ -14,7 +14,10 @@ test_that("ps_randomForest output is a list", {
 })
 
 data(test_randomForest)
+test_randomForest$predictedSources$source <-
+  as.character(test_randomForest$predictedSources$source )
 
 test_that("ps_randomForest$predictedSources is correct", {
-   expect_equal(rf$predictedSources, test_randomForest$predictedSources)
+   expect_equal(rf$predictedSources,
+                test_randomForest$predictedSources)
  })

@@ -3,12 +3,6 @@
 
 # predictSource
 
-<!-- badges: start -->
-
-[![Travis build
-status](https://travis-ci.org/benmarwick/predictSource.svg?branch=master)](https://travis-ci.org/benmarwick/predictSource)
-<!-- badges: end -->
-
 The package predictSource provides functions to verify that data can be
 used to separate sources of samples, to predict the sources of
 additional samples, and to create plots that evaluate the validity of
@@ -52,7 +46,38 @@ the remaining artifacts appear to be correctly classified. For these
 data, the random forests predictions appear to be correct for all of the
 artifacts.
 
-<img src="man/figures/README-unnamed-chunk-1-1.png" title="Principal components plot with Jemez obsidian source convex hulls and obsidian artifacts with points outside the convex hull labeled with source predictions based on scatterplots." alt="Principal components plot with Jemez obsidian source convex hulls and obsidian artifacts with points outside the convex hull labeled with source predictions based on scatterplots." width="100%" />
+``` r
+library(predictSource)
+data(ObsidianSources)
+data(ObsidianArtifacts)
+analyticVars <- c("Rb", "Sr", "Y", "Zr", "Nb")
+sources <- unique(ObsidianSources[, "Code"])
+pcaEval <-
+  ps_pcaEvaluation(
+    SourceData = ObsidianSources,
+    unknownData = ObsidianArtifacts,
+    SourceGroup = "Code",
+    unknownGroup = "Code",
+    known_sources = sources,
+    predicted_sources = sources,
+    AnalyticVars = analyticVars,
+    ID = "ID",
+    plotAllPoints = TRUE,
+    plotHullsOutsidePoints = TRUE,
+    plotOutsidePoints = TRUE
+  )
+```
+
+<div class="figure">
+
+<img src="man/figures/README-unnamed-chunk-1-1.png" alt="Principal components plot with Jemez obsidian source convex hulls and obsidian artifacts with points outside the convex hull labeled with source predictions based on scatterplots." width="100%" />
+<p class="caption">
+Principal components plot with Jemez obsidian source convex hulls and
+obsidian artifacts with points outside the convex hull labeled with
+source predictions based on scatterplots.
+</p>
+
+</div>
 
 The figure below is from a random forests analysis of the artifacts. The
 figure contains box plots of the source assignment probabilities for
@@ -80,23 +105,21 @@ saveRandomForest <-
     predictData = ObsidianArtifacts,
     plotSourceProbs = TRUE
   )
-#> Warning in bxp(list(stats = structure(c(0.998, 0.998, 0.998, 0.998, 0.998, :
-#> some notches went outside hinges ('box'): maybe set notch=FALSE
-#> Warning in bxp(list(stats = structure(c(0, 0, 0, 0.004, 0.01, 0, 0, 0.002, :
-#> some notches went outside hinges ('box'): maybe set notch=FALSE
+#> Warning in (function (z, notch = FALSE, width = NULL, varwidth = FALSE, : some
+#> notches went outside hinges ('box'): maybe set notch=FALSE
+#> Warning in (function (z, notch = FALSE, width = NULL, varwidth = FALSE, : some
+#> notches went outside hinges ('box'): maybe set notch=FALSE
 ```
 
-<img src="man/figures/README-unnamed-chunk-2-1.png" title="Figure 7.3b: Box plots of the estimated probabilities of sources other than the predicted sources for the obsidian artifacts." alt="Figure 7.3b: Box plots of the estimated probabilities of sources other than the predicted sources for the obsidian artifacts." width="100%" />
+<div class="figure">
 
-## Run in Binder
+<img src="man/figures/README-unnamed-chunk-2-1.png" alt="Figure 7.3b: Box plots of the estimated probabilities of sources other than the predicted sources for the obsidian artifacts." width="100%" />
+<p class="caption">
+Figure 7.3b: Box plots of the estimated probabilities of sources other
+than the predicted sources for the obsidian artifacts.
+</p>
 
-[![Binder](http://mybinder.org/badge.svg)](http://mybinder.org/v2/gh/benmarwick/predictSource/master)
-
-Click on the button above to launch RStudio in your browser so you can
-test or use this package without installing it locally on your computer.
-See these
-[instructions](https://github.com/rocker-org/binder#opening-rstudio-once-binder-launches)
-for full details on how to to open RStudio.
+</div>
 
 ## Installation
 

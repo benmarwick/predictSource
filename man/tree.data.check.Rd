@@ -5,7 +5,8 @@
 \alias{tree.data.check}
 \title{Data for artifacts with a predicted Jemez source likely misclassified
 by a classifiication tree model.}
-\format{A data frame with 11 rows and 9 variables:
+\format{
+A data frame with 11 rows and 9 variables:
 \describe{
   \item{group}{A character with the code for the predicted source.}
   \item{ID}{The laboratory ID for the artifact.}
@@ -18,7 +19,8 @@ by a classifiication tree model.}
   of the principal component plot of the Jemez sources and the artifacts.}
   \item{pc2}{A vector with the values of the second principal component
   of the principal component plot of the Jemez sources and the artifacts.}
-  }}
+  }
+}
 \source{
 The data frame was obtained from the function ps_pcaEvaluation()
 using Identify=TRUE.

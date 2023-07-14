@@ -4,7 +4,8 @@
 \name{test2dPlotGauss}
 \alias{test2dPlotGauss}
 \title{A list used to verify that ps_2dPlotGauss() is valid}
-\format{A list with the following elements
+\format{
+A list with the following elements
 \describe{
 \item{usage:}{  String with the contents of the argument doc, the date run, the version of R used}
 \item{dataUsed:}{ The contents of the argument data restricted to the groups used}
@@ -16,7 +17,8 @@
 \item{pvalues:}{  A data frame with the p-values for univariate and bivariate tests of normality}
 \item{dataCheck:}{ If Identify=TRUE, a data frame with the information on user-identified points of interest}
 \item{location:}{ The value of the parameter folder}
-}}
+}
+}
 \usage{
 test2dPlotGauss
 }

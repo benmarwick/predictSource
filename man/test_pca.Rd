@@ -4,7 +4,8 @@
 \name{test_pca}
 \alias{test_pca}
 \title{A list used to verify that ps_pca() is valid}
-\format{A list with the following elements
+\format{
+A list with the following elements
 \describe{
   \item{usage:}{  A string with the contents of the argument doc, the date run, the version of R used}
   \item{dataUsed:}{  The contents of the argument data restricted to the groups used}
@@ -24,7 +25,8 @@
   \item{dataCheck:}{  If Identify=TRUE, a data frame with the observations in dataUsed
    identified as of interest}
   \item{location:}{  The value of the parameter folder}
- }}
+ }
+}
 \usage{
 test_pca
 }

@@ -432,19 +432,19 @@ save_pca <-
     ScreePlot = TRUE
   )
 
-## ----results='hide',message=FALSE, fig.cap="Figure 5.2: Box plots of the first two principal components from the principal components analysis of the Jemez obsidian source data."----
-data(ObsidianSources)
-analyticVars <- c("Rb", "Sr", "Y", "Zr", "Nb")
-save_pca <-
-  ps_pca(
-    data = ObsidianSources,
-    ID = "ID",
-    GroupVar = "Code",
-    Groups = "All",
-    AnalyticVars = analyticVars,
-    pcPlot = FALSE,
-    BoxPlots = TRUE
-  )
+## ----eval=FALSE, results='hide',message=FALSE, fig.cap="Figure 5.2: Box plots of the first two principal components from the principal components analysis of the Jemez obsidian source data."----
+#  data(ObsidianSources)
+#  analyticVars <- c("Rb", "Sr", "Y", "Zr", "Nb")
+#  save_pca <-
+#    ps_pca(
+#      data = ObsidianSources,
+#      ID = "ID",
+#      GroupVar = "Code",
+#      Groups = "All",
+#      AnalyticVars = analyticVars,
+#      pcPlot = FALSE,
+#      BoxPlots = TRUE
+#    )
 
 ## ----results='hide',message=FALSE---------------------------------------------
 data(ObsidianSources)

@@ -4,7 +4,8 @@
 \name{testCheckData}
 \alias{testCheckData}
 \title{A list used to verify that ps_checkData() is valid}
-\format{A list with the following elements
+\format{
+A list with the following elements
 \describe{
 \item{usage:}{  A string with the contents of the argument doc, date run, R version used}
 \item{dataUsed:}{  The data frame specified by the argument data and GroupVar}
@@ -16,7 +17,8 @@
 \item{Nvalues:}{  A data frame contain the number of observations with a value for each analytic variable}
 \item{statistics:}{  A data frame containing the statistics statistics (by group, if Group is specified)}
 \item{location:}{  The value of the parameter folder}
-}}
+}
+}
 \usage{
 testCheckData
 }

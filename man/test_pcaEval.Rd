@@ -4,7 +4,8 @@
 \name{test_pcaEval}
 \alias{test_pcaEval}
 \title{A list used to verify that ps_pcaEvaluation() is valid}
-\format{A list with the following elements
+\format{
+A list with the following elements
 \describe{
   \item{usage:}{  A vector with the contents of the argument doc, the date run,
   the version of R used}
@@ -26,7 +27,8 @@
   \item{dataCheck:}{If Identify=TRUE, a data frame with the observations in dataUsed identified
    as of interest; value is c(NA,NA) if no points are identified}
   \item{location:}{The value of the parameter folder}
-   }}
+   }
+}
 \usage{
 test_pcaEval
 }

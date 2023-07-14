@@ -4,7 +4,8 @@
 \name{test_randomForest}
 \alias{test_randomForest}
 \title{A list used to verify that ps_randomForest() is valid}
-\format{A list with the following elements
+\format{
+A list with the following elements
 \describe{
   \item{usage:}{ A string with the contents of the argument doc, the date run, the version of R used}
   \item{dataUsed:}{ The contents of the argument data restricted to the groups used}
@@ -29,7 +30,8 @@
   \item{impError:}{ The estimated OOB (out of bag) error for imputed predictor data;
   NA if no imputed data}
   \item{location:}{ The value of the parameter folder}
- }}
+ }
+}
 \usage{
 test_randomForest
 }

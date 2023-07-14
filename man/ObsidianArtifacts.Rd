@@ -4,7 +4,8 @@
 \name{ObsidianArtifacts}
 \alias{ObsidianArtifacts}
 \title{Chemical composition of obsidian artifacts}
-\format{A data frame with 91 rows and 7 variables:
+\format{
+A data frame with 91 rows and 7 variables:
 \describe{
   \item{Code}{A one-character variable with a code for the Jemez source identified by Shackely
   using a 2- or 3-dimensional scatterplot}
@@ -15,7 +16,8 @@
   \item{Y}{The ytterbium value}
   \item{Zr}{The zirconium value}
   \item{Nb}{The niobium value}
-  }}
+  }
+}
 \source{
 The data are a random sample (30 from each of the three Jemez sources predicted by Shackely, plus
 the single sample predicted from another source) from a data set on approximately 450 artifacts provided by

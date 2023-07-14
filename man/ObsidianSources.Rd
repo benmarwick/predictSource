@@ -4,7 +4,8 @@
 \name{ObsidianSources}
 \alias{ObsidianSources}
 \title{Documentation for data sets}
-\format{A data frame with 113 rows and 7 variables:
+\format{
+A data frame with 113 rows and 7 variables:
 \describe{
   \item{Code}{A one-character variable with source code: A, B, C, D, E, F}
   \item{ID}{A character variable with an artificial lab ID; the first character
@@ -14,7 +15,8 @@
   \item{Y}{The ytterbium value}
   \item{Zr}{The zirconium value}
   \item{Nb}{The niobium value}
-  }}
+  }
+}
 \source{
 Data are from Steve Shackley's website http://www.swxrflab.net/ and from
   files provided by Shackley.

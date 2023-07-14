@@ -4,7 +4,8 @@
 \name{test_pcaGauss}
 \alias{test_pcaGauss}
 \title{A list used to verify that ps_pcaGauss() is valid}
-\format{A list with the following elements
+\format{
+A list with the following elements
 \describe{
   \item{usage:}{ A vector with the contents of the argument doc, the date run, the version of R used}
   \item{dataUsed:}{ The contents of the argument data restricted to the groups used}
@@ -17,7 +18,8 @@
  \item{data_check:}{  A data frame with data identified as generating points of interest;
  value is NA if no points are identified}
   \item{location:}{ The value of the parameter folder}
- }}
+ }
+}
 \usage{
 test_pcaGauss
 }

@@ -5,7 +5,8 @@
 \alias{sources.data.check}
 \title{Data for sources identified as potentially of interest in a plot of
 zirconium versus rubidium for Jemez source data.}
-\format{A data frame with 5 rows and 7 variables:
+\format{
+A data frame with 5 rows and 7 variables:
 \describe{
   \item{Code}{A character with the code for the source.}
   \item{ID}{The laboratory ID for the artifact.}
@@ -14,7 +15,8 @@ zirconium versus rubidium for Jemez source data.}
   \item{Y}{A vector with the yttrium values.}
   \item{Zr}{A vector with the zirconium values.}
   \item{Nb}{A vector with with the niobium values.}
-  }}
+  }
+}
 \source{
 The data frame was obtained from the function ps_2dPlotGauss()
 using Identify=TRUE.

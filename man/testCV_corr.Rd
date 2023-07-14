@@ -4,7 +4,8 @@
 \name{testCV_corr}
 \alias{testCV_corr}
 \title{A list used to verify that ps_CV_corr() is valid}
-\format{A list with the following elements
+\format{
+A list with the following elements
 \describe{
   \item{usage:}{  A vector with the contents of the argument doc, the date run, the version of R used}
   \item{dataUsed:}{  The contents of the argument data restricted to the groups used}
@@ -15,7 +16,8 @@
   \item{CV:}{  A data frame with the coefficients of variation for each analytic variable in each group}
   \item{corr:}{  A data frame with the correlations between pairs of variables in each group}
   \item{location:}{  The value of the parameter folder}
-      }}
+      }
+}
 \usage{
 testCV_corr
 }
