@@ -44,3 +44,4 @@ Suggests:
     kableExtra,
     magrittr
 VignetteBuilder: knitr
+URL: https://benmarwick.github.io/predictSource/

@@ -12,3 +12,7 @@ scatterSr_Y_Zr.jpeg
 ^\.travis\.yml$
 Dockerfile
 ^codemeta\.json$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+^\.github$

@@ -603,7 +603,7 @@ knitr::kable(plot2dGauss$pvalues, caption = "Table 4.6:  Samples sizes and p-val
 
 **************
 
-##5.  PRINCIPAL COMPONENTS ANALYSIS
+## 5.  PRINCIPAL COMPONENTS ANALYSIS
 
 Principal components analysis is a standard method implementing dimension reduction in order to create one or more two-dimensional plots to evaluate the separation of groups based on quantitative variables.  The function ps_pca() in this package does a principal components analysis after standardizing the data (so that each variable has mean zero and variance 1), plots the first two principal components (with the options in ps_2dPlot()), and returns a list with the computed values of interest (defined below).  The user can also produce a scree plot, showing the variances for each principal component, and, if the analysis is by group, box plots of the values of the component for each group for the first two components.  An option for the principal components plot is to show confidence ellipses around the points from each group (source).  
 
@@ -613,7 +613,7 @@ The function ps_pcaGaussian() provides information to evaluate whether the point
 
 A principal components analysis requires that the data to be analyzed have no missing values (an observation with a missing value is deleted from the analysis).  The function ps_pca() uses the function rfImpute() to impute a single value for any missing value, so that no observations have missing data and all observations can be analyzed.  See the discussion in Section 9 (Discussion) for more information on this procedure.  There is no imputation in ps_pcaGaussian(): this function analyzes only the observations with complete data.
 
-###5.1  Standard principal components analysis
+### 5.1  Standard principal components analysis
 
 The function ps_pca() returns a list with numerical information on the analysis.  The component named variances is a data frame with the standard deviation, proportion of total variance, and cumulative proportion of variance for each component (see Table 5.1).  The component named weights contains, for each component, the weight for each predictor variable (for the obsidian data, each element) used to compute the value of the component for that variable; these weights are standardized so that the sum of the squares of the weights for each component is 1 (see Table 5.2 for the results for this analysis).  The components named Predicted and DataPlusPredicted contain the predicted principal component values and the original data plus the predicted values, respectively, for the data used in the analysis (see Table 5.3 for a partial table for the obsidian source data).  In addition, if the user identifies points of interest, the data generating those points are in the component dataCheck. 
 
@@ -690,7 +690,7 @@ knitr::kable(head(save_pca$DataPlusPredicted), caption = "Table 5.3:  Original d
 
 ```
 
-###5.2  Evaluating the first two components for a bivariate Gaussian distribution
+### 5.2  Evaluating the first two components for a bivariate Gaussian distribution
 
 At each source, each principal component is a linear combination of the elements at that source (for the Jemez obsidian source data, the coefficients are in Table 5.2).  If each variable has a Gaussian distribution in a set of variables, a linear combination of these variables has a univariate Gaussian distribution.  Therefore, if each element at a source has an approximate Gaussian distribution, the first two principal components at this source may have an approximate Gaussian distribution.  However, if at least one element does not have a Gaussian distribution, these principal components are unlikely to have a Gaussian distribution.
 
@@ -716,7 +716,7 @@ knitr::kable(pca_Gauss$p_values, caption = "Table 5.4: P-values from test statis
 
 *************
 
-##6  CLASSIFICATION TREES (recursive partitioning)
+## 6  CLASSIFICATION TREES (recursive partitioning)
 
 A classification tree is obtained from recursive partitioning when the target (dependent) variable is categorical (a regression tree has a continuous dependent variable).  A tree model does a succession of binary splits, so that the result is similar to a botanical key (when there are only two subgroups at each decision point).  The method uses a criterion of variation within a group to develop a tree structure for which the terminal groups (nodes) are as uniform as possible, subject to criteria such as a group defined by a split must contain a minimal number of data records in order to be split (the default is 20, which the user can change using the argument minSplit), or that any further splits give improvement in the variation among the terminal groups that is less than a specified minimum (the user can control this using the function argument cP). Note that the requirement of a minimum group size indicates that classification trees should not be used when data sets are too small (an imprecise criterion!). 
 
@@ -904,7 +904,7 @@ save_pca <-
 
 ***************
 
-##7  RANDOM FORESTS
+## 7  RANDOM FORESTS
 
 Random forests are a method for obtaining more a more realistic estimate of classification error from a classification tree and for evaluating the relative importance of predictors for those trees.  The procedure repeats a classification tree analysis a large number of times (by default in this code, 500 times).  For each analysis, the code first selects a bootstrap sample of the observations (a random sample of the same size, chosen with replacement).  Because the sample is chosen with replacement, some observations will be in the sample multiple times, and some will not appear.  It can be shown that approximately 1/3 of the observations will not appear (these are known as the "out of bag" observations).  For each analysis, a classification tree is fit using a random subsample of the predictor variables; the default is to use approximately the square root of the number of predictors (the user can change this with the argument NvarUsed in the function, ps_randomForest()).  The resulting tree is used to predict the source of each of the observations not used in the analysis.  Then the error rate can be computed from the difference between the predicted and known group memberships.
 
@@ -1128,7 +1128,7 @@ save_pca <-
 
 ***************
 
-##8  EVALUATION OF THE PREDICTIONS 
+## 8  EVALUATION OF THE PREDICTIONS 
 
 We suggest two analyses for evaluating whether predicted sources for artifacts are correct: box plots similar to Figure 4.2 (Figure 8.1), and principal components plots. It is clear from the plots for yttrium and niobium in Figure 8.1 that the tree analysis improperly assigned some artifacts to source C (one of which seems likely to be from source D), and perhaps one artifact is improperly assigned to source B.  The function generating principal components plots will allow us to identify the data generating these suspect assignments.  
 
@@ -1396,7 +1396,7 @@ knitr::kable(obsCheck, caption = "Table 8.2: Random forest probability estimates
 
 ********************
 
-##9  Discussion
+## 9  Discussion
 
 These data demonstrate the advantage of using a random forest analysis rather than a classification tree to predict artifact sources.  While the classification tree in Figure 6.1 separates the sources without error, we have seen that the choice of rubidium for splitting the second node is not optimal (niobium would be much better).  The random forest analysis avoids this error by choosing random sets of predictor variables, including sets without rubidium.
 
@@ -1417,7 +1417,7 @@ a classification tree analysis using this ordering shows how the variables shoul
 
 ********************
 
-##10  Code use
+## 10  Code use
 
 To the extent possible, the functions in this package use a standard set of parameter names and return a list whose elements have a standard set of names.  This section describes these conventions and provides other information for using functions in the package.
 
@@ -1479,7 +1479,7 @@ Note that each of these procedures imputes single missing values.  Using a singl
 
 ****************
 
-##11  References
+## 11  References
 
 G Biau and E Scornet.  A random forest guided tour.  http://www.normalesup.org/~scornet/paper/test.pdf
 

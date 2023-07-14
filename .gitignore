@@ -6,3 +6,4 @@ inst/doc
 predictSource.Rcheck/
 predictSource*.tar.gz
 predictSource*.tgz
+docs
